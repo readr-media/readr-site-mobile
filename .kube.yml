@@ -10,7 +10,7 @@ spec:
   - port: 80
     protocol: TCP
     targetPort: 80
-  type: LoadBalancer
+  type: NodePort
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
