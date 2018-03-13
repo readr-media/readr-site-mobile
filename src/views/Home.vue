@@ -26,9 +26,9 @@
       </div>
     </div> -->
     <div class="homepage__container">
-      <aside class="homepage__aside">
+      <!-- <aside class="homepage__aside">
         <AppAsideNav/>
-      </aside>
+      </aside> -->
       <main class="homepage__main">
         <div class="homepage__list-main">
           <HomeArticleMain v-for="post in postsLatest" :articleData="post" :key="post.id"/>

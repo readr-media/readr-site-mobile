@@ -12,7 +12,7 @@
   import AppHeader from './components/AppHeader.vue'
   export default {
     components: {
-      'app-header': AppHeader
+      AppHeader
     },
     computed: {
       sections () {
