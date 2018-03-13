@@ -1,6 +1,6 @@
 workspace:
   base: /vue
-  path: src/github.com/readr-media/readr-site
+  path: src/github.com/readr-media/readr-site-mobile
 pipeline:
   start_slack:
     image: plugins/slack
