@@ -1,15 +1,22 @@
 <template>
   <div class="header">
-    <div class="header__container">
-      <div class="header__container__wrapper">
-        <SearchTool></SearchTool>
-        <div class="login-status" v-if="isClientSide">
-          <div class="login-status__nickname login-status__item" v-text="userNickname" v-if="isLoggedIn" @click="goMemberCenter"></div>
-          <a class="login-status__login-btn login-status__item" href="/login" v-text="wording.WORDING_HEADER_LOGIN" v-if="!isLoggedIn"></a>
-          <div class="login-status__logout-btn login-status__item" v-text="wording.WORDING_HEADER_LOGOUT" v-else-if="isLoggedIn" @click="logout"></div>
-        </div>
-      </div>
+    <img class="header__logo" src="/public/icons/logo-mobile.png" alt="">
+    <!-- <SearchTool class="header__search"></SearchTool> -->
+    <div v-if="isClientSide" class="header__status" >
+      <div v-if="isLoggedIn" class="header__status-item header--nickname" @click="goMemberCenter" v-text="userNickname"></div>
+      <a v-if="!isLoggedIn" class="header__status-item" href="/login" v-text="wording.WORDING_HEADER_LOGIN"></a>
+      <div v-else-if="isLoggedIn" class="header__status-item" @click="logout" v-text="wording.WORDING_HEADER_LOGOUT"></div>
     </div>
+    <button class="header__hamburger" @click="toggleMenu"><img src="/public/icons/menu.png"></button>
+    <section ref="headerMenu" class="header__menu">
+      <ul>
+        <li><a><img src="/public/icons/fb.png" alt=""></a></li>
+        <li><a><img src="/public/icons/github.png" alt=""></a></li>
+        <li><a><img src="/public/icons/info.png" alt=""></a></li>
+        <li><a><img src="/public/icons/mirrormedia.png" alt=""></a></li>
+      </ul>
+      <div class="header__menu-curtain" @click="toggleMenu"></div>
+    </section>
   </div>
 </template>
 <script>
@@ -69,6 +76,9 @@
             location && location.replace('/')
           })
         })
+      },
+      toggleMenu () {
+        this.$refs.headerMenu.classList.toggle('open')
       }
     },
     mounted () {
@@ -87,127 +97,110 @@
 </script>
 <style lang="stylus" scoped>
   .header
+    display flex
+    justify-content flex-end
     position fixed
-    left 0
     top 0
-    width 100%
+    left 0
+    right 0
     z-index 999
-    > div
-      width 100%
-      > div
-        width 100%
-        margin 0 auto
-    &__container
-      height 35px
-      background-color #444746
-      color #fff
-      &__wrapper
-        height 100%
-        display flex
-        align-items center
-        // justify-content space-between
-        justify-content flex-end
-        .nav
-          display flex
-          align-items center
-          padding-left 110px
-          &__item
-            color #fff
-            display inline-block
-            font-size 1.125rem
-            font-weight 100
-            // margin-right 26.5px
-            // border-right 1px solid #fff
-            padding 0 8px
-            position relative
-            &::after
-              content ''
-              position absolute
-              right 0
-              top 50%
-              margin-top -7px
-              width 1px
-              height 14px
-              background-color #fff
-              display block
-          &__item:first-child
-            // border-left 1px solid #fff
-            &::before
-              content ''
-              position absolute
-              left 0
-              top 50%
-              margin-top -7px
-              width 1px
-              height 14px
-              background-color #fff
-              display block
-        .login-status
-          // margin-left auto
-          min-width 74px
-          padding 0 7.5px 0 13px
-          // border-right 1px solid #fff
-          // border-left 1px solid #fff
-          font-size 0.875rem
-          height 100%
-          display flex
-          justify-content center
-          align-items center
-          a, a:hover, a:link, a:visited
-            color #fff
-          &__logout-btn
-            cursor pointer
-          &__item
-            position relative
-            padding 0 16.5px
-            height 100%
-            display flex
-            justify-content center
-            align-items center
-            &:last-child
-              padding-right 0
-            &::after
-              content ''
-              position absolute
-              left 0
-              top 50%
-              margin-top -7px
-              width 1px
-              height 14px
-              background-color #fff
-              display block
-            
-          &__nickname
-            padding-right 38px
-            color #ddcf21
-            &::before
-              content ''
-              width 28px
-              height 30px
-              display block
-              position absolute
-              background-color transparent
-              background-image url(/public/icons/account.png)
-              background-position center center
-              background-repeat no-repeat
-              background-size contain
-              bottom 0
-              right 10px
-            cursor pointer
-  
-  @media (max-width 768px)
-    .header
-      &__container
+    width 100%
+    height 40px
+    padding 5px 15px 5px 75px
+    background-color #444746
+    &__logo
+      position absolute
+      top 8px
+      left 15px
+      width 50px
+      height auto
+    &__status
+      display flex
+      align-items center
+      &-item
+        position relative
         height 15px
-        &__wrapper
-          .nav, .login-status
-            display none
-
-
-
-  @media (min-width 950px)
-    .header
-      > div
-        > div
-          max-width 950px
+        padding 0 10px
+        color #fff
+        font-size 12px
+        font-weight 300
+        line-height 15px
+        border-left 1px solid #fff
+        &.header--nickname
+          padding 0 34px 0 10px
+          color #ddcf21 
+          &::before
+            content ''
+            position absolute
+            bottom 0
+            right 10px
+            width 14px
+            height 15px
+            background-color transparent
+            background-image url(/public/icons/account.png)
+            background-position center center
+            background-repeat no-repeat
+            background-size contain
+    &__hamburger
+      width 30px
+      height 30px
+      padding 0
+      background transparent
+      border none
+      outline none
+      img
+        width 100%
+    &__menu
+      position absolute
+      top 0
+      left 0
+      right 0
+      bottom 0
+      z-index 10
+      width 100%
+      height 100vh
+      margin 0
+      opacity 0
+      visibility hidden
+      transition opacity 0.35s ease-out
+      &.open
+        visibility visible
+        opacity 1
+        ul
+          right 0
+      ul
+        position relative
+        right -100%
+        z-index 10
+        width 60%
+        height 100%
+        margin 0 0 0 40%
+        padding 0
+        background-color #ddcf21
+        transition right 0.35s ease-out
+        li
+          position relative
+          width 100%
+          height 25%
+          border-bottom 1px solid #fff
+          list-style-type none
+          &:last-of-type
+            border-bottom none
+          img
+            position absolute
+            top 50%
+            left 50%
+            transform translate(-50%, -50%)
+            width 50px
+            height 50px
+      &-curtain
+        position absolute
+        top 0
+        left 0
+        bottom 0
+        right 0
+        width 100%
+        height 100%
+        background-color rgba(0, 0, 0, .6)
+    
 </style>

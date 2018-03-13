@@ -1,9 +1,9 @@
 <template>
   <div class="admin">
     <div class="admin__container">
-      <aside class="admin__aside">
+      <!-- <aside class="admin__aside">
         <AppAsideNav/>
-      </aside>
+      </aside> -->
       <main class="admin__main">
         <!-- <app-header :sections="sections"></app-header> -->
         <About :profile="profile"></About>
