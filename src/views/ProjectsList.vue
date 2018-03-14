@@ -1,31 +1,26 @@
 <template>
   <div class="projects-list">
-    <div class="projects-list__container">
-      <aside class="projects-list__aside">
-        <AppAsideNav/>
-      </aside>
-      <main class="projects-list__main">
-        <div class="projects-list__list-main">
-          <ProjectsFigure v-for="project in projects" :project="project" :key="project.id"/>
-        </div>
-        <div class="projects-list__list-aside">
-          <ProjectsFigureProgress/>
-          <ProjectsFigureProgress/>
-          <AppTitledList :listTitle="'熱門關鍵字'">
-            <ul class="projects-tags-hot-list-container">
-              <li class="projects-tags-hot-list-container__list">
-                <span class="projects-tags-hot-list-container__tag-name">原住民傳統領域</span>
-                <span class="projects-tags-hot-list-container__tag-count">7631</span>
-              </li>
-              <li class="projects-tags-hot-list-container__list">
-                <span class="projects-tags-hot-list-container__tag-name">農舍</span>
-                <span class="projects-tags-hot-list-container__tag-count">631</span>
-              </li>
-            </ul>
-          </AppTitledList>
-        </div>
-      </main>
-    </div>
+    <main class="projects-list__main">
+      <div class="projects-list__list-main">
+        <ProjectsFigure v-for="project in projects" :project="project" :key="project.id"/>
+      </div>
+      <div class="projects-list__list-aside">
+        <ProjectsFigureProgress/>
+        <ProjectsFigureProgress/>
+        <AppTitledList :listTitle="'熱門關鍵字'">
+          <ul class="projects-tags-hot-list-container">
+            <li class="projects-tags-hot-list-container__list">
+              <span class="projects-tags-hot-list-container__tag-name">原住民傳統領域</span>
+              <span class="projects-tags-hot-list-container__tag-count">7631</span>
+            </li>
+            <li class="projects-tags-hot-list-container__list">
+              <span class="projects-tags-hot-list-container__tag-name">農舍</span>
+              <span class="projects-tags-hot-list-container__tag-count">631</span>
+            </li>
+          </ul>
+        </AppTitledList>
+      </div>
+    </main>
   </div>
 </template>
 
@@ -96,15 +91,17 @@ export default {
     top 60px
     z-index 999
   &__main
-    margin-left 40px
     display flex
+    flex-direction column
+    padding-top 40px
   &__list-main
+    order 1
     display flex
     flex-direction column
     justify-content flex-start
     align-items flex-start
   &__list-aside
-    margin-left 40px
+    order 0
     display flex
     flex-direction column
     justify-content flex-start

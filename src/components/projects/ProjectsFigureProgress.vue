@@ -1,6 +1,5 @@
 <template>
   <figure class="projects-figure-progress">
-    <div class="projects-figure-progress__img" :style="{ 'backgroundImage': `url(https://www.mirrormedia.mg/projects/20170801aboriginal/ogimage.jpg)` }"></div>
     <figcaption class="projects-figure-progress__figcaption">這議題有點讚</figcaption>
     <nav class="projects-figure-progress__nav">
       <button class="projects-figure-progress__button">66%</button>
@@ -13,7 +12,7 @@
 .projects-figure-progress
   margin 0
   display flex
-  width 355px
+  width 100%
   background-color white
   &__img
     width 75px
@@ -26,7 +25,6 @@
     font-size 15px
   &__nav
     display flex
-    flex-direction column
     justify-content space-between
   &__button
     width 37px

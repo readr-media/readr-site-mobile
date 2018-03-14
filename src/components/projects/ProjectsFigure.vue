@@ -37,14 +37,14 @@ export default {
 
 <style lang="stylus" scoped>
 .projects-figure
-  width 650px
+  width 100%
   height inherit
   margin 0
   background-color white
   & + &
     margin-top 10px
   &__img
-    width 650px
+    width 100%
     height 341.5px
     background-size cover
     background-position center center

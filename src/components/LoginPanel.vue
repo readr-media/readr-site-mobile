@@ -94,25 +94,21 @@
   .login-panel
     background-color #d8d8d8
     width 100%
-    height 430px
-    padding 17.5px 30px 23px
-    margin 40px auto 0
+    height 100%
+    padding 80px 10px 40px
+    margin 0
     > div
-      width 50%
-      height 100%
-      display inline-block
+      width 100%
       // overflow hidden
       vertical-align top
       position relative
       margin 0 auto
-      &:first-child
-        border-right 1px solid #000
+      
       &:last-child
-        padding-left 30px
       > .title
         color #fff
         margin 0 auto 15px
-        font-size 1.125rem
+        font-size 15px
         font-weight 600
         height 20px
         
@@ -120,12 +116,10 @@
           &.active
             color #000
         > span
-          margin 0 24.5px 0 0
+          margin 0 10px 0 0
       > .container
         width 100%
-        height calc(100% - 35px)
         margin 0 auto
-        padding-right 24px
     &__left
       > .title
         > span
