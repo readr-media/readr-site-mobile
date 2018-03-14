@@ -113,20 +113,21 @@ export default {
   display flex
   flex-direction column
   &__nav-btns
-    height 25px
+    height 20px
     margin-top auto // for automatically placing nav to the botom of the container
 
 $icon-size
-  width 25px
-  height 25px
+  width 20px
+  height 20px
 .comment-icon
   cursor pointer
   &__thumbnail
     @extends $icon-size
   &__count
     position relative
-    right 5px
-    font-size 14px
+    top 2px
+    right 3px
+    font-size 11px
     color #11b8c9
 .follow-icon
   @extends $icon-size

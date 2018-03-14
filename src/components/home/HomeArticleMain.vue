@@ -63,23 +63,23 @@ export default {
   flex-direction column
   justify-content center
   align-items center
-  width 650px
+  width 100%
   position relative
   &__share
-    width 25px
-    height 25px
     position absolute
-    top 21px
-    right 36px
+    top 15px
+    right 15px
+    width 30px
+    height 30px
   &__author
     width 100%
     height 60px
     background-color #d3d3d3
   &__content
-    width 650px
+    width 100%
     height inherit
     box-shadow 0px 0px 3px 2px rgba(211, 211, 211, 1)
-    padding 16px 32.5px
+    padding 15px
     background-color white
     display flex
     flex-direction column
@@ -107,12 +107,13 @@ export default {
     &__thumbnail
       width 60px
       height 60px
+      object-fit cover
     &__meta
-      margin-left 22.5px
+      margin-left 20px
       > p
         margin 5px 0
     &__date
-      font-size 14px
+      font-size 12px
       font-weight 500
     &__nickname
       font-size 18px
@@ -130,7 +131,7 @@ export default {
   .editor-writing
     margin 10px 0
     &__container 
-      min-height 105px
+      // min-height 105px
       // overflow hidden
       // text-overflow: ellipsis;
       & > p
@@ -161,7 +162,7 @@ export default {
   .editor-writing-source
     height 102px
     border solid 0.5px #d3d3d3
-    padding 8px 15px 5px 19.5px
+    // padding 8px 15px 5px 19.5px
     display flex
     justify-content space-between
     margin-bottom 7.5px
@@ -175,7 +176,6 @@ export default {
       margin 0
     &__description
       & > p
-        font-size 14px
         font-weight 300
         color #808080
         line-height 1.4
@@ -192,6 +192,5 @@ export default {
       font-weight 300
       color #808080
       align-self flex-end
-      position absolute
-      bottom 0
+      
 </style>

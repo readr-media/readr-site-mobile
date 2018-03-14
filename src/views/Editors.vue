@@ -1,20 +1,15 @@
 <template>
   <div class="editors">
-    <div class="editors__container">
-      <aside class="editors__aside">
-        <AppAsideNav/>
-      </aside>
-      <main class="editors__main">
-        <AppTitledList :listTitle="'本週客座'">
-          <ul class="editors-list-container">
-            <EditorsIntro class="editors-intro-main" v-for="customEditor in customEditors" :key="customEditor.id" :editor="customEditor"/>
-          </ul>
-        </AppTitledList>
-        <ul class="editors__list-aside">
-          <EditorsIntro class="editors-intro-aside" v-for="member in asideListMembers" :key="member.id" :editor="member" :trimDescription="true"/>
+    <main class="editors__main">
+      <AppTitledList :listTitle="'本週客座'">
+        <ul class="editors-list-container">
+          <EditorsIntro class="editors-intro-main" v-for="customEditor in customEditors" :key="customEditor.id" :editor="customEditor"/>
         </ul>
-      </main>
-    </div>
+      </AppTitledList>
+      <ul class="editors__list-aside">
+        <EditorsIntro class="editors-intro-aside" v-for="member in asideListMembers" :key="member.id" :editor="member" :trimDescription="true"/>
+      </ul>
+    </main>
   </div>
 </template>
 
@@ -91,7 +86,7 @@ export default {
 
 <style lang="stylus" scoped>
 .editors
-  background-color #e6e6e6
+  background-color #fff
   min-height 100vh
   &__container
     max-width 1200px
@@ -106,28 +101,28 @@ export default {
     top 60px
     z-index 999
   &__main
-    margin-left 40px
     display flex
+    flex-direction column
     justify-content flex-start
     align-items flex-start
+    padding-top 40px
   &__list-aside
     background-color white
     list-style none
     padding 16px 0
     margin 0
-    margin-left 35px
 
 .editors-list-container
-  margin 0
+  margin 10px 0 0
   padding 0
+  border-bottom 1px solid #d3d3d3
 .editors-intro-main
-  width calc(650px - 20px - 20px)
-  margin 0 20px
-  padding 14px 0 10px 0
+  width 100%
+  margin 0
 .editors-intro-aside
-  width calc(355px - 15px - 15px)
-  margin 0 15px
-  padding 10px 0
+  width 100%
+  margin 0 0 10px 0
+  padding 0 20px
   &:nth-child(1)
     padding-top 0
 </style>

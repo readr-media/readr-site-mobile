@@ -2,19 +2,24 @@
   <section class="videosList">
     <template v-for="video in videos" >
       <div :key="get(video, [ 'id' ])" class="videosList__item">
-        <div class="videosList__item-img"></div>
-        <h2 v-text="get(video, [ 'title' ])"></h2>
+        <div class="videosList__item-video">
+          <iframe src="https://app.straas.net/mirrormedia.mg/videos/ubfT6jiU" frameborder="0" allowfullscreen></iframe>
+        </div>
         <div class="videosList__item-info">
-          <div
-            class="videosList__item-info-icon comment"
-            @click="$_videosList_renderComment(get(video, [ 'id' ]))">
-            <img src="/public/icons/comment-blue.png">
-            <comment-count class="videosList__item-info-icon-count" :commentAmount="12345"></comment-count>
+          <h2 v-text="get(video, [ 'title' ])"></h2>
+          <div class="videosList__item-icons">
+            <div
+              class="videosList__item-icons-icon comment"
+              @click="$_videosList_renderComment(get(video, [ 'id' ]))">
+              <img src="/public/icons/comment-blue.png">
+              <comment-count class="videosList__item-icons-icon-count" :commentAmount="12345"></comment-count>
+            </div>
+            <div class="videosList__item-icons-icon">
+              <img src="/public/icons/view-blue.png">
+              <span class="videosList__item-icons-icon-count">709</span>
+            </div>
           </div>
-          <div class="videosList__item-info-icon">
-            <img src="/public/icons/view-blue.png">
-            <span class="videosList__item-info-icon-count">709</span>
-          </div>
+          <app-share-button class="videosList__share"></app-share-button>
         </div>
         <div :class="`videosList__item-comment hidden video-${get(video, [ 'id' ])}`">
           <div class="comment"></div>
@@ -28,11 +33,13 @@
   import { SITE_DOMAIN_DEV } from '../../../src/constants'
   import { get } from 'lodash'
   import { renderComment } from '../../../src/util/talk'
+  import AppShareButton from '../../components/AppShareButton.vue'
   import CommentCount from '../../components/comment/CommentCount.vue'
 
   export default {
     name: 'VideosList',
     components: {
+      AppShareButton,
       CommentCount
     },
     props: {
@@ -58,26 +65,32 @@
 
 <style lang="stylus" scoped>
   .videosList
-    width 355px
-    padding 15px
+    width 100%
     background-color #fff
     &__item
       width 100%
       margin-bottom 10px
       h2
-        margin 5px 0
+        margin 0 0 10px 0
         font-size 15px
         font-weight normal
       &:last-of-type
         margin-bottom 0
-      &-img
-        width 325px
-        height 183px
-        background-image url('https://projects.mirrormedia.mg/proj-assets/farmhouse/images/og.jpg')
-        background-size cover
-        background-position center
-        background-repeat no-repeat
+      &-video
+        position relative
+        width 100%
+        padding-top 56.25%
+        iframe
+          position absolute
+          top 0
+          left 0
+          right 0
+          width 100%
+          height 100%
       &-info
+        position relative
+        padding 10px 15px
+      &-icons
         &-icon
           display inline-block
           width auto
@@ -100,6 +113,12 @@
       &-comment
         &.hidden
           display none
+    &__share
+      position absolute
+      top 50%
+      right 15px
+      transform translate(0, -50%)
+      
 </style>
 
 
