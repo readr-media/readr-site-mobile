@@ -152,7 +152,6 @@
     width 100%
     height 100%
     position relative
-    padding-bottom 2rem
     color #000
     &__input-email, &__input-pwd
       margin 15px 0
@@ -171,11 +170,9 @@
       text-align right
       color red
     &__btn
-      position absolute
-      bottom 0
-      left 0
       width 100%
       height 35px
+      margin-top 140px
       background-color #444746
       color #ddcf21
       display flex

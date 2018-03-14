@@ -1,12 +1,6 @@
 <template>
   <div class="login-page">
-    <!-- <app-header :sections="sections"></app-header> -->
-    <aside class="login-page__aside">
-      <AppAsideNav/>
-    </aside>
-    <main class="login-page__main">
-      <LoginPanel v-if="isClientSide && !isLoggedIn"></LoginPanel>
-    </main>
+    <LoginPanel v-if="isClientSide && !isLoggedIn"></LoginPanel>
   </div>
 </template>
 <script>
@@ -50,13 +44,12 @@
 </script>
 <style lang="stylus" scoped>
 .login-page
-  min-height 100vh
   width 100%
+  height 100vh
   background-color #fff
   // &__container
-  max-width 1200px
   margin auto
-  padding 25px 0
+  padding 0
   display flex
   &__aside
     width 75px

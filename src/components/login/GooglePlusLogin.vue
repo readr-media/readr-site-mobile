@@ -106,14 +106,15 @@
     padding 5px 34px
     background-color #ffffff
 
-    font-size 1.125rem
+    font-size 15px
+    font-weight 400
     color #808080
 
     margin-bottom 15px
 
     &__container
       display flex
-      justify-content flex-start
+      justify-content center
       align-items center
       margin 0 auto
       width 240px
