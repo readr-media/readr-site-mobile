@@ -3,11 +3,13 @@
     <figure class="editors-intro-main__profile">
       <img class="editors-intro-main__thumbnail" :src="editor.profileImage || '/public/icons/exclamation.png'" alt="">
       <figcaption class="editors-intro-main__meta-container">
-        <p class="editors-intro-main__nickname" v-text="editor.nickname"></p>
         <img class="editors-intro-main__follow-icon" v-if="editorIsNotCurrentUser" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow">
       </figcaption>
     </figure>
-    <p class="editors-intro-main__description" v-text="trimDescription ? descritpionTrim : editor.description"></p>
+    <div class="editors-intro-main__info">
+      <p class="editors-intro-main__nickname" v-text="editor.nickname"></p>
+      <p class="editors-intro-main__description" v-text="trimDescription ? descritpionTrim : editor.description"></p>
+    </div>
   </li>
 </template>
 
@@ -104,12 +106,12 @@ export default {
 <style lang="stylus" scoped>
 .editors-intro-main
   display flex
-  flex-direction column
   align-items flex-start
-  & + &
-    border-top solid 0.5px #979797
+  margin-bottom 15px
+  
   &__profile
     display flex
+    flex-direction column
     margin 0
   &__thumbnail
     r = 50px
@@ -118,18 +120,23 @@ export default {
     border-radius r
   &__meta-container
     display flex
+    justify-content center
     align-items center
-    margin-left 4px
+    margin-top 5px
   &__follow-icon
     cursor pointer
     width 25px
     height 25px
-    margin-left 5px
   &__description
-    font-size 15px
+    font-size 14px
     font-weight 300
     text-align justify
     line-height 1.5
     margin 3px 0 0 0
+  &__info
+    margin-left 5px
+  &__nickname
+    margin 0
+    font-size 15px
 </style>
 

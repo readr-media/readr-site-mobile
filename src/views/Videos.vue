@@ -1,12 +1,8 @@
 <template>
   <div class="videos">
     <div class="videos__container">
-      <aside class="videos__aside">
-        <app-aside-nav></app-aside-nav>
-      </aside>
       <main class="videos__main">
-        <videos-highlight :video="highlightVideo"></videos-highlight>
-        <videos-list ref="videosList" :videos="videoList"></videos-list>
+        <videos-list ref="videosList" :videos="videos"></videos-list>
       </main>
     </div>
   </div>
@@ -61,12 +57,6 @@
       hasMore () {
         return get(this.$store, [ 'state', 'publicVideos', 'length' ], 0) < get(this.$store, [ 'state', 'publicVideosCount' ], 0)
       },
-      highlightVideo () {
-        return get(this.videos, [ 0 ])
-      },
-      videoList () {
-        return xor(this.videos, [ this.highlightVideo ])
-      },
       videos () {
         return get(this.$store, [ 'state', 'publicVideos' ], [])
       }
@@ -105,7 +95,7 @@
     width 100%
     min-height 100vh
     &__container
-      padding-top 37px
+      padding-top 40px
     &__aside
       display none
       position sticky

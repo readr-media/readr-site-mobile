@@ -22,11 +22,11 @@ export default {
 <style lang="stylus" scoped>
 .app-titled-list
   background-color white
-  padding 6px 0px 12px 0px
+  padding 0 20px
   &__title
     display flex
     align-items center
-    padding 0 15px
+    padding 0
     .plus
       length = 18px
       display inline-block

@@ -18,7 +18,6 @@
       <div class="editor-writing-source__content">
         <h1 class="editor-writing-source__title" v-text="linkTitleTrim"></h1>
         <div class="editor-writing-source__description">
-          <p v-text="linkDescriptionTrim"></p>
           <p class="editor-writing-source__cite" v-if="post.linkName">{{ wording[ 'WORDING_HOME_POST_SOURCE' ] }}{{ post.linkName }}</p>
         </div>
       </div>
@@ -87,7 +86,7 @@
 <style lang="stylus" scoped>
   .post-content
     &__title
-      font-size 18px
+      font-size 15px
       font-weight 600
       margin 0
   .editor-writing
@@ -98,7 +97,7 @@
       // text-overflow: ellipsis;
       margin-bottom 15px
       & > p
-        font-size 15px
+        font-size 14px
         font-weight 300
         text-align justify
         line-height 1.4
@@ -125,37 +124,32 @@
   .editor-writing-source
     height 102px
     border solid 0.5px #d3d3d3
-    padding 8px 15px 5px 19.5px
     display flex
     justify-content space-between
     margin-bottom 7.5px
     &__content
-      width 350.5px
+      order 1
+      width 50%
+      padding 10px
       position relative
     &__title
-      font-size 14px
+      font-size 12px
       font-weight 500
       color #808080
       margin 0
-    &__description
-      & > p
-        font-size 14px
-        font-weight 300
-        color #808080
-        line-height 1.4
-        margin 5px 0 0 0
-        text-align justify
     &__figure
+      order 0
       margin 0
       display flex
       align-self center
-      width 150px
-      height 78.5px
+      width 50%
+      height 100%
+      object-fit cover
+      object-position center
     &__cite
-      font-size 14px
+      font-size 11px
       font-weight 300
       color #808080
       align-self flex-end
-      position absolute
-      bottom 0
+      
 </style>
