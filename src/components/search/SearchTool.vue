@@ -55,13 +55,23 @@
 </script>
 <style lang="stylus" scoped>
   .search
+    flex 1
+    max-width 150px
+    height 20px
+    padding 0 5px
+    margin-right 15px
     background-color #fff
-    padding 0 5px 0 8px
-
     &__input
-      outline none
+      width calc(100% - 20px)
+      height 100%
+      padding 2px 0
+      margin-right 5px
+      font-size 12px
+      line-height 1
+      vertical-align top
       border none
-      height 20px
+      outline none
+      
     &__icon
       display inline-block
       width 15px

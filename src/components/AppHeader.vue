@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <img class="header__logo" src="/public/icons/logo-mobile.png" alt="">
-    <!-- <SearchTool class="header__search"></SearchTool> -->
+    <SearchTool class="header__search"></SearchTool>
     <div v-if="isClientSide" class="header__status" >
       <div v-if="isLoggedIn" class="header__status-item header--nickname" @click="goMemberCenter" v-text="userNickname"></div>
       <a v-if="!isLoggedIn" class="header__status-item" href="/login" v-text="wording.WORDING_HEADER_LOGIN"></a>
@@ -99,6 +99,7 @@
   .header
     display flex
     justify-content flex-end
+    align-items center
     position fixed
     top 0
     left 0

@@ -4,14 +4,17 @@
     <transition name="fade" mode="out-in">
       <router-view class="view"></router-view>
     </transition>
+    <app-footer></app-footer>
   </div>
 </template>
 
 <script>
   import { SECTIONS_DEFAULT } from './constants'
+  import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/AppHeader.vue'
   export default {
     components: {
+      AppFooter,
       AppHeader
     },
     computed: {
@@ -32,10 +35,12 @@ button
     cursor not-allowed
 .view
   // max-width 800px
+  width 100%
   margin 0 auto
   position relative
   background-color #fff
   padding-top 35px
+  overflow-x hidden
   &.locked
     width 100%
     height 100vh
