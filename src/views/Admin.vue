@@ -1,23 +1,18 @@
 <template>
   <div class="admin">
     <div class="admin__container">
-      <!-- <aside class="admin__aside">
-        <AppAsideNav/>
-      </aside> -->
       <main class="admin__main">
         <!-- <app-header :sections="sections"></app-header> -->
         <About :profile="profile"></About>
-        <div class="control-bar">
-          <TheControlBar
-            @addAccount="addMember"
-            @addNews="showEditorHandler({ postPanel: 'add', postType: config.type.NEWS })"
-            @addReview="showEditorHandler({ postPanel: 'add', postType: config.type.REVIEW })"
-            @addVideo="showEditorHandler({ postPanel: 'add', postType: config.type.VIDEO })"
-            @editNews="showDraftListHandler(config.type.NEWS)"
-            @editReview="showDraftListHandler(config.type.REVIEW)"
-            @openPanel="openPanel">
-          </TheControlBar>
-        </div>
+        <TheControlBar
+          @addAccount="addMember"
+          @addNews="showEditorHandler({ postPanel: 'add', postType: config.type.NEWS })"
+          @addReview="showEditorHandler({ postPanel: 'add', postType: config.type.REVIEW })"
+          @addVideo="showEditorHandler({ postPanel: 'add', postType: config.type.VIDEO })"
+          @editNews="showDraftListHandler(config.type.NEWS)"
+          @editReview="showDraftListHandler(config.type.REVIEW)"
+          @openPanel="openPanel">
+        </TheControlBar>
         <template v-if="activePanel === 'accounts'">
           <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
         </template>
@@ -164,7 +159,7 @@
   import VideoList from '../components/VideoList.vue'
   import RewardPointsInTab from '../components/RewardPointsInTab.vue'
 
-  const MAXRESULT = 20
+  const MAXRESULT = 10
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-updated_at'
 
@@ -808,28 +803,29 @@
 </script>
 <style lang="stylus" scoped>
   .admin
-    background-color #e6e6e6
+    background-color #fff
     width 100%
     min-height 100vh
     &__container
-      max-width 1200px
+      max-width 100%
       margin auto
-      padding 25px 0
+      padding 25px 0 0
       display flex
+    &__main
+      width 100%
     &__aside
       width 75px
       height 100%
       position sticky
       // position fixed
       top 60px
-    &__main
-      margin-left 93.5px
+    
     .control-bar
       width 100%
       margin 0 auto
     .panel
       width 100%
-      padding 22px 84px 33px
+      padding 20px 20px 10px
       border 5px solid #d8ca21
       margin 0 auto
       background-color white

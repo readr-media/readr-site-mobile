@@ -110,7 +110,6 @@
         margin 0 auto 15px
         font-size 15px
         font-weight 600
-        height 20px
         
         > span
           &.active

@@ -67,41 +67,74 @@
 </script>
 <style lang="stylus" scoped>
   .about
+    position relative
     width 100%
     min-height 100px
-    margin 40px auto
-    padding-left 130px
-    position relative
-    color #000
+    margin 20px auto
+    padding 0 20px 0 70px
     &__thumbnail
       position absolute
-      left 0
+      left 20px
       top 0
-      width 100px
-      height 100px
+      width 40px
+      height 40px
       border 1px solid #979797
       border-radius 50%
       overflow hidden
       > img
         width 100%
         height 100%
-        object-fit contain
+        object-fit cover
         object-position center center
-        // box-shadow inset 0 0 0 10px #fff
     &__name
-      font-size 1.125rem
+      font-size 12px
     &__introduction
-      margin-top 10px
-      font-size 0.9375rem
-      font-weight 300
-      line-height 1.375rem
+      margin-top 5px
+      font-size 14px
+      text-align justify
     &__edit
       text-align right
       &__btn
         color #4280a2
+        font-size 12px
         font-weight 600
         cursor pointer
-  @media (min-width 950px)
-    .about
-      max-width 950px
+  // .about
+  //   width 100%
+  //   min-height 100px
+  //   margin 20px auto
+  //   padding 0 20px
+  //   position relative
+  //   color #000
+  //   &__thumbnail
+  //     position absolute
+  //     left 0
+  //     top 0
+  //     width 40px
+  //     height 40px
+  //     border 1px solid #979797
+  //     border-radius 50%
+  //     overflow hidden
+  //     > img
+  //       width 100%
+  //       height 100%
+  //       object-fit contain
+  //       object-position center center
+  //       // box-shadow inset 0 0 0 10px #fff
+  //   &__name
+  //     font-size 1.125rem
+  //   &__introduction
+  //     margin-top 10px
+  //     font-size 0.9375rem
+  //     font-weight 300
+  //     line-height 1.375rem
+  //   &__edit
+  //     text-align right
+  //     &__btn
+  //       color #4280a2
+  //       font-weight 600
+  //       cursor pointer
+  // @media (min-width 950px)
+  //   .about
+  //     max-width 950px
 </style>

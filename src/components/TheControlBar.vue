@@ -186,7 +186,8 @@
 <style lang="stylus" scoped>
 .controlBar
   display flex
-  margin-bottom 30px
+  margin-bottom 40px
+  padding 0 20px
 
   button
     outline none
@@ -198,6 +199,8 @@
     margin-right 5px
     cursor pointer
     transition width .5s ease-in-out
+    &:last-of-type
+      margin 0
     > button:first-of-type
       z-index 10
     .controlBar--btn

@@ -213,21 +213,18 @@
     width 100%
     position relative
     .register-container
-      &__input-nickname, &__input-email, &__input-pwd, &__input-pwd-check
-        margin 15px 0
       width 100%
       height calc(100% - 2rem)
-      padding-bottom 2rem
       color #000
+      &__input-nickname, &__input-email, &__input-pwd, &__input-pwd-check
+        margin 15px 0
       &__notice
-        font-size 0.875rem
+        font-size 11px
         text-align right
         > .agreement
           margin-left 20px
           cursor pointer
       &__btn
-        position absolute
-        left 0
         width 100%
         height 35px
         background-color #444746
