@@ -1,5 +1,19 @@
 <template>
   <div class="postList-container">
+    <div class="postList-control">
+      <button
+        class="postList__btn postList__btn--multiple"
+        :disabled="!canPublishPosts"
+        @click="$_postList_publishPosts"
+        v-text="wording.WORDING_POSTLIST_PUBLISH">
+      </button>
+      <button
+        class="postList__btn postList__btn--multiple"
+        :disabled="!canDeletePosts"
+        @click="$_postList_deletePosts"
+        v-text="wording.WORDING_POSTLIST_DELETE">
+      </button>
+    </div>
     <PaginationNav :totalPages="totalPages" @pageChanged="$_postList_pageChanged"></PaginationNav>
     <table class="postList">
       <thead>
@@ -8,29 +22,6 @@
           <th class="postList__nickname"><span @click="$_postList_orderBy('author.nickname')" v-text="wording.WORDING_POSTLIST_NICKNAME"></span></th>
           <th class="postList__type"></th>
           <th class="postList__title"><span @click="$_postList_orderBy('title')" v-text="wording.WORDING_POSTLIST_TITLE"></span></th>
-          <th class="postList__status postList--center"><span @click="$_postList_orderBy('active')" v-text="wording.WORDING_POSTLIST_ACTIVE"></span></th>
-          <th class="postList__update postList--center">
-            <button
-              class="postList__btn postList__btn--multiple"
-              :disabled="!canPublishPosts"
-              @click="$_postList_publishPosts"
-              v-text="wording.WORDING_POSTLIST_PUBLISH">
-            </button>
-          </th>
-          <th class="postList__delete postList--center">
-            <button
-              class="postList__btn postList__btn--multiple"
-              :disabled="!canDeletePosts"
-              @click="$_postList_deletePosts"
-              v-text="wording.WORDING_POSTLIST_DELETE">
-            </button>
-          </th>
-          <th class="postList__sort postList--center">
-            <select name="" id="">
-              <option value="-updated_at" v-text="wording.WORDING_POSTLIST_UPDATE_AT"></option>
-              <option value="-created_at" v-text="wording.WORDING_POSTLIST_PUBLISH_AT"></option>
-            </select>
-          </th>
         </tr>
       </thead>
       <tbody>
@@ -39,10 +30,6 @@
           <td class="postList__nickname" v-text="$_postList_getAuthorId(p)"></td>
           <td class="postList__type"><div v-if="p.type === postType.NEWS" class="postList__type--news">N</div></td>
           <td class="postList__title" @click="$_showPost(p)" v-text="p.title"></td>
-          <td class="postList__status postList--center" v-text="$_postList_getStatus(p)"></td>
-          <td class="postList__update postList--center"><button class="postList__btn postList__btn--single" @click="$_postList_editPost(p.id)" v-text="wording.WORDING_POSTLIST_UPDATE"></button></td>
-          <td class="postList__delete postList--center"><button class="postList__btn postList__btn--single" @click="$_postList_deletePost(p.id)" v-text="wording.WORDING_POSTLIST_DELETE"></button></td>
-          <td class="postList__sort"></td>
         </tr>
       </tbody>
     </table>
@@ -212,6 +199,7 @@
 
 .postList
   width 100%
+  margin-top 10px
   color #808080
   text-align left
   border-collapse collapse
@@ -220,8 +208,8 @@
   tbody
     font-size 12px
   th
-    padding-bottom 5px
-    border-bottom 2px solid #000
+    padding-top 5px
+    border-top 2px solid #000
     span
       position relative
       cursor pointer
@@ -237,9 +225,6 @@
         background-size 7px auto
         background-image url(/public/icons/double-triangle.png)
   tr
-    &:first-of-type
-      td
-        padding-top 10px
     &:last-of-type
       td
         border-bottom none
@@ -257,6 +242,8 @@
     height 12px
   button:disabled
     background-color #ccc
+  &-control
+    text-align right
   &__checkbox
     width 20px
   &__nickname
@@ -289,38 +276,13 @@
     &--single
       color #4280a2
     &--multiple
-      width 60px
-      height 25px
+      width 45px
+      height 20px
+      margin-left 10px
       color #fff
-      line-height 23px
+      font-size 15px
+      line-height 20px
       background-color #808080
       border-radius 4px
 
-@media (min-width 950px)
-  .postList
-    thead
-      font-size 18px
-    tbody
-      font-size 15px
-    th
-      padding-bottom 10px
-    input[type="checkbox"]
-      width 15px
-      height 15px
-    &__checkbox
-      padding-right 10px
-    &__nickname
-      width 85px
-    &__title
-      width 330px
-      padding-right 60px
-    &__status, &__update, &__delete, &__sort
-      display table-cell
-    &__status
-      width 60px
-      padding-right 10px
-    &__sort
-      select
-        height 25px
-        line-height 25px
 </style>

@@ -97,7 +97,7 @@
       border none
       width 100%
       height 35px
-      font-size calc((18 / 16) * 1rem)
+      font-size 15px
       padding 0 10px
       vertical-align top
       background-color #ffffff
