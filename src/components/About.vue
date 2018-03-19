@@ -70,7 +70,7 @@
     position relative
     width 100%
     min-height 100px
-    margin 20px auto
+    margin 0 auto
     padding 0 20px 0 70px
     &__thumbnail
       position absolute

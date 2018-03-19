@@ -25,13 +25,13 @@
     <!-- <pagination-nav></pagination-nav> -->
     <div class="followingListInTab__list">
       <div v-for="follow in followingByUser" :key="follow.id" class="followingListInTab__item" :class="currentResource">
-        <div class="followingListInTab__img">
-          <div v-if="currentResource === 'member'" :style="{ backgroundImage: `url(${follow.profileImage})` }"></div>
-          <button @click="$_followingListInTab_unfollow(follow.id)"><img src="/public/icons/star-grey.png"></button>
+        <div v-if="currentResource === 'member'" class="followingListInTab__img">
+          <div :style="{ backgroundImage: `url(${follow.profileImage})` }"></div>
         </div>
-        <div class="followingListInTab__content">
+        <div class="followingListInTab__content" :class="currentResource">
           <h2 v-if="currentResource === 'member'" v-text="follow.nickname"></h2>
           <h2 v-if="currentResource !== 'member'" v-text="follow.title"></h2>
+          <button @click="$_followingListInTab_unfollow(follow.id)"><img src="/public/icons/star-grey.png"></button>
           <p v-if="$_followingListInTab_getDescription(follow)" v-text="$_followingListInTab_getDescription(follow)"></p>
         </div>
         <div v-if="currentResource === 'project'" class="followingListInTab__og"></div>
@@ -108,7 +108,7 @@
 <style lang="stylus" scoped>
 
 .followingListInTab
-  width 750px
+  width 100%
   margin 0 auto
   &__nav
     button
@@ -116,7 +116,7 @@
       padding 0
       margin 0 5px
       color #a8a8a8
-      font-size 15px
+      font-size .85rem
       background transparent
       border none
       outline none
@@ -134,12 +134,13 @@
           border-width 7.5px 0 7.5px 15px
           border-color transparent transparent transparent #ddcf21
   &__list
-    margin-top 30px
-    min-height 297px
+    margin-top 25px
   &__item
     display flex
     align-items flex-start
     margin-bottom 25px
+    &:last-of-type
+      margin-bottom 0
     &.review
       .followingListInTab__img
         width 25px
@@ -150,42 +151,44 @@
           height 25px
           line-height 25px
   &__img
-      width 60px
+      width 45px
       text-align center
       > div
-        width 60px
-        height 60px
-        margin-bottom 10px
+        width 45px
+        height 45px
         background-position center
         background-size cover
         background-repeat no-repeat
         border 1px solid #979797
         border-radius 50%
-      > button
-        width 25px
-        height 25px
-        padding 0
-        text-align center
-        background transparent
-        border none
-        outline none
-        img 
-          width 100%
+      
   &__content
     flex 1
-    margin-left 10px
+    &.member
+      margin-left 10px
     h2
+      display inline-block
       margin 0
-      font-size 18px
+      font-size .9375rem
       line-height 20px
     p
-      max-height 63px
-      margin-top 1em
+      margin-top 2px
       margin-bottom 0
-      font-size 15px
+      font-size .875rem
       text-align justify
       line-height 1.4
-      overflow hidden
+    button
+      width 20px
+      height 20px
+      padding 0
+      margin-left 10px
+      text-align center
+      vertical-align sub
+      background transparent
+      border none
+      outline none
+      img 
+        width 100%
   &__og
     width 175px
     height 92px
