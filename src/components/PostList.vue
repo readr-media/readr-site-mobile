@@ -22,14 +22,16 @@
           <th class="postList__nickname"><span @click="$_postList_orderBy('author.nickname')" v-text="wording.WORDING_POSTLIST_NICKNAME"></span></th>
           <th class="postList__type"></th>
           <th class="postList__title"><span @click="$_postList_orderBy('title')" v-text="wording.WORDING_POSTLIST_TITLE"></span></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in posts" :key="p.id">
+        <tr v-for="p in posts" :key="p.id" :class="{ active: p.active === config.active.ACTIVE }">
           <td class="postList__checkbox"><input type="checkbox" ref="checkboxItems" @change="$_postList_toggleHandler($event, p.id)"></td>
           <td class="postList__nickname" v-text="$_postList_getAuthorId(p)"></td>
-          <td class="postList__type"><div v-if="p.type === postType.NEWS" class="postList__type--news">N</div></td>
+          <td class="postList__type"><div v-if="p.type === config.type.NEWS" class="postList__type--news">N</div></td>
           <td class="postList__title" @click="$_showPost(p)" v-text="p.title"></td>
+          <td></td>
         </tr>
       </tbody>
     </table>
@@ -83,9 +85,12 @@
     data () {
       return {
         checkedIems: [],
+        config: {
+          active: POST_ACTIVE,
+          type: POST_TYPE
+        },
         order: '',
         post: {},
-        postType: POST_TYPE,
         showLightBox: false,
         wording: {
           WORDING_POSTLIST_ACTIVE,
@@ -204,9 +209,9 @@
   text-align left
   border-collapse collapse
   thead
-    font-size 15px
+    font-size .9375rem
   tbody
-    font-size 12px
+    font-size .85rem
   th
     padding-top 5px
     border-top 2px solid #000
@@ -225,6 +230,9 @@
         background-size 7px auto
         background-image url(/public/icons/double-triangle.png)
   tr
+    &.active
+      td
+        background-color #d3d3d3
     &:last-of-type
       td
         border-bottom none
@@ -253,12 +261,12 @@
     width 25px
     padding-right 5px
     &--news
-      width 20px
-      height 20px
+      width 15px
+      height 15px
       color #fff
-      font-size 13px
+      font-size 10px
       text-align center
-      line-height 20px
+      line-height 15px
       background-color #4280A2
       border-radius 50%
       user-select none
@@ -280,7 +288,7 @@
       height 20px
       margin-left 10px
       color #fff
-      font-size 15px
+      font-size .9375rem
       line-height 20px
       background-color #808080
       border-radius 4px

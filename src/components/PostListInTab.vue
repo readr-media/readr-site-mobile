@@ -10,10 +10,6 @@
       <div class="postListInTab__content">
         <div class="postListInTab__title">
           <h2 v-text="p.title"></h2>
-          <div v-if="!(!$can('editOtherPost') && p.active !== config.active.DRAFT) && parent !== 'RewardPointsInTab'" class="postListInTab__control--desktop">
-            <button class="postListInTab__btn" @click="$_postListInTab_editPost(p.id)" v-text="wording.WORDING_POSTLIST_EDIT"></button>
-            <button class="postListInTab__btn" @click="$_postListInTab_deletePost(p.id)" v-text="wording.WORDING_POSTLIST_DELETE"></button>
-          </div>
         </div>
         <p v-if="parent !== 'RewardPointsInTab' && p.content" class="postListInTab__descr" v-text="$_postListInTab_getDescr(p.content)"></p>
         <div v-else class="postListInTab__descr">
@@ -21,7 +17,7 @@
           <p class="points-info">使用時間： {{ p.createdAt.replace(/-/g, '/').replace('T', ' ').replace('Z', '') }}</p>
         </div>
       </div>
-      <div class="postListInTab__control--mobile">
+      <div v-if="(p.active === config.active.DRAFT)" class="postListInTab__control--mobile">
         <button class="postListInTab__btn" @click="$_postListInTab_editPost(p.id)" v-text="wording.WORDING_POSTLIST_EDIT"></button>
         <button class="postListInTab__btn" @click="$_postListInTab_deletePost(p.id)" v-text="wording.WORDING_POSTLIST_DELETE"></button>
       </div>
@@ -169,8 +165,7 @@
       display flex
       justify-content space-between
       margin-top 5px
-    &--desktop
-      display none
+    
   &__btn
     width calc((100% - 25px) / 2)
     height 25px
@@ -188,43 +183,5 @@
 
 .points-info
   margin 0
-  
-@media (min-width 950px)
-  .postListInTab
-    width 750px
-    &__post
-      flex-direction row
-      padding 0
-      border-bottom none
-    &__content
-      margin 0 0 0 10px
-    &__title
-      height 25px
-      h2
-        max-width 550px
-        font-size 18px
-        line-height 25px
-    &__control
-      &--mobile
-        display none
-      &--desktop
-        display flex
-        align-items center
-    &__btn
-      width auto
-      height auto
-      margin 0 5px
-      padding 0 0 2px
-      color #4280a2
-      font-size 15px
-      font-weight 600
-      background-color transparent
-      border none 
-      border-bottom 1px solid #4280a2
-      &:last-of-type
-        margin-right 0
-    &__descr
-      max-height 63px
-      font-size 15px
-      line-height 1.4
+ 
 </style>

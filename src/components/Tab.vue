@@ -42,18 +42,19 @@
     &__nav
       width 100%
       &__item
-        height 45px
+        height 25px
         display inline-flex
         justify-content center
         align-items center
         color #808080
         font-size 0.9375rem
+        font-weight 400
         cursor pointer
         &.active
           background-color #ddcf21
           color #fff
     &__content
-      border 5px solid #d8ca21
+      border 3px solid #d8ca21
       padding 20px
       font-size 0.625rem
       line-height 1rem

@@ -72,19 +72,21 @@ button
 
 .backstage
   width 100%
-  height 100vh
-  overflow hidden
   &-container
-    width 950px
-    height 100%
-    margin 0 auto
-    padding 25px 0
-    overflow hidden
+    width 100%
+    min-height calc(100vh - 40px)
+    padding-top 40px
+    
   &__controlBar
     margin-top 40px
   &__record
-    margin-top 30px
+    margin-top 20px
     background-color #fff
+  &__panel
+    padding 20px 5%
+    margin-top 20px
+    border 2px solid #d8ca21
+    background #fff
 
 @media (min-width 768px)
   .view
