@@ -245,46 +245,6 @@ router.get('/status', authVerify, function(req, res) {
   res.status(200).send(true)
 })
 
-router.get('/videos', (req, res, next) => {
-  let url = `/posts?active={"$in":[${POST_ACTIVE.ACTIVE}]}&type={"$in":[${POST_TYPE.VIDEO}, ${POST_TYPE.LIVE}]}`
-  const whitelist = [ 'max_result', 'page', 'sort' ]
-  whitelist.forEach((ele) => {
-    if (req.query.hasOwnProperty(ele)) {
-      url = `${url}&${ele}=${req.query[ele]}`
-    }
-  })
-  fetchPromise(url, req)
-  .then((response) => {
-    res.status(200).send(response)
-  })
-  .catch((err) => {
-    if (err.status === 404) {
-      res.status(200).send({ items: [] })
-    } else {
-      res.status(500).send(err)
-      console.error(`error during fetch data from : ${url}`)
-      console.error(err)
-    }
-  })
-})
-
-router.get('/videos/count', (req, res, next) => {
-  const url = `/posts/count?active={"$in":[${POST_ACTIVE.ACTIVE}]}&type={"$in":[${POST_TYPE.VIDEO}, ${POST_TYPE.LIVE}]}`
-  fetchPromise(url, req)
-  .then((response) => {
-    res.status(200).send(response)
-  })
-  .catch((err) => {
-    if (err.status === 404) {
-      res.status(200).send({ items: [] })
-    } else {
-      res.status(500).send(err)
-      console.error(`error during fetch data from : ${url}`)
-      console.error(err)
-    }
-  })
-})
-
 router.get('/project/list', (req, res) => {
   fetchPromise(req.url, req)
   .then((response) => {
