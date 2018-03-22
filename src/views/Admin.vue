@@ -40,9 +40,6 @@
                 @changeResource="updateFollowingList"
                 @unfollow="unfollow">
               </FollowingListInTab>
-              <RewardPointsInTab
-                slot="3">
-              </RewardPointsInTab>
             </app-tab>
           </section>
         </template>
@@ -137,8 +134,7 @@
     WORDING_TAB_COMMENT_RECORD,
     WORDING_TAB_FOLLOW_RECORD,
     WORDING_TAB_NEWS_RECORD,
-    WORDING_TAB_REVIEW_RECORD,
-    WORDING_TAB_REWARD_POINTS_RECORD
+    WORDING_TAB_REVIEW_RECORD
   } from '../constants'
   import _ from 'lodash'
   import About from '../components/About.vue'
@@ -157,7 +153,6 @@
   import TagList from '../components/TagList.vue'
   import TheControlBar from '../components/TheControlBar.vue'
   import VideoList from '../components/VideoList.vue'
-  import RewardPointsInTab from '../components/RewardPointsInTab.vue'
 
   const MAXRESULT = 10
   const DEFAULT_PAGE = 1
@@ -310,8 +305,7 @@
       PostPanel,
       TagList,
       TheControlBar,
-      VideoList,
-      RewardPointsInTab
+      VideoList
     },
     data () {
       return {
@@ -343,8 +337,7 @@
         tabs: [
           WORDING_TAB_REVIEW_RECORD,
           WORDING_TAB_NEWS_RECORD,
-          WORDING_TAB_FOLLOW_RECORD,
-          WORDING_TAB_REWARD_POINTS_RECORD
+          WORDING_TAB_FOLLOW_RECORD
         ],
         wording: {
           WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER,
