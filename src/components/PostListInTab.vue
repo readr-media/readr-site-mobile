@@ -11,11 +11,11 @@
         <div class="postListInTab__title">
           <h2 v-text="p.title"></h2>
         </div>
-        <p v-if="parent !== 'RewardPointsInTab' && p.content" class="postListInTab__descr" v-text="$_postListInTab_getDescr(p.content)"></p>
-        <div v-else class="postListInTab__descr">
-          <p class="points-info">使用點數： {{ p.points }} 點</p>
-          <p class="points-info">使用時間： {{ p.createdAt.replace(/-/g, '/').replace('T', ' ').replace('Z', '') }}</p>
+        <div v-if="parent === 'RewardPointsInTab'" class="postListInTab__descr">
+          <p class="points-info">{{ wording.WORDING_POINTS_SPENT }}： {{ p.points }} 點</p>
+          <p class="points-info">{{ wording.WORDING_POINTS_SPENT_WHEN }}： {{ p.createdAt.replace(/-/g, '/').replace('T', ' ').replace('Z', '') }}</p>
         </div>
+        <p v-else-if="p.content" class="postListInTab__descr" v-text="$_postListInTab_getDescr(p.content)"></p>
       </div>
       <div v-if="(p.active === config.active.DRAFT)" class="postListInTab__control--mobile">
         <button class="postListInTab__btn" @click="$_postListInTab_editPost(p.id)" v-text="wording.WORDING_POSTLIST_EDIT"></button>
@@ -34,7 +34,9 @@
     WORDING_POSTLIST_ACTIVE_PENDING,
     WORDING_POSTLIST_ACTIVE_PENDING_PROJECT,
     WORDING_POSTLIST_ACTIVE_UNPUBLISH,
-    WORDING_POSTLIST_ACTIVE_DRAFT
+    WORDING_POSTLIST_ACTIVE_DRAFT,
+    WORDING_POINTS_SPENT,
+    WORDING_POINTS_SPENT_WHEN
   } from '../constants'
   import _ from 'lodash'
   import PaginationNav from './PaginationNav.vue'
@@ -70,7 +72,9 @@
           WORDING_POSTLIST_ACTIVE_PENDING,
           WORDING_POSTLIST_ACTIVE_PENDING_PROJECT,
           WORDING_POSTLIST_ACTIVE_UNPUBLISH,
-          WORDING_POSTLIST_ACTIVE_DRAFT
+          WORDING_POSTLIST_ACTIVE_DRAFT,
+          WORDING_POINTS_SPENT,
+          WORDING_POINTS_SPENT_WHEN
         }
       }
     },
