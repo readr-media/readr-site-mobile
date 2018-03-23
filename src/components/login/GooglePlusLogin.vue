@@ -7,10 +7,9 @@
   </div>
 </template>
 <script>
-  import _ from 'lodash'
-  import { WORDING_GOOGLE_LOGIN, WORDING_GOOGLE_REGISTER, } from '../../constants'
-  import { consoleLogOnDev, } from '../../util/comm'
+  import { get, } from 'lodash'
 
+  const debug = require('debug')('CLIENT:GooglePlusLogin')
   const login = (store, profile, token) => {
     return store.dispatch('LOGIN', {
       params: profile,
@@ -30,30 +29,27 @@
       labelWording () {
         switch (this.type) {
           case 'register':
-            return this.wording.WORDING_GOOGLE_REGISTER
+            return this.$t('login.WORDING_GOOGLE_REGISTER')
           case 'login':
-            return this.wording.WORDING_GOOGLE_LOGIN
+            return this.$t('login.WORDING_GOOGLE_LOGIN')
           default:
             return ''
         }
       },
     },
-    data () {
-      return {
-        wording: {
-          WORDING_GOOGLE_LOGIN,
-          WORDING_GOOGLE_REGISTER,
-        },
-      }
-    },
-    name: 'google-plus-login',
+    name: 'GooglePlusLogin',
     methods: {
       login () {
         const readyToLogin = (idToken) => {
-          login(this.$store, { idToken, login_mode: 'google', }, _.get(this.$store, [ 'state', 'register-token', ]))
+          login(this.$store, { idToken, login_mode: 'google', }, get(this.$store, [ 'state', 'register-token', ]))
             .then((res) => {
               if (res.status === 200) {
+                /**
+                 * use location.replace instead of router.push to server-side render page
+                 */                
                 location.replace('/')
+              } else {
+                debug('res', res)
               }
             })
         }
@@ -64,31 +60,31 @@
               'resourceName': 'people/me',
               'requestMask.includeField': 'person.nicknames,person.genders,person.birthdays,person.occupations',
             }).then((response) => {
+              debug('Never Authorized.')
               register(this.$store, {
                 idToken,
-                nickname: _.get(response, [ 'nicknames', 0, 'value', ], '-'),
-                // gender:  _.get(response, [ 'nicknames', 0, 'value' ], '-'),
-                // occupation: _.get(response, [ 'occupations', 0, 'value' ], '-'),
+                nickname: get(response, [ 'result', 'nicknames', 0, 'value', ], null),
+                gender: get(response, [ 'result', 'genders', 0, 'value', ], '').toUpperCase().substr(0, 1),
                 register_mode: 'oauth-goo',
-              }, _.get(this.$store, [ 'state', 'register-token', ])).then(({ status, }) => {
-                this.isRegistered = true
+              }, get(this.$store, [ 'state', 'register-token', ])).then(({ status, }) => {
                 if (status === 200) {
-                  consoleLogOnDev({ msg: 'successfully', })
+                  debug('Register successfully.')
                   readyToLogin(idToken)
                 }
               }).catch(({ err, }) => {
-                if (err === 'User Already Existed') {
-                  consoleLogOnDev({ msg: 'User Already Existed', })
+                if (err === 'User Already Existed' || err === 'User Duplicated') {
+                  debug('User Already Existed')
                   readyToLogin(idToken)
                 } else {
                   console.log(err)
                 }
               })
             }, function (reason) {
-              consoleLogOnDev({ msg: 'Error: ' + reason.result.error.message, })
+              debug({ msg: 'Error: ' + reason.result.error.message, })
             })
           })
         } else {
+          debug('Already authorized.')
           readyToLogin(window.googleStatus.idToken)
         }
       },
@@ -106,15 +102,14 @@
     padding 5px 34px
     background-color #ffffff
 
-    font-size 15px
-    font-weight 400
+    font-size 1.125rem
     color #808080
 
     margin-bottom 15px
 
     &__container
       display flex
-      justify-content center
+      justify-content flex-start
       align-items center
       margin 0 auto
       width 240px

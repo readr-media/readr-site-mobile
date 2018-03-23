@@ -1,18 +1,23 @@
 <template>
   <div class="admin">
     <div class="admin__container">
+      <aside class="admin__aside">
+        <AppAsideNav/>
+      </aside>
       <main class="admin__main">
         <!-- <app-header :sections="sections"></app-header> -->
         <About :profile="profile"></About>
-        <TheControlBar
-          @addAccount="addMember"
-          @addNews="showEditorHandler({ postPanel: 'add', postType: config.type.NEWS })"
-          @addReview="showEditorHandler({ postPanel: 'add', postType: config.type.REVIEW })"
-          @addVideo="showEditorHandler({ postPanel: 'add', postType: config.type.VIDEO })"
-          @editNews="showDraftListHandler(config.type.NEWS)"
-          @editReview="showDraftListHandler(config.type.REVIEW)"
-          @openPanel="openPanel">
-        </TheControlBar>
+        <div class="control-bar">
+          <TheControlBar
+            @addAccount="addMember"
+            @addNews="showEditorHandler({ postPanel: 'add', postType: config.type.NEWS })"
+            @addReview="showEditorHandler({ postPanel: 'add', postType: config.type.REVIEW })"
+            @addVideo="showEditorHandler({ postPanel: 'add', postType: config.type.VIDEO })"
+            @editNews="showDraftListHandler(config.type.NEWS)"
+            @editReview="showDraftListHandler(config.type.REVIEW)"
+            @openPanel="openPanel">
+          </TheControlBar>
+        </div>
         <template v-if="activePanel === 'accounts'">
           <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
         </template>
@@ -86,7 +91,7 @@
           <MemberAccountEditor
             action="add"
             :shouldShow="showLightBox"
-            :title="wording.WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER"
+            :title="$t('admin.WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER')"
             @updated="filterChanged">
           </MemberAccountEditor>
         </BaseLightBox>
@@ -129,12 +134,6 @@
 <script>
   import { POST_ACTIVE, POST_TYPE, TAG_ACTIVE, } from '../../api/config'
   import { SECTIONS_DEFAULT, } from '../constants'
-  import {
-    WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER,
-    WORDING_TAB_FOLLOW_RECORD,
-    WORDING_TAB_NEWS_RECORD,
-    WORDING_TAB_REVIEW_RECORD,
-  } from '../constants'
   import _ from 'lodash'
   import About from '../components/About.vue'
   import AlertPanel from '../components/AlertPanel.vue'
@@ -153,7 +152,7 @@
   import TheControlBar from '../components/TheControlBar.vue'
   import VideoList from '../components/VideoList.vue'
 
-  const MAXRESULT = 10
+  const MAXRESULT = 20
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-updated_at'
 
@@ -330,13 +329,10 @@
         showEditor: false,
         showLightBox: false,
         tabs: [
-          WORDING_TAB_REVIEW_RECORD,
-          WORDING_TAB_NEWS_RECORD,
-          WORDING_TAB_FOLLOW_RECORD,
+          this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
+          this.$t('tab.WORDING_TAB_NEWS_RECORD'),
+          this.$t('tab.WORDING_TAB_FOLLOW_RECORD'),
         ],
-        wording: {
-          WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER,
-        },
       }
     },
     computed: {
@@ -791,29 +787,28 @@
 </script>
 <style lang="stylus" scoped>
   .admin
-    background-color #fff
+    background-color #e6e6e6
     width 100%
     min-height 100vh
     &__container
-      max-width 100%
+      max-width 1200px
       margin auto
-      padding 25px 0 0
+      padding 25px 0
       display flex
-    &__main
-      width 100%
     &__aside
       width 75px
       height 100%
       position sticky
       // position fixed
       top 60px
-    
+    &__main
+      margin-left 93.5px
     .control-bar
       width 100%
       margin 0 auto
     .panel
       width 100%
-      padding 20px 20px 10px
+      padding 22px 84px 33px
       border 5px solid #d8ca21
       margin 0 auto
       background-color white

@@ -7,17 +7,15 @@
   </div>
 </template>
 <script>
-  import _ from 'lodash'
-  import { WORDING_FACEBOOK_LOGIN, WORDING_FACEBOOK_REGISTER, } from '../../constants'
-  import { consoleLogOnDev, } from '../../util/comm'
+  import { get, } from 'lodash'
 
+  const debug = require('debug')('CLIENT:FacebookLogin')
   const login = (store, profile, token) => {
     return store.dispatch('LOGIN', {
       params: profile,
       token,
     })
   }
-  
   const register = (store, profile, token) => {
     return store.dispatch('REGISTER', {
       params: profile,
@@ -26,62 +24,58 @@
   }
 
   export default {
-    data () {
-      return {
-        wording: {
-          WORDING_FACEBOOK_LOGIN,
-          WORDING_FACEBOOK_REGISTER,
-        },
-      }
-    },
     computed: {
       labelWording () {
         switch (this.type) {
           case 'register':
-            return this.wording.WORDING_FACEBOOK_REGISTER
+            return this.$t('login.WORDING_FACEBOOK_REGISTER')
           case 'login':
-            return this.wording.WORDING_FACEBOOK_LOGIN
+            return this.$t('login.WORDING_FACEBOOK_LOGIN')
           default:
             return ''
         }
       },
     },
-    name: 'facebook-login',
+    name: 'FacebookLogin',
     methods: {
       login () {
         const readyToLogin = (params) => {
-          login(this.$store, params, _.get(this.$store, [ 'state', 'register-token', ]))
+          login(this.$store, params, get(this.$store, [ 'state', 'register-token', ]))
             .then((res) => {
               if (res.status === 200) {
+                /**
+                 * use location.replace instead of router.push to server-side render page
+                 */
                 location.replace('/')
+              } else {
+                debug('res', res)
               }
             })
         }
+        debug('Checking fb status before login...', window.fbStatus)
         if (window && !window.fbStatus) {
+          debug('Never Authorized.')
           FB.login(() => {
             FB.api('/me', { fields: 'id,name,gender,email', }, (res) => {
               register(this.$store, {
-                // nickname: '-',
+                nickname: get(res, 'name'),
                 email: res.email,
-                // gender: res.gender,
+                gender: get(res, 'genders', '').toUpperCase().substr(0, 1),
                 register_mode: 'oauth-fb',
                 social_id: res.id,
-              }, _.get(this.$store, [ 'state', 'register-token', ])).then(({ status, }) => {
-                this.isRegistered = true
+              }, get(this.$store, [ 'state', 'register-token', ])).then(({ status, }) => {
                 if (status === 200) {
-                  consoleLogOnDev({ msg: 'successfully', })
+                  debug('Registered successfully')
                   readyToLogin({
                     id: res.id,
-                    email: res.email,
                     login_mode: 'facebook',
                   })
                 }
               }).catch(({ err, }) => {
-                if (err === 'User Already Existed') {
-                  consoleLogOnDev({ msg: 'User Already Existed', })
+                if (err === 'User Already Existed' || err === 'User Duplicated') {
+                  debug('User Already Existed')
                   readyToLogin({
                     id: res.id,
-                    email: res.email,
                     login_mode: 'facebook',
                   })
                 } else {
@@ -91,6 +85,7 @@
             })
           }, { scope: 'public_profile,email', })
         } else {
+          debug('Already authorized.')
           readyToLogin({
             id: window.fbStatus.uid,
             login_mode: 'facebook',
@@ -98,7 +93,6 @@
         }
       },
     },
-    mounted () {},
     props: [ 'type', ],
   }
 </script>
@@ -111,8 +105,8 @@
     height 35px
     padding 5px 34px
     background-color #ffffff
-    font-size 15px
-    font-weight 400
+
+    font-size 1.125rem
     color #808080
 
     margin-bottom 15px
@@ -120,7 +114,7 @@
       width 240px
       height 100%
       display flex
-      justify-content center
+      justify-content flex-start
       align-items center
       margin 0 auto
       > .icon
