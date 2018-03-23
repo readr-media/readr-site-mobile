@@ -18,14 +18,14 @@
   </footer>
 </template>
 <script>
-  import { get } from 'lodash'
+  import { get, } from 'lodash'
 
   export default {
     name: 'AppFooter',
     computed: {
       currentPath () {
-        return get(this.$route, [ 'fullPath' ]).split('/')[1]
-      }
+        return get(this.$route, [ 'fullPath', ]).split('/')[1]
+      },
     },
     mounted () {
       window.addEventListener('touchmove', this.$_footer_touchHandler)
@@ -41,8 +41,8 @@
           document.querySelector('footer').classList.remove('active')
         }
         window.touchClientY = currentClientY
-      }
-    }
+      },
+    },
   }
 </script>
 <style lang="stylus" scoped>

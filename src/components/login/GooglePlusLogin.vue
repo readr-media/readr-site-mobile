@@ -8,20 +8,20 @@
 </template>
 <script>
   import _ from 'lodash'
-  import { WORDING_GOOGLE_LOGIN, WORDING_GOOGLE_REGISTER } from '../../constants'
-  import { consoleLogOnDev } from '../../util/comm'
+  import { WORDING_GOOGLE_LOGIN, WORDING_GOOGLE_REGISTER, } from '../../constants'
+  import { consoleLogOnDev, } from '../../util/comm'
 
   const login = (store, profile, token) => {
     return store.dispatch('LOGIN', {
       params: profile,
-      token
+      token,
     })
   }
 
   const register = (store, profile, token) => {
     return store.dispatch('REGISTER', {
       params: profile,
-      token
+      token,
     })
   }
 
@@ -36,21 +36,21 @@
           default:
             return ''
         }
-      }
+      },
     },
     data () {
       return {
         wording: {
           WORDING_GOOGLE_LOGIN,
-          WORDING_GOOGLE_REGISTER
-        }
+          WORDING_GOOGLE_REGISTER,
+        },
       }
     },
     name: 'google-plus-login',
     methods: {
       login () {
         const readyToLogin = (idToken) => {
-          login(this.$store, { idToken, login_mode: 'google' }, _.get(this.$store, [ 'state', 'register-token' ]))
+          login(this.$store, { idToken, login_mode: 'google', }, _.get(this.$store, [ 'state', 'register-token', ]))
             .then((res) => {
               if (res.status === 200) {
                 location.replace('/')
@@ -58,43 +58,43 @@
             })
         }
         if (window && !window.googleStatus) {
-          gapi && gapi.auth2.getAuthInstance().signIn({ scope: 'profile email' }).then((currUser) => {
+          gapi && gapi.auth2.getAuthInstance().signIn({ scope: 'profile email', }).then((currUser) => {
             const idToken = currUser.getAuthResponse().id_token
             gapi.client.people.people.get({
               'resourceName': 'people/me',
-              'requestMask.includeField': 'person.nicknames,person.genders,person.birthdays,person.occupations'
+              'requestMask.includeField': 'person.nicknames,person.genders,person.birthdays,person.occupations',
             }).then((response) => {
               register(this.$store, {
                 idToken,
-                nickname: _.get(response, [ 'nicknames', 0, 'value' ], '-'),
+                nickname: _.get(response, [ 'nicknames', 0, 'value', ], '-'),
                 // gender:  _.get(response, [ 'nicknames', 0, 'value' ], '-'),
                 // occupation: _.get(response, [ 'occupations', 0, 'value' ], '-'),
-                register_mode: 'oauth-goo'
-              }, _.get(this.$store, [ 'state', 'register-token' ])).then(({ status }) => {
+                register_mode: 'oauth-goo',
+              }, _.get(this.$store, [ 'state', 'register-token', ])).then(({ status, }) => {
                 this.isRegistered = true
                 if (status === 200) {
-                  consoleLogOnDev({ msg: 'successfully' })
+                  consoleLogOnDev({ msg: 'successfully', })
                   readyToLogin(idToken)
                 }
-              }).catch(({ err }) => {
+              }).catch(({ err, }) => {
                 if (err === 'User Already Existed') {
-                  consoleLogOnDev({ msg: 'User Already Existed' })
+                  consoleLogOnDev({ msg: 'User Already Existed', })
                   readyToLogin(idToken)
                 } else {
                   console.log(err)
                 }
               })
             }, function (reason) {
-              consoleLogOnDev({ msg: 'Error: ' + reason.result.error.message })
+              consoleLogOnDev({ msg: 'Error: ' + reason.result.error.message, })
             })
           })
         } else {
           readyToLogin(window.googleStatus.idToken)
         }
-      }
+      },
     },
     mounted () {},
-    props: [ 'type' ]
+    props: [ 'type', ],
   }
 </script>
 <style lang="stylus" scoped>

@@ -30,14 +30,14 @@
     WORDING_LOGIN_RESET_PWD,
     WORDING_LOGIN_INVALID_EMAIL_FORMAT,
     WORDING_LOGIN_UNAUTHORIZED,
-    WORDING_LOGIN_RESET_PWD_SUCCESSFULLY } from 'src/constants'
+    WORDING_LOGIN_RESET_PWD_SUCCESSFULLY, } from 'src/constants'
   import _ from 'lodash'
 
   const debug = require('debug')('CLIENT:RecoverPassword')
   const sendResetEmail = (store, params, token) => {
     return store.dispatch('RESET_PWD_EMAIL', {
       params,
-      token
+      token,
     })
   }
 
@@ -45,12 +45,12 @@
     name: 'RecoverPassword',
     components: {
       InputItem,
-      Spinner
+      Spinner,
     },
     computed: {
       desc () {
         return !this.isSentEmail ? this.wording.WORDING_LOGIN_PLEASE_ENTER_YOUR_REGISTERED_EMAIL : this.wording.WORDING_LOGIN_RESET_PWD_SUCCESSFULLY
-      }
+      },
     },
     data () {
       return {
@@ -66,8 +66,8 @@
           WORDING_LOGIN_RESET_PWD,
           WORDING_LOGIN_INVALID_EMAIL_FORMAT,
           WORDING_LOGIN_UNAUTHORIZED,
-          WORDING_LOGIN_RESET_PWD_SUCCESSFULLY
-        }
+          WORDING_LOGIN_RESET_PWD_SUCCESSFULLY,
+        },
       }
     },
     methods: {
@@ -90,8 +90,8 @@
           debug('abt to send reset email')
           this.shouldShowSpinner = true
           sendResetEmail(this.$store, {
-            email: this.formData.email
-          }, _.get(this.$store, [ 'state', 'register-token' ])).then((res) => {
+            email: this.formData.email,
+          }, _.get(this.$store, [ 'state', 'register-token', ])).then((res) => {
             this.shouldShowSpinner = false
             debug('res:')
             debug(res)
@@ -129,7 +129,7 @@
           debug('>>>', this.formData.email)
         }
         return pass
-      }
+      },
     },
     mounted () {},
   }

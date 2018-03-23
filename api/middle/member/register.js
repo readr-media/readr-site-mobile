@@ -1,7 +1,7 @@
-const { OAuth2Client } = require('google-auth-library')
-const { get } = require('lodash')
-const { sendActivationMail } = require('./comm')
-const { API_HOST, API_PORT, API_PROTOCOL, GOOGLE_CLIENT_ID } = require('../../config')
+const { OAuth2Client, } = require('google-auth-library')
+const { get, } = require('lodash')
+const { sendActivationMail, } = require('./comm')
+const { API_HOST, API_PORT, API_PROTOCOL, GOOGLE_CLIENT_ID, } = require('../../config')
 const debug = require('debug')('READR:api:middle:member:register')
 const express = require('express')
 const router = express.Router()
@@ -10,7 +10,7 @@ const superagent = require('superagent')
 const apiHost = API_PROTOCOL + '://' + API_HOST + ':' + API_PORT
 const sendRegisterReq = (req, res) => {
   if (!req.body.email || !(req.body.password || req.body.social_id)) {
-    res.status(400).send({ message: 'Please offer all requirements.' })
+    res.status(400).send({ message: 'Please offer all requirements.', })
     return
   }
 
@@ -24,9 +24,9 @@ const sendRegisterReq = (req, res) => {
   .send(req.body)
   .end((err, resp) => {
     if (!err && resp) {
-      sendActivationMail({ id: req.body.id, email: req.body.mail, type: 'member' }, (e, response, tokenForActivation) => {
+      sendActivationMail({ id: req.body.id, email: req.body.mail, type: 'member', }, (e, response, tokenForActivation) => {
         if (!e && response) {
-          res.status(200).send({ token: tokenForActivation })
+          res.status(200).send({ token: tokenForActivation, })
         } else {
           res.status(response.status).json(e)
           console.error(`error during register: ${url}`)
@@ -34,7 +34,7 @@ const sendRegisterReq = (req, res) => {
         }
       })
     } else {
-      res.status(500).json(get(err, [ 'response', 'body' ], { Error: 'Error occured.' }))
+      res.status(500).json(get(err, [ 'response', 'body', ], { Error: 'Error occured.', }))
       console.error(`error during register: ${url}`)
       console.error(err)
     }
@@ -99,7 +99,7 @@ router.post('/admin', (req, res, next) => {
       }
     })
 }, (req, res) => {
-  sendActivationMail({ id: req.body.id, email: req.body.mail, role: req.body.role, type: 'init' }, (e, response) => {
+  sendActivationMail({ id: req.body.id, email: req.body.mail, role: req.body.role, type: 'init', }, (e, response) => {
     if (!e && response) {
       debug('A member added by Admin')
       debug(req.body)

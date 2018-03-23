@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { ROLE_MAP } from '../constants'
+import { ROLE_MAP, } from '../constants'
 import AppAsideNav from '../components/AppAsideNav.vue'
 import AppTitledList from '../components/AppTitledList.vue'
 import EditorsIntro from '../components/editors/EditorsIntro.vue'
@@ -22,19 +22,19 @@ import _ from 'lodash'
 
 const getMembersPublic = (store, params) => {
   return store.dispatch('GET_PUBLIC_MEMBERS', {
-    params: params
+    params: params,
   })
 }
 const fetchFollowing = (store, params) => {
   if (params.subject) {
     return store.dispatch('GET_FOLLOWING_BY_USER', {
       subject: params.subject,
-      resource: params.resource
+      resource: params.resource,
     })
   } else {
     return store.dispatch('GET_FOLLOWING_BY_RESOURCE', {
       resource: params.resource,
-      ids: params.ids
+      ids: params.ids,
     })
   }
 }
@@ -43,32 +43,32 @@ export default {
   components: {
     AppAsideNav,
     AppTitledList,
-    EditorsIntro
+    EditorsIntro,
   },
   data () {
     return {
-      asideListRoleValue: '總編'
+      asideListRoleValue: '總編',
     }
   },
   computed: {
     asideListRoleKey () {
-      return _.find(ROLE_MAP, { value: this.asideListRoleValue }).key
+      return _.find(ROLE_MAP, { value: this.asideListRoleValue, }).key
     },
     customEditors () {
       return _.get(this.$store, 'state.customEditors.items', [])
     },
     asideListMembers () {
       return _.get(this.$store, `state.publicMembers[${this.asideListRoleValue}].items`, [])
-    }
+    },
   },
   beforeMount () {
     Promise.all([
       getMembersPublic(this.$store, {
-        custom_editor: true
+        custom_editor: true,
       }),
       getMembersPublic(this.$store, {
-        role: this.asideListRoleKey
-      })
+        role: this.asideListRoleKey,
+      }),
     ]).then(() => {
       if (this.$store.state.isLoggedIn) {
         const customEditorsIds = this.$store.state.customEditors.items.map(editor => editor.id)
@@ -76,11 +76,11 @@ export default {
         const ids = _.uniq(_.concat(customEditorsIds, asideListMembersIds))
         fetchFollowing(this.$store, {
           resource: 'member',
-          ids: ids
+          ids: ids,
         })
       }
     })
-  }
+  },
 }
 </script>
 

@@ -24,8 +24,8 @@
   </div>
 </template>
 <script>
-  import { WORDING_LOGIN, WORDING_LOGIN_COMMUNITY, WORDING_REGISTER, WORDING_FORGET_PASSWORD } from 'src/constants'
-  import { consoleLogOnDev } from 'src/util/comm'
+  import { WORDING_LOGIN, WORDING_LOGIN_COMMUNITY, WORDING_REGISTER, WORDING_FORGET_PASSWORD, } from 'src/constants'
+  import { consoleLogOnDev, } from 'src/util/comm'
   import FacebookLogin from 'src/components/login/FacebookLogin.vue'
   import GooglePlusLogin from 'src/components/login/GooglePlusLogin.vue'
   import Login from 'src/components/login/Login.vue'
@@ -34,7 +34,7 @@
 
   const getDisposableToken = (store) => {
     return store.dispatch('DISPOSABLE_TOKEN', {
-      type: 'register'
+      type: 'register',
     })
   }
 
@@ -44,7 +44,7 @@
       GooglePlusLogin,
       Login,
       RecoverPassword,
-      Register
+      Register,
     },
     data () {
       return {
@@ -54,8 +54,8 @@
           WORDING_LOGIN,
           WORDING_LOGIN_COMMUNITY,
           WORDING_REGISTER,
-          WORDING_FORGET_PASSWORD
-        }
+          WORDING_FORGET_PASSWORD,
+        },
       }
     },
     name: 'login-panel',
@@ -78,16 +78,16 @@
             this.isGoingRecoverPwd = false
             break
         }
-      }
+      },
     },
     mounted () {
-      consoleLogOnDev({ msg: 'login panel' })
+      consoleLogOnDev({ msg: 'login panel', })
     },
     beforeMount () {
       Promise.all([
-        getDisposableToken(this.$store)
+        getDisposableToken(this.$store),
       ])
-    }
+    },
   }
 </script>
 <style lang="stylus" scoped>
