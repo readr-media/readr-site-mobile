@@ -80,7 +80,7 @@
       
     },
     mounted () {
-      this.highlightVideo = this.live ? this.live : get(this.videos, 0)
+      this.highlightVideo = this.live ? this.live : get(this.videos, [ 0, ], {})
     },
     methods: {
       $_videos_changeHighlight (id) {

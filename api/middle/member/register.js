@@ -1,5 +1,6 @@
 const { OAuth2Client, } = require('google-auth-library')
 const { get, } = require('lodash')
+const { redisWriting, } = require('../redisHandler')
 const { sendActivationMail, } = require('./comm')
 const { API_HOST, API_PORT, API_PROTOCOL, GOOGLE_CLIENT_ID, } = require('../../config')
 const debug = require('debug')('READR:api:middle:member:register')
@@ -14,6 +15,7 @@ const sendRegisterReq = (req, res) => {
     return
   }
 
+  const tokenShouldBeBanned = req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer' && req.headers.authorization.split(' ')[1]
   delete req.body.idToken
   delete req.body.email
 
@@ -27,6 +29,10 @@ const sendRegisterReq = (req, res) => {
       sendActivationMail({ id: req.body.id, email: req.body.mail, type: 'member', }, (e, response, tokenForActivation) => {
         if (!e && response) {
           res.status(200).send({ token: tokenForActivation, })
+          /**
+           * Revoke the token
+           */
+          redisWriting(tokenShouldBeBanned, 'registered', null, 24 * 60 * 60 * 1000)
         } else {
           res.status(response.status).json(e)
           console.error(`error during register: ${url}`)
@@ -47,26 +53,35 @@ const preRigister = (req, res, next) => {
   debug(`At ${(new Date).toString()}`)
 
   if (req.body.register_mode === 'oauth-goo') {
-    const client = new OAuth2Client(GOOGLE_CLIENT_ID, '', '')
-    client.verifyIdToken(
-      req.body.idToken,
-      GOOGLE_CLIENT_ID,
-      (e, login) => {
-        if (e) {
-          res.status(403).send(e.message).end()
-          return
-        }
-        const payload = login.getPayload()
-        if (payload[ 'aud' ] !== GOOGLE_CLIENT_ID) {
-          res.status(403).send('Forbidden. Invalid token detected.').end()
-          return
-        }
-        req.body.id = payload[ 'sub' ]
-        req.body.mail = payload[ 'email' ]
-        req.body.email = payload[ 'email' ]
-        req.body.social_id = payload[ 'sub' ]
-        next()
+    const client = new OAuth2Client(GOOGLE_CLIENT_ID)
+    debug('Registering by google account.')
+    const verify = async () => {
+      return await client.verifyIdToken({
+          idToken: req.body.idToken,
+          audience: GOOGLE_CLIENT_ID,
       })
+    }
+    verify().then((ticket) => {
+      debug('Going to fetch data from payload.')
+      const payload = ticket.getPayload()
+      if (payload[ 'aud' ] !== GOOGLE_CLIENT_ID) {
+        res.status(403).send('Forbidden. Invalid token detected.').end()
+        return
+      }
+      req.body.id = payload[ 'sub' ]
+      req.body.nickname = req.body.nickname || payload[ 'name' ]
+      req.body.profile_image = payload[ 'picture' ] || null
+      req.body.mail = payload[ 'email' ]
+      req.body.email = payload[ 'email' ]
+      req.body.social_id = payload[ 'sub' ]
+      debug(payload)
+      debug(req.body)
+      next()
+    }).catch((e) => {
+      debug(e.message)
+      res.status(403).send(e.message).end()
+      return
+    })
   } else if (req.body.register_mode === 'oauth-fb') {
     req.body.mail = req.body.email
     req.body.id = req.body.social_id
