@@ -1,5 +1,9 @@
 {
-  "extends": [ "plugin:vue/base" ],
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/base"
+  ],
   "parserOptions": {
     "parser": "babel-eslint"
   },
@@ -9,9 +13,11 @@
   "rules": { 
     "array-bracket-spacing": [ 2, "always" ],
     "camelcase": [ 0, "" ],
+    "no-console": 1,
     "yoda": [ 0, "never" ]
   },
   "globals": {
+    "Coral": true,
     "FB": true,
     "FormData": true,
     "expect": true,
@@ -20,6 +26,8 @@
     "source": true
   },
   "env": {
-    "mocha": true
+    "es6": true,
+    "mocha": true,
+    "node": true
   }
 }

@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: 0*/
 import _ from 'lodash'
 import { POST_ACTIVE, POST_TYPE } from '../../api/config'
 import { ROLE_MAP } from '../../src/constants'

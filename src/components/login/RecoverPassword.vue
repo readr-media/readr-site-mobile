@@ -31,6 +31,7 @@
     WORDING_LOGIN_INVALID_EMAIL_FORMAT,
     WORDING_LOGIN_UNAUTHORIZED,
     WORDING_LOGIN_RESET_PWD_SUCCESSFULLY } from 'src/constants'
+  import _ from 'lodash'
 
   const debug = require('debug')('CLIENT:RecoverPassword')
   const sendResetEmail = (store, params, token) => {

@@ -47,6 +47,7 @@
     WORDING_FOLLOW_LIST_PROJECT,
     WORDING_FOLLOW_LIST_REVIEW
   } from '../constants'
+  import _ from 'lodash'
   import PaginationNav from './PaginationNav.vue'
 
   export default {
@@ -78,9 +79,10 @@
     methods: {
       $_followingListInTab_getDescription (follow) {
         switch (this.currentResource) {
-          case 'member':
+          case 'member': {
             return _.get(follow, [ 'description' ])
-          case 'post':
+          }
+          case 'post': {
             const parser = new DOMParser()
             const html = parser.parseFromString(follow.content, 'text/html')
             const origin = Array.from(html.querySelectorAll('p'))
@@ -92,6 +94,7 @@
               })
               .join('')
             return origin
+          }
           default:
             return ''
         }

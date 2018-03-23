@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 const publishAction = (store, data) => {
   return store.dispatch('PUBLISH_ACTION', {
     params: data
