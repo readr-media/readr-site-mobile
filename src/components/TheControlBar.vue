@@ -104,6 +104,7 @@
     WORDING_CONTROLBAR_TAG,
     WORDING_CONTROLBAR_VIDEO
   } from '../constants'
+  import _ from 'lodash'
   import ControlBarButton from './ControlBarButton.vue'
   import ControlBarButtonBox from './ControlBarButtonBox.vue'
 

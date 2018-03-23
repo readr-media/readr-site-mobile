@@ -153,7 +153,7 @@ export default {
     profileEditorUploadThumbnail () {
       const saveImage = (file) => {
         const fd = new FormData()
-        const fileExt = file.type.split('image/')[1]
+        // const fileExt = file.type.split('image/')[1]
         fd.append('image', file, `${this.profile.id}`)
         
         uploadImage(this.$store, fd)
@@ -226,7 +226,7 @@ export default {
               edit_mode: 'edit_profile',
               password: this.inputNewPassword
             }, 'UPDATE_PASSWORD')
-            .then((res) => {
+            .then(() => {
               this.inputOldPassword = ''
               this.inputNewPassword = ''
               this.inputConfirmPassword = ''

@@ -1,28 +1,21 @@
 const _ = require('lodash')
 const { API_DEADLINE, API_HOST, API_PORT, API_PROTOCOL, API_TIMEOUT } = require('./config')
-const { GCP_FILE_BUCKET, GOOGLE_CLIENT_ID, GOOGLE_RECAPTCHA_SECRET, GCS_IMG_MEMBER_PATH, GCS_IMG_POST_PATH, DISPOSABLE_TOKEN_WHITE_LIST, SECRET_KEY } = require('./config')
-const { REDIS_AUTH, REDIS_MAX_CLIENT, REDIS_READ_HOST, REDIS_READ_PORT, REDIS_WRITE_HOST, REDIS_WRITE_PORT, REDIS_TIMEOUT } = require('./config')
-const { ENDPOINT_SECURE, SCOPES } = require('./config')
+const { GCP_FILE_BUCKET, GOOGLE_RECAPTCHA_SECRET, GCS_IMG_MEMBER_PATH, GCS_IMG_POST_PATH, DISPOSABLE_TOKEN_WHITE_LIST } = require('./config')
+const { ENDPOINT_SECURE } = require('./config')
 const { SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT } = require('./config')
-const { POST_ACTIVE, POST_TYPE } = require('./config')
 const { camelizeKeys } = require('humps')
 const { constructScope, fetchPermissions } = require('./services/perm')
-const { initBucket, getFileMd5Hash, renameFile, makeFilePublic, uploadFileToBucket, deleteFileFromBucket, deleteFilesInFolder, publishAction } = require('./gcs.js')
+const { initBucket, makeFilePublic, uploadFileToBucket, deleteFilesInFolder, publishAction } = require('./gcs.js')
 const { processImage } = require('./sharp.js')
 const { verifyToken } = require('./middle/member/comm')
-const Cookies = require('cookies')
 const bodyParser = require('body-parser')
-const crypto = require('crypto')
 const config = require('./config')
 const debug = require('debug')('READR:api')
 const express = require('express')
 const fs = require('fs')
-const isProd = process.env.NODE_ENV === 'production'
-const isTest = process.env.NODE_ENV === 'test'
 const jwtExpress = require('express-jwt')
 const jwtService = require('./service.js')
 const multer  = require('multer')
-const sharp = require('sharp')
 const scrape = require('html-metadata')
 const upload = multer({ dest: 'tmp/' })
 
@@ -33,7 +26,6 @@ const superagent = require('superagent')
 
 const apiHost = API_PROTOCOL + '://' + API_HOST + ':' + API_PORT
 
-const SECRET_LENGTH = 10
 const authVerify = jwtExpress({ secret: config.JWT_SECRET })
 
 const fetchStaticJson = (req, res, next, jsonFileName) => {
@@ -94,7 +86,7 @@ const basicDeleteRequst = (url, req, res, cb) => {
   })
 }
 
-const fetchPromise = (url, req) => {
+const fetchPromise = (url) => {
   return new Promise((resolve, reject) => {
     superagent
     .get(`${apiHost}${url}`)
@@ -111,7 +103,7 @@ const fetchPromise = (url, req) => {
 }
 
 const authorize = (req, res, next) => {
-  const whitelist = _.get(ENDPOINT_SECURE, [ `${req.method}${req.url.replace(/\?[A-Za-z0-9.*+?^=!:${}()#%~&_@\-`|\[\]\/\\]*$/, '')}` ])
+  const whitelist = _.get(ENDPOINT_SECURE, [ `${req.method}${req.url.replace(/\?[A-Za-z0-9.*+?^=!:${}()#%~&_@\-`|[\]/\\]*$/, '')}` ])
   if (whitelist) {
     fetchPermissions().then((perms) => {
       Promise.all([
@@ -253,11 +245,11 @@ router.get('/project/list', (req, res) => {
   .catch((err) => {
     if (err.status === 404) {
       res.status(404).send(err)
-      console.error(`public project list not found from : ${url}`)
+      console.error(`public project list not found from : ${req.url}`)
       console.error(err)
     } else if (err.status === 500) {
       res.status(500).send(err)
-      console.error(`error during fetch data from : ${url}`)
+      console.error(`error during fetch data from : ${req.url}`)
       console.error(err)
     }
   })
@@ -404,7 +396,7 @@ router.post('/deleteMemberProfileThumbnails', authVerify, (req, res) => {
   }).then(() => {
     res.status(200).send(`Files in folder ${id} completely delete from /assets/images/members/ in bucket`)
   })
-  .catch((err) => {
+  .catch(() => {
     res.status(400).send('Delete Fail').end()
   })
 })
@@ -549,7 +541,7 @@ router.route('*')
   })
   .delete(authVerify, function (req, res) {
     const url = `${apiHost}${req.url}`
-    const params = req.body || {}
+    // const params = req.body || {}
     superagent
     .delete(url)
     .end((err, response) => {
@@ -572,6 +564,7 @@ router.use(function (err, req, res, next) {
       console.log('Error occurred when checking login status', err)
     }
   }
+  next()
 })
 
 module.exports = router
