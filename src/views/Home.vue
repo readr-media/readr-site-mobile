@@ -7,8 +7,8 @@
 </template>
 <script>
   // import { SECTIONS_DEFAULT } from '../constants'
-  import { removeToken } from '../util/services'
-  import { isScrollBarReachBottom } from '../util/comm'
+  import { removeToken, } from '../util/services'
+  import { isScrollBarReachBottom, } from '../util/comm'
   import _ from 'lodash'
   // import AppHeader from '../components/AppHeader.vue'
   import AppAsideNav from '../components/AppAsideNav.vue'
@@ -17,22 +17,22 @@
   import HomeArticleMain from '../components/home/HomeArticleMain.vue'
   import HomeArticleAside from '../components/home/HomeArticleAside.vue'
 
-  const fetchPosts = (store, { mode, category, max_result, page, sort }) => {
+  const fetchPosts = (store, { mode, category, max_result, page, sort, }) => {
     return store.dispatch('GET_PUBLIC_POSTS', {
       params: {
         mode: mode,
         category: category,
         max_result: max_result,
         page: page,
-        sort: sort
-      }
+        sort: sort,
+      },
     })
   }
-  const fetchProjectsList = (store, { max_result }) => {
+  const fetchProjectsList = (store, { max_result, }) => {
     return store.dispatch('GET_PROJECTS_LIST', {
       params: {
-        max_result: max_result
-      }
+        max_result: max_result,
+      },
     })
   }
   const fetchFollowing = (store, params) => {
@@ -50,20 +50,20 @@
       AppTitledList,
       HomeProjectAside,
       HomeArticleMain,
-      HomeArticleAside
+      HomeArticleAside,
     },
     watch: {
       isReachBottom(isReachBottom) {
         if (isReachBottom && !this.endPage) {
           this.loadmoreLatest()
         }
-      }
+      },
     },
     data () {
       return {
         isReachBottom: false,
         currentPageLatest: 1,
-        endPage: false
+        endPage: false,
       } 
     },
     computed: {
@@ -75,7 +75,7 @@
       },
       postsHot () {
         return this.$store.state.publicPostsHot.items
-      }
+      },
     },
     name: 'Home',
     methods: {
@@ -83,7 +83,7 @@
         removeToken()
       },
       loadmoreLatest () {
-        fetchPosts(this.$store, { mode: 'update', max_result: 10, page: this.currentPageLatest + 1 })
+        fetchPosts(this.$store, { mode: 'update', max_result: 10, page: this.currentPageLatest + 1, })
         .then((res) => {
           this.currentPageLatest += 1
           if (this.$store.state.isLoggedIn) {
@@ -91,7 +91,7 @@
             fetchFollowing(this.$store, {
               mode: 'update',
               resource: 'post',
-              ids: ids
+              ids: ids,
             })
           }
         })
@@ -103,7 +103,7 @@
           }
         })
       },
-      isScrollBarReachBottom
+      isScrollBarReachBottom,
     },
     beforeMount () {
       // console.log('currentUser', currentUser())
@@ -114,18 +114,18 @@
           category: 'latest',
           max_result: 10,
           page: this.currentPageLatest,
-          sort: '-updated_at'
+          sort: '-updated_at',
         }),
         fetchPosts(this.$store, {
           mode: 'set',
           category: 'hot',
           max_result: 5,
           page: 1,
-          sort: '-updated_at'
+          sort: '-updated_at',
         }),
         fetchProjectsList(this.$store, {
-          max_result: 1
-        })
+          max_result: 1,
+        }),
       ]).then(() => {
         if (this.$store.state.isLoggedIn) {
           const postIdsLatest = this.$store.state.publicPosts.items.map(post => String(post.id))
@@ -134,11 +134,11 @@
           const ids = _.uniq(_.concat(postIdsLatest, postIdsHot))
           fetchFollowing(this.$store, {
             resource: 'post',
-            ids: ids
+            ids: ids,
           })
           fetchFollowing(this.$store, {
             resource: 'project',
-            ids: postIdFeaturedProject
+            ids: postIdFeaturedProject,
           })
         }
       })
@@ -147,7 +147,7 @@
       window.addEventListener('scroll', () => {
         this.isReachBottom = this.isScrollBarReachBottom()
       })
-    }
+    },
   }
 </script>
 <style lang="stylus" scoped>

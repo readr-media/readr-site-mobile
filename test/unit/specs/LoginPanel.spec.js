@@ -5,8 +5,8 @@ import GooglePlusLogin from 'src/components/login/GooglePlusLogin.vue'
 import Register from 'src/components/register/Register.vue'
 import Vue from 'vue'
 import sinon from 'sinon'
-import { WORDING_LOGIN, WORDING_REGISTER } from 'src/constants'
-import { mount } from 'avoriaz'
+import { WORDING_LOGIN, WORDING_REGISTER, } from 'src/constants'
+import { mount, } from 'avoriaz'
 
 describe('LoginPanel.vue', () => {
   sinon.stub(LoginPanel, 'beforeMount')
@@ -15,7 +15,7 @@ describe('LoginPanel.vue', () => {
   const blockRight = LoginPanelComponent.find('.login-panel__right')[0]
   const mockRouterLink = {
     name: 'router-link',
-    render: h => h('div')
+    render: h => h('div'),
   }
   Vue.component('router-link', mockRouterLink)
   it('should display two blocks: left and right', () => {
@@ -50,9 +50,9 @@ describe('LoginPanel.vue', () => {
   const LoginPanelComponentRegister = mount(LoginPanel, {
     data () {
       return {
-        isLoginTabAcitve: false
+        isLoginTabAcitve: false,
       }
-    }
+    },
   })
   const blockLeftRegister = LoginPanelComponentRegister.find('.login-panel__left')[0]
   const blockRightRegister = LoginPanelComponentRegister.find('.login-panel__right')[0]

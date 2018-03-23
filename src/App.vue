@@ -9,19 +9,19 @@
 </template>
 
 <script>
-  import { SECTIONS_DEFAULT } from './constants'
+  import { SECTIONS_DEFAULT, } from './constants'
   import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/AppHeader.vue'
   export default {
     components: {
       AppFooter,
-      AppHeader
+      AppHeader,
     },
     computed: {
       sections () {
         return SECTIONS_DEFAULT
-      }
-    }
+      },
+    },
   }
 </script>
 

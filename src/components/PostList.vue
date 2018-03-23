@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-  import { POST_ACTIVE, POST_TYPE } from '../../api/config'
+  import { POST_ACTIVE, POST_TYPE, } from '../../api/config'
   import {
     WORDING_POSTLIST_ACTIVE,
     WORDING_POSTLIST_ACTIVE_DRAFT,
@@ -54,7 +54,7 @@
     WORDING_POSTLIST_PUBLISH_AT,
     WORDING_POSTLIST_TITLE,
     WORDING_POSTLIST_UPDATE,
-    WORDING_POSTLIST_UPDATE_AT
+    WORDING_POSTLIST_UPDATE_AT,
   } from '../constants'
   import _ from 'lodash'
   import BaseLightBox from './BaseLightBox.vue'
@@ -66,20 +66,20 @@
     components: {
       BaseLightBox,
       BaseLightBoxPost,
-      PaginationNav
+      PaginationNav,
     },
     props: {
       maxResult: {
         type: Number,
-        required: true
+        required: true,
       },
       posts: {
         type: Array,
-        required: true
+        required: true,
       },
       sort: {
         type: String,
-        required: true
+        required: true,
       },
     },
     data () {
@@ -87,7 +87,7 @@
         checkedIems: [],
         config: {
           active: POST_ACTIVE,
-          type: POST_TYPE
+          type: POST_TYPE,
         },
         order: '',
         post: {},
@@ -104,8 +104,8 @@
           WORDING_POSTLIST_PUBLISH_AT,
           WORDING_POSTLIST_TITLE,
           WORDING_POSTLIST_UPDATE,
-          WORDING_POSTLIST_UPDATE_AT
-        }
+          WORDING_POSTLIST_UPDATE_AT,
+        },
       }
     },
     computed: {
@@ -114,31 +114,31 @@
       },
       canPublishPosts () {
         const items = _.filter(this.checkedIems, (item) => {
-          const post = _.find(this.posts, { id: item })
-          return _.get(post, [ 'active' ]) !== POST_ACTIVE.ACTIVE
+          const post = _.find(this.posts, { id: item, })
+          return _.get(post, [ 'active', ]) !== POST_ACTIVE.ACTIVE
         })
         return items.length > 0
       },
       totalPages () {
-        return Math.ceil(_.get(this.$store, [ 'state', 'postsCount' ], 0) / this.maxResult)
-      }
+        return Math.ceil(_.get(this.$store, [ 'state', 'postsCount', ], 0) / this.maxResult)
+      },
     },
     mounted () {},
     methods: {
       $_postList_deletePost (id) {
-        this.$emit('deletePosts', [ id ], POST_ACTIVE.DEACTIVE)
+        this.$emit('deletePosts', [ id, ], POST_ACTIVE.DEACTIVE)
       },
       $_postList_deletePosts () {
         this.$emit('deletePosts', this.checkedIems, POST_ACTIVE.DEACTIVE)
       },
       $_postList_editPost (id) {
-        this.$emit('editPost', { postPanel: 'edit', id: id })
+        this.$emit('editPost', { postPanel: 'edit', id: id, })
       },
       $_postList_getAuthorId (post) {
-        return _.get(post, [ 'author', 'nickname' ])
+        return _.get(post, [ 'author', 'nickname', ])
       },
       $_postList_getStatus (post) {
-        const status = _.get(post, [ 'active' ])
+        const status = _.get(post, [ 'active', ])
         switch (status) {
           case POST_ACTIVE.ACTIVE:
             return this.wording.WORDING_POSTLIST_ACTIVE_PUBLISH
@@ -159,15 +159,15 @@
         } else {
           order = field
         }
-        this.$emit('filterChanged', { sort: order })
+        this.$emit('filterChanged', { sort: order, })
       },
       $_postList_pageChanged (index) {
-        this.$emit('filterChanged', { page: index })
+        this.$emit('filterChanged', { page: index, })
       },
       $_postList_publishPosts () {
         const items = _.filter(this.checkedIems, (item) => {
-          const post = _.find(this.posts, { id: item })
-          return _.get(post, [ 'active' ]) !== POST_ACTIVE.ACTIVE
+          const post = _.find(this.posts, { id: item, })
+          return _.get(post, [ 'active', ]) !== POST_ACTIVE.ACTIVE
         })
         this.$emit('publishPosts', items, POST_ACTIVE.ACTIVE)
       },
@@ -196,8 +196,8 @@
       $_showPost (post) {
         this.showLightBox = true
         this.post = post
-      }
-    }
+      },
+    },
   }
 </script>
 <style lang="stylus" scoped>

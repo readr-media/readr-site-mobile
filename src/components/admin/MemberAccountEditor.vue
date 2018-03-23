@@ -61,31 +61,31 @@
   import Radio from 'src/components/form/Radio.vue'
   import Spinner from 'src/components/Spinner.vue'
   import validator from 'validator'
-  import { getValue } from 'src/util/comm'
+  import { getValue, } from 'src/util/comm'
 
   const debug = require('debug')('CLIENT:MemberAccountEditor')
   const register = (store, profile) => {
     return store.dispatch('ADD_MEMBER', {
-      params: profile
+      params: profile,
     })
   }
 
   const updateMember = (store, profile, type = '') => {
     return store.dispatch('UPDATE_MEMBER', {
       params: profile,
-      type
+      type,
     })
   }
 
   const deleteMember = (store, profile) => {
     return store.dispatch('DELETE_MEMBER', {
-      params: profile
+      params: profile,
     })
   }
 
   const deleteMembers = (store, params) => {
     return store.dispatch('DELETE_MEMBERS', {
-      params
+      params,
     })
   }
 
@@ -101,24 +101,24 @@
     components: {
       InputItem,
       Radio,
-      Spinner
+      Spinner,
     },
     computed: {
       emailVal () {
-        return this.typedEmail || _.get(this.members, [ 0, 'mail' ], '')
+        return this.typedEmail || _.get(this.members, [ 0, 'mail', ], '')
       },
       id () {
-        return _.get(this.members, [ 0, 'id' ])
+        return _.get(this.members, [ 0, 'id', ])
       },
       nicknameVal () {
-        return _.get(this.members, [ 0, 'nickname' ])
+        return _.get(this.members, [ 0, 'nickname', ])
       },
       roleValue () {
-        return this.selectedRole || _.get(this.members, [ 0, 'role' ])
+        return this.selectedRole || _.get(this.members, [ 0, 'role', ])
       },
       roles () {
         return CONSTANTS.ROLE_MAP
-      }
+      },
     },
     data () {
       return {
@@ -127,8 +127,8 @@
         alertMsgShow: {},
         isEdible: true,
         message: null,
-        typedEmail: _.get(this.members, [ 0, 'mail' ], null),
-        selectedRole: _.get(this.members, [ 0, 'role' ], null),
+        typedEmail: _.get(this.members, [ 0, 'mail', ], null),
+        selectedRole: _.get(this.members, [ 0, 'role', ], null),
         shouldShowBtnSet: false,
         wording: {
           WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER: CONSTANTS.WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER,
@@ -146,9 +146,9 @@
           WORDING_ADMIN_MEMBER_EDITOR_DELETE_SUCCESSFUL_CUSTOMEDITOR: CONSTANTS.WORDING_ADMIN_MEMBER_EDITOR_DELETE_SUCCESSFUL_CUSTOMEDITOR,
           WORDING_REGISTER_EMAIL_VALIDATE_IN_FAIL: CONSTANTS.WORDING_REGISTER_EMAIL_VALIDATE_IN_FAIL,
           WORDING_ADMIN_EXCEED_ERROR_CUSTOMEDITOR: CONSTANTS.WORDING_ADMIN_EXCEED_ERROR_CUSTOMEDITOR,
-          WORDING_ADMIN_SET_ERROR_CUSTOMEDITOR: CONSTANTS.WORDING_ADMIN_SET_ERROR_CUSTOMEDITOR
+          WORDING_ADMIN_SET_ERROR_CUSTOMEDITOR: CONSTANTS.WORDING_ADMIN_SET_ERROR_CUSTOMEDITOR,
         },
-        shouldShowSpinner: false
+        shouldShowSpinner: false,
       }
     },
     name: 'MemberAccountEditor',
@@ -181,7 +181,7 @@
         if (this.shouldShowSpinner) { return }
         if (this.validate() || this.action === 'delete') {
           this.shouldShowSpinner = true
-          const callback = ({ status }) => {
+          const callback = ({ status, }) => {
             this.isEdible = false
             this.shouldShowSpinner = false
             if (status === 200) {
@@ -200,21 +200,21 @@
             updateMember(this.$store, {
               id: this.id,
               mail: this.typedEmail,
-              role: this.selectedRole
+              role: this.selectedRole,
             }, 'role').then(callback)
           } else if (this.action === 'add') {
             register(this.$store, {
               email: this.typedEmail,
-              role: this.selectedRole
+              role: this.selectedRole,
             }).then(callback)
           } else if (this.action === 'delete') {
             if (this.members.length > 1) {
               deleteMembers(this.$store, {
-                ids: _.map(this.members, (m) => (m.id))
+                ids: _.map(this.members, (m) => (m.id)),
               }).then(callback)
             } else {
               deleteMember(this.$store, {
-                id: this.id
+                id: this.id,
               }).then(callback)
             }
           }
@@ -240,24 +240,24 @@
         }
         this.$forceUpdate()
         return pass
-      }
+      },
     },
     mounted () {},
-    props: [ 'shouldShow', 'title', 'members', 'action' ],
+    props: [ 'shouldShow', 'title', 'members', 'action', ],
     watch: {
       members: function () {
-        this.typedEmail = _.get(this.members, [ 0, 'mail' ], null)
-        this.selectedRole = _.get(this.members, [ 0, 'role' ], null)
+        this.typedEmail = _.get(this.members, [ 0, 'mail', ], null)
+        this.selectedRole = _.get(this.members, [ 0, 'role', ], null)
         this.message = null
         this.isEdible = true
       },
       shouldShow: function () {
-        this.typedEmail = _.get(this.members, [ 0, 'mail' ], '')
-        this.selectedRole = _.get(this.members, [ 0, 'role' ])
+        this.typedEmail = _.get(this.members, [ 0, 'mail', ], '')
+        this.selectedRole = _.get(this.members, [ 0, 'role', ])
         this.message = null
         this.isEdible = true
-      }
-    }
+      },
+    },
   }
 </script>
 <style lang="stylus" scoped>

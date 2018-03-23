@@ -30,9 +30,9 @@
     WORDING_LOGIN_INFAIL_VALIDATION_ISSUE,
     WORDING_PASSWORD,
     WORDING_REGISTER_EMAIL_VALIDATE_IN_FAIL,
-    WORDING_REGISTER_PWD_EMPTY } from 'src/constants'
-  import { ROLE_MAP } from 'src/constants'
-  import { consoleLogOnDev } from 'src/util/comm'
+    WORDING_REGISTER_PWD_EMPTY, } from 'src/constants'
+  import { ROLE_MAP, } from 'src/constants'
+  import { consoleLogOnDev, } from 'src/util/comm'
   import InputItem from 'src/components/form/InputItem.vue'
   import validator from 'validator'
 
@@ -41,15 +41,15 @@
       params: {
         email: profile.email,
         password: profile.password,
-        keepAlive: profile.keepAlive
+        keepAlive: profile.keepAlive,
       },
-      token
+      token,
     })
   }
 
   export default {
     components: {
-      InputItem
+      InputItem,
     },
     data () {
       return {
@@ -67,8 +67,8 @@
           WORDING_KEEP_ALIVE,
           WORDING_FORGET_PASSWORD,
           WORDING_REGISTER_EMAIL_VALIDATE_IN_FAIL,
-          WORDING_REGISTER_PWD_EMPTY
-        }
+          WORDING_REGISTER_PWD_EMPTY,
+        },
       }
     },
     name: 'login',
@@ -81,10 +81,10 @@
           login(this.$store, {
             email: this.formData.mail,
             password: this.formData.pwd,
-            keepAlive: this.$refs[ 'keep-alive' ].checked
-          }, _.get(this.$store, [ 'state', 'register-token' ])).then((res) => {
+            keepAlive: this.$refs[ 'keep-alive' ].checked,
+          }, _.get(this.$store, [ 'state', 'register-token', ])).then((res) => {
             if (res.status === 200) {
-              const memberCenter = _.get(_.filter(ROLE_MAP, { key: _.get(this.$store, [ 'state', 'profile', 'role' ]) }), [ 0, 'route' ], 'member')
+              const memberCenter = _.get(_.filter(ROLE_MAP, { key: _.get(this.$store, [ 'state', 'profile', 'role', ]), }), [ 0, 'route', ], 'member')
               if (memberCenter.match(/member/)) {
                 location.replace('/')
               } else {
@@ -132,19 +132,19 @@
           pass = false
           this.alertFlags.mail = true
           this.alertMsgs.mail = this.wording.WORDING_REGISTER_EMAIL_VALIDATE_IN_FAIL
-          consoleLogOnDev({ msg: 'mail wrong, ' + this.formData.mail })
+          consoleLogOnDev({ msg: 'mail wrong, ' + this.formData.mail, })
         }
         if (!this.formData.pwd || validator.isEmpty(this.formData.pwd)) {
           pass = false
           this.alertFlags.pwd = true
           this.alertMsgs.pwd = this.wording.WORDING_REGISTER_PWD_EMPTY
-          consoleLogOnDev({ msg: 'pwd empty, ' + this.formData.pwd })
+          consoleLogOnDev({ msg: 'pwd empty, ' + this.formData.pwd, })
         }
         this.$forceUpdate()
         return pass
-      }
+      },
     },
-    mounted () {}
+    mounted () {},
   }
 </script>
 <style lang="stylus" scoped>

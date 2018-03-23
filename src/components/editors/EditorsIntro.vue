@@ -18,17 +18,17 @@ import _ from 'lodash'
 
 const publishAction = (store, data) => {
   return store.dispatch('PUBLISH_ACTION', {
-    params: data
+    params: data,
   })
 }
-const updateStoreFollowingByResource = (store, { action, resource, resourceId, userId }) => {
+const updateStoreFollowingByResource = (store, { action, resource, resourceId, userId, }) => {
   store.dispatch('UPDATE_FOLLOWING_BY_RESOURCE', {
     params: {
       action: action,
       resource: resource,
       resourceId: resourceId,
-      userId: userId
-    }
+      userId: userId,
+    },
   })
 }
 
@@ -36,12 +36,12 @@ export default {
   props: {
     editor: {
       type: Object,
-      require: true
+      require: true,
     },
     trimDescription: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     isFollow () {
@@ -49,7 +49,7 @@ export default {
     },
     editorFollowers () {
       if (this.$store.state.isLoggedIn) {
-        const editorFollowersData = _.find(this.$store.state.followingByResource['member'], { resourceid: `${this.editor.id}` })
+        const editorFollowersData = _.find(this.$store.state.followingByResource['member'], { resourceid: `${this.editor.id}`, })
         return editorFollowersData ? editorFollowersData.follower : []
       } else {
         return []
@@ -65,7 +65,7 @@ export default {
       } else {
         return ''
       }
-    }
+    },
   },
   methods: {
     toogleFollow () {
@@ -77,31 +77,31 @@ export default {
             action: 'follow',
             resource: 'member',
             subject: this.$store.state.profile.id,
-            object: `${this.editor.id}`
+            object: `${this.editor.id}`,
           })
           updateStoreFollowingByResource(this.$store, {
             action: 'follow',
             resource: 'member',
             resourceId: this.editor.id,
-            userId: this.$store.state.profile.id
+            userId: this.$store.state.profile.id,
           })
         } else {
           publishAction(this.$store, {
             action: 'unfollow',
             resource: 'member',
             subject: this.$store.state.profile.id,
-            object: `${this.editor.id}`
+            object: `${this.editor.id}`,
           })
           updateStoreFollowingByResource(this.$store, {
             action: 'unfollow',
             resource: 'member',
             resourceId: this.editor.id,
-            userId: this.$store.state.profile.id
+            userId: this.$store.state.profile.id,
           })
         }
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

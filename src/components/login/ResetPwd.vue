@@ -47,20 +47,20 @@
     WORDING_REGISTER_PWD_CHECK_EMPTY,
     WORDING_REGISTER_PWD_CHECK_INFAIL,
     WORDING_LOGIN_RESET_PWD_COMPLETE,
-    WORDING_LOGIN_RESET_PWD_INFAIL } from 'src/constants'
+    WORDING_LOGIN_RESET_PWD_INFAIL, } from 'src/constants'
   import InputItem from 'src/components/form/InputItem.vue'
   import Spinner from 'src/components/Spinner.vue'
   import validator from 'validator'
 
   const debug = require('debug')('CLIENT:SetPassword')
   const resetpwd = (store, params) => (store.dispatch('RESET_PWD', {
-    params
+    params,
   }))
   export default {
     name: 'ResetPwd',
     components: {
       InputItem,
-      Spinner
+      Spinner,
     },
     data () {
       return {
@@ -80,8 +80,8 @@
           WORDING_REGISTER_PWD_CHECK_EMPTY,
           WORDING_REGISTER_PWD_CHECK_INFAIL,
           WORDING_LOGIN_RESET_PWD_COMPLETE,
-          WORDING_LOGIN_RESET_PWD_INFAIL
-        }
+          WORDING_LOGIN_RESET_PWD_INFAIL,
+        },
       }
     },
     methods: {
@@ -103,7 +103,7 @@
           this.shouldShowSpinner = true
           debug('About to save password')
           resetpwd(this.$store, {
-            password: this.formData.pwd
+            password: this.formData.pwd,
           }).then(res => {
             debug(res)
             this.isDone = true
@@ -156,7 +156,7 @@
           pass = false
         }
         return pass
-      }
+      },
     },
     mounted () {
 

@@ -8,20 +8,20 @@
 </template>
 <script>
   import _ from 'lodash'
-  import { WORDING_FACEBOOK_LOGIN, WORDING_FACEBOOK_REGISTER } from '../../constants'
-  import { consoleLogOnDev } from '../../util/comm'
+  import { WORDING_FACEBOOK_LOGIN, WORDING_FACEBOOK_REGISTER, } from '../../constants'
+  import { consoleLogOnDev, } from '../../util/comm'
 
   const login = (store, profile, token) => {
     return store.dispatch('LOGIN', {
       params: profile,
-      token
+      token,
     })
   }
   
   const register = (store, profile, token) => {
     return store.dispatch('REGISTER', {
       params: profile,
-      token
+      token,
     })
   }
 
@@ -30,8 +30,8 @@
       return {
         wording: {
           WORDING_FACEBOOK_LOGIN,
-          WORDING_FACEBOOK_REGISTER
-        }
+          WORDING_FACEBOOK_REGISTER,
+        },
       }
     },
     computed: {
@@ -44,13 +44,13 @@
           default:
             return ''
         }
-      }
+      },
     },
     name: 'facebook-login',
     methods: {
       login () {
         const readyToLogin = (params) => {
-          login(this.$store, params, _.get(this.$store, [ 'state', 'register-token' ]))
+          login(this.$store, params, _.get(this.$store, [ 'state', 'register-token', ]))
             .then((res) => {
               if (res.status === 200) {
                 location.replace('/')
@@ -59,47 +59,47 @@
         }
         if (window && !window.fbStatus) {
           FB.login(() => {
-            FB.api('/me', { fields: 'id,name,gender,email' }, (res) => {
+            FB.api('/me', { fields: 'id,name,gender,email', }, (res) => {
               register(this.$store, {
                 // nickname: '-',
                 email: res.email,
                 // gender: res.gender,
                 register_mode: 'oauth-fb',
-                social_id: res.id
-              }, _.get(this.$store, [ 'state', 'register-token' ])).then(({ status }) => {
+                social_id: res.id,
+              }, _.get(this.$store, [ 'state', 'register-token', ])).then(({ status, }) => {
                 this.isRegistered = true
                 if (status === 200) {
-                  consoleLogOnDev({ msg: 'successfully' })
+                  consoleLogOnDev({ msg: 'successfully', })
                   readyToLogin({
                     id: res.id,
                     email: res.email,
-                    login_mode: 'facebook'
+                    login_mode: 'facebook',
                   })
                 }
-              }).catch(({ err }) => {
+              }).catch(({ err, }) => {
                 if (err === 'User Already Existed') {
-                  consoleLogOnDev({ msg: 'User Already Existed' })
+                  consoleLogOnDev({ msg: 'User Already Existed', })
                   readyToLogin({
                     id: res.id,
                     email: res.email,
-                    login_mode: 'facebook'
+                    login_mode: 'facebook',
                   })
                 } else {
                   console.log(err)
                 }
               })
             })
-          }, { scope: 'public_profile,email' })
+          }, { scope: 'public_profile,email', })
         } else {
           readyToLogin({
             id: window.fbStatus.uid,
-            login_mode: 'facebook'
+            login_mode: 'facebook',
           })
         }
-      }
+      },
     },
     mounted () {},
-    props: [ 'type' ]
+    props: [ 'type', ],
   }
 </script>
 <style lang="stylus" scoped>

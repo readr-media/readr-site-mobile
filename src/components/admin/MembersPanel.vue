@@ -52,13 +52,13 @@
 </template>
 <script>
   import _ from 'lodash'
-  import { WORDING_ADMIN_ACCOUNT, WORDING_ADMIN_EMAIL, WORDING_ADMIN_ROLE, WORDING_ADMIN_UPDATE, WORDING_ADMIN_DELETE } from '../../constants'
-  import { WORDING_ADMIN_MEMBER_EDITOR_REVISE_MEMBER, WORDING_ADMIN_MEMBER_EDITOR_DELETE_CONFIRMATION, WORDING_ADMIN_NICKNAME, WORDING_ADMIN_GUESTEDITOR } from '../../constants'
-  import { WORDING_ADMIN_MEMBER_EDITOR_SET_CONFIRMATION_CUSTOMEDITOR, WORDING_ADMIN_MEMBER_EDITOR_DELETE_CONFIRMATION_CUSTOMEDITOR } from '../../constants'
-  import { CUSTOM_EDITOR_LIMIT } from '../../constants'
-  import { FILTER } from '../../constants/admin'
-  import { ROLE_MAP } from '../../constants'
-  import { getValue } from '../../util/comm'
+  import { WORDING_ADMIN_ACCOUNT, WORDING_ADMIN_EMAIL, WORDING_ADMIN_ROLE, WORDING_ADMIN_UPDATE, WORDING_ADMIN_DELETE, } from '../../constants'
+  import { WORDING_ADMIN_MEMBER_EDITOR_REVISE_MEMBER, WORDING_ADMIN_MEMBER_EDITOR_DELETE_CONFIRMATION, WORDING_ADMIN_NICKNAME, WORDING_ADMIN_GUESTEDITOR, } from '../../constants'
+  import { WORDING_ADMIN_MEMBER_EDITOR_SET_CONFIRMATION_CUSTOMEDITOR, WORDING_ADMIN_MEMBER_EDITOR_DELETE_CONFIRMATION_CUSTOMEDITOR, } from '../../constants'
+  import { CUSTOM_EDITOR_LIMIT, } from '../../constants'
+  import { FILTER, } from '../../constants/admin'
+  import { ROLE_MAP, } from '../../constants'
+  import { getValue, } from '../../util/comm'
   import BaseLightBox from '../BaseLightBox.vue'
   import MemberAccountEditor from './MemberAccountEditor.vue'
   import PaginationNav from '../PaginationNav.vue'
@@ -66,14 +66,14 @@
   const getCustomEditors = (store) => {
     return store.dispatch('GET_MEMBERS', {
       params: {
-        custom_editor: true
-      }
+        custom_editor: true,
+      },
     })
   }
   const updateMember = (store, profile, type = '') => {
     return store.dispatch('UPDATE_MEMBER', {
       params: profile,
-      type
+      type,
     })
   }
 
@@ -81,11 +81,11 @@
     components: {
       BaseLightBox,
       MemberAccountEditor,
-      PaginationNav
+      PaginationNav,
     },
     computed: {
       members () {
-        return _.get(this.$store, [ 'state', 'members', 'items' ], [])
+        return _.get(this.$store, [ 'state', 'members', 'items', ], [])
       },
       filterOpts () {
         return FILTER
@@ -97,7 +97,7 @@
         })
         return roles
       },
-      title () {}
+      title () {},
     },
     data () {
       return {
@@ -118,8 +118,8 @@
           WORDING_ADMIN_MEMBER_EDITOR_DELETE_CONFIRMATION_CUSTOMEDITOR,
           WORDING_ADMIN_MEMBER_EDITOR_SET_CONFIRMATION_CUSTOMEDITOR,
           WORDING_ADMIN_NICKNAME,
-          WORDING_ADMIN_GUESTEDITOR
-        }
+          WORDING_ADMIN_GUESTEDITOR,
+        },
       }
     },
     name: 'member-panel',
@@ -128,12 +128,12 @@
         this.showLightBox = false
       },
       canBeCustomEditor (m) {
-        return this.getValue(this.roles, [ this.getValue(m, [ 'role' ], 1) ], '-') !== '會員' && this.getValue(this.roles, [ this.getValue(m, [ 'role' ], 1) ], '-') !== '-'
+        return this.getValue(this.roles, [ this.getValue(m, [ 'role', ], 1), ], '-') !== '會員' && this.getValue(this.roles, [ this.getValue(m, [ 'role', ], 1), ], '-') !== '-'
       },
       del (index) {
         this.action = 'delete'
         this.showLightBox = true
-        this.targMember = [ this.members[ index ] ]
+        this.targMember = [ this.members[ index ], ]
         this.editorTitle = this.wording.WORDING_ADMIN_MEMBER_EDITOR_DELETE_CONFIRMATION
       },
       delMultiple () {
@@ -145,13 +145,13 @@
       filterChanged (event) {
         this.$refs[ 'selectAll' ].checked = false
         this.toggoleSelectAll()
-        this.$emit('filterChanged', { sort: event.target.value })
+        this.$emit('filterChanged', { sort: event.target.value, })
       },
       getValue,
       pageChanged (index) {
         this.$refs[ 'selectAll' ].checked = false
         this.toggoleSelectAll()
-        this.$emit('filterChanged', { page: index })
+        this.$emit('filterChanged', { page: index, })
       },
       toogleCustomEditor (index, event) {
         const exceedMaxCustomEditor = () => {
@@ -161,7 +161,7 @@
           this.targMember = this.members[ index ]
           updateMember(this.$store, {
             id: this.targMember.id,
-            custom_editor: false
+            custom_editor: false,
           }).then(() => {
             event.target.checked = false
             this.updated()
@@ -174,7 +174,7 @@
           this.targMember = this.members[ index ]
           updateMember(this.$store, {
             id: this.targMember.id,
-            custom_editor: true
+            custom_editor: true,
           }).then(() => {
             event.target.checked = true
             this.updated()
@@ -196,25 +196,25 @@
       orderBy (field) {
         if (this.currOrder === field || this.currOrder === `-${field}`) {
           this.currOrder = this.currOrder.indexOf('-') === 0 ? field : `-${field}`
-          this.$emit('filterChanged', { sort: this.currOrder })
+          this.$emit('filterChanged', { sort: this.currOrder, })
         } else {
           this.currOrder = field
-          this.$emit('filterChanged', { sort: field })
+          this.$emit('filterChanged', { sort: field, })
         }
       },
       update (index) {
         this.action = 'update'
         this.showLightBox = true
-        this.targMember = [ this.members[ index ] ]
+        this.targMember = [ this.members[ index ], ]
         this.editorTitle = this.wording.WORDING_ADMIN_MEMBER_EDITOR_REVISE_MEMBER
       },
       updated () {
         this.$emit('filterChanged')
-      }
+      },
     },
     mounted () {
       getCustomEditors(this.$store)
-    }
+    },
   }
 </script>
 <style lang="stylus" scoped>

@@ -102,7 +102,7 @@
     WORDING_CONTROLBAR_RECORD,
     WORDING_CONTROLBAR_REVIEW,
     WORDING_CONTROLBAR_TAG,
-    WORDING_CONTROLBAR_VIDEO
+    WORDING_CONTROLBAR_VIDEO,
   } from '../constants'
   import _ from 'lodash'
   import ControlBarButton from './ControlBarButton.vue'
@@ -112,7 +112,7 @@
     name: 'TheControlBar',
     components: {
       'control-bar-button': ControlBarButton,
-      'control-bar-button-box': ControlBarButtonBox
+      'control-bar-button-box': ControlBarButtonBox,
     },
     data () {
       return {
@@ -135,7 +135,7 @@
           WORDING_CONTROLBAR_REVIEW,
           WORDING_CONTROLBAR_TAG,
           WORDING_CONTROLBAR_VIDEO,
-        }
+        },
       }
     },
     computed: {
@@ -144,7 +144,7 @@
       },
       wordingBtnReview () {
         return this.viewport <= 767 ? this.wording.WORDING_CONTROLBAR_REVIEW : this.wording.WORDING_CONTROLBAR_ADD_REVIEW
-      }
+      },
     },
     mounted () {
       this.$_controlBar_getViewport()
@@ -180,8 +180,8 @@
         } else {
           e.target.parentNode.classList.add('active')
         }
-      }
-    }
+      },
+    },
   }
 </script>
 <style lang="stylus" scoped>
