@@ -51,7 +51,8 @@ export function getHost () {
   }
 }
 
-export function isScrollBarReachBottom () {
+export function isScrollBarReachBottom (ratio = 0) {
+  const vh = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
   function getScrollXY () {
     var scrOfX = 0, scrOfY = 0
     if ( typeof ( window.pageYOffset ) == 'number' ) {
@@ -78,8 +79,7 @@ export function isScrollBarReachBottom () {
       D.body.clientHeight, D.documentElement.clientHeight
     )
   }
-
-  return getDocHeight() <= getScrollXY()[1] + window.innerHeight
+  return getDocHeight() <= getScrollXY()[1] + window.innerHeight + (vh * ratio)
 }
 
 export function setReadrCookie () {

@@ -17,7 +17,7 @@
             <span class="videosList__item-info-icon-count">{{ get(video, [ 'videoViews' ]) || 0 }}</span>
           </div>
         </div>
-        <div :class="`videosList__item-comment hidden video-${get(video, [ 'id' ])}`">
+        <div class="videosList__item-comment hidden" :class="`video-${get(video, [ 'id' ])}`">
           <div class="comment"></div>
         </div>
       </div>

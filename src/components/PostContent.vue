@@ -23,7 +23,7 @@
       </div>
       <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
     </a>
-    <AppArticleNav :postId="this.post.id" :commentCount="commentCount"></AppArticleNav>
+    <!-- <AppArticleNav :postId="this.post.id" :commentCount="commentCount"></AppArticleNav> -->
   </div>
 </template>
 <script>
