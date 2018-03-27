@@ -42,6 +42,7 @@
             <a class="homeNavigationMobile__project-img" href=""><img :src="get(p, [ 'ogImage' ])" :alt="get(p, [ 'title' ])"></a>
             <div class="homeNavigationMobile__project-info">
               <h2><a href="" v-text="get(p, [ 'title' ])"></a></h2>
+              <p><a href="" v-text="get(p, [ 'description' ])"></a></p>
               <div>
                 <div
                   class="homeNavigationMobile__project-info-comment"
@@ -64,6 +65,7 @@
 </template>
 <script>
   import { SITE_DOMAIN_DEV, } from '../../../src/constants'
+  import { currentYPosition, elmYPosition, } from 'kc-scroll'
   import { get, } from 'lodash'
   import { renderComment, } from '../../../src/util/talk'
   import CommentCount from '../../components/comment/CommentCount.vue'
@@ -102,6 +104,19 @@
     },
     mounted () {
       this.isStream ? this.active = 'video' : ''
+      window.addEventListener('scroll', () => {
+        if (this.active) {
+          const headerHeight = document.querySelector(`.header`).offsetHeight
+          const contentHeight = document.querySelector(`.homeNavigationMobile__content`).offsetHeight
+          switch (this.active) {
+            case 'video':
+              currentYPosition() + headerHeight + contentHeight / 2 > elmYPosition('.homeNavigationMobile__content') + contentHeight ? this.active = undefined : ''
+              break
+            default:
+              currentYPosition() + headerHeight > elmYPosition('.homeNavigationMobile__content') ? this.active = undefined : ''
+          }
+        }
+      })
     },
     methods: {
       $_homeNavigationMobile_changePanel (active) {
@@ -214,14 +229,12 @@
         font-size 0
         &::before
           content ''
+          display block
+          padding-top 66.66%
+          height 0
+        img
           position absolute
           top 0
-          left 0
-          bottom 0
-          right 0
-          width 100%
-          padding-top 66.66%
-        img
           width 100%
           height 100%
           object-fit cover
@@ -245,6 +258,8 @@
             text-align justify
             text-overflow ellipsis
             overflow hidden
+        p
+          display none
         > div
           display flex
         &-comment, &-views
@@ -263,6 +278,73 @@
         &.hidden
           display none
 
-        
+  @media (min-width 768px)
+    .homeNavigationMobile
+      margin-bottom 0
+      nav
+        position absolute
+        top 80px
+        left 25px
+        flex-direction column
+      &__item
+        display flex
+        justify-content center
+        align-items center
+        width 30px
+        height auto
+        &.active
+          &::before
+            top 50%
+            right -10px
+            bottom auto
+            width 0
+            height 0
+            transform translateY(-50%)
+            border-style solid
+            border-width 5px 0 5px 10px
+            border-color transparent transparent transparent #ddcf21
+        &:last-of-type
+          span
+            border-bottom none
+        span
+          display inline
+          width auto
+          height 90px
+          margin 0
+          padding 0 10px
+          border-right none
+          border-bottom 1px solid #d3d3d3
+          writing-mode vertical-lr
+      &__content
+        margin 0
+      &__progress
+        &:last-of-type
+          margin-bottom 20px
+      &__video
+        margin-bottom 20px
+      &__project
+        &:last-of-type
+          margin-bottom 20px
+        &-img
+          &::before
+            padding-top 56.25%
+        &-info
+          padding 0 0 0 15px
+          h2
+            font-size 1.125rem
+          p
+            display block
+            margin 0
+            font-size .9375rem
+            line-height 1.5
+            a
+              display block
+              max-width 100%
+              max-height calc(.9375rem * 4.5)
+              color #000
+              vertical-align top
+              text-align justify
+              text-overflow ellipsis
+              overflow hidden
         
 </style>

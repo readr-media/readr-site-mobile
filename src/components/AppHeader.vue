@@ -227,5 +227,13 @@
         width 100%
         height 100%
         background-color rgba(0, 0, 0, .6)
-    
+
+  @media (min-width 768px)
+    .header
+      height 50px
+      &__logo
+        width 55px
+        top 14px
+        left 25px
+
 </style>
