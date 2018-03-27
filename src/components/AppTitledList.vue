@@ -28,12 +28,12 @@ export default {
     align-items center
     padding 0
     .plus
-      length = 18px
+      length = 15px
       display inline-block
       width length
       height length
       position relative
-      margin-right 7.5px
+      margin-right 5px
       // CSS based plus sign
       &::before
         content ''
@@ -59,7 +59,8 @@ export default {
         margin auto
     h1
       display inline
-      font-size 18px
+      font-size .9375rem
       font-weight 600
+      line-height 1
       margin 0
 </style>

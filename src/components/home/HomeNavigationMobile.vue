@@ -37,43 +37,22 @@
         </div>
       </template>
       <template v-if="active === 'projectsDone'">
-        <div v-for="p in projectsDone" :key="p.id" class="homeNavigationMobile__project">
-          <div class="homeNavigationMobile__project-content">
-            <a class="homeNavigationMobile__project-img" href=""><img :src="get(p, [ 'ogImage' ])" :alt="get(p, [ 'title' ])"></a>
-            <div class="homeNavigationMobile__project-info">
-              <h2><a href="" v-text="get(p, [ 'title' ])"></a></h2>
-              <p><a href="" v-text="get(p, [ 'description' ])"></a></p>
-              <div>
-                <div
-                  class="homeNavigationMobile__project-info-comment"
-                  @click="$_homeNavigationMobile_renderComment(get(p, [ 'id' ]))">
-                  <img src="/public/icons/comment-blue.png">
-                  <CommentCount class="homeNavigationMobile__project-info-comment-count"></CommentCount>
-                </div>
-                <div class="homeNavigationMobile__project-info-views">
-                  <img src="/public/icons/view-blue.png">
-                  <span></span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="homeNavigationMobile__project-comment hidden" :class="`project-${get(p, [ 'id' ])}`"></div>
-        </div>
+        <ProjectBlock v-for="p in projectsDone" :key="p.id" :project="p"></ProjectBlock>
       </template>
     </div>
   </section>
 </template>
 <script>
-  import { SITE_DOMAIN_DEV, } from '../../../src/constants'
   import { currentYPosition, elmYPosition, } from 'kc-scroll'
   import { get, } from 'lodash'
-  import { renderComment, } from '../../../src/util/talk'
   import CommentCount from '../../components/comment/CommentCount.vue'
+  import ProjectBlock from '../../components/ProjectBlock.vue'
 
   export default {
     name: 'HomeNavigationMobile',
     components: {
       CommentCount,
+      ProjectBlock,
     },
     props: {
       projectsDone: {
@@ -87,7 +66,6 @@
       video: {
         required: true,
       },
-      
     },
     data () {
       return {
@@ -121,13 +99,6 @@
     methods: {
       $_homeNavigationMobile_changePanel (active) {
         this.active === active ? this.active = undefined : this.active = active
-      },
-      $_homeNavigationMobile_renderComment (id) {
-        document.querySelector(`.homeNavigationMobile__project-comment.project-${id}`).classList.toggle('hidden')
-        const rendered = document.querySelector(`.homeNavigationMobile__project-comment.project-${id} iframe`)
-        if (window.Coral && !rendered) {
-          renderComment(this.$el, `.homeNavigationMobile__project-comment.project-${id} > .comment`, `${location.protocol}//${SITE_DOMAIN_DEV}/post/${id}`)
-        }
       },
       get,
     },
@@ -214,69 +185,6 @@
         right 0
         width 100%
         height 100%
-    &__project
-      padding 15px
-      background-color #fff
-      border-bottom 1px solid #d3d3d3
-      &:last-of-type
-        border-bottom none
-      &-content
-        display flex
-      &-img
-        position relative
-        display block
-        width 50%
-        font-size 0
-        &::before
-          content ''
-          display block
-          padding-top 66.66%
-          height 0
-        img
-          position absolute
-          top 0
-          width 100%
-          height 100%
-          object-fit cover
-          object-position 50% 50%
-      &-info
-        display flex
-        flex-direction column
-        justify-content space-between
-        width 50%
-        padding 2px 0 0 10px
-        h2
-          margin 0
-          font-size .9375rem
-          line-height 1.5
-          a
-            display block
-            max-width 100%
-            max-height calc(.9375rem * 3)
-            color #000
-            vertical-align top
-            text-align justify
-            text-overflow ellipsis
-            overflow hidden
-        p
-          display none
-        > div
-          display flex
-        &-comment, &-views
-          img
-            width 25px
-            height 25px
-        &-comment
-          &-count
-            position relative
-            right 3px
-            bottom -3px
-            color #11b8c9
-        &-views
-          margin-left 35px
-      &-comment
-        &.hidden
-          display none
 
   @media (min-width 768px)
     .homeNavigationMobile
@@ -322,29 +230,5 @@
           margin-bottom 20px
       &__video
         margin-bottom 20px
-      &__project
-        &:last-of-type
-          margin-bottom 20px
-        &-img
-          &::before
-            padding-top 56.25%
-        &-info
-          padding 0 0 0 15px
-          h2
-            font-size 1.125rem
-          p
-            display block
-            margin 0
-            font-size .9375rem
-            line-height 1.5
-            a
-              display block
-              max-width 100%
-              max-height calc(.9375rem * 4.5)
-              color #000
-              vertical-align top
-              text-align justify
-              text-overflow ellipsis
-              overflow hidden
         
 </style>

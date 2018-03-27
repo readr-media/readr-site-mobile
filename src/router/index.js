@@ -17,6 +17,7 @@ const Editor = () => import('../views/Editor.vue')
 const Editors = () => import('../views/Editors.vue')
 const GuestEditor = () => import('../views/GuestEditor.vue')
 const Home = () => import('../views/Home.vue')
+const Hots = () => import('../views/Hots.vue')
 const Login = () => import('../views/Login.vue')
 const Member = () => import('../views/Member.vue')
 const Post = () => import('../views/Post.vue')
@@ -37,6 +38,7 @@ const router = new Router({
     { path: '/editor', component: Editor, meta: { permission: 'editor', },},
     { path: '/editors', component: Editors, },
     { path: '/guesteditor', component: GuestEditor, meta: { permission: 'guesteditor', },},
+    { path: '/hots', component: Hots, },
     { path: '/login', component: Login, },
     { path: '/member', component: Member, meta: { permission: 'member', },},
     { path: '/post/:id', component: Post, },

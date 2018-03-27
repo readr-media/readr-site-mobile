@@ -1,20 +1,20 @@
 <template>
   <footer ref="footer" class="footer">
-    <a href="" class="footer__item" :class="{ active: currentPath === '' }">
+    <router-link to="/" class="footer__item" :class="{ active: currentPath === '' }">
       <img src="/public/icons/posts.png" alt="">
-    </a>
-    <a href="" class="footer__item">
+    </router-link>
+    <router-link to="/" class="footer__item">
       <img src="/public/icons/hot-posts.png" alt="">
-    </a>
-    <a href="" class="footer__item" :class="{ active: currentPath === 'videos' }">
+    </router-link>
+    <!-- <router-link to="/videos" class="footer__item" :class="{ active: currentPath === 'videos' }">
       <img src="/public/icons/videos.png" alt="">
-    </a>
-    <a href="" class="footer__item" :class="{ active: currentPath === 'editors' }">
+    </router-link> -->
+    <router-link to="/editors" class="footer__item" :class="{ active: currentPath === 'editors' }">
       <img src="/public/icons/editors.png" alt="">
-    </a>
-    <a href="" class="footer__item" :class="{ active: currentPath === 'projects' }">
+    </router-link>
+    <router-link to="/projects" class="footer__item" :class="{ active: currentPath === 'projects' }">
       <img src="/public/icons/projects.png" alt="">
-    </a>
+    </router-link>
   </footer>
 </template>
 <script>
@@ -62,7 +62,7 @@
     &__item
       display inline-block
       position relative
-      width 20%
+      width 25%
       height 100%
       &.active
         background-color #ddcf21
