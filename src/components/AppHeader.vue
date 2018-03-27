@@ -1,13 +1,21 @@
 <template>
   <div class="header">
     <img class="header__logo" src="/public/icons/logo-mobile.png" alt="">
-    <SearchTool class="header__search"></SearchTool>
-    <div v-if="isClientSide" class="header__status" >
-      <div v-if="isLoggedIn" class="header__status-item header--nickname" @click="goMemberCenter" v-text="userNickname"></div>
+    
+    <SearchTool class="header__item"></SearchTool>
+    <div class="header__item header--hamburger" @click="toggleMenu">
+      <div class="header__hamburgerBar"></div>
+      <div class="header__hamburgerBar"></div>
+      <div class="header__hamburgerBar"></div>
+    </div>
+    <div v-if="isClientSide && isLoggedIn" class="header__item header--account" @click="goMemberCenter">
+      <img src="/public/icons/account.png" alt="">
+    </div>
+    <div v-if="isClientSide" class="header__item header--status" >
       <a v-if="!isLoggedIn" class="header__status-item" href="/login" v-text="wording.WORDING_HEADER_LOGIN"></a>
       <div v-else-if="isLoggedIn" class="header__status-item" @click="logout" v-text="wording.WORDING_HEADER_LOGOUT"></div>
     </div>
-    <button class="header__hamburger" @click="toggleMenu"><img src="/public/icons/menu.png"></button>
+
     <section ref="headerMenu" class="header__menu">
       <ul>
         <li><a><img src="/public/icons/fb.png" alt=""></a></li>
@@ -113,7 +121,7 @@
     z-index 999
     width 100%
     height 40px
-    padding 5px 15px 5px 75px
+    padding 0 15px 0 75px
     background-color #444746
     &__logo
       position absolute
@@ -121,18 +129,22 @@
       left 15px
       width 50px
       height auto
+    &__item
+      height 20px
+      padding 0 10px
+      border-left 1px solid #fff
+      &:last-of-type
+        padding-right 0
     &__status
       display flex
       align-items center
       &-item
         position relative
-        height 15px
-        padding 0 10px
+        height 20px
         color #fff
-        font-size 12px
+        font-size .85rem
         font-weight 300
-        line-height 15px
-        border-left 1px solid #fff
+        line-height 20px
         &.header--nickname
           padding 0 34px 0 10px
           color #ddcf21 
@@ -148,15 +160,21 @@
             background-position center center
             background-repeat no-repeat
             background-size contain
-    &__hamburger
-      width 30px
-      height 30px
-      padding 0
+    &--hamburger
+      display flex
+      flex-direction column
+      justify-content space-around
+      // padding 0
       background transparent
-      border none
+      // border none
       outline none
+    &--account
       img
-        width 100%
+        height 30px
+    &__hamburgerBar
+      width 20px
+      height 2px
+      background-color #fff
     &__menu
       position absolute
       top 0

@@ -65,4 +65,9 @@ export default {
     'WORDING_TAB_REVIEW_RECORD' : '評論記錄',
     'WORDING_TAB_NEWS_RECORD' : '新聞記錄',
   },
+  'homeNavigation': {
+    'WORDING_HOME_NAV_IN_PROGRESS' : '進行中',
+    'WORDING_HOME_NAV_PROJECT' : '議題',
+    'WORDING_HOME_NAV_VIDEO' : '對話',
+  },
 }

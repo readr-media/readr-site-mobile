@@ -1,99 +1,136 @@
 <template>
-  <div class="homepage">
-    <main class="homepage__main">
-      <HomeArticleMain v-for="post in postsLatest" :articleData="post" :key="post.id"/>
-    </main>
-  </div> 
+  <section class="home">
+    <HomeNavigationMobile :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
+    <HomeArticleMain v-for="post in posts" :articleData="post" :key="post.id"/> 
+  </section>
 </template>
 <script>
-  // import { SECTIONS_DEFAULT } from '../constants'
-  import { removeToken, } from '../util/services'
+  import { PROJECT_STATUS, } from '../../api/config'
+  import { get, } from 'lodash'
   import { isScrollBarReachBottom, } from '../util/comm'
-  import _ from 'lodash'
-  // import AppHeader from '../components/AppHeader.vue'
-  import AppAsideNav from '../components/AppAsideNav.vue'
-  import AppTitledList from '../components/AppTitledList.vue'
-  import HomeProjectAside from '../components/home/HomeProjectAside.vue'
   import HomeArticleMain from '../components/home/HomeArticleMain.vue'
-  import HomeArticleAside from '../components/home/HomeArticleAside.vue'
+  import HomeNavigationMobile from '../components/home/HomeNavigationMobile.vue'
+  
+  const MAXRESULT_POSTS = 10
+  const MAXRESULT_PROJECTS = 2
+  const MAXRESULT_VIDEOS = 1
+  const DEFAULT_PAGE = 1
+  const DEFAULT_SORT = '-updated_at'
 
-  const fetchPosts = (store, { mode, category, max_result, page, sort, }) => {
+  // const fetchFollowing = (store, params) => {
+  //   if (params.subject) {
+  //     return store.dispatch('GET_FOLLOWING_BY_USER', params)
+  //   } else {
+  //     return store.dispatch('GET_FOLLOWING_BY_RESOURCE', params)
+  //   }
+  // }
+
+  const fetchPosts = (store, {
+    max_result = MAXRESULT_POSTS,
+    mode = 'set',
+    page = DEFAULT_PAGE,
+    sort = DEFAULT_SORT,
+  } = {}) => {
     return store.dispatch('GET_PUBLIC_POSTS', {
       params: {
         mode: mode,
-        category: category,
+        category: 'latest',
         max_result: max_result,
         page: page,
         sort: sort,
       },
     })
   }
-  const fetchProjectsList = (store, { max_result, }) => {
-    return store.dispatch('GET_PROJECTS_LIST', {
+
+  const fetchProjectsList = (store, {
+    max_result = MAXRESULT_PROJECTS,
+    status,
+  } = {}) => {
+    return store.dispatch('GET_PUBLIC_PROJECTS', {
       params: {
         max_result: max_result,
+        where: {
+          status: status,
+        },
       },
     })
   }
-  const fetchFollowing = (store, params) => {
-    if (params.subject) {
-      return store.dispatch('GET_FOLLOWING_BY_USER', params)
-    } else {
-      return store.dispatch('GET_FOLLOWING_BY_RESOURCE', params)
-    }
+
+  const fetchVideos = (store) => {
+    return store.dispatch('GET_PUBLIC_VIDEOS', {
+      params: {
+        max_result: MAXRESULT_VIDEOS,
+      },
+    })
   }
 
   export default {
-    components: {
-      // 'app-header': AppHeader,
-      AppAsideNav,
-      AppTitledList,
-      HomeProjectAside,
-      HomeArticleMain,
-      HomeArticleAside,
+    name: 'AppHome',
+    asyncData ({ store, }) {
+      return Promise.all([
+        fetchPosts(store),
+        fetchProjectsList(store, { max_result: 5, status: PROJECT_STATUS.WIP, }),
+        fetchProjectsList(store, { max_result: 2, status: PROJECT_STATUS.DONE, }),
+        fetchVideos(store),
+      ])
     },
-    watch: {
-      isReachBottom(isReachBottom) {
-        if (isReachBottom && !this.endPage) {
-          this.loadmoreLatest()
-        }
-      },
+    components: {
+      HomeArticleMain,
+      HomeNavigationMobile,
     },
     data () {
       return {
-        isReachBottom: false,
-        currentPageLatest: 1,
+        currentPage: DEFAULT_PAGE,
         endPage: false,
-      } 
+        isReachBottom: false,
+      }
     },
     computed: {
-      // sections () {
-      //   return SECTIONS_DEFAULT
-      // }
-      postsLatest () {
-        return this.$store.state.publicPosts.items
+      posts () {
+        return get(this.$store, [ 'state', 'publicPosts', 'items', ], [])
       },
-      postsHot () {
-        return this.$store.state.publicPostsHot.items
+      projectsDone () {
+        return get(this.$store, [ 'state', 'publicProjects', 'done', ], [])
+      },
+      projectsInProgress () {
+        return get(this.$store, [ 'state', 'publicProjects', 'inProgress', ], [])
+      },
+      video () {
+        return get(this.$store, [ 'state', 'publicVideos', 0, ])
       },
     },
-    name: 'Home',
-    methods: {
-      logout () {
-        removeToken()
+    watch: {
+      isReachBottom (val) {
+        if (val && !this.endPage) {
+          this.$_home_loadmore()
+        }
       },
-      loadmoreLatest () {
-        fetchPosts(this.$store, { mode: 'update', max_result: 10, page: this.currentPageLatest + 1, })
-        .then((res) => {
-          this.currentPageLatest += 1
-          if (this.$store.state.isLoggedIn) {
-            const ids = res.items.map(post => post.id)
-            fetchFollowing(this.$store, {
-              mode: 'update',
-              resource: 'post',
-              ids: ids,
-            })
-          }
+    },
+    mounted () {
+      // if (this.$store.state.isLoggedIn) {
+      //   const postIdsLatest = this.$store.state.publicPosts.items.map(post => String(post.id))
+      //   fetchFollowing(this.$store, {
+      //     resource: 'post',
+      //     ids: postIdsLatest,
+      //   })
+      // }
+      window.addEventListener('scroll', () => {
+        this.isReachBottom = isScrollBarReachBottom(1/3)
+      })
+    },
+    methods: {
+      $_home_loadmore () {
+        fetchPosts(this.$store, { mode: 'update', max_result: 10, page: this.currentPage + 1, })
+        .then(() => {
+          this.currentPage += 1
+          // if (this.$store.state.isLoggedIn) {
+          //   const ids = res.items.map(post => post.id)
+          //   fetchFollowing(this.$store, {
+          //     mode: 'update',
+          //     resource: 'post',
+          //     ids: ids,
+          //   })
+          // }
         })
         .catch((res) => {
           if (res === 'end') {
@@ -103,56 +140,12 @@
           }
         })
       },
-      isScrollBarReachBottom,
-    },
-    beforeMount () {
-      // console.log('currentUser', currentUser())
-      // console.log('isLoggedIn', isLoggedIn())
-      Promise.all([
-        fetchPosts(this.$store, {
-          mode: 'set',
-          category: 'latest',
-          max_result: 10,
-          page: this.currentPageLatest,
-          sort: '-updated_at',
-        }),
-        fetchPosts(this.$store, {
-          mode: 'set',
-          category: 'hot',
-          max_result: 5,
-          page: 1,
-          sort: '-updated_at',
-        }),
-        fetchProjectsList(this.$store, {
-          max_result: 1,
-        }),
-      ]).then(() => {
-        if (this.$store.state.isLoggedIn) {
-          const postIdsLatest = this.$store.state.publicPosts.items.map(post => String(post.id))
-          const postIdsHot = this.$store.state.publicPostsHot.items.map(post => String(post.id))
-          const postIdFeaturedProject = this.$store.state.projectsList.items.map(project => String(project.id))
-          const ids = _.uniq(_.concat(postIdsLatest, postIdsHot))
-          fetchFollowing(this.$store, {
-            resource: 'post',
-            ids: ids,
-          })
-          fetchFollowing(this.$store, {
-            resource: 'project',
-            ids: postIdFeaturedProject,
-          })
-        }
-      })
-    },
-    mounted () {
-      window.addEventListener('scroll', () => {
-        this.isReachBottom = this.isScrollBarReachBottom()
-      })
     },
   }
 </script>
 <style lang="stylus" scoped>
-  .homepage
+  .home
     min-height 100vh
-    &__main
-      padding-top 40px
+    padding-top 65px
+    background-color #e6e6e6
 </style>
