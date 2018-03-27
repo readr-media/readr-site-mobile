@@ -1,130 +1,58 @@
 <template>
-  <div class="projects-list">
-    <main class="projects-list__main">
-      <div class="projects-list__list-main">
-        <ProjectsFigure v-for="project in projects" :project="project" :key="project.id"/>
-      </div>
-      <div class="projects-list__list-aside">
-        <ProjectsFigureProgress/>
-        <ProjectsFigureProgress/>
-        <AppTitledList :listTitle="'熱門關鍵字'">
-          <ul class="projects-tags-hot-list-container">
-            <li class="projects-tags-hot-list-container__list">
-              <span class="projects-tags-hot-list-container__tag-name">原住民傳統領域</span>
-              <span class="projects-tags-hot-list-container__tag-count">7631</span>
-            </li>
-            <li class="projects-tags-hot-list-container__list">
-              <span class="projects-tags-hot-list-container__tag-name">農舍</span>
-              <span class="projects-tags-hot-list-container__tag-count">631</span>
-            </li>
-          </ul>
-        </AppTitledList>
-      </div>
-    </main>
-  </div>
+  <section class="projects-list">
+    <template v-for="p in projects" >
+      <ProjectBlock :key="p.id" :project="p"></ProjectBlock>
+    </template>
+  </section>
 </template>
 
 <script>
-import AppAsideNav from '../components/AppAsideNav.vue'
-import AppTitledList from '../components/AppTitledList.vue'
-import ProjectsFigure from '../components/projects/ProjectsFigure.vue'
-import ProjectsFigureProgress from '../components/projects/ProjectsFigureProgress.vue'
-import _ from 'lodash'
+import { PROJECT_STATUS, } from '../../api/config'
+import { get, } from 'lodash'
+import ProjectBlock from '../components/ProjectBlock.vue'
 
-const fetchProjectsList = (store, params) => {
-  return store.dispatch('GET_PROJECTS_LIST', {
-    params: params,
+const MAX_RESULT = 10
+const DEFAULT_PAGE = 1
+const DEFAULT_SORT = '-updated_at'
+
+const fetchProjectsList = (store, {
+  max_result = MAX_RESULT,
+  page = DEFAULT_PAGE,
+  sort = DEFAULT_SORT,
+} = {}) => {
+  return store.dispatch('GET_PUBLIC_PROJECTS', {
+    params: {
+      max_result: max_result,
+      page: page,
+      sort: sort,
+      where: {
+        status: PROJECT_STATUS.DONE,
+      },
+    },
   })
-}
-const fetchFollowing = (store, params) => {
-  if (params.subject) {
-    return store.dispatch('GET_FOLLOWING_BY_USER', {
-      subject: params.subject,
-      resource: params.resource,
-    })
-  } else {
-    return store.dispatch('GET_FOLLOWING_BY_RESOURCE', {
-      resource: params.resource,
-      ids: params.ids,
-    })
-  }
 }
 
 export default {
+  name: 'ProjectsList',
+  asyncData ({ store, }) {
+    return fetchProjectsList(store)
+  },
   components: {
-    AppAsideNav,
-    AppTitledList,
-    ProjectsFigure,
-    ProjectsFigureProgress,
+    ProjectBlock,
   },
   computed: {
     projects () {
-      return _.get(this.$store, 'state.projectsList.items', [])
+      return get(this.$store, [ 'state', 'publicProjects', 'done', ], [])
     },
-  },
-  beforeMount () {
-    fetchProjectsList(this.$store, {}).then(() => {
-      const postIdFeaturedProject = this.$store.state.projectsList.items.map(project => project.id)
-      fetchFollowing(this.$store, {
-        resource: 'project',
-        ids: postIdFeaturedProject,
-      })
-    })
   },
 }
 </script>
 
 <style lang="stylus" scoped>
-.projects-list
-  background-color #e6e6e6
-  min-height 100vh
-  &__container
-    max-width 1200px
-    margin auto
-    padding 25px 0
-    display flex
-  &__aside
-    width 75px
-    height 100%
-    position sticky
-    // position fixed
-    top 60px
-    z-index 999
-  &__main
-    display flex
-    flex-direction column
-    padding-top 40px
-  &__list-main
-    order 1
-    display flex
-    flex-direction column
-    justify-content flex-start
-    align-items flex-start
-  &__list-aside
-    order 0
-    display flex
-    flex-direction column
-    justify-content flex-start
-    align-items flex-start
-    & > figure
-      & + figure
-        margin-top 10px
-    section
-      margin-top 16.5px
-
-.projects-tags-hot-list-container
-  margin 15px 0 0 0
-  padding 0 15px
-  width 355px
-  list-style none
-  &__list
-    margin 10px 0
-    font-size 15px
-    display flex
-  &__tag-count
-    margin-left 10px
-    font-size 12px
-    align-self center
-    color #444746
+  .projects-list
+    position relative
+    min-height 100vh
+    padding-top 65px
+    background-color #e6e6e6
 </style>
 

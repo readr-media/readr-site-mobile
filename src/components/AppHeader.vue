@@ -9,6 +9,7 @@
       <div class="header__hamburgerBar"></div>
     </div>
     <div v-if="isClientSide && isLoggedIn" class="header__item header--account" @click="goMemberCenter">
+      <p v-text="userNickname"></p>
       <img src="/public/icons/account.png" alt="">
     </div>
     <div v-if="isClientSide" class="header__item header--status" >
@@ -169,6 +170,10 @@
       // border none
       outline none
     &--account
+      p
+        display none
+        margin 0
+        color #ddcf21
       img
         height 30px
     &__hamburgerBar
@@ -235,5 +240,16 @@
         width 55px
         top 14px
         left 25px
-
+      &__status
+        &-item
+          font-size .875rem
+      &--account
+        p
+          display inline
+          margin-right 10px
+          vertical-align top
+          font-size .875rem
+          line-height 20px
+        img
+          height 35px
 </style>

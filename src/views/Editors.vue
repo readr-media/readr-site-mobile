@@ -88,24 +88,24 @@ export default {
 .editors
   background-color #fff
   min-height 100vh
-  &__container
-    max-width 1200px
-    margin auto
-    padding 60px 0
-    display flex
-  &__aside
-    width 75px
-    height 100%
-    position sticky
-    // position fixed
-    top 60px
-    z-index 999
+  // &__container
+  //   max-width 1200px
+  //   margin auto
+  //   padding 60px 0
+  //   display flex
+  // &__aside
+  //   width 75px
+  //   height 100%
+  //   position sticky
+  //   // position fixed
+  //   top 60px
+  //   z-index 999
   &__main
     display flex
     flex-direction column
     justify-content flex-start
     align-items flex-start
-    padding-top 40px
+    padding-top 30px
   &__list-aside
     background-color white
     list-style none
