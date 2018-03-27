@@ -1,7 +1,7 @@
 <template>
   <section class="home">
     <HomeNavigationMobile :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
-    <HomeArticleMain v-for="post in posts" :articleData="post" :key="post.id"/> 
+    <HomeArticleMain v-for="post in posts" :key="post.id" :articleData="post" ></HomeArticleMain>
   </section>
 </template>
 <script>
@@ -145,7 +145,13 @@
 </script>
 <style lang="stylus" scoped>
   .home
+    position relative
     min-height 100vh
     padding-top 65px
     background-color #e6e6e6
+
+  @media (min-width 768px)
+    .home
+      padding 80px 20px 0 80px
+
 </style>
