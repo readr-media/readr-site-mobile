@@ -47,7 +47,7 @@
         justify-content center
         align-items center
         color #808080
-        font-size 0.9375rem
+        font-size 0.75rem
         font-weight 400
         cursor pointer
         &.active
