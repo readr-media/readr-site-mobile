@@ -1,8 +1,10 @@
 <template>
   <div class="header">
-    <img class="header__logo" src="/public/icons/logo-mobile.png" alt="">
-    
-    <SearchTool class="header__item"></SearchTool>
+    <router-link to="/" class="header__logo"><img src="/public/icons/logo-mobile.png" alt=""></router-link>
+    <div v-if="isBackstage" class="header__item header--edit" @click="toggleControl">
+      <img src="/public/icons/pen-white.png" alt="">
+    </div>
+    <SearchTool v-if="!isBackstage" class="header__item"></SearchTool>
     <div class="header__item header--hamburger" @click="toggleMenu">
       <div class="header__hamburgerBar"></div>
       <div class="header__hamburgerBar"></div>
@@ -26,11 +28,51 @@
       </ul>
       <div class="header__menu-curtain" @click="toggleMenu"></div>
     </section>
+
+    <section v-if="isBackstage" ref="headerControl" class="header__control">
+      <div class="header__control-menu">
+        <div class="header__control-menu-item">
+          <div class="header__control-menu-item-title">評論</div>
+          <div class="header__control-menu-item-box">
+            <button>直接新增</button>
+            <button>編輯草稿</button>
+          </div>
+        </div>
+        <div class="header__control-menu-item">
+          <div class="header__control-menu-item-title">新聞</div>
+          <div class="header__control-menu-item-box">
+            <button>直接新增</button>
+            <button>編輯草稿</button>
+          </div>
+        </div>
+        <div class="header__control-menu-item">
+          <div class="header__control-menu-item-title">管理</div>
+          <div class="header__control-menu-item-box">
+            <button>記錄</button>
+            <button>編輯草稿</button>
+          </div>
+          <div class="header__control-menu-item-box">
+            <button>影片</button>
+            <button>關鍵字</button>
+          </div>
+        </div>
+        <div class="header__control-menu-item">
+          <div class="header__control-menu-item-title">帳號</div>
+          <div class="header__control-menu-item-box">
+            <button>直接新增</button>
+            <button>帳號列表</button>
+          </div>
+        </div>
+        <button>編輯個人檔案</button>
+      </div>
+      <button @click="toggleControl"><img src="/public/icons/close-black.png" alt=""></button>
+    </section>
+
   </div>
 </template>
 <script>
-  import _ from 'lodash'
   import { ROLE_MAP, } from '../constants'
+  import { filter, includes, get, } from 'lodash'
   import { removeToken, } from '../util/services'
   import SearchTool from 'src/components/search/SearchTool.vue'
 
@@ -50,16 +92,19 @@
     },
     computed: {
       currUrl () {
-        return _.get(this.$router, [ 'fullpath', ])
+        return get(this.$router, [ 'fullpath', ])
       },
       currentUser () {
-        return _.get(this.$store, [ 'state', 'profile', ], {})
+        return get(this.$store, [ 'state', 'profile', ], {})
+      },
+      isBackstage () {
+        return includes([ 'admin', 'editor', 'guesteditor', 'member', ], get(this.$route, [ 'fullPath', ]).split('/')[1])
       },
       isLoggedIn () {
-        return _.get(this.$store, [ 'state', 'isLoggedIn', ])
+        return get(this.$store, [ 'state', 'isLoggedIn', ])
       },
       userNickname () {
-        return this.isLoggedIn && _.get(this.currentUser, [ 'nickname', ], _.get(this.currentUser, [ 'name', ], this.$t('header.WORIDNG_HEADER_MEMBER_CENTRE')))
+        return this.isLoggedIn && get(this.currentUser, [ 'nickname', ], get(this.currentUser, [ 'name', ], this.$t('header.WORIDNG_HEADER_MEMBER_CENTRE')))
       },
     },
     data () {
@@ -70,7 +115,7 @@
     name: 'AppHeader',
     methods: {
       goMemberCenter () {
-        const memberCenter = _.get(_.filter(ROLE_MAP, { key: _.get(this.$store, [ 'state', 'profile', 'role', ]), }), [ 0, 'route', ], 'member')
+        const memberCenter = get(filter(ROLE_MAP, { key: get(this.$store, [ 'state', 'profile', 'role', ]), }), [ 0, 'route', ], 'member')
         /**
          * use location.replace instead of router.push to server-side render page
          */
@@ -85,6 +130,9 @@
             location && location.replace('/')
           })
         })
+      },
+      toggleControl () {
+        this.$refs.headerControl.classList.toggle('open')
       },
       toggleMenu () {
         this.$refs.headerMenu.classList.toggle('open')
@@ -124,6 +172,8 @@
       left 15px
       width 50px
       height auto
+      img
+        width 100%
     &__item
       height 20px
       padding 0 10px
@@ -155,6 +205,10 @@
             background-position center center
             background-repeat no-repeat
             background-size contain
+    &--edit
+      img
+        width 20px
+        height 20px
     &--hamburger
       display flex
       flex-direction column
@@ -175,7 +229,7 @@
       height 2px
       background-color #fff
     &__menu
-      position absolute
+      position fixed
       top 0
       left 0
       right 0
@@ -226,6 +280,85 @@
         width 100%
         height 100%
         background-color rgba(0, 0, 0, .6)
+    &__control
+      display flex
+      flex-direction column
+      justify-content center
+      align-items center
+      position fixed
+      top 0
+      left 0
+      right 0
+      bottom 0
+      z-index 10
+      width 100%
+      height 100vh
+      margin 0
+      background-color #ddcf21
+      opacity 0
+      visibility hidden
+      transition opacity 0.35s ease-out
+      &.open
+        visibility visible
+        opacity 1
+      > button
+        display flex
+        justify-content center
+        align-items center
+        position absolute
+        top 10px
+        right 10px
+        width 35px
+        height 35px
+        padding 0
+        border 1px solid #000
+        background-color transparent
+        img
+          width 20px
+          height 20px
+      &-menu
+        width calc(100% - 40px)
+        text-align center
+        button
+          padding 20px 0
+          font-size 1.125rem
+          background-color transparent
+          border none
+        &-item
+          &:last-of-type
+            padding-bottom 10px
+            border-bottom 1px solid #fff
+          &-title
+            position relative
+            margin 10px 0
+            color #fff
+            font-size 1.25rem
+            font-weight 300
+            text-align center
+            &:before
+              content ''
+              position absolute
+              top 50%
+              left 0
+              transform translate(0, -50%)
+              width calc(50% - 36px)
+              height 1px
+              background-color #fff
+            &:after
+              content ''
+              position absolute
+              top 50%
+              right 0
+              transform translate(0, -50%)
+              width calc(50% - 36px)
+              height 1px
+              background-color #fff
+          &-box
+            button
+              width 50%
+              padding 10px 0
+              &:first-of-type
+                border-right 1px solid #000
 
   @media (min-width 768px)
     .header
