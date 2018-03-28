@@ -123,8 +123,7 @@ function render (req, res, next) {
   debug('Requested page:', req.url, req.url.match(targ_exp_login))
   debug('isDesktop', req.useragent.isDesktop)
 
-  // if (req.useragent.isDesktop && !curr_host.match(targ_localhost_exp)) {
-  if (req.useragent.isDesktop) {
+  if (req.useragent.isDesktop && !curr_host.match(targ_localhost_exp)) {
       if (SERVER_PROTOCOL && SERVER_HOST) {
       res.redirect(302, `${SERVER_PROTOCOL}://${SERVER_HOST}${SERVER_PORT ? ':' + SERVER_PORT : ''}${req.url}`)
       return
