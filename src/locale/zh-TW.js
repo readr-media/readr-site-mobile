@@ -127,6 +127,11 @@ export default {
     'WORDING_HOME_POST_MORE' : '更多',
     'WORDING_HOME_POST_SOURCE' : '出處：',
   },
+  'homeNavigation': { 
+    'WORDING_HOME_NAV_IN_PROGRESS' : '進行中', 
+    'WORDING_HOME_NAV_PROJECT' : '議題', 
+    'WORDING_HOME_NAV_VIDEO' : '對話', 
+  },
   'post_list': {
     'WORDING_POSTLIST_ACTIVE' : '狀態',
     'WORDING_POSTLIST_ACTIVE_DRAFT' : '草稿',
