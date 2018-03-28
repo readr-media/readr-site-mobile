@@ -1,7 +1,7 @@
 <template>
   <article class="home-article-main">
     <div class="home-article-main__share">
-      <AppShareButton :shareUrl="shareUrl" :direction="'down'" :iconColor="'white'" :backgroundColor="'#d3d3d3'"/>
+      <AppShareButton :shareUrl="shareUrl" :direction="'down'" :backgroundColor="'#d3d3d3'"/>
     </div>
     <div class="home-article-main__author">
       <figure class="author-info">

@@ -87,16 +87,17 @@
         object-fit cover
         object-position center center
     &__name
-      font-size 12px
+      font-size .75rem
     &__introduction
       margin-top 5px
-      font-size 14px
+      font-size .75rem
+      line-height 1.5
       text-align justify
     &__edit
       text-align right
       &__btn
         color #4280a2
-        font-size 12px
+        font-size .75rem
         font-weight 600
         cursor pointer
   // .about

@@ -5,18 +5,18 @@
         <img :src="editor.profileImage || '/public/icons/exclamation.png'" alt="">
       </router-link>
       <figcaption class="editors-intro-main__meta-container">
-        <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__nickname">
-          <p v-text="editor.nickname"></p>
-        </router-link>
         <img class="editors-intro-main__follow-icon" v-if="editorIsNotCurrentUser" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow">
       </figcaption>
     </figure>
-    <p class="editors-intro-main__description" v-text="trimDescription ? descritpionTrim : editor.description"></p>
+    <div class="editors-intro-main__info">
+      <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__nickname"><p v-text="editor.nickname"></p></router-link>
+      <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__description"><p v-text="trimDescription ? descritpionTrim : editor.description"></p></router-link>
+    </div>
   </li>
 </template>
 
 <script>
-import _ from 'lodash'
+import { find, } from 'lodash'
 
 const publishAction = (store, data) => {
   return store.dispatch('PUBLISH_ACTION', {
@@ -51,7 +51,7 @@ export default {
     },
     editorFollowers () {
       if (this.$store.state.isLoggedIn) {
-        const editorFollowersData = _.find(this.$store.state.followingByResource['member'], { resourceid: `${this.editor.id}`, })
+        const editorFollowersData = find(this.$store.state.followingByResource['member'], { resourceid: `${this.editor.id}`, })
         return editorFollowersData ? editorFollowersData.follower : []
       } else {
         return []
@@ -110,18 +110,20 @@ export default {
 <style lang="stylus" scoped>
 .editors-intro-main
   display flex
-  flex-direction column
   align-items flex-start
-  & + &
-    border-top solid 0.5px #979797
+  margin-bottom 15px
+  a
+    display block
+    color #000
+  p
+    margin 0
   &__profile
     display flex
+    flex-direction column
     margin 0
-  &__nickname
-    text-decoration none
-    color #000
+  
   &__thumbnail
-    r = 50px
+    r = 45px
     width r
     height r
     border-radius r
@@ -132,15 +134,21 @@ export default {
       object-size cover
   &__meta-container
     display flex
+    justify-content center
     align-items center
-    margin-left 4px
+    margin-top 5px
   &__follow-icon
     cursor pointer
     width 25px
     height 25px
+  &__info
     margin-left 5px
-  &__description
+  &__nickname
+    margin 0
     font-size 15px
+  &__description
+    margin-top 5px
+    font-size .875rem
     font-weight 300
     text-align justify
     line-height 1.5

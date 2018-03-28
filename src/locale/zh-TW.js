@@ -72,7 +72,7 @@ export default {
   },
   'agreement': {
     'WORDING_AGREEMENT_TERMS_AND_SERVICE' : '會員服務條款',
-    'WORDING_AGREEMENT_IPR' : '著作權、智慧財產權政策',
+    'WORDING_AGREEMENT_IPR' : '智慧財產權政策',
     'WORDING_AGREEMENT_PRIVACY' : '隱私權政策',
   },
   'profile': {

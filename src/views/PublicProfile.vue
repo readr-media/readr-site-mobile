@@ -1,29 +1,24 @@
 <template>
-  <div class="profile">
-    <aside class="profile__aside">
-      <AppAsideNav></AppAsideNav>
-    </aside>
-    <main class="profile__main">
-      <About :profile="profile"></About>
-      <Tab :tabs="tabs" @changeTab="tabHandler">
-        <template slot="0">
-          <div class="profile__main__review">
-            <div class="profile__main__review__filter">
-              <select @change="filterChanged">
-                <option v-text="$t('profile.WORDING_PROFILE_FILTER_ALL')" value="all"></option>
-                <option v-for="item in filters" v-text="item" :value="item"></option>
-              </select>
-            </div>
-            <div class="profile__main__review__container">
-              <div class="item" v-for="post in posts" :key="post.id">
-                <PostContent :post="post"></PostContent>
-              </div>
+  <main class="profile">
+    <About :profile="profile"></About>
+    <Tab :tabs="tabs" class="profile__tab" @changeTab="tabHandler">
+      <template slot="0">
+        <div class="profile__main__review">
+          <div class="profile__main__review__filter">
+            <select @change="filterChanged">
+              <option v-text="$t('profile.WORDING_PROFILE_FILTER_ALL')" value="all"></option>
+              <option v-for="item in filters" v-text="item" :value="item"></option>
+            </select>
+          </div>
+          <div class="profile__main__review__container">
+            <div class="item" v-for="post in posts" :key="post.id">
+              <PostContent :post="post"></PostContent>
             </div>
           </div>
-        </template>
-      </Tab>
-    </main>
-  </div>
+        </div>
+      </template>
+    </Tab>
+  </main>
 </template>
 <script>
   import { POST_TYPE, } from 'api/config'
@@ -186,21 +181,19 @@
     width 100%
     background-color #fff
     display flex
-    padding 25px 0
-    &__aside
-      width 75px
-      height 100%
-      position sticky
-      top 60px
+    flex-direction column
+    padding 70px 0 0
+    &__tab
+      margin-top 20px
     &__main
       padding-left 93.5px
       width 100%
       &__review
-        padding 0 100px
+        padding 0
         &__filter
-          margin-bottom 30px
-          width 130px
-          height 30px
+          margin-bottom 15px
+          width 100px
+          height 25px
           border solid 1px #d3d3d3
 
           position relative
@@ -244,16 +237,10 @@
             cursor pointer
             position relative
             z-index 2
-            font-size 0.875rem
+            font-size 0.75rem
         &__container
           > .item
-            margin 35px auto
-  @media (min-width 950px)
-    .profile
-      &__main
-        max-width 950px
-  @media (min-width 1200px)
-    .profile
-      max-width 1200px
+            margin 0 auto
+  
 
 </style>
