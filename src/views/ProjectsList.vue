@@ -9,9 +9,10 @@
 <script>
 import { PROJECT_STATUS, } from '../../api/config'
 import { get, } from 'lodash'
+import { isScrollBarReachBottom, } from '../util/comm'
 import ProjectBlock from '../components/ProjectBlock.vue'
 
-const MAX_RESULT = 10
+const MAX_RESULT = 8
 const DEFAULT_PAGE = 1
 const DEFAULT_SORT = '-updated_at'
 
@@ -40,9 +41,33 @@ export default {
   components: {
     ProjectBlock,
   },
+  data () {
+    return {
+      currentPage: DEFAULT_PAGE,
+      hasMore: true,
+      loading: false,
+    }
+  },
   computed: {
     projects () {
       return get(this.$store, [ 'state', 'publicProjects', 'done', ], [])
+    },
+  },
+  mounted () {
+    window.addEventListener('scroll', this.$_projects_loadmoreHandler)
+  },
+  methods: {
+    $_projects_loadmoreHandler () {
+      if (this.hasMore && !this.loading && isScrollBarReachBottom(1/3)) {
+        const origCount = get(this.projects, [ 'length', ], 0)
+        this.loading = true
+        fetchProjectsList(this.$store, { page: this.currentPage + 1, })
+        .then(() => {
+          this.currentPage += 1
+          get(this.projects, [ 'length', ], 0) <= origCount ? this.hasMore = false : ''
+          this.loading = false
+        })
+      }
     },
   },
 }
