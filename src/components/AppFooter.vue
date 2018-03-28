@@ -3,7 +3,7 @@
     <router-link to="/" class="footer__item" :class="{ active: currentPath === '' }">
       <img src="/public/icons/posts.png" alt="">
     </router-link>
-    <router-link to="/" class="footer__item">
+    <router-link to="/hots" class="footer__item" :class="{ active: currentPath === 'hots' }">
       <img src="/public/icons/hot-posts.png" alt="">
     </router-link>
     <!-- <router-link to="/videos" class="footer__item" :class="{ active: currentPath === 'videos' }">
