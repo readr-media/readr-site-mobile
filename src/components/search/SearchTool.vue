@@ -3,7 +3,7 @@
     <img src="/public/icons/search-white.png" alt="" @click="toggleSearchBar">
     <section ref="searchBar" class="searchBar" @click.self="toggleSearchBar">
       <form action="">
-        <input type="text" :placeholder="wording[ 'WORIDNG_HEADER_MEMBER_SEARCH' ]">
+        <input type="text" :placeholder="$t('header.WORIDNG_HEADER_MEMBER_SEARCH')">
         <button @click.prevent="toggleSearchBar"><img src="/public/icons/close-grey.png" alt=""></button>
       </form>
     </section>
@@ -17,7 +17,6 @@
   </div> -->
 </template>
 <script>
-  import { WORIDNG_HEADER_MEMBER_SEARCH, } from 'src/constants'
   import { get, } from 'lodash'
 
   // const debug = require('debug')('CLIENT:SearchTool')
@@ -28,9 +27,6 @@
         currentSearchVal: get(this.$refs, 'searchInput.value'),
         isChanged: true,
         // searchVal: get(this.$route, [ 'params', 'keyword' ]),
-        wording: {
-          WORIDNG_HEADER_MEMBER_SEARCH,
-        },
       }
     },
     computed: {

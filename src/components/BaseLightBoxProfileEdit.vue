@@ -3,29 +3,29 @@
     <div class="profile-edit__main">
       <div class="form">
         <div class="form__item">
-          <span class="form__name">{{ wording.WORDING_PROFILEEDIT_NICKNAME }}：</span>
+          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_NICKNAME') }}：</span>
           <!-- <input type="text" name="nickname" v-model="computedNickname"> -->
           <input class="form__input" type="text" name="nickname" v-model="inputNickname">
         </div>
         <div class="form__item">
-          <span class="form__name--align-start">{{ wording.WORDING_PROFILEEDIT_DESCRIPTION }}：</span>
+          <span class="form__name--align-start">{{ $t('profile_editor.WORDING_PROFILEEDIT_DESCRIPTION') }}：</span>
           <!-- <textarea name="description" v-model="computedDescription"></textarea> -->
           <textarea class="form__description" name="description" v-model="inputDescription"></textarea>
         </div>
         <div class="form__item">
-          <span class="form__name">{{ wording.WORDING_PROFILEEDIT_OLDPASSWORD }}：</span>
+          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_OLDPASSWORD') }}：</span>
           <input class="form__input" type="password" name="old_password" v-model="inputOldPassword">
         </div>
         <div class="form__item">
-          <span class="form__name">{{ wording.WORDING_PROFILEEDIT_NEWPASSWORD }}：</span>
+          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_NEWPASSWORD') }}：</span>
           <input class="form__input" type="password" name="new_password" v-model="inputNewPassword">
         </div>
         <div class="form__item">
-          <span class="form__name">{{ wording.WORDING_PROFILEEDIT_CONFIRMPASSWORD }}：</span>
+          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_CONFIRMPASSWORD') }}：</span>
           <input class="form__input" type="password" name="confirm_password" v-model="inputConfirmPassword">
         </div>
         <div class="form__item">
-          <span class="form__name">{{ wording.WORDING_PROFILEEDIT_PERSONAL_OPTIONS }}：</span>
+          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_PERSONAL_OPTIONS') }}：</span>
           <div class="form__personal-options"></div>
         </div>
       </div>
@@ -38,26 +38,17 @@
         </div>
         <div class="portrait__name">{{ staticNickname }}</div>
       </div>
-      <button class="profile-edit__save-button" @click="profileEditorSave">{{ wording.WORDING_PROFILEEDIT_SAVE }}</button>
+      <button class="profile-edit__save-button" @click="profileEditorSave">{{ $t('profile_editor.WORDING_PROFILEEDIT_SAVE') }}</button>
     </div>
   </div>
 </template>
 
 <script>
-import { 
-  WORDING_PROFILEEDIT_NICKNAME,
-  WORDING_PROFILEEDIT_EMAIL,
-  WORDING_PROFILEEDIT_DESCRIPTION,
-  WORDING_PROFILEEDIT_OLDPASSWORD,
-  WORDING_PROFILEEDIT_NEWPASSWORD,
-  WORDING_PROFILEEDIT_CONFIRMPASSWORD,
-  WORDING_PROFILEEDIT_PERSONAL_OPTIONS,
-  WORDING_PROFILEEDIT_SAVE,
-} from '../constants'
 import { removeToken, } from '../util/services'
 import validator from 'validator'
 import _ from 'lodash'
 
+const debug = require('debug')('CLIENT:')
 const updateInfo = (store, profile, action) => {
   return store.dispatch(action, {
     params: profile,
@@ -78,11 +69,15 @@ const logout = (store) => {
 const uploadImage = (store, file) => {
   return store.dispatch('UPLOAD_IMAGE', { file, type: 'member', })
 }
+const syncAvatar = (store, params) => {
+  return store.dispatch('SYNC_AVATAR', { params, })
+}
 const deleteMemberProfileThumbnails = (store, id) => {
   return store.dispatch('DELETE_MEMBER_PROFILE_THUMBNAILS', { id, })
 }
 
 export default {
+  name: 'BaseLightBoxProfileEdit',
   props: {
     profile: {
       type: Object,
@@ -102,16 +97,6 @@ export default {
       inputOldPassword: '',
       inputNewPassword: '',
       inputConfirmPassword: '',
-      wording: {
-        WORDING_PROFILEEDIT_NICKNAME,
-        WORDING_PROFILEEDIT_EMAIL,
-        WORDING_PROFILEEDIT_DESCRIPTION,
-        WORDING_PROFILEEDIT_OLDPASSWORD,
-        WORDING_PROFILEEDIT_NEWPASSWORD,
-        WORDING_PROFILEEDIT_CONFIRMPASSWORD,
-        WORDING_PROFILEEDIT_PERSONAL_OPTIONS,
-        WORDING_PROFILEEDIT_SAVE,
-      },
     }
   },
   computed: {
@@ -162,10 +147,16 @@ export default {
             id: this.profile.id,
             edit_mode: 'edit_profile',
             profile_image: res.body.url,
-          }, 'UPDATE_PROFILE')
+          }, 'UPDATE_PROFILE').then(() => {
+            debug('Going to sync the avatar to talk db.')
+            return syncAvatar(this.$store, {
+              url: res.body.url,
+              id: this.profile.id,
+            })
+          })
         })
         .catch((err) => {
-          console.log(err)
+          console.error(err)
         })
       }
 
@@ -177,7 +168,7 @@ export default {
         const file = input.files[0]
         if (/^image\//.test(file.type)) {
           deleteMemberProfileThumbnails(this.$store, this.profile.id)
-          file.size <= 5242880 ? saveImage(file) : console.log(`file size is ${file.size} bytes bigger than 5MB`)
+          file.size <= 5242880 ? saveImage(file) : console.info(`file size is ${file.size} bytes bigger than 5MB`)
         }
       }
     },

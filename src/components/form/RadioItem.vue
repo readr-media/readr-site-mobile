@@ -1,27 +1,35 @@
 <template>
   <div class="radio-container" :class="{ disabled: disabled }">
-    <input type="radio" class="radio--hidden" :name="name" :id="`${name}${value}`" :disabled="disabled" :checked="value === initValue">
-    <label class="radio--mock" @click="clickHandler" :for="`${name}${value}`">
+    <input type="radio" class="radio--hidden" ref="radio"
+      :name="name"
+      :id="`${name}${value}`"
+      :disabled="disabled"
+      :checked="value === currSelected"
+      :value="value"
+      @change="change">
+    <label class="radio--mock" :for="`${name}${value}`">
       {{ label }}
       <span class="radio"></span>
     </label>
   </div>
 </template>
 <script>
+  const debug = require('debug')('CLIENT:RadioItem')
   export default {
     data () {
       return {
-        selected: false,
+        checkedStatus: false,
       }
     },
-    name: 'radio',
+    name: 'RadioItem',
     methods: {
-      clickHandler () {
-        !this.disabled && this.$emit('selected', this.name, this.value)
+      change () {
+        debug(this.$refs[ 'radio' ].checked)
+        this.$emit('update:currSelected', this.value)
       },
     },
     mounted () {},
-    props: [ 'label', 'value', 'name', 'disabled', 'initValue', ],
+    props: [ 'label', 'value', 'name', 'disabled', 'currSelected', ],
   }
 </script>
 <style lang="stylus" scoped>

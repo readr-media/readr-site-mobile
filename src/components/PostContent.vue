@@ -7,7 +7,7 @@
           <p class="editor-writing__paragraph--visible" v-if="i === 0">
             <span v-html="firstParagraph"></span>
             <span v-if="(p.length > 150 || postContent.length > 1) ? !isReadMore : false">
-              ......<span class="editor-writing__more" @click="toogleReadmore" v-text="wording['WORDING_HOME_POST_MORE']"></span>
+              ......<span class="editor-writing__more" @click="toogleReadmore" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
             </span>
           </p>
           <p :class="`editor-writing__paragraph--${isReadMore ? 'visible' : 'invisible'}`" v-else v-html="p"></p>
@@ -18,7 +18,7 @@
       <div class="editor-writing-source__content">
         <h1 class="editor-writing-source__title" v-text="linkTitleTrim"></h1>
         <div class="editor-writing-source__description">
-          <p class="editor-writing-source__cite" v-if="post.linkName">{{ wording[ 'WORDING_HOME_POST_SOURCE' ] }}{{ post.linkName }}</p>
+          <p class="editor-writing-source__cite" v-if="post.linkName">{{ $t('homepage.WORDING_HOME_POST_SOURCE') }}{{ post.linkName }}</p>
         </div>
       </div>
       <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
@@ -27,8 +27,7 @@
   </div>
 </template>
 <script>
-  import { WORDING_HOME_POST_MORE, WORDING_HOME_POST_SOURCE, } from 'src/constants'
-  import { find, filter, get, map, } from 'lodash'
+  import { find, get, map, } from 'lodash'
   import AppArticleNav from 'src/components/AppArticleNav.vue'
   import sanitizeHtml from 'sanitize-html'
   import truncate from 'truncate'
@@ -57,8 +56,10 @@
         return truncate(this.post.linkDescription, 45)
       },
       postContent () {
-        const doc = new dom().parseFromString(this.post.content)
-        const postParagraphs = map(filter(get(doc, 'childNodes'), { tagName: 'p', }), (p) => (sanitizeHtml(new seializer().serializeToString(p), { allowedTags: [ ], })))
+        if (!this.post.content || this.post.content.length === 0) { return }
+        const wrappedContent = sanitizeHtml(this.post.content, { allowedTags: false, selfClosing: [ 'img', ], })
+        const doc = new dom().parseFromString(wrappedContent)
+        const postParagraphs = map(get(doc, 'childNodes'), (p) => (sanitizeHtml(new seializer().serializeToString(p), { allowedTags: [ 'img', ], })))
         return postParagraphs
       },
     },
@@ -68,10 +69,6 @@
     data () {
       return {
         isReadMore: false,
-        wording: {
-          WORDING_HOME_POST_MORE,
-          WORDING_HOME_POST_SOURCE,
-        },
       }
     },
     methods: {
@@ -83,7 +80,7 @@
     props: [ 'post', ],
   }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
   .post-content
     &__title
       font-size 15px
@@ -105,8 +102,9 @@
         // text-overflow: ellipsis;
       p > br
         display none
-      p > img
+      p > img, p img
         width 100%
+        margin 20px 0
       p + p
         margin-top 6px
     &__more
