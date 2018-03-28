@@ -5,10 +5,14 @@
     </div>
     <div class="home-article-main__author">
       <figure class="author-info">
-        <img class="author-info__thumbnail" :src="articleData.author.profileImage" alt="">
+        <router-link class="author-info__thumbnail" :to="`/profile/${get(articleData, 'author.id')}`">
+          <img :src="get(articleData, 'author.profileImage', '/public/icons/star-blue.png')" alt="">
+        </router-link>
         <figcaption class="author-info__meta">
           <p class="author-info__date" v-text="dateDiffFromNow"></p>
-          <p class="author-info__nickname" v-text="articleData.author.nickname"></p>
+          <router-link class="author-info__nickname" :to="`/profile/${get(articleData, 'author.id')}`">
+            <p class="author-info__nickname" v-text="articleData.author.nickname"></p>
+          </router-link>
         </figcaption>
       </figure>
     </div>
@@ -23,6 +27,7 @@ import AppShareButton from 'src/components/AppShareButton.vue'
 import PostContent from 'src/components/PostContent.vue'
 import { SITE_DOMAIN_DEV, } from 'src/constants'
 import { dateDiffFromNow, } from 'src/util/comm'
+import { get, } from 'lodash'
 
 export default {
   props: {
@@ -53,6 +58,9 @@ export default {
     shareUrl () {
       return `${SITE_DOMAIN_DEV}/post/${this.articleData.id}`
     },
+  },
+  methods: {
+    get,
   },
 }
 </script>
@@ -107,16 +115,20 @@ export default {
     &__thumbnail
       width 60px
       height 60px
-      object-fit cover
+      img
+        width 100%
+        height 100%
+        object-fit cover
     &__meta
       margin-left 20px
-      > p
+      p
         margin 5px 0
     &__date
       font-size 12px
       font-weight 500
     &__nickname
       font-size 18px
+      color #000
     &:before
       content ''
       position absolute

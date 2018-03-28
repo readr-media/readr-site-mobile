@@ -1,10 +1,9 @@
 const _ = require('lodash')
 const { API_DEADLINE, API_HOST, API_PORT, API_PROTOCOL, API_TIMEOUT, } = require('./config')
 const { GCP_FILE_BUCKET, GOOGLE_RECAPTCHA_SECRET, GCS_IMG_MEMBER_PATH, GCS_IMG_POST_PATH, } = require('./config')
-const { ENDPOINT_SECURE, } = require('./config')
 const { SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT, } = require('./config')
 const { camelizeKeys, } = require('humps')
-const { constructScope, fetchPermissions, } = require('./services/perm')
+const { authorize, constructScope, fetchPermissions, } = require('./services/perm')
 const { initBucket, makeFilePublic, uploadFileToBucket, deleteFilesInFolder, publishAction, } = require('./gcs.js')
 const { processImage, } = require('./sharp.js')
 const { verifyToken, } = require('./middle/member/comm')
@@ -112,29 +111,6 @@ const fetchPromise = (url) => {
   })
 }
 
-const authorize = (req, res, next) => {
-  const whitelist = _.get(ENDPOINT_SECURE, [ `${req.method}${req.url.replace(/\?[A-Za-z0-9.*+?^=!:${}()#%~&_@\-`|[\]/\\]*$/, '')}`, ])
-  if (whitelist) {
-    fetchPermissions().then((perms) => {
-      Promise.all([
-        new Promise((resolve) => (resolve(_.get(whitelist, [ 'role', ]) ? _.find(_.get(whitelist, [ 'role', ]), (r) => (r === req.user.role)) : true))),
-        new Promise((resolve) => (resolve(_.get(whitelist, [ 'perm', ]) ? _.get(whitelist, [ 'perm', ]).length === _.filter(_.get(whitelist, [ 'perm', ]), (p) => (_.find(_.filter(perms, { role: req.user.role, }), { object: p, }))).length : true))),
-      ]).then((isAuthorized) => {
-        const isRoleAuthorized = isAuthorized[ 0 ]
-        const isPermsAuthorized = isAuthorized[ 1 ]
-        if (isRoleAuthorized && isPermsAuthorized) {
-          next()
-        } else {
-          res.status(403).send('Forbidden. No right to access.').end()
-        }
-      })
-    })
-
-  } else {
-    next()
-  }
-}
-
 /**
  * 
  * special request handler
@@ -142,8 +118,8 @@ const authorize = (req, res, next) => {
  */
 
 router.use('/activate', verifyToken, require('./middle/member/activation'))
+router.use('/following', require('./middle/following'))
 router.use('/initmember', authVerify, require('./middle/member/initMember'))
-router.use('/member/public', require('./middle/member'))
 router.use('/member', [ authVerify, authorize, ], require('./middle/member'))
 router.use('/comment', require('./middle/comment'))
 router.use('/register', authVerify, require('./middle/member/register'))
@@ -168,9 +144,6 @@ router.all('/post', [ authVerify, authorize, ], function(req, res, next) {
   next()
 })
 router.all('/posts', [ authVerify, authorize, ], function(req, res, next) {
-  next()
-})
-router.all('/following', [ authVerify, authorize, ], function(req, res, next) {
   next()
 })
 router.all('/tags', [ authVerify, authorize, ], function(req, res, next) {
@@ -271,44 +244,6 @@ router.get('/project/list', (req, res) => {
  * METHOD POST
  * 
  */
-
-router.post('/following/byuser', authVerify, (req, res) => {
-  const url = `${apiHost}/following/byuser`
-  superagent
-  .get(url)
-  .send(req.body)
-  .end((err, response) => {
-    if (!err && response) {
-      const resData = JSON.parse(response.text)
-      res.json(resData)
-    } else {
-      if (err.status === 404) {
-        res.status(200).json([])
-      } else {
-        res.json(err)
-        console.error(`error during fetch data from : ${url}`)
-        console.error(err)  
-      }
-    }
-  })
-})
-
-router.post('/following/byresource', authVerify, (req, res) => {
-  const url = `${apiHost}/following/byresource`
-  superagent
-  .get(url)
-  .send(req.body)
-  .end((err, response) => {
-    if (!err && response) {
-      const resData = JSON.parse(response.text)
-      return res.json(resData)
-    } else {
-      res.json(err)
-      console.error(`error during fetch data from : ${url}`)
-      console.error(err)
-    }
-  })
-})
 
 router.post('/verify-recaptcha-token', (req, res) => {
   let url = 'https://www.google.com/recaptcha/api/siteverify'
@@ -497,7 +432,11 @@ router.route('*')
                * if data not empty, go next to save data to redis
                * if endpoint is not /members, go next to save data to redis
                */
-              if (req.url.indexOf('/members') === -1 && req.url.indexOf('/post') === -1 && req.url.indexOf('/posts') === -1 && req.url.indexOf('/tags') === -1 && req.url.indexOf('/following/byuser') === -1) {
+              if (req.url.indexOf('/members') === -1
+                && req.url.indexOf('/post') === -1
+                && req.url.indexOf('/posts') === -1
+                && req.url.indexOf('/tags') === -1
+                && req.url.indexOf('/following/byuser') === -1) {
                 next()
               }
             }
@@ -520,8 +459,8 @@ router.route('*')
       if (!err && response) {
         res.status(200).end()
       } else {
-        console.log('error occurred when handling a req: ', req.url)
-        console.log(err)
+        console.error('error occurred when handling a req: ', req.url)
+        console.error(err)
         res.status(500).json(err)
       }
     })
@@ -549,7 +488,7 @@ router.route('*')
       if (!err && response) {
         res.status(200).end()
       } else {
-        console.log('Error occurred when deleting stuff', err)
+        console.error('Error occurred when deleting stuff', err)
         res.status(500).json(err)
       }
     })
@@ -562,7 +501,7 @@ router.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
       res.status(200).send(false)
     } else {
-      console.log('Error occurred when checking login status', err)
+      console.error('Error occurred when checking login status', err)
     }
   }
   next()

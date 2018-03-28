@@ -13,8 +13,8 @@
       <img src="/public/icons/account.png" alt="">
     </div>
     <div v-if="isClientSide" class="header__item header--status" >
-      <a v-if="!isLoggedIn" class="header__status-item" href="/login" v-text="wording.WORDING_HEADER_LOGIN"></a>
-      <div v-else-if="isLoggedIn" class="header__status-item" @click="logout" v-text="wording.WORDING_HEADER_LOGOUT"></div>
+      <a v-if="!isLoggedIn" class="header__status-item" href="/login" v-text="$t('header.WORDING_HEADER_LOGIN')"></a>
+      <div v-else-if="isLoggedIn" class="header__status-item" @click="logout" v-text="$t('header.WORDING_HEADER_LOGOUT')"></div>
     </div>
 
     <section ref="headerMenu" class="header__menu">
@@ -30,7 +30,6 @@
 </template>
 <script>
   import _ from 'lodash'
-  import { WORDING_HEADER_LOGIN, WORDING_HEADER_LOGOUT, WORIDNG_HEADER_MEMBER_CENTRE, } from '../constants'
   import { ROLE_MAP, } from '../constants'
   import { removeToken, } from '../util/services'
   import SearchTool from 'src/components/search/SearchTool.vue'
@@ -60,17 +59,12 @@
         return _.get(this.$store, [ 'state', 'isLoggedIn', ])
       },
       userNickname () {
-        return this.isLoggedIn && _.get(this.currentUser, [ 'nickname', ], _.get(this.currentUser, [ 'name', ], this.wording.WORIDNG_HEADER_MEMBER_CENTRE))
+        return this.isLoggedIn && _.get(this.currentUser, [ 'nickname', ], _.get(this.currentUser, [ 'name', ], this.$t('header.WORIDNG_HEADER_MEMBER_CENTRE')))
       },
     },
     data () {
       return {
         isClientSide: false,
-        wording: {
-          WORDING_HEADER_LOGIN,
-          WORDING_HEADER_LOGOUT,
-          WORIDNG_HEADER_MEMBER_CENTRE,
-        },
       }
     },
     name: 'AppHeader',

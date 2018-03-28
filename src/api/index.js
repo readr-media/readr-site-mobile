@@ -255,8 +255,8 @@ export function getMembers ({ params, }) {
 }
 
 export function getPublicMember ({ params, }) {
-  let url = `${host}/api/member/public`
-  url = `${url}/profile/${params.id}`
+  let url = `${host}/api/public/profile/${params.id}`
+  // url = `${url}/profile/${params.id}`
   return _doFetch(url)
 }
 
@@ -484,6 +484,7 @@ export function updateTags ({ params, }) {
 
 export function uploadImage (file, type) {
   let url
+  debug('Goin to send upload req.')
   return new Promise((resolve, reject) => {
     if (type === 'member') {
       url = `${host}/api/image/member`
@@ -568,4 +569,9 @@ export function search (keyword = '', params = {}) {
   debug('keyword', keyword)
   url = `${url}?query=${encodeURIComponent(`"${keyword}"`)}&hitsPerPage=${params.max_results}&page=${params.page - 1}`
   return _doFetch(url)
+}
+
+export function syncAvatar (params) {
+  const url = `${host}/api/member/syncavatar`
+  return _doPost(url, params)
 }

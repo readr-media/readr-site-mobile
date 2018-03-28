@@ -1,6 +1,6 @@
 const { constructScope, fetchPermissions, } = require('../../services/perm')
-const { redisFetching, redisWriting, } = require('../redisHandler')
-const { find, pick, } = require('lodash')
+const { find, get, } = require('lodash')
+const { handlerError, } = require('../../comm')
 const config = require('../../config')
 const debug = require('debug')('READR:api:member')
 const express = require('express')
@@ -70,6 +70,19 @@ const banUserForTalk = (email) => new Promise((resolve) => {
   })
 })
 
+const syncAvatar = (email, url) => new Promise((resolve) => {
+  MongoClient.connect(mongourl, function(err, client) {
+    debug("Connected successfully to server")
+    const db = client.db('talk')
+    const collection = db.collection('users')
+    collection.updateOne({ "profiles.id": { $in: [ email, ], }, }
+      , { $set: { metadata: { avatar: url, }, }, }, function() {
+      client.close()
+      resolve()
+    })
+  })
+})
+
 router.put('/role', (req, res) => {
   debug('Got a req to update user\'s role')
   debug(req.body)
@@ -92,6 +105,23 @@ router.put('/', (req, res, next) => {
   next()
 })
 
+router.post('/syncavatar', (req, res) => {
+  debug('Got a avatar sync req.')
+  debug(req.body)
+  const email = get(req.body, 'id', '')
+  const url = get(req.body, 'url', null)
+  syncAvatar(email, url)
+  .then(() => {
+    res.status(200).send('Sync avatar successfully.')
+  })
+  .catch((err) => {
+    const err_wrapper = handlerError(err, {})
+    res.status(err_wrapper.status).send(err_wrapper.text)
+    console.error(`Error occurred  during snyc avatar : ${req.url}`)
+    console.error(err)
+  })
+})
+
 router.post('*', () => {})
 
 router.delete('*', (req, res, next) => {
@@ -101,42 +131,6 @@ router.delete('*', (req, res, next) => {
   const userid = req.url.split('/')[ 1 ]
   userid && banUserForTalk(userid).then(() => {
     next()
-  })
-})
-
-router.get('/profile/:id', (req, res) => {
-  const id = req.params.id
-  const url = `${apiHost}/member/${id}`
-  if (!id) { res.status(403).send(`Forbidden.`) }
-  debug('Abt to fetch public member data.')
-  debug('>>>', req.url)
-  // res.send('ok')
-  redisFetching(`member${req.url}`, ({ err, data, }) => {
-    if (!err && data) {
-      debug('Fetch public member data from Redis.')
-      debug('>>>', req.url)
-      const mem = JSON.parse(data)
-      res.json({
-        'items': mem['_items'].map((object) => pick(object, [ 'id', 'nickname', 'description', 'profile_image', ])),
-      })
-    } else {
-      superagent
-      .get(url)
-      .end((e, response) => {
-        debug('Fetchpublic member data from api.', url)
-        if (!e && response) {
-          redisWriting(`member${req.url}`, response.text)
-          const mem = JSON.parse(response.text)
-          res.json({
-            'items': mem['_items'].map((object) => pick(object, [ 'id', 'nickname', 'description', 'profile_image', ])),
-          })
-        } else {
-          res.status(response.status).send('{\'error\':' + e + '}')
-          console.error(`error during fetch data from: member${req.url}`)
-          console.error(e)  
-        }
-      })
-    }
   })
 })
 

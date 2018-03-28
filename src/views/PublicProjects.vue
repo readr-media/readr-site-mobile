@@ -1,5 +1,5 @@
 <template>
-  <section class="projects-list">
+  <section class="projects">
     <template v-for="p in projects" >
       <ProjectBlock :key="p.id" :project="p"></ProjectBlock>
     </template>
@@ -74,10 +74,13 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .projects-list
+  .projects
     position relative
     min-height 100vh
     padding-top 65px
     background-color #e6e6e6
+  @media (min-width 768px)
+    .projects
+      padding-top 80px
 </style>
 

@@ -94,5 +94,8 @@
     min-height 100vh
     padding-top 65px
     background-color #e6e6e6
+  @media (min-width 768px)
+    .hots
+      padding-top 80px
 
 </style>
