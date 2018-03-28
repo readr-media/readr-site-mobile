@@ -11,42 +11,43 @@ if (process.browser) {
 }
 
 // route-level code splitting
-const Admin = () => import('../views/Admin.vue')
-const Agreement = () => import('../views/Agreement.vue')
-const Editor = () => import('../views/Editor.vue')
-const Editors = () => import('../views/Editors.vue')
-const GuestEditor = () => import('../views/GuestEditor.vue')
-const Home = () => import('../views/Home.vue')
-const Hots = () => import('../views/Hots.vue')
-const Login = () => import('../views/Login.vue')
-const Member = () => import('../views/Member.vue')
-const Post = () => import('../views/Post.vue')
-const Profile = () => import('../views/Profile.vue')
-const ProjectsList = () => import('../views/ProjectsList.vue')
-const Search = () => import('../views/Search.vue')
-const SetPassword = () => import('../views/SetPassword.vue')
-// const Videos = () => import('../views/Videos.vue')
+const ManageAdmin = () => import('../views/ManageAdmin.vue')
+const ManageEditor = () => import('../views/ManageEditor.vue')
+const ManageGuestEditor = () => import('../views/ManageGuestEditor.vue')
+const ManageMember = () => import('../views/ManageMember.vue')
+
+const PublicAgreement = () => import('../views/PublicAgreement.vue')
+const PublicEditors = () => import('../views/PublicEditors.vue')
+const PublicHome = () => import('../views/PublicHome.vue')
+const PublicHots = () => import('../views/PublicHots.vue')
+const PublicLogin = () => import('../views/PublicLogin.vue')
+const PublicPost = () => import('../views/PublicPost.vue')
+const PublicProfile = () => import('../views/PublicProfile.vue')
+const PublicProjects = () => import('../views/PublicProjects.vue')
+const PublicSearch = () => import('../views/PublicSearch.vue')
+const PublicSetPassword = () => import('../views/PublicSetPassword.vue')
+// const PublicVideos = () => import('../views/PublicVideos.vue')
 
 const router = new Router({
   mode: 'history',
   fallback: false,
   scrollBehavior: () => ({ y: 0, }),
   routes: [
-    { path: '/', component: Home, },
-    { path: '/admin', component: Admin, meta: { permission: 'admin', },},
-    { path: '/agreement', component: Agreement, },
-    { path: '/editor', component: Editor, meta: { permission: 'editor', },},
-    { path: '/editors', component: Editors, },
-    { path: '/guesteditor', component: GuestEditor, meta: { permission: 'guesteditor', },},
-    { path: '/hots', component: Hots, },
-    { path: '/login', component: Login, },
-    { path: '/member', component: Member, meta: { permission: 'member', },},
-    { path: '/post/:id', component: Post, },
-    { path: '/profile/:id', component: Profile, },
-    { path: '/projects', component: ProjectsList, },
-    { path: '/search/:keyword', component: Search, },
-    { path: '/setup/:type', component: SetPassword, },
-    // { path: '/videos', component: Videos, },
+    { path: '/', component: PublicHome, },
+    { path: '/admin', component: ManageAdmin, meta: { permission: 'admin', },},
+    { path: '/agreement', component: PublicAgreement, },
+    { path: '/editor', component: ManageEditor, meta: { permission: 'editor', },},
+    { path: '/editors', component: PublicEditors, },
+    { path: '/guesteditor', component: ManageGuestEditor, meta: { permission: 'guesteditor', },},
+    { path: '/hots', component: PublicHots, },
+    { path: '/login', component: PublicLogin, },
+    { path: '/member', component: ManageMember, meta: { permission: 'member', },},
+    { path: '/post/:id', component: PublicPost, },
+    { path: '/profile/:id', component: PublicProfile, },
+    { path: '/projects', component: PublicProjects, },
+    { path: '/search/:keyword', component: PublicSearch, },
+    { path: '/setup/:type', component: PublicSetPassword, },
+    // { path: '/videos', component: PublicVideos, },
   ],
 })
 
