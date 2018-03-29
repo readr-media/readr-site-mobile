@@ -28,6 +28,9 @@ const PublicSearch = () => import('../views/PublicSearch.vue')
 const PublicSetPassword = () => import('../views/PublicSetPassword.vue')
 // const PublicVideos = () => import('../views/PublicVideos.vue')
 
+const PageNotFound = () => import('../views/PageNotFound.vue')
+const ServerError = () => import('../views/ServerError.vue')
+
 const router = new Router({
   mode: 'history',
   fallback: false,
@@ -47,6 +50,8 @@ const router = new Router({
     { path: '/projects', component: PublicProjects, meta: { permission: 'member', }, },
     { path: '/search/:keyword', component: PublicSearch, meta: { permission: 'member', }, },
     { path: '/setup/:type', component: PublicSetPassword, },
+    { path: '/404', component: PageNotFound, },
+    { path: '/500', component: ServerError, },
     // { path: '/videos', component: PublicVideos, },
   ],
 })
