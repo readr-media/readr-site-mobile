@@ -127,7 +127,7 @@
             /**
               * use location.replace instead of router.push to server-side render page
               */
-            location && location.replace('/')
+            location && location.replace('/login')
           })
         })
       },
