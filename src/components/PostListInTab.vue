@@ -1,6 +1,6 @@
 <template>
   <section class="postListInTab">
-    <PaginationNav v-if="parent !== 'RewardPointsInTab'" :totalPages="totalPages" @pageChanged="$_postListInTab_pageChanged"></PaginationNav>
+    <PaginationNav v-if="parent !== 'RewardPointsInTab'" class="postListInTab__pagination" :totalPages="totalPages" @pageChanged="$_postListInTab_pageChanged"></PaginationNav>
     <div v-for="p in posts" :key="p.id" class="postListInTab__post">
       <div
         class="postListInTab__active"
@@ -10,10 +10,6 @@
       <div class="postListInTab__content">
         <div class="postListInTab__title">
           <h2 v-text="p.title"></h2>
-          <div v-if="!(!$can('editOtherPost') && p.active !== config.active.DRAFT) && parent !== 'RewardPointsInTab'" class="postListInTab__control--desktop">
-            <button class="postListInTab__btn" @click="$_postListInTab_editPost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_EDIT')"></button>
-            <button class="postListInTab__btn" @click="$_postListInTab_deletePost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_DELETE')"></button>
-          </div>
         </div>
         <div v-if="parent === 'RewardPointsInTab'" class="postListInTab__descr">
           <p class="points-info">{{ $t('point.WORDING_POINTS_SPENT') }}： {{ p.points }} 點</p>
@@ -21,7 +17,7 @@
         </div>
         <p v-else-if="p.content" class="postListInTab__descr" v-text="$_postListInTab_getDescr(p.content)"></p>
       </div>
-      <div class="postListInTab__control--mobile">
+      <div v-if="!(!$can('editOtherPost') && p.active !== config.active.DRAFT)" class="postListInTab__control--mobile">
         <button class="postListInTab__btn" @click="$_postListInTab_editPost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_EDIT')"></button>
         <button class="postListInTab__btn" @click="$_postListInTab_deletePost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_DELETE')"></button>
       </div>
@@ -33,7 +29,7 @@
   import _ from 'lodash'
   import PaginationNav from './PaginationNav.vue'
 
-  const MAXRESULT = 20
+  const MAXRESULT = 5
 
   export default {
     name: 'PostListInTab',
@@ -110,6 +106,8 @@
 .postListInTab
   width 100%
   margin 0 auto
+  &__pagination
+    margin-bottom 10px
   &__post
     display flex
     flex-direction column
@@ -117,8 +115,6 @@
     border-bottom 1px solid #979797
     h2
       margin 0
-    &:not(:first-of-type)
-      margin-top 10px
     &:last-of-type
       border-bottom none
   &__active

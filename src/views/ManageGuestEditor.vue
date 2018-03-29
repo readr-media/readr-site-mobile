@@ -1,48 +1,34 @@
 <template>
-  <div class="guestEditor">
-    <!-- <app-header :sections="sections"></app-header> -->
-    <div class="guestEditor__container">
-      <aside class="guestEditor__aside">
-        <AppAsideNav/>
-      </aside>
-      <main class="main-container">
-        <app-about :profile="profile"></app-about>
-        <control-bar
-          @addNews="$_guestEditor_showEditor({ postPanel: 'add', postType: config.type.NEWS })"
-          @addReview="$_guestEditor_showEditor({ postPanel: 'add', postType: config.type.REVIEW })"
-          @editNews="$_guestEditor_showDraftList(config.type.NEWS)"
-          @editReview="$_guestEditor_showDraftList(config.type.REVIEW)"
-          @openPanel="$_guestEditor_openPanel">
-        </control-bar>
-        <template v-if="activePanel === 'records'">
-          <section class="guestEditor__record">
-            <app-tab :tabs="tabs" @changeTab="$_guestEditor_tabHandler">
-              <post-list-tab
-                slot="0"
-                :posts="posts"
-                @deletePost="$_guestEditor_showAlert"
-                @editPost="$_guestEditor_showEditor"
-                @filterChanged="$_guestEditor_filterHandler">
-              </post-list-tab>
-              <post-list-tab
-                slot="1"
-                :posts="posts"
-                @deletePost="$_guestEditor_showAlert"
-                @editPost="$_guestEditor_showEditor"
-                @filterChanged="$_guestEditor_filterHandler">
-              </post-list-tab>
-              <following-list-tab
-                slot="2"
-                :currentResource="followingResource"
-                :followingByUser="followingByUser"
-                @changeResource="$_guestEditor_updateFollowingList"
-                @unfollow="$_guestEditor_unfollow">
-              </following-list-tab>
-            </app-tab>
-          </section>
-        </template>
-      </main>
-    </div>
+  <div class="backstage guestEditor">
+    <main class="backstage-container">
+      <template v-if="activePanel === 'records'">
+        <section class="backstage__record">
+          <app-tab class="backstage__tab" :tabs="tabs" @changeTab="$_guestEditor_tabHandler">
+            <post-list-tab
+              slot="0"
+              :posts="posts"
+              @deletePost="$_guestEditor_showAlert"
+              @editPost="$_guestEditor_showEditor"
+              @filterChanged="$_guestEditor_filterHandler">
+            </post-list-tab>
+            <post-list-tab
+              slot="1"
+              :posts="posts"
+              @deletePost="$_guestEditor_showAlert"
+              @editPost="$_guestEditor_showEditor"
+              @filterChanged="$_guestEditor_filterHandler">
+            </post-list-tab>
+            <following-list-tab
+              slot="2"
+              :currentResource="followingResource"
+              :followingByUser="followingByUser"
+              @changeResource="$_guestEditor_updateFollowingList"
+              @unfollow="$_guestEditor_unfollow">
+            </following-list-tab>
+          </app-tab>
+        </section>
+      </template>
+    </main>
     <base-light-box :showLightBox.sync="showDraftList">
       <post-list-detailed
         :posts="postsDraft"
@@ -77,10 +63,7 @@
 <script>
   import { POST_ACTIVE, POST_TYPE, } from '../../api/config'
   import _ from 'lodash'
-  import About from '../components/About.vue'
   import AlertPanel from '../components/AlertPanel.vue'
-  import AppAsideNav from '../components/AppAsideNav.vue'
-  import AppHeader from '../components/AppHeader.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import PaginationNav from '../components/PaginationNav.vue'
@@ -89,9 +72,8 @@
   import PostListInTab from '../components/PostListInTab.vue'
   import PostPanel from '../components/PostPanel.vue'
   import Tab from '../components/Tab.vue'
-  import TheControlBar from '../components/TheControlBar.vue'
 
-  const MAXRESULT = 20
+  const MAXRESULT = 5
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-updated_at'
 
@@ -152,10 +134,7 @@
     name: 'GuestEditor',
     components: {
       'alert-panel': AlertPanel,
-      'app-about': About,
-      'app-header': AppHeader,
       'app-tab': Tab,
-      'control-bar': TheControlBar,
       'base-light-box': BaseLightBox,
       'following-list-tab': FollowingListInTab,
       'pagination-nav': PaginationNav,
@@ -163,7 +142,6 @@
       'post-list-detailed': PostListDetailed,
       'post-list-tab': PostListInTab,
       'post-panel': PostPanel,
-      AppAsideNav,
     },
     data () {
       return {

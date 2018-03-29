@@ -42,12 +42,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-$app-share-button  
-  // position absolute
-  // top 15.5px
-  // right 22.5px
-  width 25px
-  height 25px
+$app-share-button
+  position relative
+  width 30px
+  height 30px
 $app-share-button__item
   transition-duration .19s
   position absolute
@@ -64,14 +62,15 @@ $app-share-button__item
     position absolute
     top 0
     right 0
-    border none
-    width 101%
-    height 101%
-    // background-image url(/public/icons/share-blue.png)
-    background-size 100% 100%
-    background-color transparent
-    outline none
     z-index 2
+    width 30px
+    height 30px
+    padding 0
+    background-size 29px 29px
+    background-color transparent
+    border none
+    outline none
+    
   &__item
     &--fb
       @extends $app-share-button__item
@@ -88,30 +87,30 @@ $app-share-button__item
       .app-share-button__item--fb
         transform translate3d(0, -40px, 0)
       .app-share-button__item--line
-        transform translate3d(0, -70px, 0)
+        transform translate3d(0, -75px, 0)
       .app-share-button__item--link
-        transform translate3d(0, -100px, 0)
+        transform translate3d(0, -110px, 0)
     &.right
       .app-share-button__item--fb
         transform translate3d(40px, 0, 0)
       .app-share-button__item--line
-        transform translate3d(70px, 0, 0)
+        transform translate3d(75px, 0, 0)
       .app-share-button__item--link
-        transform translate3d(100px, 0, 0)
+        transform translate3d(110px, 0, 0)
     &.down
       .app-share-button__item--fb
         transform translate3d(0, 40px, 0)
       .app-share-button__item--line
-        transform translate3d(0, 70px, 0)
+        transform translate3d(0, 75px, 0)
       .app-share-button__item--link
-        transform translate3d(0, 100px, 0)
+        transform translate3d(0, 110px, 0)
     &.left
       .app-share-button__item--fb
         transform translate3d(-40px, 0, 0)
       .app-share-button__item--line
-        transform translate3d(-70px, 0, 0)
+        transform translate3d(-75px, 0, 0)
       .app-share-button__item--link
-        transform translate3d(-100px, 0, 0)
+        transform translate3d(-110px, 0, 0)
 
 </style>
 

@@ -15,14 +15,14 @@
         <div class="actions title">
           <!-- <div class="actions__guesteditor" v-text="wording.WORDING_ADMIN_GUESTEDITOR"></div> -->
           <div class="actions__guesteditor"><span v-text="$t('admin.WORDING_ADMIN_GUESTEDITOR')" @click="orderBy('custom_editor')"></span></div>
-          <div class="actions__update" v-if="$can('updateAccount')" v-text="$t('admin.WORDING_ADMIN_UPDATE')"></div>
-          <div class="actions__delete" v-if="$can('deleteAccount')" v-text="$t('admin.WORDING_ADMIN_DELETE')" @click="delMultiple"></div>
+          <!-- <div class="actions__update" v-if="$can('updateAccount')" v-text="$t('admin.WORDING_ADMIN_UPDATE')"></div> -->
+          <!-- <div class="actions__delete" v-if="$can('deleteAccount')" v-text="$t('admin.WORDING_ADMIN_DELETE')" @click="delMultiple"></div> -->
         </div>
-        <div class="filter title">
+        <!-- <div class="filter title">
           <select @change="filterChanged">
             <option v-for="opt in filterOpts" v-text="opt.title" :value="opt.key"></option>
           </select>
-        </div>
+        </div> -->
       </div>
       <div class="member-panel__items__item" v-for="(m, k) in members">
         <div class="checkbox">
@@ -40,8 +40,8 @@
               <label :for="`checkbox-${m.id}`" class='ios-style-switch__label'></label>
             </div>
           </div>
-          <div class="actions__update" v-if="$can('updateAccount')" v-text="$t('admin.WORDING_ADMIN_UPDATE')" @click="update(k)"></div>
-          <div class="actions__delete" v-if="$can('deleteAccount')" v-text="$t('admin.WORDING_ADMIN_DELETE')" @click="del(k)"></div>
+          <!-- <div class="actions__update" v-if="$can('updateAccount')" v-text="$t('admin.WORDING_ADMIN_UPDATE')" @click="update(k)"></div> -->
+          <!-- <div class="actions__delete" v-if="$can('deleteAccount')" v-text="$t('admin.WORDING_ADMIN_DELETE')" @click="del(k)"></div> -->
         </div>
       </div>
       <BaseLightBox :showLightBox.sync="showLightBox" borderStyle="nonBorder" :isConversation="true">
@@ -204,9 +204,8 @@
 <style lang="stylus" scoped>
   .member-panel
     width 100%
-    margin 30px auto
     border solid 5px #d8ca21
-    padding 23.5px 75px 45px
+    padding 15px 20px
     background-color white
     &__pagination
       height 20px
@@ -217,6 +216,7 @@
       width 100%
       margin 25px auto 0
       &__item
+        display flex
         // padding 0 85px
         &:first-child
           border-bottom 2px solid #808080
@@ -232,9 +232,11 @@
           word-break break-all
           vertical-align top
           &.title
-            font-size 1.125rem
+            flex 1
+            font-size .9375rem
             font-weight 600
             color #808080
+            padding-right 20px
             margin 10px 0
             height 25px
             cursor pointer
@@ -262,25 +264,26 @@
             padding 5px 10px 5px 0
           &.checkbox
             width 25px
+            padding-right 0
             > input[type="checkbox"]
               vertical-align top
               width 15px
               height 15px
-          &.nickname
-            width 80px
-          &.email
-            width 275px
-          &.role
-            width 63px
+          // &.nickname
+          //   width 80px
+          // &.email
+          //   width 275px
+          // &.role
+          //   width 63px
           // &.guesteditor
           //   width 100px
           &.actions
-            width 240px
+            min-width 80px
             > div
               display inline-flex
               justify-content center
               align-items center
-              padding 0 12px
+              padding 0
               color #4280a2
               cursor pointer
               margin-right 6.5px
@@ -291,7 +294,6 @@
               &.actions__guesteditor
                 cursor initial
                 position relative
-                width 100px
                 margin-right 0
                 background-color transparent
                 color #808080
@@ -396,11 +398,4 @@
       &:hover:after
         box-shadow 0 0 5px rgba(0, 0, 0, 0.3)
 
-  @media (min-width 800px)
-    .member-panel
-      &__items, &__pagination
-        max-width 800px
-  @media (min-width 950px)
-    .member-panel
-      max-width 950px
 </style>

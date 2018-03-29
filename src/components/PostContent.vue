@@ -124,7 +124,6 @@
     border solid 0.5px #d3d3d3
     display flex
     justify-content space-between
-    margin-bottom 7.5px
     &__content
       order 1
       width 50%
