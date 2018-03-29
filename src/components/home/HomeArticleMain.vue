@@ -172,18 +172,18 @@ export default {
         display none
 
   .editor-writing-source
-    height 102px
-    border solid 0.5px #d3d3d3
+    border solid 1px #d3d3d3
     // padding 8px 15px 5px 19.5px
     display flex
     justify-content space-between
-    margin-bottom 7.5px
     &__content
-      width 350.5px
+      width 50%
       position relative
     &__title
-      font-size 14px
+      max-height calc(.75rem * 3)
+      font-size 12px
       font-weight 500
+      line-height 1.5
       color #808080
       margin 0
     &__description
@@ -197,10 +197,11 @@ export default {
       margin 0
       display flex
       align-self center
-      width 150px
-      height 78.5px
+      width 50%
+      object-fit cover
+      object-position center
     &__cite
-      font-size 14px
+      font-size 11px
       font-weight 300
       color #808080
       align-self flex-end

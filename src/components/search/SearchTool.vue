@@ -2,24 +2,23 @@
   <div class="search">
     <img src="/public/icons/search-white.png" alt="" @click="toggleSearchBar">
     <section ref="searchBar" class="searchBar" @click.self="toggleSearchBar">
-      <form action="">
-        <input type="text" :placeholder="$t('header.WORIDNG_HEADER_MEMBER_SEARCH')">
+      <form action=".">
+        <input
+          ref="searchInput"
+          v-model="currentSearchVal"
+          type="text"
+          :placeholder="$t('header.WORIDNG_HEADER_MEMBER_SEARCH')"
+          @change="checkIsChanged"
+          @keyup="setCurrVal">
         <button @click.prevent="toggleSearchBar"><img src="/public/icons/close-grey.png" alt=""></button>
       </form>
     </section>
   </div>
-  <!-- <div class="search">
-    <input class="search__input" type="text" ref="searchInput"
-      :placeholder="wording[ 'WORIDNG_HEADER_MEMBER_SEARCH' ]"
-      @keyup="setCurrVal"
-      @change="checkIsChanged">
-    <span class="search__icon" @click="goSearch"></span>
-  </div> -->
 </template>
 <script>
   import { get, } from 'lodash'
 
-  // const debug = require('debug')('CLIENT:SearchTool')
+  const debug = require('debug')('CLIENT:SearchTool')
   export default {
     name: 'SearchTool',
     data () {
@@ -38,26 +37,27 @@
       toggleSearchBar () {
         this.$refs.searchBar.classList.toggle('active')
       },
-      // checkIsChanged () {
-      //   debug('Change Detected.', this.searchVal, this.currentSearchVal)
-      //   if (this.searchVal !== this.currentSearchVal) {
-      //     this.isChanged = true
-      //   } else {
-      //     this.isChanged = false
-      //   }
-      // },
-      // goSearch () {
-      //   debug('this.isChanged', this.isChanged)
-      //   debug('this.currentSearch', this.currentSearchVal)
-      //   debug('this.searchVal', this.searchVal)
-      //   if (this.searchVal !== this.currentSearchVal && this.currentSearchVal) {
-      //     this.$router.push('/search/' + this.currentSearchVal)
-      //   }
-      // },
-      // setCurrVal () {
-      //   debug('Abt to change current search words to:', get(this.$refs, 'searchInput.value'))
-      //   this.currentSearchVal = get(this.$refs, 'searchInput.value')
-      // },
+      checkIsChanged (e) {
+        debug('Change Detected.', this.searchVal, this.currentSearchVal)
+        debug('enter?', e.keyCode)
+        this.isChanged = true
+      },
+      goSearch () {
+        debug('this.currentSearch', this.currentSearchVal)
+        debug('this.searchVal', this.searchVal)
+        if (this.searchVal !== this.currentSearchVal && this.currentSearchVal) {
+          this.$router.push('/search/' + this.currentSearchVal)
+          debug('Go search!')
+        }
+      },
+      setCurrVal (e) {
+        debug('Abt to change current search words to:', get(this.$refs, 'searchInput.value'))
+        debug('isChanged', this.isChanged)
+        if (e.keyCode === 13 && this.isChanged) {
+          this.goSearch()
+        }
+        this.isChanged = false
+      },
     },
   }
 </script>
