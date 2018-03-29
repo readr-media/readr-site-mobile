@@ -31,39 +31,39 @@
 
     <section v-if="isBackstage" ref="headerControl" class="header__control">
       <div class="header__control-menu">
-        <div class="header__control-menu-item">
-          <div class="header__control-menu-item-title">評論</div>
+        <div v-if="$can('addPost')" class="header__control-menu-item">
+          <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_REVIEW')"></div>
           <div class="header__control-menu-item-box">
-            <button>直接新增</button>
-            <button>編輯草稿</button>
+            <button v-text="$t('header.WORDING_HEADER_ADD_DIRECTLY')"></button>
+            <button v-text="$t('header.WORDING_HEADER_EDIT_DRAFT')"></button>
+          </div>
+        </div>
+        <div v-if="$can('addPost')" class="header__control-menu-item">
+          <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_NEWS')"></div>
+          <div class="header__control-menu-item-box">
+            <button v-text="$t('header.WORDING_HEADER_ADD_DIRECTLY')"></button>
+            <button v-text="$t('header.WORDING_HEADER_EDIT_DRAFT')"></button>
           </div>
         </div>
         <div class="header__control-menu-item">
-          <div class="header__control-menu-item-title">新聞</div>
+          <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_MANAGE')"></div>
           <div class="header__control-menu-item-box">
-            <button>直接新增</button>
-            <button>編輯草稿</button>
+            <button v-text="$t('header.WORDING_HEADER_RECORD')"></button>
+            <button v-if="$can('addPost')" v-text="$t('header.WORDING_HEADER_EDIT_DRAFT')"></button>
+          </div>
+          <div class="header__control-menu-item-box">
+            <!-- <button v-text="$t('header.WORDING_HEADER_VIDEO')"></button> -->
+            <button v-if="$can('editTag')" v-text="$t('header.WORDING_HEADER_TAG')"></button>
           </div>
         </div>
-        <div class="header__control-menu-item">
-          <div class="header__control-menu-item-title">管理</div>
+        <div v-if="$can('memberManage')" class="header__control-menu-item">
+          <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_ACCOUNT')"></div>
           <div class="header__control-menu-item-box">
-            <button>記錄</button>
-            <button>編輯草稿</button>
-          </div>
-          <div class="header__control-menu-item-box">
-            <button>影片</button>
-            <button>關鍵字</button>
+            <button v-text="$t('header.WORDING_HEADER_ADD_DIRECTLY')"></button>
+            <button v-text="$t('header.WORDING_HEADER_ACCOUNT_LIST')"></button>
           </div>
         </div>
-        <div class="header__control-menu-item">
-          <div class="header__control-menu-item-title">帳號</div>
-          <div class="header__control-menu-item-box">
-            <button>直接新增</button>
-            <button>帳號列表</button>
-          </div>
-        </div>
-        <button>編輯個人檔案</button>
+        <button v-text="$t('header.WORDING_HEADER_EDIT_PROFILE')"></button>
       </div>
       <button @click="toggleControl"><img src="/public/icons/close-black.png" alt=""></button>
     </section>
@@ -287,20 +287,18 @@
       align-items center
       position fixed
       top 0
-      left 0
-      right 0
+      right -100%
       bottom 0
       z-index 10
       width 100%
       height 100vh
       margin 0
       background-color #ddcf21
-      opacity 0
       visibility hidden
-      transition opacity 0.35s ease-out
+      transition right 0.35s ease-out
       &.open
+        right 0
         visibility visible
-        opacity 1
       > button
         display flex
         justify-content center
@@ -313,6 +311,7 @@
         padding 0
         border 1px solid #000
         background-color transparent
+        outline none
         img
           width 20px
           height 20px
@@ -359,6 +358,8 @@
               padding 10px 0
               &:first-of-type
                 border-right 1px solid #000
+              &:last-of-type
+                border-right none
 
   @media (min-width 768px)
     .header

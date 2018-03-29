@@ -1,13 +1,13 @@
 <template>
   <div class="backstage member">
     <main class="backstage-container">
-      <app-about :profile="profile"></app-about>
+      <section class="backstage__record">
+      </section>
     </main>
   </div>
 </template>
 <script>
-  import { get, } from 'lodash'
-  import About from '../components/About.vue'
+  // import { get, } from 'lodash'
 
   // const MAXRESULT = 20
   // const DEFAULT_PAGE = 1
@@ -16,12 +16,10 @@
   export default {
     name: 'AppMember',
     components: {
-      'app-about': About,
+      
     },
     computed: {
-      profile () {
-        return get(this.$store, [ 'state', 'profile', ], {})
-      },
+      
     },
   }
 </script>
