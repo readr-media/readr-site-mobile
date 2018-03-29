@@ -1,37 +1,37 @@
 <template>
   <section class="followingListInTab">
     <nav class="followingListInTab__nav">
-      <button
+      <div
         :class="[ currentResource === 'member' ? 'active' : '' ]"
-        @click="$_followingListInTab_resourceHandler('member')"
-        v-text="$t('follow.WORDING_FOLLOW_LIST_GUEST_EDITOR')">
-      </button>
-      <button
+        @click="$_followingListInTab_resourceHandler('member')">
+        <span v-text="$t('follow.WORDING_FOLLOW_LIST_GUEST_EDITOR')"></span>
+      </div>
+      <div
         :class="[ currentResource === 'review' ? 'active' : '' ]"
-        @click="$_followingListInTab_resourceHandler('review')"
-        v-text="`${$t('follow.WORDING_FOLLOW_LIST_FOLLOW')}${$t('follow.WORDING_FOLLOW_LIST_REVIEW')}`">
-      </button>
-      <button
+        @click="$_followingListInTab_resourceHandler('review')">
+        <span v-text="`${$t('follow.WORDING_FOLLOW_LIST_FOLLOW')}${$t('follow.WORDING_FOLLOW_LIST_REVIEW')}`"></span>
+      </div>
+      <div
         :class="[ currentResource === 'news' ? 'active' : '' ]"
-        @click="$_followingListInTab_resourceHandler('news')"
-        v-text="`${$t('follow.WORDING_FOLLOW_LIST_FOLLOW')}${$t('follow.WORDING_FOLLOW_LIST_NEWS')}`">
-      </button>
-      <button
+        @click="$_followingListInTab_resourceHandler('news')">
+        <span v-text="`${$t('follow.WORDING_FOLLOW_LIST_FOLLOW')}${$t('follow.WORDING_FOLLOW_LIST_NEWS')}`"></span>
+      </div>
+      <div
         :class="[ currentResource === 'project' ? 'active' : '' ]"
-        @click="$_followingListInTab_resourceHandler('project')"
-        v-text="`${$t('follow.WORDING_FOLLOW_LIST_FOLLOW')}${$t('follow.WORDING_FOLLOW_LIST_PROJECT')}`">
-      </button>
+        @click="$_followingListInTab_resourceHandler('project')">
+        <span v-text="`${$t('follow.WORDING_FOLLOW_LIST_FOLLOW')}${$t('follow.WORDING_FOLLOW_LIST_PROJECT')}`"></span>
+      </div>
     </nav>
     <!-- <pagination-nav></pagination-nav> -->
     <div class="followingListInTab__list">
       <div v-for="follow in followingByUser" :key="follow.id" class="followingListInTab__item" :class="currentResource">
-        <div v-if="currentResource === 'member'" class="followingListInTab__img">
-          <div :style="{ backgroundImage: `url(${follow.profileImage})` }"></div>
+        <div class="followingListInTab__img">
+          <div v-if="currentResource === 'member'" class="followingListInTab__img-member" :style="{ backgroundImage: `url(${follow.profileImage})` }"></div>
+          <button @click="$_followingListInTab_unfollow(follow.id)"><img src="/public/icons/star-grey.png"></button>
         </div>
         <div class="followingListInTab__content" :class="currentResource">
           <h2 v-if="currentResource === 'member'" v-text="follow.nickname"></h2>
           <h2 v-if="currentResource !== 'member'" v-text="follow.title"></h2>
-          <button @click="$_followingListInTab_unfollow(follow.id)"><img src="/public/icons/star-grey.png"></button>
           <p v-if="$_followingListInTab_getDescription(follow)" v-text="$_followingListInTab_getDescription(follow)"></p>
         </div>
         <div v-if="currentResource === 'project'" class="followingListInTab__og"></div>
@@ -94,14 +94,16 @@
 
 .followingListInTab
   width 100%
+  min-height 100%
   margin 0 auto
   &__nav
-    button
+    div
+      display inline-block
       height 15px
       padding 0
       margin 0 5px
       color #a8a8a8
-      font-size .85rem
+      font-size .8125rem
       background transparent
       border none
       outline none
@@ -116,14 +118,16 @@
           line-height 0
           vertical-align super
           border-style solid
-          border-width 7.5px 0 7.5px 15px
+          border-width 6px 0 6px 10px
           border-color transparent transparent transparent #ddcf21
+        span
+          border-bottom 1px solid #000
   &__list
     margin-top 25px
   &__item
     display flex
     align-items flex-start
-    margin-bottom 25px
+    margin-bottom 15px
     &:last-of-type
       margin-bottom 0
     &.review
@@ -136,21 +140,32 @@
           height 25px
           line-height 25px
   &__img
+    width 45px
+    text-align center
+    > div
       width 45px
-      text-align center
-      > div
-        width 45px
-        height 45px
-        background-position center
-        background-size cover
-        background-repeat no-repeat
-        border 1px solid #979797
-        border-radius 50%
+      height 45px
+      background-position center
+      background-size cover
+      background-repeat no-repeat
+      border 1px solid #979797
+      border-radius 50%
+    > button
+      width 25px
+      height 25px
+      padding 0
       
+      text-align center
+      background transparent
+      border none
+      outline none
+      img 
+        width 100%
+    &-member
+      margin-bottom 10px
   &__content
     flex 1
-    &.member
-      margin-left 10px
+    margin-left 10px
     h2
       display inline-block
       margin 0
@@ -162,18 +177,6 @@
       font-size .875rem
       text-align justify
       line-height 1.4
-    button
-      width 20px
-      height 20px
-      padding 0
-      margin-left 10px
-      text-align center
-      vertical-align sub
-      background transparent
-      border none
-      outline none
-      img 
-        width 100%
   &__og
     width 175px
     height 92px
