@@ -1,19 +1,22 @@
 <template>
   <div class="login-page">
-    <LoginPanel v-if="isClientSide && !isLoggedIn"></LoginPanel>
+    <!--LoginPanel v-if="isClientSide && !isLoggedIn"></LoginPanel-->
+    <LoginPanelPackingTest v-if="isClientSide && !isLoggedIn"></LoginPanelPackingTest>
   </div>
 </template>
 <script>
   import _ from 'lodash'
   import { SECTIONS_DEFAULT, } from '../constants'
-  import LoginPanel from '../components/LoginPanel.vue'
+  // import LoginPanel from '../components/LoginPanel.vue'
+  import LoginPanelPackingTest from '../components/LoginPanelPackingTest.vue'
   import AppHeader from '../components/AppHeader.vue'
   import AppAsideNav from '../components/AppAsideNav.vue'
   
   export default {
     components: {
       'app-header': AppHeader,
-      LoginPanel,
+      // LoginPanel,
+      LoginPanelPackingTest,
       AppAsideNav,
     },
     computed: {
