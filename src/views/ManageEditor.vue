@@ -1,19 +1,9 @@
 <template>
   <div class="backstage editor">
     <main class="backstage-container">
-      <app-about :profile="profile"></app-about>
-      <control-bar
-        class="backstage__controlBar"
-        @addNews="$_editor_showEditor({ postPanel: 'add', postType: config.type.NEWS })"
-        @addReview="$_editor_showEditor({ postPanel: 'add', postType: config.type.REVIEW })"
-        @addVideo="$_editor_showEditor({ postPanel: 'add', postType: config.type.VIDEO })"
-        @editNews="$_editor_showDraftList(config.type.NEWS)"
-        @editReview="$_editor_showDraftList(config.type.REVIEW)"
-        @openPanel="$_editor_openPanel">
-      </control-bar>
       <template v-if="activePanel === 'records'">
         <section class="backstage__record">
-          <app-tab :tabs="tabs" @changeTab="$_editor_tabHandler">
+          <app-tab class="backstage__tab" :tabs="tabs" @changeTab="$_editor_tabHandler">
             <post-list-tab
               slot="0"
               :posts="posts"
@@ -116,9 +106,7 @@
 <script>
   import { POST_ACTIVE, POST_TYPE, TAG_ACTIVE, } from '../../api/config'
   import _ from 'lodash'
-  import About from '../components/About.vue'
   import AlertPanelB from '../components/AlertPanel.vue'
-  import AppAsideNav from '../components/AppAsideNav.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import PostList from '../components/PostList.vue'
@@ -127,7 +115,6 @@
   import PostPanelB from '../components/PostPanel.vue'
   import Tab from '../components/Tab.vue'
   import TagList from '../components/TagList.vue'
-  import TheControlBar from '../components/TheControlBar.vue'
   import VideoList from '../components/VideoList.vue'
 
   const MAXRESULT = 20
@@ -253,10 +240,8 @@
     name: 'AppEditor',
     components: {
       'alert-panel': AlertPanelB,
-      'app-about': About,
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
-      'control-bar': TheControlBar,
       'following-list-tab': FollowingListInTab,
       'post-list': PostList,
       'post-list-detailed': PostListDetailed,
@@ -264,7 +249,6 @@
       'post-panel': PostPanelB,
       'tag-list': TagList,
       'video-list': VideoList,
-      AppAsideNav,
     },
     data () {
       return {

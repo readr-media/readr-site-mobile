@@ -122,6 +122,8 @@
     color #000
     &__input-email, &__input-pwd
       margin 15px 0
+      &:first-of-type
+        margin-top 0
     &__wrapper
       display flex
       justify-content space-between

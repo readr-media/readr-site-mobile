@@ -73,15 +73,24 @@ button
 .backstage
   width 100%
   &-container
+    display flex
+    flex-direction column
     width 100%
     min-height calc(100vh - 40px)
-    padding-top 40px
-    
+    padding-top 30px
   &__controlBar
     margin-top 40px
   &__record
-    margin-top 20px
+    flex 1
+    display flex
+    flex-direction column
     background-color #fff
+  &__tab
+    flex 1
+    display flex
+    flex-direction column
+    .tab__content
+      flex 1
   &__panel
     padding 20px 5%
     margin-top 20px

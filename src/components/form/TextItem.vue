@@ -113,7 +113,8 @@
       border none
       width 100%
       height 35px
-      font-size 1.125rem
+      font-size .9375rem
+      line-height 35px
       padding 0 10px
       vertical-align top
       background-color #ffffff

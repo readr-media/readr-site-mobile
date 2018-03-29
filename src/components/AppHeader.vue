@@ -4,7 +4,7 @@
     <div v-if="isBackstage" class="header__item header--edit" @click="toggleControl">
       <img src="/public/icons/pen-white.png" alt="">
     </div>
-    <SearchTool v-if="!isBackstage" class="header__item"></SearchTool>
+    <SearchTool v-if="!isBackstage && isLoggedIn" class="header__item"></SearchTool>
     <div class="header__item header--hamburger" @click="toggleMenu">
       <div class="header__hamburgerBar"></div>
       <div class="header__hamburgerBar"></div>

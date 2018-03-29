@@ -112,6 +112,8 @@
   .recover-password
     div
       margin 15px 0
+      &:first-of-type
+        margin-top 0
     &__desc
       font-size 0.9rem
     &__btn
