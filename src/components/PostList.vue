@@ -121,15 +121,15 @@
         const status = _.get(post, [ 'active', ])
         switch (status) {
           case POST_ACTIVE.ACTIVE:
-            return this.wording.WORDING_POSTLIST_ACTIVE_PUBLISH
+            return this.$t('post_list.WORDING_POSTLIST_ACTIVE_PUBLISH')
           case POST_ACTIVE.PENDING:
-            return this.wording.WORDING_POSTLIST_ACTIVE_PENDING
+            return this.$t('post_list.WORDING_POSTLIST_ACTIVE_PENDING')
           case POST_ACTIVE.DRAFT:
-            return this.wording.WORDING_POSTLIST_ACTIVE_DRAFT
+            return this.$t('post_list.WORDING_POSTLIST_ACTIVE_DRAFT')
           case POST_ACTIVE.UNPUBLISH:
-            return this.wording.WORDING_POSTLIST_ACTIVE_UNPUBLISH
+            return this.$t('post_list.WORDING_POSTLIST_ACTIVE_UNPUBLISH')
           default:
-            return this.wording.WORDING_POSTLIST_ACTIVE_DRAFT
+            return this.$t('post_list.WORDING_POSTLIST_ACTIVE_DRAFT')
         }
       },
       $_postList_orderBy (field) {

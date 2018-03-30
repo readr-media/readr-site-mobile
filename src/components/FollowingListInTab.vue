@@ -26,7 +26,7 @@
     <div class="followingListInTab__list">
       <div v-for="follow in followingByUser" :key="follow.id" class="followingListInTab__item" :class="currentResource">
         <div class="followingListInTab__img">
-          <div v-if="currentResource === 'member'" class="followingListInTab__img-member" :style="{ backgroundImage: `url(${follow.profileImage})` }"></div>
+          <div v-if="currentResource === 'member'" class="followingListInTab__img-member" :style="{ backgroundImage: `url(${$_followingListInTab_getImage(follow)})` }"></div>
           <button @click="$_followingListInTab_unfollow(follow.id)"><img src="/public/icons/star-grey.png"></button>
         </div>
         <div class="followingListInTab__content" :class="currentResource">
@@ -34,13 +34,13 @@
           <h2 v-if="currentResource !== 'member'" v-text="follow.title"></h2>
           <p v-if="$_followingListInTab_getDescription(follow)" v-text="$_followingListInTab_getDescription(follow)"></p>
         </div>
-        <div v-if="currentResource === 'project'" class="followingListInTab__og"></div>
+        <div v-if="currentResource === 'project'" class="followingListInTab__og" :style="{ backgroundImage: `url(${$_followingListInTab_getImage(follow)})` }"></div>
       </div>
     </div>
   </section>
 </template>
 <script>
-  import _ from 'lodash'
+  import { get, } from 'lodash'
   import PaginationNav from './PaginationNav.vue'
 
   export default {
@@ -61,10 +61,8 @@
     methods: {
       $_followingListInTab_getDescription (follow) {
         switch (this.currentResource) {
-          case 'member': {
-            return _.get(follow, [ 'description', ])
-          }
-          case 'post': {
+          case 'review':
+          case 'news': {
             const parser = new DOMParser()
             const html = parser.parseFromString(follow.content, 'text/html')
             const origin = Array.from(html.querySelectorAll('p'))
@@ -78,8 +76,22 @@
             return origin
           }
           default:
-            return ''
+            return get(follow, [ 'description', ])
         }
+      },
+      $_followingListInTab_getImage (follow) {
+        let image
+        switch (this.currentResource) {
+          case 'member':
+            image = get(follow, [ 'profileImage', ])
+            break
+          default:
+            image = get(follow, [ 'heroImage', ])
+        }
+        if (image) {
+          return image
+        }
+        return ' '
       },
       $_followingListInTab_resourceHandler (resource) {
         this.$emit('changeResource', resource)
@@ -87,6 +99,7 @@
       $_followingListInTab_unfollow (id) {
         this.$emit('unfollow', this.currentResource, id)
       },
+      get,
     },
   }
 </script>
@@ -130,17 +143,8 @@
     margin-bottom 15px
     &:last-of-type
       margin-bottom 0
-    &.review
-      .followingListInTab__img
-        width 25px
-        height 25px
-        text-align left
-      .followingListInTab__content
-        h2
-          height 25px
-          line-height 25px
+    
   &__img
-    width 45px
     text-align center
     > div
       width 45px
@@ -168,18 +172,33 @@
     margin-left 10px
     h2
       display inline-block
+      max-height calc(.8125rem * 2.6)
       margin 0
-      font-size .9375rem
-      line-height 20px
+      padding-top 4px
+      font-size .8125rem
+      line-height 1.3
+      overflow hidden
+      text-overflow ellipsis
     p
-      margin-top 2px
+      max-height 48px
+      margin-top 5px
       margin-bottom 0
-      font-size .875rem
+      font-size 12px
       text-align justify
-      line-height 1.4
+      line-height 16px
+      overflow hidden
+      text-overflow ellipsis
+    &.project
+      display flex
+      height 100px
+      flex-direction column
+      justify-content space-between
+
   &__og
-    width 175px
-    height 92px
+    width 100px
+    height 100px
     margin-left 15px
+    background-size cover
+    background-position center center
 
 </style>

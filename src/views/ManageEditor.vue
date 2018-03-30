@@ -250,6 +250,11 @@
       'tag-list': TagList,
       'video-list': VideoList,
     },
+    props: {
+      openManagePanel: {
+        type: String,
+      },
+    },
     data () {
       return {
         activePanel: 'records',
@@ -303,6 +308,11 @@
       },
       tags () {
         return _.get(this.$store, [ 'state', 'tags', ], [])
+      },
+    },
+    watch: {
+      openManagePanel (panel) {
+        this.openPanel(panel)
       },
     },
     beforeMount () {

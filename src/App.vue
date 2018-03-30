@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <app-header :sections="sections"></app-header>
+    <app-header v-if="!isLogin" :sections="sections" @openManagePanel="$_app_openManagePanel"></app-header>
     <transition name="fade" mode="out-in">
-      <router-view class="view"></router-view>
+      <router-view class="view" :openManagePanel="openManagePanel"></router-view>
     </transition>
     <app-footer></app-footer>
   </div>
@@ -10,6 +10,7 @@
 
 <script>
   import { SECTIONS_DEFAULT, } from './constants'
+  import { get, } from 'lodash'
   import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/AppHeader.vue'
   export default {
@@ -17,9 +18,22 @@
       AppFooter,
       AppHeader,
     },
+    data () {
+      return {
+        openManagePanel: '',
+      }
+    },
     computed: {
+      isLogin () {
+        return get(this.$route, [ 'fullPath', ]).split('/')[1] === 'login'
+      },
       sections () {
         return SECTIONS_DEFAULT
+      },
+    },
+    methods: {
+      $_app_openManagePanel (panel) {
+        this.openManagePanel = panel
       },
     },
   }

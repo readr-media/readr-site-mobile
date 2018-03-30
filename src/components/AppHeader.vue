@@ -48,19 +48,19 @@
         <div class="header__control-menu-item">
           <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_MANAGE')"></div>
           <div class="header__control-menu-item-box">
-            <button v-text="$t('header.WORDING_HEADER_RECORD')"></button>
-            <button v-if="$can('addPost')" v-text="$t('header.WORDING_HEADER_EDIT_DRAFT')"></button>
+            <button v-text="$t('header.WORDING_HEADER_RECORD')" @click="openManagePanel('records')"></button>
+            <button v-if="$can('addPost')" v-text="$t('header.WORIDNG_HEADER_POST')" @click="openManagePanel('posts')"></button>
           </div>
           <div class="header__control-menu-item-box">
             <!-- <button v-text="$t('header.WORDING_HEADER_VIDEO')"></button> -->
-            <button v-if="$can('editTag')" v-text="$t('header.WORDING_HEADER_TAG')"></button>
+            <button v-if="$can('editTag')" v-text="$t('header.WORDING_HEADER_TAG')" @click="openManagePanel('tags')"></button>
           </div>
         </div>
         <div v-if="$can('memberManage')" class="header__control-menu-item">
           <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_ACCOUNT')"></div>
           <div class="header__control-menu-item-box">
             <button v-text="$t('header.WORDING_HEADER_ADD_DIRECTLY')"></button>
-            <button v-text="$t('header.WORDING_HEADER_ACCOUNT_LIST')"></button>
+            <button v-text="$t('header.WORDING_HEADER_ACCOUNT_LIST')" @click="openManagePanel('accounts')"></button>
           </div>
         </div>
         <button v-text="$t('header.WORDING_HEADER_EDIT_PROFILE')"></button>
@@ -130,6 +130,10 @@
             location && location.replace('/login')
           })
         })
+      },
+      openManagePanel (panel) {
+        this.$emit('openManagePanel', panel)
+        this.$refs.headerControl.classList.remove('open')
       },
       toggleControl () {
         this.$refs.headerControl.classList.toggle('open')
@@ -353,13 +357,13 @@
               height 1px
               background-color #fff
           &-box
+            display flex
+            flex-wrap wrap
             button
               width 50%
               padding 10px 0
-              &:first-of-type
+              &:nth-child(odd)
                 border-right 1px solid #000
-              &:last-of-type
-                border-right none
 
   @media (min-width 768px)
     .header
