@@ -5,7 +5,7 @@
         <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
       </template>
       <template v-else-if="activePanel === 'records'">
-        <section class="backstage__record">
+        <section class="backstage__records">
           <app-tab class="backstage__tab" :tabs="tabs" @changeTab="tabHandler">
             <PostListInTab
               slot="0"
@@ -32,7 +32,7 @@
         </section>
       </template>
       <template v-else-if="activePanel === 'posts'">
-        <section class="panel">
+        <section class="backstage__panel">
           <PostList
             :maxResult="20"
             :posts="posts"
@@ -45,7 +45,7 @@
         </section>
       </template>
       <template v-else-if="activePanel === 'tags'">
-        <section class="panel">
+        <section class="backstage__panel">
           <TagList
             :maxResult="20"
             :sort="currSort"
@@ -57,7 +57,7 @@
           </TagList>
         </section>
       </template>
-      <template v-else-if="activePanel === 'videos'">
+      <!-- <template v-else-if="activePanel === 'videos'">
         <section class="panel">
           <VideoList
             :maxResult="20"
@@ -69,7 +69,7 @@
             @publishPosts="showAlertHandler">
           </VideoList>
         </section>
-      </template>
+      </template> -->
     </main>
     <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showLightBox" :isConversation="true">
       <MemberAccountEditor

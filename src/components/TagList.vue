@@ -2,8 +2,8 @@
   <div class="tagList">
     <div class="tagList__control">
       <div class="tagList__add">
-        <input v-model="addTag" type="text" :placeholder="$t('tag_list.WORDING_TAGLIST_ADD_PLACEHOLDER')">
-        <button :disabled="!tagNameValidated" @click="$_tagList_addTag" v-text="$t('tag_list.WORDING_TAGLIST_ADD')"></button>
+        <input v-model="addTag" type="text" :placeholder="$t('TAG_LIST.ADD_PLACEHOLDER')">
+        <button :disabled="!tagNameValidated" @click="$_tagList_addTag" v-text="$t('TAG_LIST.ADD')"></button>
       </div>
       <pagination-nav :totalPages="totalPages" @pageChanged="$_tagList_pageChanged"></pagination-nav>
     </div>
@@ -11,19 +11,19 @@
       <thead>
         <tr>
           <th class="tagList__checkbox"><input type="checkbox" ref="checkboxSelectAll"  @click="$_tagList_toggleSelectAll"></th>
-          <th class="tagList__text"><span @click="$_tagList_orderBy('text')" v-text="$t('tag_list.WORDING_TAGLIST_TAG')"></span></th>
-          <th><span @click="$_tagList_orderBy('related_reviews')" v-text="$t('tag_list.WORDING_TAGLIST_REVIEW_COUNT')"></span></th>
-          <th><span @click="$_tagList_orderBy('related_news')" v-text="$t('tag_list.WORDING_TAGLIST_NEWS_COUNT')"></span></th>
-          <th class="tagList__edit"></th>
+          <th class="tagList__text"><span @click="$_tagList_orderBy('text')" v-text="$t('TAG_LIST.TAG')"></span></th>
+          <th class="tagList__count"><span @click="$_tagList_orderBy('related_reviews')" v-html="`${$t('TAG_LIST.RELATED')}<br>${$t('TAG_LIST.REVIEW_COUNT')}`"></span></th>
+          <th class="tagList__count"><span @click="$_tagList_orderBy('related_news')" v-html="`${$t('TAG_LIST.RELATED')}<br>${$t('TAG_LIST.NEWS_COUNT')}`"></span></th>
+          <!-- <th class="tagList__edit"></th> -->
           <th class="tagList__delete">
-            <button class="tagList__btn tagList__btn--multiple" v-text="$t('tag_list.WORDING_TAGLIST_DELETE')" @click="$_postList_deleteTags"></button>
+            <button class="tagList__btn tagList__btn--multiple" v-text="$t('TAG_LIST.DELETE')" @click="$_postList_deleteTags"></button>
           </th>
-          <th class="tagList__sort">
+          <!-- <th class="tagList__sort">
             <select name="" id="">
               <option value="-updated_at" v-text="$t('tag_list.WORDING_TAGLIST_UPDATE_AT')"></option>
               <option value="-created_at" v-text="$t('tag_list.WORDING_TAGLIST_PUBLISH_AT')"></option>
             </select>
-          </th>
+          </th> -->
         </tr>
       </thead>
       <tbody>
@@ -32,13 +32,13 @@
           <td ref="tagTextBlock" class="tagList__text">
             <span ref="originTagText" @click="$_tagList_editTag" v-text="t.text"></span>
             <input ref="inputTagText" type="text" :value="t.text">
-            <button @click="$_tagList_confirmEdit($event, t.id)" v-text="$t('tag_list.WORDING_TAGLIST_CONFIRM')"></button>
-            <button @click="$_tagList_cancel" v-text="$t('tag_list.WORDING_TAGLIST_CANCEL')"></button>
+            <button @click="$_tagList_confirmEdit($event, t.id)" v-text="$t('TAG_LIST.CONFIRM')"></button>
+            <button @click="$_tagList_cancel" v-text="$t('TAG_LIST.CANCEL')"></button>
           </td>
-          <td v-text="t.relatedReviews"></td>
-          <td v-text="t.relatedNews"></td>
-          <td class="tagList__edit"><button class="tagList__btn tagList__btn--single" @click="$_tagList_editTagBtn" v-text="$t('tag_list.WORDING_TAGLIST_EDIT')"></button></td>
-          <td class="tagList__delete"><button class="tagList__btn tagList__btn--single" @click="$_tagList_deleteTag(t.id)" v-text="$t('tag_list.WORDING_TAGLIST_DELETE')"></button></td>
+          <td class="tagList__count" v-text="t.relatedReviews"></td>
+          <td class="tagList__count" v-text="t.relatedNews"></td>
+          <!-- <td class="tagList__edit"><button class="tagList__btn tagList__btn--single" @click="$_tagList_editTagBtn" v-text="$t('tag_list.WORDING_TAGLIST_EDIT')"></button></td> -->
+          <!-- <td class="tagList__delete"><button class="tagList__btn tagList__btn--single" @click="$_tagList_deleteTag(t.id)" v-text="$t('tag_list.WORDING_TAGLIST_DELETE')"></button></td> -->
           <td></td>
         </tr>
       </tbody>
@@ -172,11 +172,16 @@
 .tagList
   table
     width 100%
+    margin-top 10px
     text-align left
     border-collapse collapse
     thead
       color #808080
-      font-size 18px
+      font-size .9375rem
+      input
+        padding 15px 0
+    tbody
+      font-size .875rem
     th
       padding-bottom 5px
       border-bottom 2px solid #000
@@ -198,6 +203,9 @@
       &:first-of-type
         td
           padding-top 10px
+      &:last-of-type
+        td
+          border-bottom none
     td
       padding-top 5px
       padding-bottom 5px
@@ -207,10 +215,13 @@
       height 15px
   &__control
     display flex
+    flex-direction column
     justify-content space-between
   &__add
+    display flex
+    margin-bottom 10px
     input
-      width 250px
+      flex 1
       height 25px
       padding 0 0 0 10px
       color #808080
@@ -234,7 +245,7 @@
     vertical-align baseline
   &__text
     position relative
-    width 250px
+    // width 250px
     > span
       cursor pointer
     > input, > button
@@ -255,9 +266,12 @@
         background transparent
         border-radius 4px
         outline none
-  &__edit, &__delete
-    width 70px
-    padding-right 10px
+  &__delete
+    width 50px
+    text-align center
+  &__count
+    width 65px
+    padding-right 15px
     text-align center
   &__sort
     width 105px
@@ -271,10 +285,9 @@
     &--single
       color #4280a2
     &--multiple
-      width 60px
       height 25px
       color #fff
-      line-height 23px
+      line-height 20px
       background-color #808080
       border-radius 4px
 </style>

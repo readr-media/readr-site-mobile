@@ -94,32 +94,33 @@ button
     padding-top 30px
   &__controlBar
     margin-top 40px
-  &__record
+  &__records
     flex 1
     display flex
     flex-direction column
     background-color #fff
+  &__panel
+    position relative
+    flex 1
+    display flex
+    flex-direction column
+    padding 20px 5%
+    background-color #fff
+    border 2px solid #d8ca21
   &__tab
     flex 1
     display flex
     flex-direction column
     .tab__content
       flex 1
-  &__panel
-    padding 20px 5%
-    margin-top 20px
-    border 2px solid #d8ca21
-    background #fff
+  // &__panel
+  //   padding 20px 5%
+  //   margin-top 20px
+  //   border 2px solid #d8ca21
+  //   background #fff
 
 @media (min-width 768px)
   .view
     background-color #e6e6e6
 
-@media (min-width 950px)
-  .main-container
-    width 950px
-    max-width 950px
-    margin 22px auto 0
-  .main-panel
-    padding 35px calc((100% - 800px) / 2) 40px
 </style>
