@@ -5,8 +5,8 @@
         <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
       </template>
       <template v-else-if="activePanel === 'records'">
-        <section class="">
-          <app-tab :tabs="tabs" @changeTab="tabHandler">
+        <section class="backstage__record">
+          <app-tab class="backstage__tab" :tabs="tabs" @changeTab="tabHandler">
             <PostListInTab
               slot="0"
               :posts="posts"
@@ -275,6 +275,11 @@
       TagList,
       VideoList,
     },
+    props: {
+      openManagePanel: {
+        type: String,
+      },
+    },
     data () {
       return {
         activePanel: 'accounts',
@@ -334,6 +339,11 @@
       },
       tags () {
         return _.get(this.$store, [ 'state', 'tags', ], [])
+      },
+    },
+    watch: {
+      openManagePanel (panel) {
+        this.openPanel(panel)
       },
     },
     beforeMount () {

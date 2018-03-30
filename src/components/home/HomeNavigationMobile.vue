@@ -8,13 +8,13 @@
         @click="$_homeNavigationMobile_changePanel('projectsInProgress')">
         <span v-text="`${$t('homeNavigation.WORDING_HOME_NAV_IN_PROGRESS')}${$t('homeNavigation.WORDING_HOME_NAV_PROJECT')}`"></span>
       </div>
-      <div
+      <!-- <div
         v-if="video && videoLink"
         class="homeNavigationMobile__item"
         :class="{ active: active === 'video' }"
         @click="$_homeNavigationMobile_changePanel('video')">
         <span v-text="$t('homeNavigation.WORDING_HOME_NAV_VIDEO')"></span>
-      </div>
+      </div> -->
       <div
         v-if="projectsDone.length !== 0"
         class="homeNavigationMobile__item"
@@ -31,11 +31,11 @@
           <div class="homeNavigationMobile__progress-donate"><img src="/public/icons/encoruage-white.png" alt=""></div>
         </div>
       </template>
-      <template v-if="active === 'video' && videoLink">
+      <!-- <template v-if="active === 'video' && videoLink">
         <div class="homeNavigationMobile__video">
           <iframe :src="videoLink" frameborder="0" allowfullscreen></iframe>
         </div>
-      </template>
+      </template> -->
       <template v-if="active === 'projectsDone'">
         <ProjectBlock v-for="p in projectsDone" :key="p.id" :project="p"></ProjectBlock>
       </template>

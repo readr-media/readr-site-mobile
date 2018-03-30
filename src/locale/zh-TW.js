@@ -122,6 +122,7 @@ export default {
     'WORIDNG_HEADER_MEMBER_CENTRE' : '會員中心',
     'WORIDNG_HEADER_MEMBER_SEARCH' : '搜尋',
     'WORIDNG_HEADER_NEWS' : '新聞',
+    'WORIDNG_HEADER_POST' : '文章',
     'WORDING_HEADER_RECORD' : '記錄',
     'WORIDNG_HEADER_REVIEW' : '評論',
     'WORDING_HEADER_TAG' : '關鍵字',
