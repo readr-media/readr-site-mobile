@@ -1,7 +1,6 @@
 <template>
   <section class="postPanel">
     <div class="postPanel__input">
-      <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_VIDEO')}${$t('post_editor.WORDING_POSTEDITOR_TITLE')}：`"></label>
       <input v-model="post.title" type="text" class="postPanel__title" :placeholder="$t('post_editor.WORDING_POSTEDITOR_INPUT_TITLE')">
     </div>
     <text-editor
