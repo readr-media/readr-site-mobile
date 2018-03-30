@@ -2,7 +2,7 @@
   <div class="backstage editor">
     <main class="backstage-container">
       <template v-if="activePanel === 'records'">
-        <section class="backstage__record">
+        <section class="backstage__records">
           <app-tab class="backstage__tab" :tabs="tabs" @changeTab="$_editor_tabHandler">
             <post-list-tab
               slot="0"

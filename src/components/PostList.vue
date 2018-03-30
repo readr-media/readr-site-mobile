@@ -1,5 +1,19 @@
 <template>
   <div class="postList-container">
+    <div class="postList__multiple">
+      <button
+        class="postList__btn postList__btn--multiple"
+        :disabled="!canPublishPosts"
+        @click="$_postList_publishPosts"
+        v-text="$t('post_list.WORDING_POSTLIST_PUBLISH')">
+      </button>
+      <button
+        class="postList__btn postList__btn--multiple"
+        :disabled="!canDeletePosts"
+        @click="$_postList_deletePosts"
+        v-text="$t('post_list.WORDING_POSTLIST_DELETE')">
+      </button>
+    </div>
     <PaginationNav :totalPages="totalPages" @pageChanged="$_postList_pageChanged"></PaginationNav>
     <table class="postList">
       <thead>
@@ -8,41 +22,43 @@
           <th class="postList__nickname"><span @click="$_postList_orderBy('author.nickname')" v-text="$t('post_list.WORDING_POSTLIST_NICKNAME')"></span></th>
           <th class="postList__type"></th>
           <th class="postList__title"><span @click="$_postList_orderBy('title')" v-text="$t('post_list.WORDING_POSTLIST_TITLE')"></span></th>
-          <th class="postList__status postList--center"><span @click="$_postList_orderBy('active')" v-text="$t('post_list.WORDING_POSTLIST_ACTIVE')"></span></th>
-          <th class="postList__update postList--center">
+          <th></th>
+          <!-- <th class="postList__status postList--center"><span @click="$_postList_orderBy('active')" v-text="$t('post_list.WORDING_POSTLIST_ACTIVE')"></span></th> -->
+          <!-- <th class="postList__update postList--center">
             <button
               class="postList__btn postList__btn--multiple"
               :disabled="!canPublishPosts"
               @click="$_postList_publishPosts"
               v-text="$t('post_list.WORDING_POSTLIST_PUBLISH')">
             </button>
-          </th>
-          <th class="postList__delete postList--center">
+          </th> -->
+          <!-- <th class="postList__delete postList--center">
             <button
               class="postList__btn postList__btn--multiple"
               :disabled="!canDeletePosts"
               @click="$_postList_deletePosts"
               v-text="$t('post_list.WORDING_POSTLIST_DELETE')">
             </button>
-          </th>
-          <th class="postList__sort postList--center">
+          </th> -->
+          <!-- <th class="postList__sort postList--center">
             <select name="" id="">
               <option value="-updated_at" v-text="$t('post_list.WORDING_POSTLIST_UPDATE_AT')"></option>
               <option value="-created_at" v-text="$t('post_list.WORDING_POSTLIST_PUBLISH_AT')"></option>
             </select>
-          </th>
+          </th> -->
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in posts" :key="p.id">
+        <tr v-for="p in posts" :key="p.id" :class="{ active: p.active === config.postActive.ACTIVE }">
           <td class="postList__checkbox"><input type="checkbox" ref="checkboxItems" @change="$_postList_toggleHandler($event, p.id)"></td>
           <td class="postList__nickname" v-text="$_postList_getAuthorId(p)"></td>
-          <td class="postList__type"><div v-if="p.type === postType.NEWS" class="postList__type--news">N</div></td>
+          <td class="postList__type"><div v-if="p.type === config.postType.NEWS" class="postList__type--news">N</div></td>
           <td class="postList__title" @click="$_showPost(p)" v-text="p.title"></td>
-          <td class="postList__status postList--center" v-text="$_postList_getStatus(p)"></td>
-          <td class="postList__update postList--center"><button class="postList__btn postList__btn--single" @click="$_postList_editPost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_UPDATE')"></button></td>
-          <td class="postList__delete postList--center"><button class="postList__btn postList__btn--single" @click="$_postList_deletePost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_DELETE')"></button></td>
-          <td class="postList__sort"></td>
+          <td class="postList__edit"><img src="/public/icons/pen-blue.png" alt=""></td>
+          <!-- <td class="postList__status postList--center" v-text="$_postList_getStatus(p)"></td> -->
+          <!-- <td class="postList__update postList--center"><button class="postList__btn postList__btn--single" @click="$_postList_editPost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_UPDATE')"></button></td> -->
+          <!-- <td class="postList__delete postList--center"><button class="postList__btn postList__btn--single" @click="$_postList_deletePost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_DELETE')"></button></td> -->
+          <!-- <td class="postList__sort"></td> -->
         </tr>
       </tbody>
     </table>
@@ -82,9 +98,12 @@
     data () {
       return {
         checkedIems: [],
+        config: {
+          postActive: POST_ACTIVE,
+          postType: POST_TYPE,
+        },
         order: '',
         post: {},
-        postType: POST_TYPE,
         showLightBox: false,
       }
     },
@@ -224,21 +243,36 @@
     white-space nowrap
     border-bottom 1px solid #d3d3d3
     overflow hidden
+    &.postList__edit
+      padding 2.5px 0
   
   input[type="checkbox"]
-    width 12px
-    height 12px
+    width 14px
+    height 14px
+    line-height 1
   button:disabled
     background-color #ccc
   &-control
     text-align right
   &__checkbox
     width 20px
+    height 25px
+    padding-right 5px
+    line-height 1
+  &__multiple
+    position absolute
+    top 20px
+    right 5%
+    button
+      margin-left 0
+      margin-right 10px
+      &:last-of-type
+        margin-right 0
   &__nickname
     width 20%
     padding-right 10px
   &__type
-    width 25px
+    width 20px
     padding-right 5px
     &--news
       width 15px
@@ -253,8 +287,12 @@
   &__title
     padding-right 10px
     cursor pointer
-  &__status, &__update, &__delete, &__sort
-    display none
+  &__edit
+    width 20px
+    line-height 1
+    img
+      width 20px
+      height 20px
   &--center
     text-align center
   &__btn

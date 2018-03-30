@@ -21,10 +21,10 @@
 
     <section ref="headerMenu" class="header__menu">
       <ul>
-        <li><a><img src="/public/icons/fb.png" alt=""></a></li>
-        <li><a><img src="/public/icons/github.png" alt=""></a></li>
+        <!-- <li><a><img src="/public/icons/fb.png" alt=""></a></li> -->
+        <!-- <li><a><img src="/public/icons/github.png" alt=""></a></li> -->
         <li><a><img src="/public/icons/info.png" alt=""></a></li>
-        <li><a><img src="/public/icons/mirrormedia.png" alt=""></a></li>
+        <li><a href="https://www.mirrormedia.mg/"><img src="/public/icons/mirrormedia.png" alt=""></a></li>
       </ul>
       <div class="header__menu-curtain" @click="toggleMenu"></div>
     </section>
@@ -263,7 +263,7 @@
         li
           position relative
           width 100%
-          height 25%
+          height 50%
           border-bottom 1px solid #fff
           list-style-type none
           &:last-of-type
@@ -327,6 +327,7 @@
           font-size 1.125rem
           background-color transparent
           border none
+          outline none
         &-item
           &:last-of-type
             padding-bottom 10px

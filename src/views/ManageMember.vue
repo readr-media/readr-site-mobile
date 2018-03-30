@@ -1,7 +1,7 @@
 <template>
   <div class="backstage member">
     <main class="backstage-container">
-      <section class="backstage__record">
+      <section class="backstage__records">
         <app-tab class="backstage__tab" :tabs="tabs">
           <following-list-tab
             slot="0"
