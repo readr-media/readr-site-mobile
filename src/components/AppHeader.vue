@@ -23,8 +23,8 @@
       <ul>
         <!-- <li><a><img src="/public/icons/fb.png" alt=""></a></li> -->
         <!-- <li><a><img src="/public/icons/github.png" alt=""></a></li> -->
-        <li><a><img src="/public/icons/info.png" alt=""></a></li>
-        <li><a href="https://www.mirrormedia.mg/"><img src="/public/icons/mirrormedia.png" alt=""></a></li>
+        <li><router-link to="/about"><img src="/public/icons/info.png" alt=""></router-link></li>
+        <li><a href="https://www.mirrormedia.mg/" target="_blank"><img src="/public/icons/mirrormedia.png" alt=""></a></li>
       </ul>
       <div class="header__menu-curtain" @click="toggleMenu"></div>
     </section>
@@ -88,12 +88,19 @@
   }
 
   export default {
+    name: 'AppHeader',
     components: {
       SearchTool,
     },
+    props: [ 'sections', ],
+    data () {
+      return {
+        isClientSide: false,
+      }
+    },
     computed: {
       currUrl () {
-        return get(this.$router, [ 'fullpath', ])
+        return get(this.$route, [ 'fullPath', ])
       },
       currentUser () {
         return get(this.$store, [ 'state', 'profile', ], {})
@@ -109,12 +116,23 @@
         return this.isLoggedIn && get(this.currentUser, [ 'nickname', ], get(this.currentUser, [ 'name', ], this.$t('header.WORIDNG_HEADER_MEMBER_CENTRE')))
       },
     },
-    data () {
-      return {
-        isClientSide: false,
-      }
+    watch: {
+      currUrl () {
+        this.$refs.headerMenu.classList.remove('open')
+      },
     },
-    name: 'AppHeader',
+    beforeMount () {
+      // checkLoginStatus(this.$store).then(() => {
+      //   if (this.isLoggedIn) {
+      //     return getProfile(this.$store)
+      //   }
+      //   return
+      // })
+    },
+    mounted () {
+      this.isClientSide = true
+      debug('isClientSide', this.isClientSide)
+    },
     methods: {
       goMemberCenter () {
         const memberCenter = get(filter(ROLE_MAP, { key: get(this.$store, [ 'state', 'profile', 'role', ]), }), [ 0, 'route', ], 'member')
@@ -144,19 +162,6 @@
         this.$refs.headerMenu.classList.toggle('open')
       },
     },
-    mounted () {
-      this.isClientSide = true
-      debug('isClientSide', this.isClientSide)
-    },
-    beforeMount () {
-      // checkLoginStatus(this.$store).then(() => {
-      //   if (this.isLoggedIn) {
-      //     return getProfile(this.$store)
-      //   }
-      //   return
-      // })
-    },
-    props: [ 'sections', ],
   }
 </script>
 <style lang="stylus" scoped>

@@ -16,6 +16,7 @@ const ManageEditor = () => import('../views/ManageEditor.vue')
 const ManageGuestEditor = () => import('../views/ManageGuestEditor.vue')
 const ManageMember = () => import('../views/ManageMember.vue')
 
+const PublicAbout = () => import('../views/PublicAbout.vue')
 const PublicAgreement = () => import('../views/PublicAgreement.vue')
 const PublicEditors = () => import('../views/PublicEditors.vue')
 const PublicHome = () => import('../views/PublicHome.vue')
@@ -37,6 +38,7 @@ const router = new Router({
   scrollBehavior: () => ({ y: 0, }),
   routes: [
     { path: '/', component: PublicHome, meta: { permission: 'member', }, },
+    { path: '/about', component: PublicAbout, meta: { permission: 'member', }, },
     { path: '/admin', component: ManageAdmin, meta: { permission: 'admin', }, },
     { path: '/agreement', component: PublicAgreement, },
     { path: '/editor', component: ManageEditor, meta: { permission: 'editor', }, },
