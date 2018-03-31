@@ -4,7 +4,7 @@
     <div v-if="isBackstage" class="header__item header--edit" @click="toggleControl">
       <img src="/public/icons/pen-white.png" alt="">
     </div>
-    <SearchTool v-if="!isBackstage && isLoggedIn" class="header__item"></SearchTool>
+    <SearchTool v-if="!isBackstage && isLoggedIn && isClientSide" class="header__item"></SearchTool>
     <div class="header__item header--hamburger" @click="toggleMenu">
       <div class="header__hamburgerBar"></div>
       <div class="header__hamburgerBar"></div>
@@ -29,7 +29,7 @@
       <div class="header__menu-curtain" @click="toggleMenu"></div>
     </section>
 
-    <section v-if="isBackstage" ref="headerControl" class="header__control">
+    <section v-if="isBackstage && isClientSide" ref="headerControl" class="header__control">
       <div class="header__control-menu">
         <div v-if="$can('addPost')" class="header__control-menu-item">
           <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_REVIEW')"></div>
@@ -76,12 +76,13 @@
   import { removeToken, } from '../util/services'
   import SearchTool from 'src/components/search/SearchTool.vue'
 
-  const checkLoginStatus = (store) => {
-    return store.dispatch('CHECK_LOGIN_STATUS', {})
-  }
-  const getProfile = (store) => {
-    return store.dispatch('GET_PROFILE', {})
-  }
+  const debug = require('debug')('CLIENT:AppHeader')
+  // const checkLoginStatus = (store) => {
+  //   return store.dispatch('CHECK_LOGIN_STATUS', {})
+  // }
+  // const getProfile = (store) => {
+  //   return store.dispatch('GET_PROFILE', {})
+  // }
   const logout = (store) => {
     return store.dispatch('LOGOUT', {})
   }
@@ -101,6 +102,7 @@
         return includes([ 'admin', 'editor', 'guesteditor', 'member', ], get(this.$route, [ 'fullPath', ]).split('/')[1])
       },
       isLoggedIn () {
+        debug('isLoggedIn', get(this.$store, [ 'state', 'isLoggedIn', ]))
         return get(this.$store, [ 'state', 'isLoggedIn', ])
       },
       userNickname () {
@@ -144,14 +146,15 @@
     },
     mounted () {
       this.isClientSide = true
+      debug('isClientSide', this.isClientSide)
     },
     beforeMount () {
-      checkLoginStatus(this.$store).then(() => {
-        if (this.isLoggedIn) {
-          return getProfile(this.$store)
-        }
-        return
-      })
+      // checkLoginStatus(this.$store).then(() => {
+      //   if (this.isLoggedIn) {
+      //     return getProfile(this.$store)
+      //   }
+      //   return
+      // })
     },
     props: [ 'sections', ],
   }
