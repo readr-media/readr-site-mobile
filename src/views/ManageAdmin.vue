@@ -1,116 +1,118 @@
 <template>
   <div class="backstage admin">
-    <main class="backstage-container">
-      <template v-if="activePanel === 'accounts'">
-        <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
-      </template>
-      <template v-else-if="activePanel === 'records'">
-        <section class="backstage__records">
-          <app-tab class="backstage__tab" :tabs="tabs" @changeTab="tabHandler">
-            <PostListInTab
-              slot="0"
+    <template v-if="showMain">
+      <main class="backstage-container">
+        <template v-if="activePanel === 'accounts'">
+          <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
+        </template>
+        <template v-else-if="activePanel === 'records'">
+          <section class="backstage__records">
+            <app-tab class="backstage__tab" :tabs="tabs" @changeTab="tabHandler">
+              <PostListInTab
+                slot="0"
+                :posts="posts"
+                @deletePost="showAlertHandler"
+                @editPost="showEditorHandler"
+                @filterChanged="filterChanged">
+              </PostListInTab>
+              <PostListInTab
+                slot="1"
+                :posts="posts"
+                @deletePost="showAlertHandler"
+                @editPost="showEditorHandler"
+                @filterChanged="filterChanged">
+              </PostListInTab>
+              <FollowingListInTab
+                slot="2"
+                :currentResource="followingResource"
+                :followingByUser="followingByUser"
+                @changeResource="updateFollowingList"
+                @unfollow="unfollow">
+              </FollowingListInTab>
+            </app-tab>
+          </section>
+        </template>
+        <template v-else-if="activePanel === 'posts'">
+          <section class="backstage__panel">
+            <PostList
+              :maxResult="20"
               :posts="posts"
-              @deletePost="showAlertHandler"
+              :sort="currSort"
+              @deletePosts="showAlertHandler"
               @editPost="showEditorHandler"
-              @filterChanged="filterChanged">
-            </PostListInTab>
-            <PostListInTab
-              slot="1"
+              @filterChanged="filterChanged"
+              @publishPosts="showAlertHandler">
+            </PostList>
+          </section>
+        </template>
+        <template v-else-if="activePanel === 'tags'">
+          <section class="backstage__panel">
+            <TagList
+              :maxResult="20"
+              :sort="currSort"
+              :tags="tags"
+              @addTag="addTag"
+              @deleteTags="showAlertHandler"
+              @filterChanged="filterChanged"
+              @updateTagList="updateTagList({})">
+            </TagList>
+          </section>
+        </template>
+        <!-- <template v-else-if="activePanel === 'videos'">
+          <section class="panel">
+            <VideoList
+              :maxResult="20"
               :posts="posts"
-              @deletePost="showAlertHandler"
+              :sort="currSort"
+              @deletePosts="showAlertHandler"
               @editPost="showEditorHandler"
-              @filterChanged="filterChanged">
-            </PostListInTab>
-            <FollowingListInTab
-              slot="2"
-              :currentResource="followingResource"
-              :followingByUser="followingByUser"
-              @changeResource="updateFollowingList"
-              @unfollow="unfollow">
-            </FollowingListInTab>
-          </app-tab>
-        </section>
-      </template>
-      <template v-else-if="activePanel === 'posts'">
-        <section class="backstage__panel">
-          <PostList
-            :maxResult="20"
-            :posts="posts"
-            :sort="currSort"
-            @deletePosts="showAlertHandler"
-            @editPost="showEditorHandler"
-            @filterChanged="filterChanged"
-            @publishPosts="showAlertHandler">
-          </PostList>
-        </section>
-      </template>
-      <template v-else-if="activePanel === 'tags'">
-        <section class="backstage__panel">
-          <TagList
-            :maxResult="20"
-            :sort="currSort"
-            :tags="tags"
-            @addTag="addTag"
-            @deleteTags="showAlertHandler"
-            @filterChanged="filterChanged"
-            @updateTagList="updateTagList({})">
-          </TagList>
-        </section>
-      </template>
-      <!-- <template v-else-if="activePanel === 'videos'">
-        <section class="panel">
-          <VideoList
-            :maxResult="20"
-            :posts="posts"
-            :sort="currSort"
-            @deletePosts="showAlertHandler"
-            @editPost="showEditorHandler"
-            @filterChanged="filterChanged"
-            @publishPosts="showAlertHandler">
-          </VideoList>
-        </section>
-      </template> -->
-    </main>
-    <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showLightBox" :isConversation="true">
-      <MemberAccountEditor
-        action="add"
-        :shouldShow="showLightBox"
-        :title="$t('admin.WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER')"
-        @updated="filterChanged">
-      </MemberAccountEditor>
-    </BaseLightBox>
-    <BaseLightBox :showLightBox.sync="showDraftList">
-      <PostListDetailed
-        :posts="postsDraft"
-        @deletePost="showAlertHandler"
-        @editPost="showEditorHandler">
-      </PostListDetailed>
-    </BaseLightBox>
-    <BaseLightBox :showLightBox.sync="showEditor">
-      <PostPanel
-        :post="post"
-        :panelType="postPanel"
-        :postType="postType"
-        @addPost="addPost"
-        @deletePost="deletePost"
-        @publishPost="publishPost"
-        @updatePost="updatePost">
-      </PostPanel>
-    </BaseLightBox>
-    <BaseLightBox :isAlert="true" :showLightBox.sync="showAlert">
-      <AlertPanel
-        :active="itemsActive"
-        :activeChanged="postActiveChanged"
-        :items="itemsSelected"
-        :needConfirm="needConfirm"
-        :showLightBox="showAlert"
-        :type="alertType"
-        @deletePosts="deletePosts"
-        @deleteTags="deleteTags"
-        @closeAlert="alertHandler(false)"
-        @publishPosts="publishPostHandler">
-      </AlertPanel>
-    </BaseLightBox>
+              @filterChanged="filterChanged"
+              @publishPosts="showAlertHandler">
+            </VideoList>
+          </section>
+        </template> -->
+      </main>
+      <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showLightBox" :isConversation="true">
+        <MemberAccountEditor
+          action="add"
+          :shouldShow="showLightBox"
+          :title="$t('admin.WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER')"
+          @updated="filterChanged">
+        </MemberAccountEditor>
+      </BaseLightBox>
+      <BaseLightBox :showLightBox.sync="showDraftList">
+        <PostListDetailed
+          :posts="postsDraft"
+          @deletePost="showAlertHandler"
+          @editPost="showEditorHandler">
+        </PostListDetailed>
+      </BaseLightBox>
+      <BaseLightBox :showLightBox.sync="showEditor">
+        <PostPanel
+          :post="post"
+          :panelType="postPanel"
+          :postType="postType"
+          @addPost="addPost"
+          @deletePost="deletePost"
+          @publishPost="publishPost"
+          @updatePost="updatePost">
+        </PostPanel>
+      </BaseLightBox>
+      <BaseLightBox :isAlert="true" :showLightBox.sync="showAlert">
+        <AlertPanel
+          :active="itemsActive"
+          :activeChanged="postActiveChanged"
+          :items="itemsSelected"
+          :needConfirm="needConfirm"
+          :showLightBox="showAlert"
+          :type="alertType"
+          @deletePosts="deletePosts"
+          @deleteTags="deleteTags"
+          @closeAlert="alertHandler(false)"
+          @publishPosts="publishPostHandler">
+        </AlertPanel>
+      </BaseLightBox>
+    </template>
   </div>
 </template>
 <script>
@@ -307,6 +309,7 @@
         showDraftList: false,
         showEditor: false,
         showLightBox: false,
+        showMain: false,
         tabs: [
           this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
           this.$t('tab.WORDING_TAB_NEWS_RECORD'),
@@ -766,7 +769,9 @@
         .catch(() => this.loading = false)
       },
     },
-    
+    mounted () {
+      this.showMain = true
+    },
   }
 </script>
 <style lang="stylus" scoped>
