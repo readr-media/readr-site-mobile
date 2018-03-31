@@ -72,6 +72,7 @@ export default {
   justify-content center
   align-items center
   width 100%
+  margin-top 20px
   position relative
   &__share
     position absolute

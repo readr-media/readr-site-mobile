@@ -106,6 +106,7 @@
 </script>
 <style lang="stylus" scoped>
   .homeNavigationMobile
+    margin-top 20px
     margin-bottom 20px
     nav
       display flex
@@ -191,7 +192,7 @@
       margin-bottom 0
       nav
         position absolute
-        top 80px
+        top 0
         left 25px
         flex-direction column
       &__item
