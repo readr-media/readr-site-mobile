@@ -1,7 +1,10 @@
 <template>
   <section class="home">
-    <HomeNavigationMobile :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
-    <HomeArticleMain v-for="post in posts" :key="post.id" :articleData="post" ></HomeArticleMain>
+    <Invite></Invite>
+    <main>
+      <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
+      <HomeArticleMain v-for="post in posts" :key="post.id" :articleData="post" ></HomeArticleMain>
+    </main>
   </section>
 </template>
 <script>
@@ -10,6 +13,7 @@
   import { isScrollBarReachBottom, } from '../util/comm'
   import HomeArticleMain from '../components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from '../components/home/HomeNavigationMobile.vue'
+  import Invite from '../components/invitation/Invite.vue'
   
   const MAXRESULT_POSTS = 10
   const MAXRESULT_PROJECTS = 2
@@ -77,6 +81,7 @@
     components: {
       HomeArticleMain,
       HomeNavigationMobile,
+      Invite,
     },
     data () {
       return {
@@ -88,6 +93,9 @@
     computed: {
       posts () {
         return get(this.$store, [ 'state', 'publicPosts', 'items', ], [])
+      },
+      hasNavigation () {
+        return this.projectsDone.length !== 0 || this.projectsInProgress.length !== 0
       },
       projectsDone () {
         return get(this.$store, [ 'state', 'publicProjects', 'done', ], [])
@@ -147,11 +155,16 @@
   .home
     position relative
     min-height 100vh
-    padding-top 65px
+    padding-top 40px
     background-color #e6e6e6
 
   @media (min-width 768px)
     .home
-      padding 80px 20px 0 80px
+      padding-top 50px
+      main
+        position relative
+        padding 0 20px 0 80px
+  //     padding 80px 20px 0 80px
+      
 
 </style>
