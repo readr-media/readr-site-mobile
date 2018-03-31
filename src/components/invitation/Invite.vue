@@ -1,11 +1,10 @@
 <template>
   <section class="invite">
-    <div class="invite__title">
-      
+    <div class="invite__title" @click="$_invite_toggle">
       <span class="invite__title-text" v-text="$t('INVITATION.TITLE')"></span>
       <span class="invite__title-count" v-text="inviteableCount"></span>
     </div>
-    <div class="invite__form">
+    <div ref="inviteForm" class="invite__form">
       <h2 v-text="$t('INVITATION.EMAIL_ADDRESS')"></h2>
       <template v-for="n in inviteableCount">
         <input :key="n" type="text">
@@ -24,7 +23,11 @@
       }
     },
     mounted () {},
-    methods: {},
+    methods: {
+      $_invite_toggle () {
+        this.$refs.inviteForm.classList.toggle('open')
+      },
+    },
   }
 </script>
 <style lang="stylus" scoped>
@@ -57,16 +60,24 @@
         color #fff
         font-size .9375rem
     &__form
-      padding 15px 10px
+      max-height 0
+      text-align center
       background-color #fff
+      overflow hidden
+      transition max-height .5s ease-out
+      &.open
+        max-height 1000px
+        transition max-height 1.5s ease-out
       h2
         display none
       input
-        width 100%
+        width calc(100% - 20px)
         margin-bottom 10px
         padding 4px 0 4px 10px
         font-size .6875rem
         border 1px solid #808080
+        &:first-of-type
+          margin-top 15px
       button
         width calc(50% - 5px)
         height 20px
@@ -80,6 +91,10 @@
           margin-right 0
   @media (min-width 768px)
     .invite
+      &__title
+        padding 0 60px
+        &-count
+          right 68px
       &__form
         padding 10px 60px 30px
         h2
