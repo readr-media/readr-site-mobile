@@ -7,7 +7,7 @@
     <div ref="inviteForm" class="invite__form">
       <h2 v-text="$t('INVITATION.EMAIL_ADDRESS')"></h2>
       <template v-for="n in inviteableCount">
-        <input :key="n" type="text">
+        <input :key="n" type="text" :placeholder="$t('INVITATION.PLACEHOLDER')">
       </template>
       <button v-text="$t('INVITATION.BTN_CANCEL')"></button>
       <button v-text="$t('INVITATION.BTN_SUBMIT')"></button>
@@ -96,16 +96,18 @@
         &-count
           right 68px
       &__form
-        padding 10px 60px 30px
+        // padding 10px 60px 30px
         h2
           display block
-          margin 0 0 10px 0
+          margin 10px 0 10px 0
           font-size .9375rem
         input
           height 25px
           font-size .75rem
+          &:first-of-type
+            margin-top 0
         button
-          width calc(50% - 7.5px)
-          margin-right 15px
+          // width calc(50% - 7.5px)
+          // margin-right 15px
           font-size .9375rem
 </style>

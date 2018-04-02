@@ -176,6 +176,15 @@
         line-height 25px
         background-color #444746
         border-bottom 1px solid #fff
-      
-
+        border-top none
+        border-left none
+      &__alert
+        width 25px
+        height 25px
+      &.alert
+        > input
+          width calc(100% - 25px)
+        .text-item__alert
+          background-size 15px 15px
+          border none
 </style>

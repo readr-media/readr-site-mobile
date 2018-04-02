@@ -48,13 +48,15 @@ button
   &:disabled
     cursor not-allowed
 .view
-  // max-width 800px
   width 100%
+  min-height 100vh
   margin 0 auto
   position relative
   background-color #fff
   padding-top 40px
   overflow-x hidden
+  &.main
+    background-color #e6e6e6
   &.locked
     width 100%
     height 100vh
@@ -83,6 +85,8 @@ button
 
 .fade-enter, .fade-leave-active
   opacity 0
+
+
 
 .backstage
   width 100%
@@ -121,6 +125,8 @@ button
 
 @media (min-width 768px)
   .view
+    padding-top 50px
     background-color #e6e6e6
+    
 
 </style>

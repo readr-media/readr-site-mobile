@@ -1,5 +1,6 @@
 <template>
-  <section class="hots">
+  <section class="main">
+    <Invite></Invite>
     <HomeArticleMain v-for="post in posts" :key="post.id" :articleData="post" ></HomeArticleMain>
   </section>
 </template>
@@ -7,7 +8,8 @@
   import { get, } from 'lodash'
   import { isScrollBarReachBottom, } from '../util/comm'
   import HomeArticleMain from '../components/home/HomeArticleMain.vue'
-  
+  import Invite from '../components/invitation/Invite.vue'
+
   const MAX_RESULT = 10
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-updated_at'
@@ -38,6 +40,7 @@
     },
     components: {
       HomeArticleMain,
+      Invite,
     },
     data () {
       return {
@@ -89,13 +92,4 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .hots
-    position relative
-    min-height 100vh
-    padding-top 65px
-    background-color #e6e6e6
-  @media (min-width 768px)
-    .hots
-      padding-top 80px
-
 </style>
