@@ -150,4 +150,18 @@
         background-color #737373
   .forget-pwd
     cursor pointer
+  
+  .closed-beta
+    .login__wrapper
+      color #fff
+    .login__btn
+      height 25px
+      color #444746
+      background-color #ddcf21
+  
+  @media (min-height 667px)
+    .closed-beta
+      .login
+        margin-top 25px
+  
 </style>

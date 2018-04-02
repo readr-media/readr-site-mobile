@@ -167,6 +167,15 @@
         left -17.5px
         top 7.5px
         display block
-
+  .closed-beta
+    .text-item
+      input
+        height 25px
+        padding 5px 0 5px 5px
+        color #fff
+        line-height 25px
+        background-color #444746
+        border-bottom 1px solid #fff
+      
 
 </style>
