@@ -152,6 +152,8 @@
     cursor pointer
   
   .closed-beta
+    .login
+      padding-bottom 25px
     .login__wrapper
       color #fff
     .login__btn
@@ -163,5 +165,8 @@
     .closed-beta
       .login
         margin-top 25px
+      .login__msg
+        margin 5px 0
+        font-size .9375rem
   
 </style>

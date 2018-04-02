@@ -1,5 +1,5 @@
 <template>
-  <section class="home">
+  <section class="home main">
     <Invite></Invite>
     <main>
       <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
@@ -152,19 +152,11 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .home
-    position relative
-    min-height 100vh
-    padding-top 40px
-    background-color #e6e6e6
-
   @media (min-width 768px)
     .home
-      padding-top 50px
       main
         position relative
         padding 0 20px 0 80px
   //     padding 80px 20px 0 80px
-      
 
 </style>

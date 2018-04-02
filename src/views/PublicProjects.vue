@@ -1,5 +1,6 @@
 <template>
-  <section class="projects">
+  <section class="projects main">
+    <Invite></Invite>
     <template v-for="p in projects" >
       <ProjectBlock :key="p.id" :project="p"></ProjectBlock>
     </template>
@@ -10,6 +11,7 @@
 import { PROJECT_STATUS, } from '../../api/config'
 import { get, } from 'lodash'
 import { isScrollBarReachBottom, } from '../util/comm'
+import Invite from '../components/invitation/Invite.vue'
 import ProjectBlock from '../components/ProjectBlock.vue'
 
 const MAX_RESULT = 8
@@ -40,6 +42,7 @@ export default {
   },
   components: {
     ProjectBlock,
+    Invite,
   },
   data () {
     return {
@@ -74,13 +77,5 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .projects
-    position relative
-    min-height 100vh
-    padding-top 65px
-    background-color #e6e6e6
-  @media (min-width 768px)
-    .projects
-      padding-top 80px
 </style>
 

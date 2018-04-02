@@ -1,6 +1,7 @@
 <template>
-  <div class="editors">
-    <main class="editors__main">
+  <div class="editors main">
+    <Invite></Invite>
+    <main>
       <AppTitledList :listTitle="$t('editors.WORDING_EDITORS_CURRENT_GUESTEDITOR')">
         <ul class="editors-list-container">
           <EditorsIntro class="editors-intro-main" v-for="customEditor in customEditors" :key="customEditor.id" :editor="customEditor"/>
@@ -18,7 +19,8 @@ import { ROLE_MAP, } from '../constants'
 import AppAsideNav from '../components/AppAsideNav.vue'
 import AppTitledList from '../components/AppTitledList.vue'
 import EditorsIntro from '../components/editors/EditorsIntro.vue'
-import _ from 'lodash'
+import Invite from '../components/invitation/Invite.vue'
+import { concat, find, get, uniq, } from 'lodash'
 
 // const debug = require('debug')('CLIENT:Editors')
 const getMembersPublic = (store, params) => {
@@ -43,7 +45,7 @@ const fetchFollowing = (store, params) => {
 export default {
   name: 'Editors',
   asyncData ({ store, i18n, }) {
-    const targ_key = _.find(ROLE_MAP, { value: i18n.t('editors.WORDING_EDITORS_GUESTEDITOR'), }).key
+    const targ_key = find(ROLE_MAP, { value: i18n.t('editors.WORDING_EDITORS_GUESTEDITOR'), }).key
     return getMembersPublic(store, {
       role: targ_key,
     })
@@ -52,6 +54,7 @@ export default {
     AppAsideNav,
     AppTitledList,
     EditorsIntro,
+    Invite,
   },
   data () {
     return {
@@ -60,10 +63,10 @@ export default {
   },
   computed: {
     customEditors () {
-      return _.get(this.$store, 'state.customEditors.items', [])
+      return get(this.$store, 'state.customEditors.items', [])
     },
     asideListMembers () {
-      return _.get(this.$store, `state.publicMembers[${this.asideListRoleValue}].items`, [])
+      return get(this.$store, `state.publicMembers[${this.asideListRoleValue}].items`, [])
     },
   },
   beforeMount () {
@@ -75,7 +78,7 @@ export default {
       if (this.$store.state.isLoggedIn) {
         const customEditorsIds = this.$store.state.customEditors.items.map(editor => editor.id)
         const asideListMembersIds = this.$store.state.publicMembers[this.asideListRoleValue].items.map(member => member.id)
-        const ids = _.uniq(_.concat(customEditorsIds, asideListMembersIds))
+        const ids = uniq(concat(customEditorsIds, asideListMembersIds))
         fetchFollowing(this.$store, {
           resource: 'member',
           ids: ids,
@@ -89,20 +92,7 @@ export default {
 <style lang="stylus" scoped>
 .editors
   background-color #fff
-  min-height 100vh
-  // &__container
-  //   max-width 1200px
-  //   margin auto
-  //   padding 60px 0
-  //   display flex
-  // &__aside
-  //   width 75px
-  //   height 100%
-  //   position sticky
-  //   // position fixed
-  //   top 60px
-  //   z-index 999
-  &__main
+  main
     display flex
     flex-direction column
     justify-content flex-start
