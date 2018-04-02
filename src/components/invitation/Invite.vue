@@ -79,16 +79,16 @@
         &:first-of-type
           margin-top 15px
       button
-        width calc(50% - 5px)
+        width calc(50% - 15px)
         height 20px
-        margin-right 10px
+        margin 0 10px 15px 0
         color #fff
         font-size .6875rem
         font-weight 300
         background-color #11b8c9
         border none
-        &:last-of-type
-          margin-right 0
+        &:first-of-type
+          margin-left 10px
   @media (min-width 768px)
     .invite
       &__title

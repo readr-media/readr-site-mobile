@@ -133,4 +133,10 @@
         &.disabled
           background-color #c5c5c5
           color #a5a5a5
+  .closed-beta
+    .recover-password__btn
+      span
+        color #444746
+        background-color #ddcf21
+
 </style>
