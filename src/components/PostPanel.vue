@@ -89,21 +89,21 @@
         v-text="$t('post_editor.WORDING_POSTEDITOR_SAVE')">
       </button>
       <button
-        v-if="(panelType === 'add') && $can('addPost')"
+        v-if="isClientSide && (panelType === 'add') && $can('addPost')"
         class="postPanel__btn"
         :disabled="isEmpty"
         @click="$_postPanel_submitHandler(config.active.DRAFT)"
         v-text="$t('post_editor.WORDING_POSTEDITOR_SAVE_DRAFT')">
       </button>
       <button
-        v-if="!$can('publishPost')"
+        v-if="isClientSide && !$can('publishPost')"
         class="postPanel__btn"
         :disabled="isEmpty"
         @click="$_postPanel_submitHandler(config.active.PENDING)"
         v-text="$t('post_editor.WORDING_POSTEDITOR_SAVE_PENDING')">
       </button>
       <button
-        v-if="$can('publishPost') && (post.active !== config.active.ACTIVE)"
+        v-if="isClientSide && $can('publishPost') && (post.active !== config.active.ACTIVE)"
         class="postPanel__btn"
         :disabled="isEmpty"
         @click="$_postPanel_submitHandler(config.active.ACTIVE)"
@@ -189,6 +189,9 @@
       }
     },
     computed: {
+      isClientSide () {
+        return _.get(this.$store, [ 'state', 'isClientSide', ], false)
+      },
       isEmpty () {
         return _.isEmpty(_.trim(_.get(this.post, [ 'link', ], '')))
           && _.isEmpty(_.trim(_.get(this.post, [ 'title', ], '')))

@@ -49,8 +49,8 @@
         @updatePost="$_guestEditor_updatePost">
       </post-panel>
     </base-light-box>
-    <!-- <base-light-box :isAlert="true" :showLightBox.sync="showAlert"> -->
-      <!-- <alert-panel
+    <base-light-box :showLightBox.sync="showEditor">
+      <alert-panel
         :active="itemsActive"
         :activeChanged="postActiveChanged"
         :items="itemsSelected"
@@ -59,8 +59,8 @@
         :type="alertType"
         @closeAlert="$_guestEditor_alertHandler(false)"
         @deletePosts="$_guestEditor_deletePosts">
-      </alert-panel> -->
-    <!-- </base-light-box> -->
+      </alert-panel>
+    </base-light-box>
   </div>
 </template>
 <script>
