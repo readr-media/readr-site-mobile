@@ -93,11 +93,6 @@
       SearchTool,
     },
     props: [ 'sections', ],
-    data () {
-      return {
-        isClientSide: false,
-      }
-    },
     computed: {
       currUrl () {
         return get(this.$route, [ 'fullPath', ])
@@ -107,6 +102,9 @@
       },
       isBackstage () {
         return includes([ 'admin', 'editor', 'guesteditor', 'member', ], get(this.$route, [ 'fullPath', ]).split('/')[1])
+      },
+      isClientSide () {
+        return get(this.$store, [ 'state', 'isClientSide', ], false)
       },
       isLoggedIn () {
         debug('isLoggedIn', get(this.$store, [ 'state', 'isLoggedIn', ]))
@@ -130,7 +128,6 @@
       // })
     },
     mounted () {
-      this.isClientSide = true
       debug('isClientSide', this.isClientSide)
     },
     methods: {
