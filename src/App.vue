@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <app-header v-if="!isLogin" :sections="sections" @openManagePanel="$_app_openManagePanel"></app-header>
+    <app-header v-if="!isLogin" :sections="sections" @openLightBox="$_app_openLightBox" @openManagePanel="$_app_openManagePanel"></app-header>
     <transition name="fade" mode="out-in">
-      <router-view class="view" :openManagePanel="openManagePanel"></router-view>
+      <router-view class="view" :openLightBox="openLightBox" :openManagePanel="openManagePanel" @closeLightBox="$_app_closeLightBox"></router-view>
     </transition>
-    <app-footer></app-footer>
+    <app-footer v-if="!isLogin"></app-footer>
   </div>
 </template>
 
@@ -21,6 +21,7 @@
     data () {
       return {
         openManagePanel: '',
+        openLightBox: '',
       }
     },
     computed: {
@@ -32,6 +33,12 @@
       },
     },
     methods: {
+      $_app_closeLightBox () {
+        this.openLightBox = ''
+      },
+      $_app_openLightBox (panel) {
+        this.openLightBox = panel
+      },
       $_app_openManagePanel (panel) {
         this.openManagePanel = panel
       },
@@ -85,8 +92,6 @@ button
 
 .fade-enter, .fade-leave-active
   opacity 0
-
-
 
 .backstage
   width 100%

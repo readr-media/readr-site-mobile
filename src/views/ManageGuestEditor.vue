@@ -29,6 +29,9 @@
         </section>
       </template>
     </main>
+    <base-light-box borderStyle="nonBorder" :showLightBox.sync="showProfile">
+      <base-light-box-profile :profile="profile" :showLightBox="showProfile"></base-light-box-profile>
+    </base-light-box>
     <base-light-box :showLightBox.sync="showDraftList">
       <post-list-detailed
         :posts="postsDraft"
@@ -46,8 +49,8 @@
         @updatePost="$_guestEditor_updatePost">
       </post-panel>
     </base-light-box>
-    <base-light-box :isAlert="true" :showLightBox.sync="showAlert">
-      <alert-panel
+    <!-- <base-light-box :isAlert="true" :showLightBox.sync="showAlert"> -->
+      <!-- <alert-panel
         :active="itemsActive"
         :activeChanged="postActiveChanged"
         :items="itemsSelected"
@@ -56,8 +59,8 @@
         :type="alertType"
         @closeAlert="$_guestEditor_alertHandler(false)"
         @deletePosts="$_guestEditor_deletePosts">
-      </alert-panel>
-    </base-light-box>
+      </alert-panel> -->
+    <!-- </base-light-box> -->
   </div>
 </template>
 <script>
@@ -65,6 +68,7 @@
   import _ from 'lodash'
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
+  import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import PaginationNav from '../components/PaginationNav.vue'
   import PostList from '../components/PostList.vue'
@@ -136,12 +140,18 @@
       'alert-panel': AlertPanel,
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
+      'base-light-box-profile': BaseLightBoxProfileEdit,
       'following-list-tab': FollowingListInTab,
       'pagination-nav': PaginationNav,
       'post-list': PostList,
       'post-list-detailed': PostListDetailed,
       'post-list-tab': PostListInTab,
       'post-panel': PostPanel,
+    },
+    props: {
+      openLightBox: {
+        type: String,
+      },
     },
     data () {
       return {
@@ -166,6 +176,7 @@
         showAlert: false,
         showDraftList: false,
         showEditor: false,
+        showProfile: false,
         tabs: [
           this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
           this.$t('tab.WORDING_TAB_NEWS_RECORD'),
@@ -197,6 +208,16 @@
         return _.get(this.$store, [ 'state', 'tags', ], [])
       },
     },
+    watch: {
+      openLightBox (panel) {
+        this.$_guestEditor_openLightBoxHandler(panel)
+      },
+      showProfile (val) {
+        if (!val) {
+          this.$emit('closeLightBox')
+        }
+      }, 
+    },
     beforeMount () {
       this.loading = true
       Promise.all([
@@ -218,8 +239,10 @@
     },
     methods: {
       $_guestEditor_addPost (params) {
+        this.alertType = 'post'
         this.itemsSelected = []
         this.itemsSelected.push(params)
+        this.loading = true
         addPost(this.$store, params)
           .then(() => {
             this.$_guestEditor_updatePostList({ needUpdateCount: true, })
@@ -228,7 +251,17 @@
             this.postActiveChanged = true
             this.needConfirm = false
             this.showAlert = true
+            this.loading = false
           })
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
+            this.loading = false
+          })
+      },
+      $_guestEditor_alertHandler (showAlert) {
+        this.showAlert = showAlert
       },
       $_guestEditor_deletePost () {
         this.itemsActive = POST_ACTIVE.DEACTIVE
@@ -244,11 +277,22 @@
             this.showDraftList = false
             this.needConfirm = false
           })
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
+          })
       },
       $_guestEditor_filterHandler ({ sort = this.sort, page = this.page, }) {
         switch (this.activePanel) {
           case 'records':
             return this.$_guestEditor_updatePostList({ sort: sort, page: page, })
+        }
+      },
+      $_guestEditor_openLightBoxHandler (panel) {
+        switch (panel) {
+          case 'profile':
+            return this.showProfile = true
         }
       },
       $_guestEditor_openPanel (panel) {
@@ -418,7 +462,11 @@
             this.showAlert = true
             this.needConfirm = false
           })
-          .catch((err) => console.error(err))
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
+          })
       },
       $_guestEditor_updatePostList ({ sort, page, needUpdateCount = false, }) {
         this.sort = sort || this.sort

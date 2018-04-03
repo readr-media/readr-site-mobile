@@ -13,9 +13,14 @@
         </app-tab>
       </section>
     </main>
+    <base-light-box borderStyle="nonBorder" :showLightBox.sync="showProfile">
+      <base-light-box-profile :profile="profile" :showLightBox="showProfile"></base-light-box-profile>
+    </base-light-box>
   </div>
 </template>
 <script>
+  import BaseLightBox from '../components/BaseLightBox.vue'
+  import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import Tab from '../components/Tab.vue'
   import { get, } from 'lodash'
@@ -47,12 +52,20 @@
     name: 'AppMember',
     components: {
       'app-tab': Tab,
+      'base-light-box': BaseLightBox,
+      'base-light-box-profile': BaseLightBoxProfileEdit,
       'following-list-tab': FollowingListInTab,
+    },
+    props: {
+      openLightBox: {
+        type: String,
+      },
     },
     data () {
       return {
         followingResource: 'member',
         page: DEFAULT_PAGE,
+        showProfile: false,
         tabs: [
           this.$t('tab.WORDING_TAB_FOLLOW_RECORD'),
         ],
@@ -66,10 +79,26 @@
         return get(this.$store, [ 'state', 'profile', ], {})
       },
     },
+    watch: {
+      openLightBox (panel) {
+        this.$_member_openLightBoxHandler(panel)
+      },
+      showProfile (val) {
+        if (!val) {
+          this.$emit('closeLightBox')
+        }
+      }, 
+    },
     beforeMount () {
       getFollowing(this.$store, { subject: get(this.profile, [ 'id', ]), resource: 'member', })
     },
     methods: {
+      $_member_openLightBoxHandler (panel) {
+        switch (panel) {
+          case 'profile':
+            return this.showProfile = true
+        }
+      },
       $_member_unfollow (resource, object) {
         const subject = get(this.profile, [ 'id', ]) 
         const objectID = object.toString()

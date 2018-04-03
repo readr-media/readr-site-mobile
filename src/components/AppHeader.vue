@@ -63,7 +63,7 @@
             <button v-text="$t('header.WORDING_HEADER_ACCOUNT_LIST')" @click="openManagePanel('accounts')"></button>
           </div>
         </div>
-        <button v-text="$t('header.WORDING_HEADER_EDIT_PROFILE')"></button>
+        <button v-text="$t('header.WORDING_HEADER_EDIT_PROFILE')" @click="openLightBox('profile')"></button>
       </div>
       <button @click="toggleControl"><img src="/public/icons/close-black.png" alt=""></button>
     </section>
@@ -150,6 +150,10 @@
             location && location.replace('/login')
           })
         })
+      },
+      openLightBox (panel) {
+        this.$emit('openLightBox', panel)
+        this.$refs.headerControl.classList.remove('open')
       },
       openManagePanel (panel) {
         this.$emit('openManagePanel', panel)

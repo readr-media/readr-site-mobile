@@ -58,19 +58,6 @@
             </TagList>
           </section>
         </template>
-        <!-- <template v-else-if="activePanel === 'videos'">
-          <section class="panel">
-            <VideoList
-              :maxResult="20"
-              :posts="posts"
-              :sort="currSort"
-              @deletePosts="showAlertHandler"
-              @editPost="showEditorHandler"
-              @filterChanged="filterChanged"
-              @publishPosts="showAlertHandler">
-            </VideoList>
-          </section>
-        </template> -->
       </main>
       <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showLightBox" :isConversation="true">
         <MemberAccountEditor
@@ -79,6 +66,9 @@
           :title="$t('admin.WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER')"
           @updated="filterChanged">
         </MemberAccountEditor>
+      </BaseLightBox>
+      <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showProfile">
+        <BaseLightBoxProfileEdit :profile="profile" :showLightBox="showProfile"/>
       </BaseLightBox>
       <BaseLightBox :showLightBox.sync="showDraftList">
         <PostListDetailed
@@ -121,6 +111,7 @@
   import _ from 'lodash'
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
+  import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import MemberAccountEditor from '../components/admin/MemberAccountEditor.vue'
   import MembersPanel from '../components/admin/MembersPanel.vue'
@@ -267,6 +258,7 @@
       'app-tab': Tab,
       AlertPanel,
       BaseLightBox,
+      BaseLightBoxProfileEdit,
       FollowingListInTab,
       MemberAccountEditor,
       MembersPanel,
@@ -278,6 +270,9 @@
       VideoList,
     },
     props: {
+      openLightBox: {
+        type: String,
+      },
       openManagePanel: {
         type: String,
       },
@@ -310,6 +305,7 @@
         showEditor: false,
         showLightBox: false,
         showMain: false,
+        showProfile: false,
         tabs: [
           this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
           this.$t('tab.WORDING_TAB_NEWS_RECORD'),
@@ -345,9 +341,17 @@
       },
     },
     watch: {
+      openLightBox (panel) {
+        this.openLightBoxHandler(panel)
+      },
       openManagePanel (panel) {
         this.openPanel(panel)
       },
+      showProfile (val) {
+        if (!val) {
+          this.$emit('closeLightBox')
+        }
+      }, 
     },
     beforeMount () {
       this.loading = true
@@ -362,6 +366,7 @@
         this.showLightBox = true
       },
       addPost (params) {
+        this.alertType = 'post'
         this.itemsSelected = []
         this.itemsSelected.push(params)
         if (params.active === POST_ACTIVE.ACTIVE) {
@@ -372,6 +377,7 @@
           this.needConfirm = true
           this.showAlert = true
         } else {
+          this.loading = true
           addPost(this.$store, params)
             .then(() => {
               this.updatePostList({ needUpdateCount: true, })
@@ -380,6 +386,13 @@
               this.postActiveChanged = true
               this.needConfirm = false
               this.showAlert = true
+              this.loading = false
+            })
+            .catch(() => {
+              this.alertType = 'error'
+              this.needConfirm = false
+              this.showAlert = true
+              this.loading = false
             })
         }
       },
@@ -391,8 +404,14 @@
         .then(() => {
           this.updateTagList({ needUpdateCount: true, })
           this.showAlert = true
+          this.loading = false
         })
-        .catch(() => this.loading = false)
+        .catch(() => {
+          this.alertType = 'error'
+          this.needConfirm = false
+          this.showAlert = true
+          this.loading = false
+        })
       },
       alertHandler (showAlert) {
         this.showAlert = showAlert
@@ -415,12 +434,22 @@
           this.showDraftList = false
           this.needConfirm = false
         })
+        .catch(() => {
+          this.alertType = 'error'
+          this.needConfirm = false
+          this.showAlert = true
+        })
       },
       deleteTags () {
         deleteTags(this.$store, this.itemsSelectedID)
           .then(() => {
             this.updateTagList({ needUpdateCount: true, })
             this.needConfirm = false
+          })
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
           })
       },
       filterChanged (filter = {}) {
@@ -437,6 +466,12 @@
           case 'tags':
             return this.updateTagList({ page: this.currPage, sort: this.currSort, })
           
+        }
+      },
+      openLightBoxHandler (panel) {
+        switch (panel) {
+          case 'profile':
+            return this.showProfile = true
         }
       },
       openPanel (panel) {
@@ -504,6 +539,7 @@
         this.showAlert = true
       },
       publishPostHandler () {
+        this.alertType = 'post'
         if (this.isPublishPostInEditor) {
           if (this.postPanel === 'add') {
             addPost(this.$store, this.postForPublishInEditor)
@@ -512,6 +548,11 @@
                 this.showEditor = false
                 this.needConfirm = false
               })
+              .catch(() => {
+                this.alertType = 'error'
+                this.needConfirm = false
+                this.showAlert = true
+              })
           } else {
             updatePost(this.$store, this.postForPublishInEditor)
               .then(() => {
@@ -519,6 +560,11 @@
                 this.showEditor = false
                 this.showDraftList = false
                 this.needConfirm = false
+              })
+              .catch(() => {
+                this.alertType = 'error'
+                this.needConfirm = false
+                this.showAlert = true
               })
           }
         } else {
@@ -529,6 +575,11 @@
             .then(() => {
               this.updatePostList({ needUpdateCount: true, })
               this.needConfirm = false
+            })
+            .catch(() => {
+              this.alertType = 'error'
+              this.needConfirm = false
+              this.showAlert = true
             })
         }
       },
@@ -682,6 +733,7 @@
         }
       },
       updatePost(params, activeChanged) {
+        this.alertType = 'post'
         this.itemsActive = params.active
         this.postActiveChanged = activeChanged
         updatePost(this.$store, params)
@@ -692,7 +744,11 @@
             this.showAlert = true
             this.needConfirm = false
           })
-          .catch((err) => console.error(err))
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
+          })
       },
       updatePostList ({ sort, page, needUpdateCount = false, }) {
         this.sort = sort || this.sort
