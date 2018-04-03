@@ -1,8 +1,8 @@
 <template>
   <article class="home-article-main">
-    <div class="home-article-main__share">
+    <!-- <div class="home-article-main__share">
       <AppShareButton :shareUrl="shareUrl" :direction="'down'" :backgroundColor="'#d3d3d3'"/>
-    </div>
+    </div> -->
     <div class="home-article-main__author">
       <figure class="author-info">
         <router-link class="author-info__thumbnail" :to="`/profile/${get(articleData, 'author.id')}`">

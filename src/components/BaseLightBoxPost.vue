@@ -56,26 +56,28 @@ export default {
 
 <style lang="stylus">
 .baselightbox-post
-  width 911px
-  height 620.5px
-  padding 26px 120px 26px 91px
+  // width 100%
+  // height 620.5px
+  padding 29px 25px 12.5px 25px
   overflow-y scroll
+  align-self flex-start
+  margin 0 auto auto auto
   &__article
     display flex
   &__author-thumbnail
-    width 75px
-    min-width 75px
-    height 75px
-    border-radius 75px
+    width 45px
+    min-width 45px
+    height 45px
+    border-radius 45px
   &__comment
     margin-top 17px
     border-top 1px solid #979797
-    padding 18.5px 0 0 90px
+    padding 10px 0
     
 .article-content
-  margin-left 15px
+  margin-left 10px
   &__date
-    font-size 14px
+    font-size 12px
     font-weight 300
     color #000000
     margin 0
@@ -87,15 +89,15 @@ export default {
     margin 0
     line-height 21px
   &__title
-    font-size 18px
-    font-weight 600
+    font-size 15px
+    font-weight 400
     color #000000
     margin 0
     line-height 25px
   &__paragraph-container
     & > p
-      margin 13px 0
-      font-size 15px
+      margin 10px 0
+      font-size 14px
       font-weight 300
       text-align justify
       color #000000
@@ -109,7 +111,7 @@ export default {
   display flex
   align-items center
   &__user-thumbnail
-    r = 75px
+    r = 45px
     width r
     height r
     border-radius r
