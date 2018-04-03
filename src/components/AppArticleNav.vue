@@ -113,6 +113,7 @@ export default {
 .article-nav
   display flex
   flex-direction column
+  margin-top 10px
   &__nav-btns
     height 20px
     margin-top auto // for automatically placing nav to the botom of the container
