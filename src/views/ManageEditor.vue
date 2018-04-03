@@ -68,6 +68,9 @@
         </section>
       </template>
     </main>
+    <base-light-box borderStyle="nonBorder" :showLightBox.sync="showProfile">
+      <base-light-box-profile :profile="profile" :showLightBox="showProfile"></base-light-box-profile>
+    </base-light-box>
     <base-light-box :showLightBox.sync="showDraftList">
       <post-list-detailed
         :posts="postsDraft"
@@ -108,6 +111,7 @@
   import _ from 'lodash'
   import AlertPanelB from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
+  import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import PostList from '../components/PostList.vue'
   import PostListDetailed from '../components/PostListDetailed.vue'
@@ -242,6 +246,7 @@
       'alert-panel': AlertPanelB,
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
+      'base-light-box-profile': BaseLightBoxProfileEdit,
       'following-list-tab': FollowingListInTab,
       'post-list': PostList,
       'post-list-detailed': PostListDetailed,
@@ -251,6 +256,9 @@
       'video-list': VideoList,
     },
     props: {
+      openLightBox: {
+        type: String,
+      },
       openManagePanel: {
         type: String,
       },
@@ -279,6 +287,7 @@
         showAlert: false,
         showDraftList: false,
         showEditor: false,
+        showProfile: false,
         tabs: [
           this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
           this.$t('tab.WORDING_TAB_NEWS_RECORD'),
@@ -311,9 +320,17 @@
       },
     },
     watch: {
+      openLightBox (panel) {
+        this.$_editor_openLightBoxHandler(panel)
+      },
       openManagePanel (panel) {
         this.openPanel(panel)
       },
+      showProfile (val) {
+        if (!val) {
+          this.$emit('closeLightBox')
+        }
+      }, 
     },
     beforeMount () {
       Promise.all([
@@ -335,6 +352,7 @@
     },
     methods: {
       $_editor_addPost (params) {
+        this.alertType = 'post'
         this.itemsSelected = []
         this.itemsSelected.push(params)
         if (params.active === POST_ACTIVE.ACTIVE) {
@@ -345,6 +363,7 @@
           this.needConfirm = true
           this.showAlert = true
         } else {
+          this.loading = true
           addPost(this.$store, params)
             .then(() => {
               this.$_editor_updatePostList({ needUpdateCount: true, })
@@ -353,6 +372,12 @@
               this.postActiveChanged = true
               this.needConfirm = false
               this.showAlert = true
+            })
+            .catch(() => {
+              this.alertType = 'error'
+              this.needConfirm = false
+              this.showAlert = true
+              this.loading = false
             })
         }
       },
@@ -364,8 +389,14 @@
           .then(() => {
             this.$_editor_updateTagList({ needUpdateCount: true, })
             this.showAlert = true
+            this.loading = false
           })
-          .catch(() => this.loading = false)
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
+            this.loading = false
+          })
       },
       $_editor_alertHandler (showAlert) {
         this.showAlert = showAlert
@@ -388,12 +419,22 @@
           this.showDraftList = false
           this.needConfirm = false
         })
+        .catch(() => {
+          this.alertType = 'error'
+          this.needConfirm = false
+          this.showAlert = true
+        })
       },
       $_editor_deleteTags () {
         deleteTags(this.$store, this.itemsSelectedID)
           .then(() => {
             this.$_editor_updateTagList({ needUpdateCount: true, })
             this.needConfirm = false
+          })
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
           })
       },
       $_editor_filterHandler ({ sort = this.sort, page = this.page, }) {
@@ -404,6 +445,12 @@
             return this.$_editor_updatePostList({ sort: sort, page: page, })
           case 'tags':
             return this.$_editor_updateTagList({ sort: sort, page: page, })
+        }
+      },
+      $_editor_openLightBoxHandler (panel) {
+        switch (panel) {
+          case 'profile':
+            return this.showProfile = true
         }
       },
       $_editor_openPanel (panel) {
@@ -471,6 +518,7 @@
         this.showAlert = true
       },
       $_editor_publishPostHandler () {
+        this.alertType = 'post'
         if (this.isPublishPostInEditor) {
           if (this.postPanel === 'add') {
             addPost(this.$store, this.postForPublishInEditor)
@@ -479,6 +527,11 @@
                 this.showEditor = false
                 this.needConfirm = false
               })
+              .catch(() => {
+                this.alertType = 'error'
+                this.needConfirm = false
+                this.showAlert = true
+              })
           } else {
             updatePost(this.$store, this.postForPublishInEditor)
               .then(() => {
@@ -486,6 +539,11 @@
                 this.showEditor = false
                 this.showDraftList = false
                 this.needConfirm = false
+              })
+              .catch(() => {
+                this.alertType = 'error'
+                this.needConfirm = false
+                this.showAlert = true
               })
           }
         } else {
@@ -496,6 +554,11 @@
             .then(() => {
               this.$_editor_updatePostList({ needUpdateCount: true, })
               this.needConfirm = false
+            })
+            .catch(() => {
+              this.alertType = 'error'
+              this.needConfirm = false
+              this.showAlert = true
             })
         }
       },
@@ -649,6 +712,7 @@
         }
       },
       $_editor_updatePost(params, activeChanged) {
+        this.alertType = 'post'
         this.itemsActive = params.active
         this.postActiveChanged = activeChanged
         updatePost(this.$store, params)
@@ -659,7 +723,11 @@
             this.showAlert = true
             this.needConfirm = false
           })
-          .catch((err) => console.error(err))
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
+          })
       },
       $_editor_updatePostList ({ sort, page, needUpdateCount = false, }) {
         this.sort = sort || this.sort

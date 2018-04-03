@@ -114,12 +114,11 @@
     &.non-border 
       > .baseLightBox__btn--close
         top 0
-        left 100%
-        right auto
+        right 0
     &.conversation
       > .baseLightBox__btn--close
-        width 25px
-        height 25px
+        width 45px
+        height 45px
     &.alert
       border none
       > .baseLightBox__btn--close

@@ -350,6 +350,9 @@
               params.link_image = _.get(res, [ 'body', 'openGraph', 'image', 'url', ])
               this.$_postPanel_submit(active, params)
             })
+            .catch((err) => {
+              console.error(`get meta error ${link}`, err)
+            })
           } else {
             this.$_postPanel_submit(active, params)
           }

@@ -2,51 +2,50 @@
   <div class="profile-edit">
     <div class="profile-edit__main">
       <div class="form">
+        <button class="profile-edit__close"><img src="/public/icons/close-white.png" alt=""></button>
+        <div class="portrait">
+          <div class="portrait__container" @click="profileEditorUploadThumbnail">
+            <img class="portrait__thumbnail" :src="thumbnail" alt="thumbnail">
+            <div class="portrait__upload"></div>
+          </div>
+        </div>
         <div class="form__item">
-          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_NICKNAME') }}：</span>
+          <span class="form__name">{{ $t('PROFILE.NICK_NAME') }}：</span>
           <!-- <input type="text" name="nickname" v-model="computedNickname"> -->
           <input class="form__input" type="text" name="nickname" v-model="inputNickname">
         </div>
         <div class="form__item">
-          <span class="form__name--align-start">{{ $t('profile_editor.WORDING_PROFILEEDIT_DESCRIPTION') }}：</span>
+          <span class="form__name--align-start">{{ $t('PROFILE.DESCRIPTION') }}：</span>
           <!-- <textarea name="description" v-model="computedDescription"></textarea> -->
           <textarea class="form__description" name="description" v-model="inputDescription"></textarea>
         </div>
         <div class="form__item">
-          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_OLDPASSWORD') }}：</span>
+          <span class="form__name">{{ $t('PROFILE.OLD_PASSWORD') }}：</span>
           <input class="form__input" type="password" name="old_password" v-model="inputOldPassword">
         </div>
         <div class="form__item">
-          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_NEWPASSWORD') }}：</span>
+          <span class="form__name">{{ $t('PROFILE.NEW_PASSWORD') }}：</span>
           <input class="form__input" type="password" name="new_password" v-model="inputNewPassword">
         </div>
         <div class="form__item">
-          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_CONFIRMPASSWORD') }}：</span>
+          <span class="form__name">{{ $t('PROFILE.CONFIRM_PASSWORD') }}：</span>
           <input class="form__input" type="password" name="confirm_password" v-model="inputConfirmPassword">
         </div>
-        <div class="form__item">
-          <span class="form__name">{{ $t('profile_editor.WORDING_PROFILEEDIT_PERSONAL_OPTIONS') }}：</span>
+        <!-- <div class="form__item">
+          <span class="form__name">{{ $t('PROFILE.PERSONAL_OPTIONS') }}：</span>
           <div class="form__personal-options"></div>
-        </div>
+        </div> -->
+        <button class="profile-edit__save-button" @click="profileEditorSave">{{ $t('PROFILE.SAVE') }}</button>
       </div>
     </div>
-    <div class="profile-edit__aside">
-      <div class="portrait">
-        <div class="portrait__container" @click="profileEditorUploadThumbnail">
-          <img class="portrait__thumbnail" :src="thumbnail" alt="thumbnail">
-          <div class="portrait__upload"></div>
-        </div>
-        <div class="portrait__name">{{ staticNickname }}</div>
-      </div>
-      <button class="profile-edit__save-button" @click="profileEditorSave">{{ $t('profile_editor.WORDING_PROFILEEDIT_SAVE') }}</button>
-    </div>
+    
   </div>
 </template>
 
 <script>
+import { get, } from 'lodash'
 import { removeToken, } from '../util/services'
 import validator from 'validator'
-import _ from 'lodash'
 
 const debug = require('debug')('CLIENT:')
 const updateInfo = (store, profile, action) => {
@@ -89,11 +88,11 @@ export default {
   },
   data () {
     return {
-      staticNickname : _.get(this.profile, [ 'nickname', ], ''),
+      staticNickname : get(this.profile, [ 'nickname', ], ''),
       // inputNickname: '',
       // inputDescription: '',
-      inputNickname: _.get(this.profile, [ 'nickname', ], ''),
-      inputDescription: _.get(this.profile, [ 'description', ], ''),
+      inputNickname: get(this.profile, [ 'nickname', ], ''),
+      inputDescription: get(this.profile, [ 'description', ], ''),
       inputOldPassword: '',
       inputNewPassword: '',
       inputConfirmPassword: '',
@@ -102,7 +101,7 @@ export default {
   computed: {
     // computedNickname: {
     //   get () {
-    //     return _.get(this.profile, [ 'nickname' ], '')
+    //     return get(this.profile, [ 'nickname' ], '')
     //   },
     //   set (newValue) {
     //     this.inputNickname = newValue
@@ -110,14 +109,14 @@ export default {
     // },
     // computedDescription: {
     //   get () {
-    //     return _.get(this.profile, [ 'description' ], '')
+    //     return get(this.profile, [ 'description' ], '')
     //   },
     //   set (newValue) {
     //     this.inputDescription = newValue
     //   }
     // },
     thumbnail () {
-      return _.get(this.profile, [ 'profileImage', ]) || '/public/icons/exclamation.png'
+      return get(this.profile, [ 'profileImage', ]) || '/public/icons/exclamation.png'
     },
     thumbnailFilePath () {
       return this.thumbnail.substr(this.thumbnail.lastIndexOf('/') + 1)
@@ -126,8 +125,8 @@ export default {
   watch: {
     showLightBox (value) {
       if (!value) {
-        this.inputNickname = _.get(this.profile, [ 'nickname', ], '')
-        this.inputDescription = _.get(this.profile, [ 'description', ], '')
+        this.inputNickname = get(this.profile, [ 'nickname', ], '')
+        this.inputDescription = get(this.profile, [ 'description', ], '')
         this.inputOldPassword = ''
         this.inputNewPassword = ''
         this.inputConfirmPassword = ''
@@ -254,13 +253,24 @@ export default {
 
 <style lang="stylus" scoped>
 .profile-edit
-  width 920px
-  height 688px
+  width 100%
+  height 100vh
   background-color #d8d8d8
   display flex
   &__main
-    width 704px
-    padding 30px 0 30px 50px
+    width 100%
+    padding 20px 15px 45px
+  &__close
+    position absolute
+    top 0
+    right 0
+    width 45px
+    height 45px
+    padding 10px
+    background-color #808080
+    img
+      width 100%
+      height 100%
   &__aside
     width 216px
     height 688px
@@ -270,7 +280,8 @@ export default {
     justify-content space-between
   &__save-button
     width 100%
-    height 35px
+    height 30px
+    margin-top 15px
     border-radius 2.5px
     border none
     background-color #4280a2
@@ -283,10 +294,10 @@ export default {
       filter brightness(80%)
 
 $form__name
-  width 90px
+  width 75px
   height 25px
   line-height 25px
-  font-size 18px
+  font-size .9375rem
   color #808080
   margin 0 4px 0 0 
   text-align justify
@@ -302,6 +313,7 @@ $form__name
   &__item
     display flex
     align-items center
+    width 100%
     & + .form__item
       margin 15px 0 0 0
   &__name
@@ -309,15 +321,20 @@ $form__name
     &--align-start
       @extends $form__name
       align-self flex-start
-  form-width = 560px
+  form-width = auto
   &__input
+    flex 1
     width form-width
-    height 35px
+    height 25px
+    font-size .875rem
     border 1px solid white
     padding 0 15px
   &__description
+    flex 1
     width form-width
     height 121px
+    text-align justify
+    font-size .875rem
     border 1px solid white
     resize none
     padding 9px 15px
@@ -328,8 +345,8 @@ $form__name
     background-color white
 
 $portrait-container-size
-  width 125px
-  height 125px
+  width 70px
+  height 70px
 $plus-sign
   content ''
   background-color white
@@ -340,16 +357,20 @@ $plus-sign
   right 0
   margin auto
 .portrait
+  align-self self-start
+  margin-bottom 25px
   &__container
     @extends $portrait-container-size
     position relative
     cursor pointer
   &__thumbnail
     @extends $portrait-container-size
+    display block
     border-radius 50%
+    border 1px solid #808080
     overflow hidden
   &__upload
-    r = 38px
+    r = 30px
     position absolute
     bottom 0
     right 0
