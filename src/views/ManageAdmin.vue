@@ -1,6 +1,17 @@
 <template>
   <div class="backstage admin">
     <template v-if="showMain">
+      <TheControlBar
+        @addAccount="addMember"
+        @addNews="showEditorHandler({ postPanel: 'add', postType: config.type.NEWS })"
+        @addReview="showEditorHandler({ postPanel: 'add', postType: config.type.REVIEW })"
+        @addVideo="showEditorHandler({ postPanel: 'add', postType: config.type.VIDEO })"
+        @closeControlBar="closeControlBar"
+        @editNews="showDraftListHandler(config.type.NEWS)"
+        @editProfile="showProfileHandler"
+        @editReview="showDraftListHandler(config.type.REVIEW)"
+        @openPanel="openPanel">
+      </TheControlBar>
       <main class="backstage-container">
         <template v-if="activePanel === 'accounts'">
           <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
@@ -121,6 +132,7 @@
   import PostPanel from '../components/PostPanel.vue'
   import Tab from '../components/Tab.vue'
   import TagList from '../components/TagList.vue'
+  import TheControlBar from '../components/TheControlBar.vue'
   import VideoList from '../components/VideoList.vue'
 
   const MAXRESULT = 20
@@ -267,14 +279,12 @@
       PostListInTab,
       PostPanel,
       TagList,
+      TheControlBar,
       VideoList,
     },
     props: {
-      openLightBox: {
-        type: String,
-      },
-      openManagePanel: {
-        type: String,
+      openControlBar: {
+        type: Boolean,
       },
     },
     data () {
@@ -341,17 +351,13 @@
       },
     },
     watch: {
-      openLightBox (panel) {
-        this.openLightBoxHandler(panel)
-      },
-      openManagePanel (panel) {
-        this.openPanel(panel)
-      },
-      showProfile (val) {
-        if (!val) {
-          this.$emit('closeLightBox')
+      openControlBar (val) {
+        if (val) {
+          document.querySelector('.controlBar').classList.add('open')
+        } else {
+          document.querySelector('.controlBar').classList.remove('open')
         }
-      }, 
+      },
     },
     beforeMount () {
       this.loading = true
@@ -416,6 +422,9 @@
       alertHandler (showAlert) {
         this.showAlert = showAlert
       },
+      closeControlBar () {
+        this.$emit('closeControlBar')
+      },
       deletePost () {
         this.itemsActive = POST_ACTIVE.DEACTIVE
         this.postActiveChanged = true
@@ -465,13 +474,6 @@
             return this.updatePostList({ page: this.currPage, sort: this.currSort, })
           case 'tags':
             return this.updateTagList({ page: this.currPage, sort: this.currSort, })
-          
-        }
-      },
-      openLightBoxHandler (panel) {
-        switch (panel) {
-          case 'profile':
-            return this.showProfile = true
         }
       },
       openPanel (panel) {
@@ -674,6 +676,9 @@
         }
         this.postPanel = postPanel
         this.showEditor = true
+      },
+      showProfileHandler () {
+        this.showProfile = true
       },
       tabHandler (tab) {
         this.loading = true

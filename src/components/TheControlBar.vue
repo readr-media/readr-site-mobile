@@ -1,93 +1,45 @@
 <template>
-  <section class="controlBar">
-    <control-bar-button-box
-      v-if="$can('addPost')"
-      class="controlBar__btnBox"
-      :amount="3"
-      :style="[ viewport <= 767 ? { width: `calc((100% - (${(amountBtn - 1) * 5}px))/ ${amountBtn})` } : {} ]"
-      @changeBtnAmount="$_controlBar_btnAmountHandler">
-      <button slot="0" class="controlBar--btn edit" @click="$_controlBar_toggleBtnBox" v-text="wordingBtnReview"></button>
-      <button slot="1" class="controlBar--subBtn" @click="$_controlBar_clickHandler('addReview')" v-text="$t('control_bar.WORDING_CONTROLBAR_ADD_DIRECTLY')"></button>
-      <button slot="2" class="controlBar--subBtn" @click="$_controlBar_clickHandler('editReview')" v-text="$t('control_bar.WORDING_CONTROLBAR_EDIT_DRAFT')"></button>
-    </control-bar-button-box>
-    <control-bar-button-box
-      v-if="$can('addPost')"
-      class="controlBar__btnBox"
-      :amount="3"
-      :style="[ viewport <= 767 ? { width: `calc((100% - (${(amountBtn - 1) * 5}px))/ ${amountBtn})` } : {} ]"
-      @changeBtnAmount="$_controlBar_btnAmountHandler">
-      <button slot="0" class="controlBar--btn edit" @click="$_controlBar_toggleBtnBox" v-text="wordingBtnNews"></button>
-      <button slot="1" class="controlBar--subBtn" @click="$_controlBar_clickHandler('addNews')" v-text="$t('control_bar.WORDING_CONTROLBAR_ADD_DIRECTLY')"></button>
-      <button slot="2" class="controlBar--subBtn" @click="$_controlBar_clickHandler('editNews')" v-text="$t('control_bar.WORDING_CONTROLBAR_EDIT_DRAFT')"></button>
-    </control-bar-button-box>
-    <control-bar-button-box
-      v-if="viewport <= 767"
-      class="controlBar__btnBox"
-      :amount="5"
-      :style="[ viewport <= 767 ? { width: `calc((100% - (${(amountBtn - 1) * 5}px))/ ${amountBtn})` } : {} ]"
-      @changeBtnAmount="$_controlBar_btnAmountHandler">
-      <button slot="0" class="controlBar--btn" @click="$_controlBar_toggleBtnBox" v-text="$t('control_bar.WORDING_CONTROLBAR_MANAGE')"></button>
-      <button slot="1" class="controlBar--subBtn" :class="[ activePanel === 'record' ? 'active' : '' ]" v-text="$t('control_bar.WORDING_CONTROLBAR_RECORD')" @click="$_controlBar_openPanel($event, 'records')"></button>
-      <button slot="2" class="controlBar--subBtn" :class="[ activePanel === 'posts' ? 'active' : '' ]" v-text="$t('control_bar.WORDING_CONTROLBAR_POST')" @click="$_controlBar_openPanel($event, 'posts')"></button>
-      <!-- <button slot="3" class="controlBar--subBtn" :class="[ activePanel === 'video' ? 'active' : '' ]" v-text="$t('control_bar.WORDING_CONTROLBAR_VIDEO')" @click="$_controlBar_openPanel($event, 'videos')"></button> -->
-      <button slot="4" class="controlBar--subBtn" :class="[ activePanel === 'tag' ? 'active' : '' ]" v-text="$t('control_bar.WORDING_CONTROLBAR_TAG')" @click="$_controlBar_openPanel($event, 'tags')"></button>
-    </control-bar-button-box>
-    <control-bar-button-box
-      v-if="$can('addAccount') && $can('memberManage') && viewport <= 767"
-      class="controlBar__btnBox"
-      :amount="3"
-      :style="[ viewport <= 767 ? { width: `calc((100% - (${(amountBtn - 1) * 5}px))/ ${amountBtn})` } : {} ]"
-      @changeBtnAmount="$_controlBar_btnAmountHandler">
-      <button slot="0" class="controlBar--btn" @click="$_controlBar_toggleBtnBox" v-text="$t('control_bar.WORDING_CONTROLBAR_ACCOUNT')"></button>
-      <button slot="1" class="controlBar--subBtn" v-text="$t('control_bar.WORDING_CONTROLBAR_ADD_DIRECTLY')" @click="$_controlBar_clickHandler('addAccount')"></button>
-      <button slot="2" class="controlBar--subBtn" v-text="$t('control_bar.WORDING_CONTROLBAR_ACCOUNT_LIST')" @click="$_controlBar_openPanel($event, 'accounts')"></button>
-    </control-bar-button-box>
-    <control-bar-button
-      v-if="viewport > 767"
-      class="controlBar--btn"
-      @changeBtnAmount="$_controlBar_btnAmountHandler"
-      @click="$_controlBar_openPanel($event, 'records')"
-      :text="`${$t('control_bar.WORDING_CONTROLBAR_RECORD')}${$t('control_bar.WORDING_CONTROLBAR_MANAGE')}`">
-    </control-bar-button>
-    <control-bar-button
-      v-if="$can('editOtherPost') && viewport > 767"
-      class="controlBar--btn"
-      @changeBtnAmount="$_controlBar_btnAmountHandler"
-      @click="$_controlBar_openPanel($event, 'posts')"
-      :text="`${$t('control_bar.WORDING_CONTROLBAR_POST')}${$t('control_bar.WORDING_CONTROLBAR_MANAGE')}`">
-    </control-bar-button>
-    <control-bar-button
-      v-if="$can('editTag') && viewport > 767"
-      class="controlBar--btn"
-      @changeBtnAmount="$_controlBar_btnAmountHandler"
-      @click="$_controlBar_openPanel($event, 'tags')"
-      :text="`${$t('control_bar.WORDING_CONTROLBAR_TAG')}${$t('control_bar.WORDING_CONTROLBAR_MANAGE')}`">
-    </control-bar-button>
-    <!-- <control-bar-button-box
-      v-if="viewport > 767"
-      class="controlBar__btnBox"
-      :amount="2">
-      <button slot="0" class="controlBar--btn" @click="$_controlBar_openPanel($event, 'videos')" v-text="`${$t('control_bar.WORDING_CONTROLBAR_VIDEO')}${$t('control_bar.WORDING_CONTROLBAR_MANAGE')}`"></button>
-      <button slot="1" class="controlBar--subBtn" v-text="$t('control_bar.WORDING_CONTROLBAR_ADD_VIDEO')" @click="$_controlBar_clickHandler('addVideo')"></button>
-    </control-bar-button-box> -->
-    <control-bar-button
-      v-if="$can('addAccount') && viewport > 767"
-      class="controlBar--btn"
-      @changeBtnAmount="$_controlBar_btnAmountHandler"
-      @click="$_controlBar_clickHandler('addAccount')"
-      :text="$t('control_bar.WORDING_CONTROLBAR_ADD_ACCOUNT')">
-    </control-bar-button>
-    <control-bar-button
-      v-if="$can('memberManage') && viewport > 767"
-      class="controlBar--btn"
-      @changeBtnAmount="$_controlBar_btnAmountHandler"
-      @click="$_controlBar_openPanel($event, 'accounts')"
-      :text="`${$t('control_bar.WORDING_CONTROLBAR_ACCOUNT')}${$t('control_bar.WORDING_CONTROLBAR_MANAGE')}`">
-    </control-bar-button>
+  <section ref="controlBar" class="controlBar">
+    <div v-if="isClientSide" class="controlBar__menu">
+      <div v-if="$can('addPost')" class="controlBar__menu-item">
+        <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.REVIEW')"></div>
+        <div class="controlBar__menu-item-box">
+          <button v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
+          <button v-text="$t('CONTROL_BAR.EDIT_DRAFT')"></button>
+        </div>
+      </div>
+      <div v-if="$can('addPost')" class="controlBar__menu-item">
+        <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.NEWS')"></div>
+        <div class="controlBar__menu-item-box">
+          <button v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
+          <button v-text="$t('CONTROL_BAR.EDIT_DRAFT')"></button>
+        </div>
+      </div>
+      <div class="controlBar__menu-item">
+        <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.MANAGE')"></div>
+        <div class="controlBar__menu-item-box">
+          <button @click="$_controlBar_openPanel($event, 'records')" v-text="$t('CONTROL_BAR.RECORD')"></button>
+          <button v-if="$can('editOtherPost')" @click="$_controlBar_openPanel($event, 'posts')" v-text="$t('CONTROL_BAR.POST')"></button>
+        </div>
+        <div class="controlBar__menu-item-box">
+          <!-- <button @click="$_controlBar_openPanel($event, 'videos')" v-text="$t('CONTROL_BAR.VIDEO')"></button> -->
+          <button v-if="$can('editTag')" @click="$_controlBar_openPanel($event, 'tags')" v-text="$t('CONTROL_BAR.TAG')"></button>
+        </div>
+      </div>
+      <div v-if="$can('memberManage')" class="controlBar__menu-item">
+        <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.ACCOUNT')"></div>
+        <div class="controlBar__menu-item-box">
+          <button v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
+          <button @click="$_controlBar_openPanel($event, 'accounts')" v-text="$t('CONTROL_BAR.ACCOUNT_LIST')"></button>
+        </div>
+      </div>
+      <button @click="$_controlBar_clickHandler('editProfile')" v-text="$t('CONTROL_BAR.EDIT_PROFILE')"></button>
+    </div>
+    <button @click="$_controlBar_close"><img src="/public/icons/close-black.png" alt=""></button>
   </section>
 </template>
 <script>
-  import { includes, } from 'lodash'
+  import { get, } from 'lodash'
   import ControlBarButton from './ControlBarButton.vue'
   import ControlBarButtonBox from './ControlBarButtonBox.vue'
 
@@ -105,6 +57,9 @@
       }
     },
     computed: {
+      isClientSide () {
+        return get(this.$store, [ 'state', 'isClientSide', ], false)
+      },
       wordingBtnNews () {
         return this.viewport <= 767 ? this.$t('control_bar.WORDING_CONTROLBAR_NEWS') : this.$t('control_bar.WORDING_CONTROLBAR_ADD_NEWS')
       },
@@ -129,6 +84,10 @@
       },
       $_controlBar_clickHandler (eventName) {
         this.$emit(eventName)
+        this.$emit('closeControlBar')
+      },
+      $_controlBar_close () {
+        this.$emit('closeControlBar')
       },
       $_controlBar_getViewport () {
         this.viewport = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
@@ -136,125 +95,99 @@
       $_controlBar_openPanel (event, panel) {
         this.activePanel = panel
         this.$emit('openPanel', panel)
-        if (this.viewport < 950) {
-          event.target.parentNode.classList.remove('active')
-        }
+        this.$emit('closeControlBar')
       },
-      $_controlBar_toggleBtnBox (e) {
-        if (this.viewport < 950 && includes(e.target.parentNode.classList, 'active')) {
-          e.target.parentNode.classList.remove('active')
-        } else {
-          e.target.parentNode.classList.add('active')
-        }
-      },
+      // $_controlBar_toggleBtnBox (e) {
+      //   if (this.viewport < 950 && includes(e.target.parentNode.classList, 'active')) {
+      //     e.target.parentNode.classList.remove('active')
+      //   } else {
+      //     e.target.parentNode.classList.add('active')
+      //   }
+      // },
     },
   }
 </script>
 <style lang="stylus" scoped>
 .controlBar
   display flex
-  padding 0 20px
-
-  button
-    outline none
-
-  &__btnBox
+  flex-direction column
+  justify-content center
+  align-items center
+  position fixed
+  top 0
+  right -100%
+  bottom 0
+  z-index 1000
+  width 100%
+  height 100vh
+  margin 0
+  background-color #ddcf21
+  visibility hidden
+  transition right 0.35s ease-out
+  &.open
+    right 0
+    visibility visible
+  > button
     display flex
-    position relative
-    width 90px
-    margin-right 5px
-    cursor pointer
-    transition width .5s ease-in-out
-    &:last-of-type
-      margin 0
-    > button:first-of-type
-      z-index 10
-    .controlBar--btn
-      width 100%
-      margin 0
-    .controlBar--subBtn
-      width calc(100% - 2px)
-
-  &--btn
-    width 90px
-    height 30px
-    padding 0
-    margin-right 5px
-    color #808080
-    font-size 15px
-    background-color #fff
-    border 1px solid #d3d3d3
-    cursor pointer
-    transition all .5s ease-in-out
-    &:first-of-type
-      margin-left 0
-  
-  &--subBtn
-    box-sizing content-box
+    justify-content center
+    align-items center
     position absolute
-    top 0
-    left 0
-    z-index -1
-    width 88px
-    height 30px
+    top 10px
+    right 10px
+    width 35px
+    height 35px
     padding 0
-    color #808080
-    font-size 12px
-    background-color #fff
-    border 1px solid #d3d3d3
-    cursor pointer
-    transition-timing-function ease-in-out
-    transition-duration .3s
-    &:nth-of-type(2)
-      border-top none
-
-@media (max-width 949px)
-  .controlBar
-    &__btnBox
-      &.active
-        > button
-          &:nth-of-type(2)
-            transform translate3d(0, 30px, 0)
-          &:nth-of-type(3)
-            transform translate3d(0, 60px, 0)
-          &:nth-of-type(4)
-            transform translate3d(0, 90px, 0)
-          &:nth-of-type(5)
-            transform translate3d(0, 120px, 0)
-        .controlBar--btn.edit
-          color #fff 
-          background-color #808080 
-        .controlBar--subBtn
-          z-index 10
-    &--subBtn
-      &.active
+    border 1px solid #000
+    background-color transparent
+    outline none
+    img
+      width 20px
+      height 20px
+  &__menu
+    width calc(100% - 40px)
+    text-align center
+    button
+      padding 20px 0
+      font-size 1.125rem
+      background-color transparent
+      border none
+      outline none
+    &-item
+      &:last-of-type
+        padding-bottom 10px
+        border-bottom 1px solid #fff
+      &-title
+        position relative
+        margin 10px 0
         color #fff
-        background-color #808080
-
-
-@media (min-width 950px)
-  .controlBar
-    &__btnBox
-      width 100px
-      &:hover
-        .controlBar--btn
-          color #fff
-          background-color #808080
-        .controlBar--subBtn
-          z-index auto
-          transition-timing-function ease-in-out
-        > button
-          &:nth-of-type(2)
-            transform translate3d(0, 30px, 0)
-          &:nth-of-type(3)
-            transform translate3d(0, 60px, 0)
-          &:nth-of-type(4)
-            transform translate3d(0, 90px, 0)
-    &--btn
-      width 100px
-      font-size 18px
-    &--subBtn
-      width 98px
-      font-size 18px
+        font-size 1.25rem
+        font-weight 300
+        text-align center
+        &:before
+          content ''
+          position absolute
+          top 50%
+          left 0
+          transform translate(0, -50%)
+          width calc(50% - 36px)
+          height 1px
+          background-color #fff
+        &:after
+          content ''
+          position absolute
+          top 50%
+          right 0
+          transform translate(0, -50%)
+          width calc(50% - 36px)
+          height 1px
+          background-color #fff
+      &-box
+        display flex
+        flex-wrap wrap
+        button
+          width 50%
+          padding 10px 0
+          &:nth-child(odd)
+            border-right 1px solid #000
       
 </style>

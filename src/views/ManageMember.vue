@@ -1,5 +1,9 @@
 <template>
   <div class="backstage member">
+    <control-bar
+      @closeControlBar="$_member_closeControlBar"
+      @editProfile="$_member_showProfile">
+    </control-bar>
     <main class="backstage-container">
       <section class="backstage__records">
         <app-tab class="backstage__tab" :tabs="tabs">
@@ -23,6 +27,7 @@
   import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import Tab from '../components/Tab.vue'
+  import TheControlBar from '../components/TheControlBar.vue'
   import { get, } from 'lodash'
 
   // const MAXRESULT = 20
@@ -54,11 +59,12 @@
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
       'base-light-box-profile': BaseLightBoxProfileEdit,
+      'control-bar': TheControlBar,
       'following-list-tab': FollowingListInTab,
     },
     props: {
-      openLightBox: {
-        type: String,
+      openControlBar: {
+        type: Boolean,
       },
     },
     data () {
@@ -80,24 +86,23 @@
       },
     },
     watch: {
-      openLightBox (panel) {
-        this.$_member_openLightBoxHandler(panel)
-      },
-      showProfile (val) {
-        if (!val) {
-          this.$emit('closeLightBox')
+      openControlBar (val) {
+        if (val) {
+          document.querySelector('.controlBar').classList.add('open')
+        } else {
+          document.querySelector('.controlBar').classList.remove('open')
         }
-      }, 
+      },
     },
     beforeMount () {
       getFollowing(this.$store, { subject: get(this.profile, [ 'id', ]), resource: 'member', })
     },
     methods: {
-      $_member_openLightBoxHandler (panel) {
-        switch (panel) {
-          case 'profile':
-            return this.showProfile = true
-        }
+      $_member_closeControlBar () {
+        this.$emit('closeControlBar')
+      },
+      $_member_showProfile () {
+        this.showProfile = true
       },
       $_member_unfollow (resource, object) {
         const subject = get(this.profile, [ 'id', ]) 

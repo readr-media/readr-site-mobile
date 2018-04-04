@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <app-header v-if="!isLogin" :sections="sections" @openLightBox="$_app_openLightBox" @openManagePanel="$_app_openManagePanel"></app-header>
+    <app-header v-if="!isLogin" :sections="sections" @openControlBar="$_app_openControlBar"></app-header>
     <transition name="fade" mode="out-in">
-      <router-view class="view" :openLightBox="openLightBox" :openManagePanel="openManagePanel" @closeLightBox="$_app_closeLightBox"></router-view>
+      <router-view class="view" :openControlBar="openControlBar" @closeControlBar="$_app_closeControlBar"></router-view>
     </transition>
     <app-footer v-if="!isLogin"></app-footer>
   </div>
@@ -20,8 +20,7 @@
     },
     data () {
       return {
-        openManagePanel: '',
-        openLightBox: '',
+        openControlBar: false,
       }
     },
     computed: {
@@ -36,14 +35,11 @@
       this.$store.dispatch('UPDATE_CLIENT_SIDE')
     },
     methods: {
-      $_app_closeLightBox () {
-        this.openLightBox = ''
+      $_app_closeControlBar () {
+        this.openControlBar = false
       },
-      $_app_openLightBox (panel) {
-        this.openLightBox = panel
-      },
-      $_app_openManagePanel (panel) {
-        this.openManagePanel = panel
+      $_app_openControlBar () {
+        this.openControlBar = true
       },
     },
   }

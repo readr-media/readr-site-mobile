@@ -1,5 +1,14 @@
 <template>
   <div class="backstage guestEditor">
+    <control-bar
+      @addNews="$_guestEditor_showEditor({ postPanel: 'add', postType: config.type.NEWS })"
+      @addReview="$_guestEditor_showEditor({ postPanel: 'add', postType: config.type.REVIEW })"
+      @closeControlBar="$_guestEditor_closeControlBar"
+      @editNews="$_guestEditor_showDraftList(config.type.NEWS)"
+      @editProfile="$_guestEditor_showProfile"
+      @editReview="$_guestEditor_showDraftList(config.type.REVIEW)"
+      @openPanel="$_guestEditor_openPanel">
+    </control-bar>
     <main class="backstage-container">
       <template v-if="activePanel === 'records'">
         <section class="backstage__records">
@@ -76,6 +85,7 @@
   import PostListInTab from '../components/PostListInTab.vue'
   import PostPanel from '../components/PostPanel.vue'
   import Tab from '../components/Tab.vue'
+  import TheControlBar from '../components/TheControlBar.vue'
 
   const MAXRESULT = 5
   const DEFAULT_PAGE = 1
@@ -141,6 +151,7 @@
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
       'base-light-box-profile': BaseLightBoxProfileEdit,
+      'control-bar': TheControlBar,
       'following-list-tab': FollowingListInTab,
       'pagination-nav': PaginationNav,
       'post-list': PostList,
@@ -149,8 +160,8 @@
       'post-panel': PostPanel,
     },
     props: {
-      openLightBox: {
-        type: String,
+      openControlBar: {
+        type: Boolean,
       },
     },
     data () {
@@ -209,14 +220,13 @@
       },
     },
     watch: {
-      openLightBox (panel) {
-        this.$_guestEditor_openLightBoxHandler(panel)
-      },
-      showProfile (val) {
-        if (!val) {
-          this.$emit('closeLightBox')
+      openControlBar (val) {
+        if (val) {
+          document.querySelector('.controlBar').classList.add('open')
+        } else {
+          document.querySelector('.controlBar').classList.remove('open')
         }
-      }, 
+      },
     },
     beforeMount () {
       this.loading = true
@@ -263,6 +273,9 @@
       $_guestEditor_alertHandler (showAlert) {
         this.showAlert = showAlert
       },
+      $_guestEditor_closeControlBar () {
+        this.$emit('closeControlBar')
+      },
       $_guestEditor_deletePost () {
         this.itemsActive = POST_ACTIVE.DEACTIVE
         this.postActiveChanged = true
@@ -287,12 +300,6 @@
         switch (this.activePanel) {
           case 'records':
             return this.$_guestEditor_updatePostList({ sort: sort, page: page, })
-        }
-      },
-      $_guestEditor_openLightBoxHandler (panel) {
-        switch (panel) {
-          case 'profile':
-            return this.showProfile = true
         }
       },
       $_guestEditor_openPanel (panel) {
@@ -393,6 +400,9 @@
         }
         this.postPanel = postPanel
         this.showEditor = true
+      },
+      $_guestEditor_showProfile () {
+        this.showProfile = true
       },
       $_guestEditor_tabHandler (tab) {
         this.loading = true

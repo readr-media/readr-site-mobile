@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <router-link to="/" class="header__logo"><img src="/public/icons/logo-mobile.png" alt=""></router-link>
-    <div v-if="isBackstage" class="header__item header--edit" @click="toggleControl">
+    <div v-if="isBackstage" class="header__item header--edit" @click="openControlBar">
       <img src="/public/icons/pen-white.png" alt="">
     </div>
     <SearchTool v-if="!isBackstage && isLoggedIn && isClientSide" class="header__item"></SearchTool>
@@ -27,45 +27,6 @@
         <li><a href="https://www.mirrormedia.mg/" target="_blank"><img src="/public/icons/mirrormedia.png" alt=""></a></li>
       </ul>
       <div class="header__menu-curtain" @click="toggleMenu"></div>
-    </section>
-
-    <section v-if="isBackstage && isClientSide" ref="headerControl" class="header__control">
-      <div class="header__control-menu">
-        <div v-if="$can('addPost')" class="header__control-menu-item">
-          <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_REVIEW')"></div>
-          <div class="header__control-menu-item-box">
-            <button v-text="$t('header.WORDING_HEADER_ADD_DIRECTLY')"></button>
-            <button v-text="$t('header.WORDING_HEADER_EDIT_DRAFT')"></button>
-          </div>
-        </div>
-        <div v-if="$can('addPost')" class="header__control-menu-item">
-          <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_NEWS')"></div>
-          <div class="header__control-menu-item-box">
-            <button v-text="$t('header.WORDING_HEADER_ADD_DIRECTLY')"></button>
-            <button v-text="$t('header.WORDING_HEADER_EDIT_DRAFT')"></button>
-          </div>
-        </div>
-        <div class="header__control-menu-item">
-          <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_MANAGE')"></div>
-          <div class="header__control-menu-item-box">
-            <button v-text="$t('header.WORDING_HEADER_RECORD')" @click="openManagePanel('records')"></button>
-            <button v-if="$can('addPost')" v-text="$t('header.WORIDNG_HEADER_POST')" @click="openManagePanel('posts')"></button>
-          </div>
-          <div class="header__control-menu-item-box">
-            <!-- <button v-text="$t('header.WORDING_HEADER_VIDEO')"></button> -->
-            <button v-if="$can('editTag')" v-text="$t('header.WORDING_HEADER_TAG')" @click="openManagePanel('tags')"></button>
-          </div>
-        </div>
-        <div v-if="$can('memberManage')" class="header__control-menu-item">
-          <div class="header__control-menu-item-title" v-text="$t('header.WORIDNG_HEADER_ACCOUNT')"></div>
-          <div class="header__control-menu-item-box">
-            <button v-text="$t('header.WORDING_HEADER_ADD_DIRECTLY')"></button>
-            <button v-text="$t('header.WORDING_HEADER_ACCOUNT_LIST')" @click="openManagePanel('accounts')"></button>
-          </div>
-        </div>
-        <button v-text="$t('header.WORDING_HEADER_EDIT_PROFILE')" @click="openLightBox('profile')"></button>
-      </div>
-      <button @click="toggleControl"><img src="/public/icons/close-black.png" alt=""></button>
     </section>
 
   </div>
@@ -148,16 +109,8 @@
           })
         })
       },
-      openLightBox (panel) {
-        this.$emit('openLightBox', panel)
-        this.$refs.headerControl.classList.remove('open')
-      },
-      openManagePanel (panel) {
-        this.$emit('openManagePanel', panel)
-        this.$refs.headerControl.classList.remove('open')
-      },
-      toggleControl () {
-        this.$refs.headerControl.classList.toggle('open')
+      openControlBar () {
+        this.$emit('openControlBar')
       },
       toggleMenu () {
         this.$refs.headerMenu.classList.toggle('open')
@@ -293,87 +246,6 @@
         width 100%
         height 100%
         background-color rgba(0, 0, 0, .6)
-    &__control
-      display flex
-      flex-direction column
-      justify-content center
-      align-items center
-      position fixed
-      top 0
-      right -100%
-      bottom 0
-      z-index 10
-      width 100%
-      height 100vh
-      margin 0
-      background-color #ddcf21
-      visibility hidden
-      transition right 0.35s ease-out
-      &.open
-        right 0
-        visibility visible
-      > button
-        display flex
-        justify-content center
-        align-items center
-        position absolute
-        top 10px
-        right 10px
-        width 35px
-        height 35px
-        padding 0
-        border 1px solid #000
-        background-color transparent
-        outline none
-        img
-          width 20px
-          height 20px
-      &-menu
-        width calc(100% - 40px)
-        text-align center
-        button
-          padding 20px 0
-          font-size 1.125rem
-          background-color transparent
-          border none
-          outline none
-        &-item
-          &:last-of-type
-            padding-bottom 10px
-            border-bottom 1px solid #fff
-          &-title
-            position relative
-            margin 10px 0
-            color #fff
-            font-size 1.25rem
-            font-weight 300
-            text-align center
-            &:before
-              content ''
-              position absolute
-              top 50%
-              left 0
-              transform translate(0, -50%)
-              width calc(50% - 36px)
-              height 1px
-              background-color #fff
-            &:after
-              content ''
-              position absolute
-              top 50%
-              right 0
-              transform translate(0, -50%)
-              width calc(50% - 36px)
-              height 1px
-              background-color #fff
-          &-box
-            display flex
-            flex-wrap wrap
-            button
-              width 50%
-              padding 10px 0
-              &:nth-child(odd)
-                border-right 1px solid #000
 
   @media (min-width 768px)
     .header
