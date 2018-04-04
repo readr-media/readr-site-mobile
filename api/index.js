@@ -199,7 +199,9 @@ router.get('/profile', [ authVerify, ], (req, res) => {
     const profile = response[ 0 ][ 'items' ][ 0 ]
     const perms = response[ 1 ]
     const scopes = constructScope(perms, profile.role)
-    res.header('Cache-Control', 'no-cache') 
+    res.header("Cache-Control", "no-cache, no-store, must-revalidate")
+    res.header("Pragma", "no-cache")
+    res.header("Expires", "0")
     res.json({
       name: profile.name,
       nickname: profile.nickname,
@@ -219,7 +221,9 @@ router.get('/profile', [ authVerify, ], (req, res) => {
 })
 
 router.get('/status', authVerify, function(req, res) {
-  res.header('Cache-Control', 'no-cache') 
+  res.header("Cache-Control", "no-cache, no-store, must-revalidate")
+  res.header("Pragma", "no-cache")
+  res.header("Expires", "0")
   res.status(200).send(true)
 })
 
