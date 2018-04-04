@@ -1,5 +1,15 @@
 <template>
   <div class="backstage editor">
+    <control-bar
+      @addNews="$_editor_showEditor({ postPanel: 'add', postType: config.type.NEWS })"
+      @addReview="$_editor_showEditor({ postPanel: 'add', postType: config.type.REVIEW })"
+      @addVideo="$_editor_showEditor({ postPanel: 'add', postType: config.type.VIDEO })"
+      @closeControlBar="$_editor_closeControlBar"
+      @editNews="$_editor_showDraftList(config.type.NEWS)"
+      @editProfile="$_editor_showProfile"
+      @editReview="$_editor_showDraftList(config.type.REVIEW)"
+      @openPanel="$_editor_openPanel">
+    </control-bar>
     <main class="backstage-container">
       <template v-if="activePanel === 'records'">
         <section class="backstage__records">
@@ -119,6 +129,7 @@
   import PostPanelB from '../components/PostPanel.vue'
   import Tab from '../components/Tab.vue'
   import TagList from '../components/TagList.vue'
+  import TheControlBar from '../components/TheControlBar.vue'
   import VideoList from '../components/VideoList.vue'
 
   const MAXRESULT = 20
@@ -247,6 +258,7 @@
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
       'base-light-box-profile': BaseLightBoxProfileEdit,
+      'control-bar': TheControlBar,
       'following-list-tab': FollowingListInTab,
       'post-list': PostList,
       'post-list-detailed': PostListDetailed,
@@ -256,11 +268,8 @@
       'video-list': VideoList,
     },
     props: {
-      openLightBox: {
-        type: String,
-      },
-      openManagePanel: {
-        type: String,
+      openControlBar: {
+        type: Boolean,
       },
     },
     data () {
@@ -320,17 +329,13 @@
       },
     },
     watch: {
-      openLightBox (panel) {
-        this.$_editor_openLightBoxHandler(panel)
-      },
-      openManagePanel (panel) {
-        this.openPanel(panel)
-      },
-      showProfile (val) {
-        if (!val) {
-          this.$emit('closeLightBox')
+      openControlBar (val) {
+        if (val) {
+          document.querySelector('.controlBar').classList.add('open')
+        } else {
+          document.querySelector('.controlBar').classList.remove('open')
         }
-      }, 
+      },
     },
     beforeMount () {
       Promise.all([
@@ -401,6 +406,9 @@
       $_editor_alertHandler (showAlert) {
         this.showAlert = showAlert
       },
+      $_editor_closeControlBar () {
+        this.$emit('closeControlBar')
+      },
       $_editor_deletePost () {
         this.itemsActive = POST_ACTIVE.DEACTIVE
         this.postActiveChanged = true
@@ -445,12 +453,6 @@
             return this.$_editor_updatePostList({ sort: sort, page: page, })
           case 'tags':
             return this.$_editor_updateTagList({ sort: sort, page: page, })
-        }
-      },
-      $_editor_openLightBoxHandler (panel) {
-        switch (panel) {
-          case 'profile':
-            return this.showProfile = true
         }
       },
       $_editor_openPanel (panel) {
@@ -653,6 +655,9 @@
         }
         this.postPanel = postPanel
         this.showEditor = true
+      },
+      $_editor_showProfile () {
+        this.showProfile = true
       },
       $_editor_tabHandler (tab) {
         this.loading = true
