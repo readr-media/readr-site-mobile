@@ -10,16 +10,23 @@ const schema = require('./schema')
 
 const apiHost = API_PROTOCOL + '://' + API_HOST + ':' + API_PORT
 
+const pickInsensitiveUserInfo = (userData) => {
+  return pick(userData, [ 'id', 'nickname', 'description', 'profile_image', ])
+}
+
 const fetchAndConstructMembers = (req, res) => {
   const url = `${apiHost}${req.url}`
   redisFetching(`member${req.url}`, ({ error, data, }) => {
+    const itemsCheck = (memberObj) => {
+      return memberObj['_items'] !== null ? { 'items': memberObj['_items'].map((object) => pickInsensitiveUserInfo(object)), } : {}
+    }
+
     if (!error && data) {
       debug('Fetch public member data from Redis.')
       debug('>>>', req.url)
       const mem = JSON.parse(data)
-      res.json({
-        'items': mem['_items'].map((object) => pick(object, [ 'id', 'nickname', 'description', 'profile_image', ])),
-      })
+      const responseSend = itemsCheck(mem)
+      res.json(responseSend)
     } else {
       superagent
       .get(url)
@@ -28,13 +35,12 @@ const fetchAndConstructMembers = (req, res) => {
         if (!e && response) {
           redisWriting(`member${req.url}`, response.text)
           const mem = JSON.parse(response.text)
-          res.json({
-            'items': mem['_items'].map((object) => pick(object, [ 'id', 'nickname', 'description', 'profile_image', ])),
-          })
+          const responseSend = itemsCheck(mem)
+          res.json(responseSend)
         } else {
           res.status(response.status).send('{\'error\':' + e + '}')
           console.error(`error during fetch data from: member${req.url}`)
-          console.error(e)  
+          console.error(e)
         }
       })
     }
