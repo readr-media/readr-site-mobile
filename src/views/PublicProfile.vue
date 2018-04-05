@@ -1,6 +1,6 @@
 <template>
   <main class="profile">
-    <About :profile="profile"></About>
+    <About :profile="profile || {}"></About>
     <Tab :tabs="tabs" class="profile__tab" @changeTab="tabHandler">
       <template slot="0">
         <div class="profile__main__review">
@@ -105,14 +105,20 @@
         return this.currUser === get(this.$route, 'params.id')
       },
       filters () {
+        debug('state.publicPosts.items', get(this.$store, 'state.publicPosts.items'))
+        debug('filters', map(get(this.$store, 'state.publicPosts.items') || [], post => moment(new Date(post.publishedAt)).format('YYYY/MM/DD')))
         return map(get(this.$store, 'state.publicPosts.items') || [], post => moment(new Date(post.publishedAt)).format('YYYY/MM/DD'))
       },
       posts () {
+        debug('state.publicPosts.items', get(this.$store, 'state.publicPosts.items'))
+        let posts
         if (this.filter === 'all') {
-          return get(this.$store, 'state.publicPosts.items') || []
+          posts = get(this.$store, 'state.publicPosts.items') || []
         } else {
-          return filter(get(this.$store, 'state.publicPosts.items') || [], post => (moment(new Date(post.publishedAt)).format('YYYY/MM/DD') === this.filter))
+          posts = filter(get(this.$store, 'state.publicPosts.items') || [], post => (moment(new Date(post.publishedAt)).format('YYYY/MM/DD') === this.filter))
         }
+        debug('posts', posts)
+        return posts
       },
       profileId () {
         return get(this.$route, 'params.id')
