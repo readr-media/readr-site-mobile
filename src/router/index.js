@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import pathToRegexp from 'path-to-regexp'
 import { ReadrPerm, } from '../util/services'
 
 Vue.use(Router)
@@ -33,7 +34,32 @@ const ServerError = () => import('../views/ServerError.vue')
 const router = new Router({
   mode: 'history',
   fallback: false,
-  scrollBehavior: () => ({ y: 0, }),
+  scrollBehavior: (to, from) => {
+    const keepPosition = [
+      {
+        from: '/',
+        to: '/post/:postId',
+      },
+      {
+        from: '/hot',
+        to: '/post/:postId',
+      },
+      {
+        from: '/post/:postId',
+        to: '/',
+      },
+      {
+        from: '/post/:postId',
+        to: '/hot',
+      },
+    ]
+    .map(route =>({ from: pathToRegexp(route.from), to: pathToRegexp(route.to), }))
+    .reduce((acc, cur) => acc || (cur.from.test(from.path) && cur.to.test(to.path)), false)
+
+    if (!keepPosition) {
+      return { y: 0, }
+    }
+  },
   routes: [
     { path: '/', component: PublicHome, meta: { permission: 'member', }, },
     { path: '/hot', component: PublicHome, meta: { permission: 'member', }, },

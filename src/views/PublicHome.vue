@@ -12,7 +12,7 @@
 </template>
 <script>
   import { PROJECT_STATUS, } from '../../api/config'
-  import { get, find, } from 'lodash'
+  import { get, find, uniq, concat, } from 'lodash'
   import { isScrollBarReachBottom, isCurrentRoutePath, } from '../util/comm'
   import { createStore, } from '../store'
   import HomeArticleMain from '../components/home/HomeArticleMain.vue'
@@ -175,10 +175,10 @@
     },
     beforeMount () {
       if (this.$store.state.isLoggedIn) {
-        const postIdsLatest = _.get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
-        const postIdsHot = _.get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
-        const postIdFeaturedProject = _.get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
-        const ids = _.uniq(_.concat(postIdsLatest, postIdsHot))
+        const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
+        const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
+        const postIdFeaturedProject = get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
+        const ids = uniq(concat(postIdsLatest, postIdsHot))
 
         if (ids.length !== 0) {
           fetchFollowing(this.$store, {

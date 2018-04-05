@@ -6,12 +6,12 @@
     <div class="home-article-main__author">
       <figure class="author-info">
         <router-link class="author-info__thumbnail" :to="`/profile/${get(articleData, 'author.id')}`">
-          <img :src="getImageUrl(get(articleData, 'author.profileImage', '/public/icons/exclamation.png'))" alt="">
+          <img :src="articleData.author_profileImage || getImageUrl(get(articleData, 'author.profileImage', '/public/icons/exclamation.png'))" alt="">
         </router-link>
         <figcaption class="author-info__meta">
           <p class="author-info__date" v-text="dateDiffFromNow"></p>
           <router-link class="author-info__nickname" :to="`/profile/${get(articleData, 'author.id')}`">
-            <p class="author-info__nickname" v-text="articleData.author.nickname"></p>
+            <p class="author-info__nickname" v-text="articleData.author_nickname || articleData.author.nickname"></p>
           </router-link>
         </figcaption>
       </figure>
