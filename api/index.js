@@ -51,6 +51,14 @@ const fetchStaticJson = (req, res, next, jsonFileName) => {
     }
   })
 }
+
+const setupClientCache = (req, res, next) => {
+  res.header("Cache-Control", "no-cache, no-store, must-revalidate")
+  res.header("Pragma", "no-cache")
+  res.header("Expires", "0")
+  next()
+}
+
 router.use('/grouped', function(req, res, next) {
   fetchStaticJson(req, res, next, 'grouped')
 })
@@ -187,7 +195,7 @@ router.get('/posts', authVerify, (req, res) => {
   })
 })
 
-router.get('/profile', [ authVerify, ], (req, res) => {
+router.get('/profile', [ authVerify, setupClientCache, ], (req, res) => {
   debug('req.user')
   debug(req.user)
   const targetProfile = req.user.id
@@ -199,9 +207,6 @@ router.get('/profile', [ authVerify, ], (req, res) => {
     const profile = response[ 0 ][ 'items' ][ 0 ]
     const perms = response[ 1 ]
     const scopes = constructScope(perms, profile.role)
-    res.header("Cache-Control", "no-cache, no-store, must-revalidate")
-    res.header("Pragma", "no-cache")
-    res.header("Expires", "0")
     res.json({
       name: profile.name,
       nickname: profile.nickname,
@@ -220,10 +225,7 @@ router.get('/profile', [ authVerify, ], (req, res) => {
   })
 })
 
-router.get('/status', authVerify, function(req, res) {
-  res.header("Cache-Control", "no-cache, no-store, must-revalidate")
-  res.header("Pragma", "no-cache")
-  res.header("Expires", "0")
+router.get('/status', [ authVerify, setupClientCache, ], function(req, res) {
   res.status(200).send(true)
 })
 
