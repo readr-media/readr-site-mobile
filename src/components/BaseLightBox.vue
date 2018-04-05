@@ -120,6 +120,8 @@
         width 45px
         height 45px
     &.alert
+      width auto
+      height auto
       border none
       > .baseLightBox__btn--close
         display none

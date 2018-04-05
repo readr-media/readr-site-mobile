@@ -164,7 +164,7 @@ export default {
   border-bottom 1px solid #d3d3d3
   .quill-editor
     width 100%
-    height 100%
+    height 350px
     &.half
       width 50%
   .medium-editor-element
@@ -202,7 +202,8 @@ export default {
     display flex
     flex-direction column
     height calc(100% - 20px)
-    
+    > div
+      height 100%
     &--html
       position absolute
       
@@ -216,15 +217,5 @@ export default {
         top 42px
       &.review
         top 0
-
-@media (min-width 950px)
-  .editor
-    height 400px
-    .quill-editor.news
-      height 338px
-    .quill-editor.review
-      height 380px
-    &__main
-      height 380px
 
 </style>
