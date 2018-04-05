@@ -337,20 +337,21 @@
         if (Date.parse(_.get(this.post, [ 'date', ]))) {
           params.published_at = _.get(this.post, [ 'date', ])
         }
-
+        
         if (this.metaChanged) {
-          const link = _.get(this.post, [ 'link', ])
+          let link = _.get(this.post, [ 'link', ])
           params.link_name = ''
           params.link_title = ''
           params.link_description = ''
           params.link_image = ''
           if (validator.isURL(link, { protocols: [ 'http','https', ], }) && !this.isVideo) {
+            link = encodeURI(link)
             getMeta(this.$store, link)
             .then((res) => {
-              params.link_name = _.truncate(_.get(res, [ 'body', 'openGraph', 'siteName', ]), { 'length': 50, })
-              params.link_title = _.get(res, [ 'body', 'openGraph', 'title', ])
-              params.link_description = _.get(res, [ 'body', 'openGraph', 'description', ])
-              params.link_image = _.get(res, [ 'body', 'openGraph', 'image', 'url', ])
+              params.link_name = _.truncate(_.get(res, [ 'body', 'ogSiteName', ]), { 'length': 50, })
+              params.link_title = _.get(res, [ 'body', 'ogTitle', ])
+              params.link_description = _.get(res, [ 'body', 'ogDescription', ])
+              params.link_image = _.get(res, [ 'body', 'ogImage', 'url', ])
               this.$_postPanel_submit(active, params)
             })
             .catch((err) => {
@@ -384,7 +385,6 @@
   &__title
     padding-left 10px
     color #000
-    font-size 18px
     font-weight 600
     &::placeholder
       color #808080
@@ -405,7 +405,10 @@
       padding-left 10px
       height 25px
       color #808080
+      font-size 12px
       border 1px solid #808080
+      &.postPanel__title
+        font-size 15px
     button
       width 25px
       height 25px
