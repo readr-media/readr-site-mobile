@@ -15,7 +15,7 @@
         <input class="comment-now__input" type="text">
       </section>
       <section class="comment-list"></section> -->
-      <!-- <div v-if="post.id" :class="`comment comment-${post.id}`"></div> -->
+      <div v-if="post.id" :class="`comment comment-${post.id}`"></div>
     </section>
   </div>
 </template>
