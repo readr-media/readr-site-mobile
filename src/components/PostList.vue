@@ -302,7 +302,7 @@
     &--single
       color #4280a2
     &--multiple
-      width 45px
+      width auto
       height 20px
       margin-left 10px
       color #fff
