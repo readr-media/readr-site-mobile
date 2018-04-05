@@ -81,6 +81,9 @@
   width 100%
   height 100vh
   background-color rgba(0,0,0,.6)
+  &.text-editor
+    .baseLightBox__container
+      padding 55px 0 120px
   &__btn
     &--close
       cursor pointer

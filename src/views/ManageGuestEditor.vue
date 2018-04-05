@@ -48,7 +48,7 @@
         @editPost="$_guestEditor_showEditor">
       </post-list-detailed>
     </base-light-box>
-    <base-light-box :showLightBox.sync="showEditor">
+    <base-light-box class="text-editor" :showLightBox.sync="showEditor">
       <post-panel
         :post="post"
         :panelType="postPanel"

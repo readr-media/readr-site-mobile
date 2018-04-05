@@ -178,6 +178,7 @@
         border-bottom 1px solid #fff
         border-top none
         border-left none
+        border-radius 0
       &__alert
         width 25px
         height 25px

@@ -377,7 +377,6 @@
   width 90%
   height 100%
   margin 0 auto
-  padding 55px 0 35px
   overflow-y auto
   > input 
     width 100%
