@@ -23,6 +23,7 @@ import {
   getFollowingByUser,
   getMembers,
   getMeta,
+  getPost,
   getPosts,
   getPostsCount,
   getProfile,
@@ -166,6 +167,19 @@ export default {
   GET_META: ({ commit, dispatch, state, }, { url, }) => {
     return getMeta(url)
   },
+  GET_POST: ({ commit, dispatch, state, }, { params, }) => {
+    return new Promise((resolve, reject) => {
+      getPost({ params, }).then(({ status, body, }) => {
+        if (status === 200) {
+          commit('SET_PUBLIC_POST_SINGLE', { posts: body, })
+          resolve({ status: 200, })
+        }
+      }).catch((err) => {
+        // reject(err)
+        resolve({ status: 'error', res: err,})
+      })
+    })
+  },
   GET_POSTS: ({ commit, dispatch, state, }, { params, }) => {
     return getPosts({ params, }).then(({ status, body, }) => {
       if (status === 200) {
@@ -217,7 +231,7 @@ export default {
           } else if (params.mode === 'update') {
             commit('UPDATE_PUBLIC_POSTS', { posts: body, })
           }
-          resolve(body)
+          resolve({ status: 200, res: body, })
         } else {
           // reject('end')
           if (body.items === null) {
@@ -225,11 +239,13 @@ export default {
               commit('SET_PUBLIC_POSTS', { posts: [], })
             }
           }
+          // reject('end')
           resolve({ status: 'end', res: {},})
         }
       })
       .catch((res) => {
-        reject(res)
+        // reject(res)
+        resolve({ status: 'error', res: res,})
       })
     }) 
   },
@@ -302,7 +318,8 @@ export default {
         resolve(body)
       })
       .catch((res) => {
-        reject(res)
+        // reject(res)
+        resolve(res)
       })
     }) 
   },

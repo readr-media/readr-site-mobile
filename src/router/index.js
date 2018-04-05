@@ -20,9 +20,7 @@ const PublicAbout = () => import('../views/PublicAbout.vue')
 const PublicAgreement = () => import('../views/PublicAgreement.vue')
 const PublicEditors = () => import('../views/PublicEditors.vue')
 const PublicHome = () => import('../views/PublicHome.vue')
-const PublicHots = () => import('../views/PublicHots.vue')
 const PublicLogin = () => import('../views/PublicLogin.vue')
-const PublicPost = () => import('../views/PublicPost.vue')
 const PublicProfile = () => import('../views/PublicProfile.vue')
 const PublicProjects = () => import('../views/PublicProjects.vue')
 const PublicSearch = () => import('../views/PublicSearch.vue')
@@ -38,16 +36,16 @@ const router = new Router({
   scrollBehavior: () => ({ y: 0, }),
   routes: [
     { path: '/', component: PublicHome, meta: { permission: 'member', }, },
+    { path: '/hot', component: PublicHome, meta: { permission: 'member', }, },
     { path: '/about', component: PublicAbout, meta: { permission: 'member', }, },
     { path: '/admin', component: ManageAdmin, meta: { permission: 'admin', }, },
     { path: '/agreement', component: PublicAgreement, },
     { path: '/editor', component: ManageEditor, meta: { permission: 'editor', }, },
     { path: '/editors', component: PublicEditors, meta: { permission: 'member', }, },
     { path: '/guesteditor', component: ManageGuestEditor, meta: { permission: 'guesteditor', }, },
-    { path: '/hots', component: PublicHots, meta: { permission: 'member', }, },
     { path: '/login', component: PublicLogin, },
     { path: '/member', component: ManageMember, meta: { permission: 'member', }, },
-    { path: '/post/:id', component: PublicPost, meta: { permission: 'member', }, },
+    { path: '/post/:postId', component: PublicHome, meta: { permission: 'member', }, },
     { path: '/profile/:id', component: PublicProfile, meta: { permission: 'member', }, },
     { path: '/projects', component: PublicProjects, meta: { permission: 'member', }, },
     { path: '/search/:keyword', component: PublicSearch, meta: { permission: 'member', }, },

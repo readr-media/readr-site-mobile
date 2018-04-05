@@ -286,6 +286,11 @@ export function getMeta (targetUrl) {
     .catch(err => err)
 }
 
+export function getPost ({ params, }) {
+  let url = `${host}/api/public/post/${params.id}`
+  return _doFetch(url, {})
+}
+
 export function getPosts ({ params, }) {
   let url = `${host}/api/posts`
   const query = _buildQuery(params)
@@ -305,7 +310,7 @@ export function getPostsCount ({ params, }) {
 }
 
 export function getPublicPosts ({ params, }) {
-  let url = `${host}/api/public/posts`
+  let url = params.category !== 'hot' ? `${host}/api/public/posts` : `${host}/api/public/posts/hot`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
     url = url + `?${query}`
