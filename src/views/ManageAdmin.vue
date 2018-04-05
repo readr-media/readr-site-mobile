@@ -79,7 +79,7 @@
         </MemberAccountEditor>
       </BaseLightBox>
       <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showProfile">
-        <BaseLightBoxProfileEdit :profile="profile" :showLightBox="showProfile"/>
+        <BaseLightBoxProfileEdit :profile="profile" :showLightBox="showProfile" @save="showProfile = false"/>
       </BaseLightBox>
       <BaseLightBox :showLightBox.sync="showDraftList">
         <PostListDetailed
