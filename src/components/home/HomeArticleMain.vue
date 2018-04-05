@@ -6,7 +6,7 @@
     <div class="home-article-main__author">
       <figure class="author-info">
         <router-link class="author-info__thumbnail" :to="`/profile/${get(articleData, 'author.id')}`">
-          <img :src="get(articleData, 'author.profileImage', '/public/icons/star-blue.png')" alt="">
+          <img :src="getImageUrl(get(articleData, 'author.profileImage', '/public/icons/exclamation.png'))" alt="">
         </router-link>
         <figcaption class="author-info__meta">
           <p class="author-info__date" v-text="dateDiffFromNow"></p>
@@ -26,7 +26,7 @@
 import AppShareButton from 'src/components/AppShareButton.vue'
 import PostContent from 'src/components/PostContent.vue'
 import { SITE_DOMAIN_DEV, } from 'src/constants'
-import { dateDiffFromNow, } from 'src/util/comm'
+import { dateDiffFromNow, getImageUrl, } from 'src/util/comm'
 import { get, } from 'lodash'
 
 export default {
@@ -61,6 +61,7 @@ export default {
   },
   methods: {
     get,
+    getImageUrl,
   },
 }
 </script>

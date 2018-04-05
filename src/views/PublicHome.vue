@@ -28,13 +28,14 @@
   const DEFAULT_SORT = '-updated_at'
   const DEFAULT_CATEGORY = 'latest'
 
-  // const fetchFollowing = (store, params) => {
-  //   if (params.subject) {
-  //     return store.dispatch('GET_FOLLOWING_BY_USER', params)
-  //   } else {
-  //     return store.dispatch('GET_FOLLOWING_BY_RESOURCE', params)
-  //   }
-  // }
+  const fetchFollowing = (store, params) => {
+    if (params.subject) {
+      return store.dispatch('GET_FOLLOWING_BY_USER', params)
+    } else {
+      return store.dispatch('GET_FOLLOWING_BY_RESOURCE', params)
+    }
+  }
+
   const fetchPost = (store, { id, }) => {
     return store.dispatch('GET_POST', {
       params: {
@@ -172,14 +173,29 @@
         next()
       }
     },
+    beforeMount () {
+      if (this.$store.state.isLoggedIn) {
+        const postIdsLatest = _.get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
+        const postIdsHot = _.get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
+        const postIdFeaturedProject = _.get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
+        const ids = _.uniq(_.concat(postIdsLatest, postIdsHot))
+
+        if (ids.length !== 0) {
+          fetchFollowing(this.$store, {
+            resource: 'post',
+            ids: ids,
+          })
+        }
+
+        if (postIdFeaturedProject.length !== 0) {
+          fetchFollowing(this.$store, {
+            resource: 'project',
+            ids: postIdFeaturedProject,
+          })
+        }
+      }
+    },
     mounted () {
-      // if (this.$store.state.isLoggedIn) {
-      //   const postIdsLatest = this.$store.state.publicPosts.items.map(post => String(post.id))
-      //   fetchFollowing(this.$store, {
-      //     resource: 'post',
-      //     ids: postIdsLatest,
-      //   })
-      // }
       window.addEventListener('scroll', () => {
         this.isReachBottom = isScrollBarReachBottom(1/3)
       })
@@ -191,22 +207,21 @@
       isCurrentRoutePath,
       $_home_loadmore () {
         fetchPosts(this.$store, { mode: 'update', max_result: 10, page: this.currentPage + 1, })
-        .then(() => {
-          this.currentPage += 1
-          // if (this.$store.state.isLoggedIn) {
-          //   const ids = res.items.map(post => post.id)
-          //   fetchFollowing(this.$store, {
-          //     mode: 'update',
-          //     resource: 'post',
-          //     ids: ids,
-          //   })
-          // }
-        })
-        .catch((res) => {
-          if (res === 'end') {
+        .then(({ status, res, }) => {
+          if (status === 'end') {
             this.endPage = true
-          } else {
+          } else if (status === 'error') {
             console.log(res)
+          } else {
+            this.currentPageLatest += 1
+            if (this.$store.state.isLoggedIn) {
+              const ids = res.items.map(post => `${post.id}`)
+              fetchFollowing(this.$store, {
+                mode: 'update',
+                resource: 'post',
+                ids: ids,
+              })
+            }
           }
         })
       },
