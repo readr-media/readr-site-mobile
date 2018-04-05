@@ -23,29 +23,6 @@
           <th class="postList__type"></th>
           <th class="postList__title"><span @click="$_postList_orderBy('title')" v-text="$t('post_list.WORDING_POSTLIST_TITLE')"></span></th>
           <th></th>
-          <!-- <th class="postList__status postList--center"><span @click="$_postList_orderBy('active')" v-text="$t('post_list.WORDING_POSTLIST_ACTIVE')"></span></th> -->
-          <!-- <th class="postList__update postList--center">
-            <button
-              class="postList__btn postList__btn--multiple"
-              :disabled="!canPublishPosts"
-              @click="$_postList_publishPosts"
-              v-text="$t('post_list.WORDING_POSTLIST_PUBLISH')">
-            </button>
-          </th> -->
-          <!-- <th class="postList__delete postList--center">
-            <button
-              class="postList__btn postList__btn--multiple"
-              :disabled="!canDeletePosts"
-              @click="$_postList_deletePosts"
-              v-text="$t('post_list.WORDING_POSTLIST_DELETE')">
-            </button>
-          </th> -->
-          <!-- <th class="postList__sort postList--center">
-            <select name="" id="">
-              <option value="-updated_at" v-text="$t('post_list.WORDING_POSTLIST_UPDATE_AT')"></option>
-              <option value="-created_at" v-text="$t('post_list.WORDING_POSTLIST_PUBLISH_AT')"></option>
-            </select>
-          </th> -->
         </tr>
       </thead>
       <tbody>
@@ -54,11 +31,7 @@
           <td class="postList__nickname" v-text="$_postList_getAuthorId(p)"></td>
           <td class="postList__type"><div v-if="p.type === config.postType.NEWS" class="postList__type--news">N</div></td>
           <td class="postList__title" @click="$_showPost(p)" v-text="p.title"></td>
-          <td class="postList__edit"><img src="/public/icons/pen-blue.png" alt=""></td>
-          <!-- <td class="postList__status postList--center" v-text="$_postList_getStatus(p)"></td> -->
-          <!-- <td class="postList__update postList--center"><button class="postList__btn postList__btn--single" @click="$_postList_editPost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_UPDATE')"></button></td> -->
-          <!-- <td class="postList__delete postList--center"><button class="postList__btn postList__btn--single" @click="$_postList_deletePost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_DELETE')"></button></td> -->
-          <!-- <td class="postList__sort"></td> -->
+          <td class="postList__edit" @click="$_postList_editPost(p.id)"><img src="/public/icons/pen-blue.png" alt=""></td>
         </tr>
       </tbody>
     </table>
