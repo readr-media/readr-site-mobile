@@ -58,7 +58,7 @@
         @updatePost="$_guestEditor_updatePost">
       </post-panel>
     </base-light-box>
-    <base-light-box :showLightBox.sync="showEditor">
+    <base-light-box :isAlert="true" :showLightBox.sync="showAlert">
       <alert-panel
         :active="itemsActive"
         :activeChanged="postActiveChanged"
