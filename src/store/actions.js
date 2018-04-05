@@ -219,6 +219,11 @@ export default {
           }
           resolve(body)
         } else {
+          if (body.items === null) {
+            if (params.mode === 'set') {
+              commit('SET_PUBLIC_POSTS', { posts: [], })
+            }
+          }
           reject('end')
         }
       })
