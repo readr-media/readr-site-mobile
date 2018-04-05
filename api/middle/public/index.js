@@ -47,27 +47,7 @@ const fetchAndConstructMembers = (req, res) => {
   })  
 }
 
-router.get('/profile/:id', (req, res, next) => {
-  const id = req.params.id
-  debug('Going to get member profile.', id)
-  if (!id) { res.status(403).send(`Forbidden.`) }
-  req.url = `/member/${id}`
-  next()
-}, fetchAndConstructMembers)
-
-router.get('/members', publicQueryValidation.validate(schema.members), fetchAndConstructMembers)
-
-router.get('/posts', publicQueryValidation.validate(schema.posts), (req, res, next) => {
-  const activePostQueryString = `{"$in":[${POST_ACTIVE.ACTIVE}]}`
-  if (Object.keys(req.query).length === 0) {
-    req.url += `?active=${activePostQueryString}&type={"$in":[${POST_TYPE.REVIEW}, ${POST_TYPE.NEWS}]}`
-  } else {
-    req.url += `&active=${activePostQueryString}&type={"$in":[${POST_TYPE.REVIEW}, ${POST_TYPE.NEWS}]}`
-  }
-  next()
-},
-fetchFromRedis,
-function (req, res, next) {
+const fetchAndConstructPosts = (req, res, next) => {
   const url = `${apiHost}${req.url}`
   if (res.redis) {
     console.log('fetch data from Redis.', req.url)
@@ -79,24 +59,50 @@ function (req, res, next) {
       .timeout(API_TIMEOUT)
       .end((e, r) => {
         if (!e && r) {
-          const dt = JSON.parse(r.text)
-          if (dt['_items'] !== null && dt.constructor === Object) {
-            res.dataString = r.text
+          const resData = JSON.parse(r.text)
+
+          if (resData['_items'] !== null && resData.constructor === Object) {
+            resData['_items'].forEach(post => { post.author = pickInsensitiveUserInfo(post.author) })
+            const dt = JSON.stringify(resData)
+            res.dataString = dt
             /**
              * if data not empty, go next to save data to redis
              */
             next()
           }
-          const resData = JSON.parse(r.text)
+
           res.json(resData)
         } else {
-          res.json(e)
-          console.error(`error during fetch public data from : ${url}`)
-          console.error(e)  
+          res.status(r.status).json(e)
+          console.error(`error during fetch public post data from : ${url}`)
+          console.error(e)
         }
       })
-    }
-}, insertIntoRedis)
+  }
+}
+
+router.get('/profile/:id', (req, res, next) => {
+  const id = req.params.id
+  debug('Going to get member profile.', id)
+  if (!id) { res.status(403).send(`Forbidden.`) }
+  req.url = `/member/${id}`
+  next()
+}, fetchAndConstructMembers)
+
+router.get('/members', publicQueryValidation.validate(schema.members), fetchAndConstructMembers)
+
+router.get('/post/:postId', fetchFromRedis, fetchAndConstructPosts, insertIntoRedis)
+
+router.get('/posts', publicQueryValidation.validate(schema.posts), (req, res, next) => {
+  const activePostQueryString = `{"$in":[${POST_ACTIVE.ACTIVE}]}`
+  if (Object.keys(req.query).length === 0) {
+    req.url += `?active=${activePostQueryString}&type={"$in":[${POST_TYPE.REVIEW}, ${POST_TYPE.NEWS}]}`
+  } else {
+    req.url += `&active=${activePostQueryString}&type={"$in":[${POST_TYPE.REVIEW}, ${POST_TYPE.NEWS}]}`
+  }
+  next()
+},
+fetchFromRedis, fetchAndConstructPosts, insertIntoRedis)
 
 router.get('/projects', publicQueryValidation.validate(schema.projects), (req, res, next) => {
   let url = '/project/list?'
@@ -208,5 +214,20 @@ router.get('/videos/count', (req, res, next) => {
       })
   }
 }, insertIntoRedis)
+
+router.get('/posts/hot', (req, res) => {
+  const url = `${apiHost}${req.url}`
+  superagent
+  .get(url)
+  .end((e, r) => {
+    if (!e && r) {
+      res.status(200).json(JSON.parse(r.text))
+    } else {
+      res.status(500).json(e)
+      console.error(`error during fetch public hot post data from : ${url}`)
+      console.error(e)  
+    }
+  })
+})
 
 module.exports = router

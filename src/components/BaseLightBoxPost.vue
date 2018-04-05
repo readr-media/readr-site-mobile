@@ -10,17 +10,19 @@
       </section>
     </article>
     <section class="baselightbox-post__comment">
-      <section class="comment-now">
+      <!-- <section class="comment-now">
         <img class="comment-now__user-thumbnail" src="/public/icons/account.png" alt="">
         <input class="comment-now__input" type="text">
       </section>
-      <section class="comment-list"></section>
+      <section class="comment-list"></section> -->
+      <div v-if="post.id" :class="`comment comment-${post.id}`"></div>
     </section>
   </div>
 </template>
 
 <script>
-import { updatedAtYYYYMMDD, } from '../util/comm'
+import { renderComment, } from 'src/util/talk'
+import { updatedAtYYYYMMDD, getImageUrl, } from '../util/comm'
 import _ from 'lodash'
 
 export default {
@@ -47,16 +49,23 @@ export default {
   },
   methods: {
     updatedAtYYYYMMDD,
+    getImageUrl,
+    renderComment (ref) {
+      renderComment(this.$el, `${ref}`, `/post/${this.post.id}`)
+    },
     profileImage (post) {
-      return post.author.profileImage || '/public/icons/exclamation.png'
+      return this.getImageUrl(post.author.profileImage) || '/public/icons/exclamation.png'
     },
   },
+  // updated () {
+  //   if (this.post.id) this.renderComment(`.baselightbox-post__comment > .comment.comment-${this.post.id}`)
+  // },
 }
 </script>
 
 <style lang="stylus">
 .baselightbox-post
-  // width 100%
+  width 100%
   // height 620.5px
   padding 29px 25px 12.5px 25px
   overflow-y scroll

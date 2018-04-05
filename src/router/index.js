@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import pathToRegexp from 'path-to-regexp'
 import { ReadrPerm, } from '../util/services'
 
 Vue.use(Router)
@@ -20,9 +21,7 @@ const PublicAbout = () => import('../views/PublicAbout.vue')
 const PublicAgreement = () => import('../views/PublicAgreement.vue')
 const PublicEditors = () => import('../views/PublicEditors.vue')
 const PublicHome = () => import('../views/PublicHome.vue')
-const PublicHots = () => import('../views/PublicHots.vue')
 const PublicLogin = () => import('../views/PublicLogin.vue')
-const PublicPost = () => import('../views/PublicPost.vue')
 const PublicProfile = () => import('../views/PublicProfile.vue')
 const PublicProjects = () => import('../views/PublicProjects.vue')
 const PublicSearch = () => import('../views/PublicSearch.vue')
@@ -35,19 +34,44 @@ const ServerError = () => import('../views/ServerError.vue')
 const router = new Router({
   mode: 'history',
   fallback: false,
-  scrollBehavior: () => ({ y: 0, }),
+  scrollBehavior: (to, from) => {
+    const keepPosition = [
+      {
+        from: '/',
+        to: '/post/:postId',
+      },
+      {
+        from: '/hot',
+        to: '/post/:postId',
+      },
+      {
+        from: '/post/:postId',
+        to: '/',
+      },
+      {
+        from: '/post/:postId',
+        to: '/hot',
+      },
+    ]
+    .map(route =>({ from: pathToRegexp(route.from), to: pathToRegexp(route.to), }))
+    .reduce((acc, cur) => acc || (cur.from.test(from.path) && cur.to.test(to.path)), false)
+
+    if (!keepPosition) {
+      return { y: 0, }
+    }
+  },
   routes: [
     { path: '/', component: PublicHome, meta: { permission: 'member', }, },
+    { path: '/hot', component: PublicHome, meta: { permission: 'member', }, },
     { path: '/about', component: PublicAbout, meta: { permission: 'member', }, },
     { path: '/admin', component: ManageAdmin, meta: { permission: 'admin', }, },
     { path: '/agreement', component: PublicAgreement, },
     { path: '/editor', component: ManageEditor, meta: { permission: 'editor', }, },
     { path: '/editors', component: PublicEditors, meta: { permission: 'member', }, },
     { path: '/guesteditor', component: ManageGuestEditor, meta: { permission: 'guesteditor', }, },
-    { path: '/hots', component: PublicHots, meta: { permission: 'member', }, },
     { path: '/login', component: PublicLogin, },
     { path: '/member', component: ManageMember, meta: { permission: 'member', }, },
-    { path: '/post/:id', component: PublicPost, meta: { permission: 'member', }, },
+    { path: '/post/:postId', component: PublicHome, meta: { permission: 'member', }, },
     { path: '/profile/:id', component: PublicProfile, meta: { permission: 'member', }, },
     { path: '/projects', component: PublicProjects, meta: { permission: 'member', }, },
     { path: '/search/:keyword', component: PublicSearch, meta: { permission: 'member', }, },

@@ -5,7 +5,7 @@
         <button class="profile-edit__close"><img src="/public/icons/close-white.png" alt=""></button>
         <div class="portrait">
           <div class="portrait__container" @click="profileEditorUploadThumbnail">
-            <img class="portrait__thumbnail" :src="thumbnail" alt="thumbnail">
+            <img class="portrait__thumbnail" :src="getImageUrl(thumbnail)" alt="thumbnail">
             <div class="portrait__upload"></div>
           </div>
         </div>
@@ -45,6 +45,7 @@
 <script>
 import { get, } from 'lodash'
 import { removeToken, } from '../util/services'
+import { getImageUrl, } from '../util/comm'
 import validator from 'validator'
 
 const debug = require('debug')('CLIENT:')
@@ -134,6 +135,7 @@ export default {
     },
   },
   methods: {
+    getImageUrl,
     profileEditorUploadThumbnail () {
       const saveImage = (file) => {
         const fd = new FormData()
@@ -245,6 +247,8 @@ export default {
       if (!isOldPasswordEmpty() && isConfirmNewPassword()) {
         updatePassword()
       }
+
+      this.$emit('save')
     },
   },
 }

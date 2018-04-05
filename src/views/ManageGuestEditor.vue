@@ -39,7 +39,7 @@
       </template>
     </main>
     <base-light-box borderStyle="nonBorder" :showLightBox.sync="showProfile">
-      <base-light-box-profile :profile="profile" :showLightBox="showProfile"></base-light-box-profile>
+      <base-light-box-profile :profile="profile" :showLightBox="showProfile" @save="showProfile = false"></base-light-box-profile>
     </base-light-box>
     <base-light-box :showLightBox.sync="showDraftList">
       <post-list-detailed
