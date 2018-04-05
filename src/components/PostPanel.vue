@@ -55,7 +55,7 @@
       <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_OG_DESCRIPTION')}：`"></label>
       <input v-model="post.ogDescription" type="text">
     </div>
-    <div v-if="$can('editPostOg')" class="postPanel__input">
+    <div v-if="$can('editPostOg')" class="postPanel__input share">
       <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_OG_IMAGE')}：`"></label>
       <input v-model="post.ogImage" type="text" readonly>
       <button class="postPanel__btn--img" @click="$_postPanel_addOgImage">
@@ -372,12 +372,13 @@
 <style lang="stylus" scoped>
 
 .postPanel
-  display flex
-  flex-direction column
+  // display flex
+  // flex-direction column
   width 90%
   height 100%
   margin 0 auto
   padding 55px 0 35px
+  overflow-y auto
   > input 
     width 100%
     height 25px
@@ -395,14 +396,17 @@
     width 100%
     &:not(:first-of-type)
       margin-top 10px
+    &.share
+      input
+        max-width calc(100% - 155px)
     label
       line-height 25px
     input
       flex 1
       padding-left 10px
-      width 440px
       height 25px
       color #808080
+      border 1px solid #808080
     button
       width 25px
       height 25px

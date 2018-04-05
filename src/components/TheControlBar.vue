@@ -4,15 +4,15 @@
       <div v-if="$can('addPost')" class="controlBar__menu-item">
         <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.REVIEW')"></div>
         <div class="controlBar__menu-item-box">
-          <button v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
-          <button v-text="$t('CONTROL_BAR.EDIT_DRAFT')"></button>
+          <button @click="$_controlBar_clickHandler('addReview')" v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
+          <button @click="$_controlBar_clickHandler('editReview')" v-text="$t('CONTROL_BAR.EDIT_DRAFT')"></button>
         </div>
       </div>
       <div v-if="$can('addPost')" class="controlBar__menu-item">
         <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.NEWS')"></div>
         <div class="controlBar__menu-item-box">
-          <button v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
-          <button v-text="$t('CONTROL_BAR.EDIT_DRAFT')"></button>
+          <button @click="$_controlBar_clickHandler('addNews')" v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
+          <button @click="$_controlBar_clickHandler('editNews')" v-text="$t('CONTROL_BAR.EDIT_DRAFT')"></button>
         </div>
       </div>
       <div class="controlBar__menu-item">
