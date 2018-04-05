@@ -88,7 +88,7 @@
           @editPost="showEditorHandler">
         </PostListDetailed>
       </BaseLightBox>
-      <BaseLightBox :showLightBox.sync="showEditor">
+      <BaseLightBox class="text-editor" :showLightBox.sync="showEditor">
         <PostPanel
           :post="post"
           :panelType="postPanel"
