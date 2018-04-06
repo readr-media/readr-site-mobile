@@ -140,8 +140,9 @@ export default {
     getImageUrl,
     inputChangeHandler () {
       const file = this.$refs.inputPortraitImg.files[0]
-
+      console.log('inputChangeHandler 1')
       const saveImage = (file) => {
+        console.log('saveImage')
         const fd = new FormData()
         // const fileExt = file.type.split('image/')[1]
         fd.append('image', file, `${this.profile.id}`)
@@ -166,6 +167,7 @@ export default {
       }
 
       if (/^image\//.test(file.type)) {
+        console.log('inputChangeHandler 2')
         deleteMemberProfileThumbnails(this.$store, this.profile.id)
         file.size <= 5242880 ? saveImage(file) : console.info(`file size is ${file.size} bytes bigger than 5MB`)
       }

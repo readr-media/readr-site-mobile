@@ -294,11 +294,12 @@ router.post('/post', authVerify, (req, res) => {
 })
 
 router.post('/image/:sourceType', authVerify, upload.single('image'), (req, res) => {
-  console.info(`--- api image`)
   const url = `${apiHost}${req.url}`
   const bucket = initBucket(GCP_FILE_BUCKET)
   const file = req.file
   const destination = req.params.sourceType === 'member' ? `${GCS_IMG_MEMBER_PATH}/${file.originalname}` : GCS_IMG_POST_PATH
+  console.error(`---- api image url`, url)
+  console.error(`---- api image file`, file)
   processImage(file, req.params.sourceType)
     .then((images) => {
       const origImg = req.params.sourceType === 'member' ? _.trim(images[images.length - 1], 'tmp/') : _.trim(images[0], 'tmp/')
@@ -310,12 +311,12 @@ router.post('/image/:sourceType', authVerify, upload.single('image'), (req, res)
             contentType: file.mimetype,
           },
         }).then((bucketFile) => {
-          console.info(`file ${fileName}(${path}) completed uploading to bucket `)
+          console.error(`file ${fileName}(${path}) completed uploading to bucket `)
           fs.unlink(path, (err) => {
             if (err) {
               console.error(`Error: delete ${path} fail`)
             }
-            console.info(`successfully deleted ${path}`)
+            console.error(`successfully deleted ${path}`)
           })
           makeFilePublic(bucketFile)
         })
