@@ -23,8 +23,6 @@
   </div>
 </template>
 <script>
-  import { SITE_DOMAIN, SITE_DOMAIN_DEV, } from '../../src/constants'
-  import { currEnv, } from 'src/util/comm'
   import { get, } from 'lodash'
   import { renderComment, } from '../../src/util/talk'
   import CommentCount from '../components/comment/CommentCount.vue'
@@ -45,12 +43,7 @@
         document.querySelector(`.projectBlock__comment.project-${id}`).classList.toggle('hidden')
         const rendered = document.querySelector(`.projectBlock__comment.project-${id} iframe`)
         if (window.Coral && !rendered) {
-          renderComment(
-            this.$el,
-            `.projectBlock__comment.project-${id} > .comment`,
-            `${location.protocol}//${currEnv() !== 'dev' ? SITE_DOMAIN : SITE_DOMAIN_DEV}/post/${id}`,
-            this.$store.state.setting.TALK_SERVER
-          )
+          renderComment(this.$el, `.projectBlock__comment.project-${id} > .comment`, `/post/${id}`, this.$store.state.setting.TALK_SERVER)
         }
       },
       get,
