@@ -144,7 +144,11 @@ function render (req, res, next) {
   const cookies = new Cookies( req, res, {} )
   const readrid = cookies.get('readrid')
   if (!readrid) {
-    cookies.set('readrid', uuidv4(), { httpOnly: false, expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) })
+    cookies.set('readrid', uuidv4(), {
+      httpOnly: false,
+      domain: config.DOMAIN,
+      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+    })
   }
 
   const context = {
