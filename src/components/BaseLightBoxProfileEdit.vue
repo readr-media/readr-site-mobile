@@ -6,7 +6,9 @@
         <div class="portrait">
           <div class="portrait__container" @click="profileEditorUploadThumbnail">
             <img class="portrait__thumbnail" :src="getImageUrl(thumbnail)" alt="thumbnail">
-            <div class="portrait__upload"></div>
+            <div class="portrait__upload">
+              <input ref="inputPortraitImg" type="file" accept="image/*" class="editor__input" style="display: none;" @change="inputChangeHandler">
+            </div>
           </div>
         </div>
         <div class="form__item">
@@ -136,7 +138,9 @@ export default {
   },
   methods: {
     getImageUrl,
-    profileEditorUploadThumbnail () {
+    inputChangeHandler () {
+      const file = this.$refs.inputPortraitImg.files[0]
+
       const saveImage = (file) => {
         const fd = new FormData()
         // const fileExt = file.type.split('image/')[1]
@@ -161,17 +165,13 @@ export default {
         })
       }
 
-      const input = document.createElement('input')
-      input.setAttribute('type', 'file')
-      input.setAttribute('accept', 'image/*')
-      input.click()
-      input.onchange = () => {
-        const file = input.files[0]
-        if (/^image\//.test(file.type)) {
-          deleteMemberProfileThumbnails(this.$store, this.profile.id)
-          file.size <= 5242880 ? saveImage(file) : console.info(`file size is ${file.size} bytes bigger than 5MB`)
-        }
+      if (/^image\//.test(file.type)) {
+        deleteMemberProfileThumbnails(this.$store, this.profile.id)
+        file.size <= 5242880 ? saveImage(file) : console.info(`file size is ${file.size} bytes bigger than 5MB`)
       }
+    },
+    profileEditorUploadThumbnail () {
+      this.$refs.inputPortraitImg.click()
     },
     profileEditorSave () {
       // Check basic infos has been modified or not, if modified, update the infos

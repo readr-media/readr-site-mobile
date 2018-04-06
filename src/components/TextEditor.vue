@@ -4,6 +4,7 @@
       <div class="editor__heading--text" v-text="$t('post_editor.WORDING_POSTEDITOR_EDITOR')"></div>
       <div class="editor__heading--switch" :class="{ active: showHtml }" @click="$_editor_toggleHtml">&lt; / &gt;</div>
     </div>
+    <input ref="inputImg" type="file" accept="image/*" class="editor__input" @change="$_editor_changeHandler">
     <div class="editor__main">
       <div v-show="type === postType.REVIEW">
         <div
@@ -113,7 +114,7 @@ export default {
       }
     },
     $_editor_imageHandler () {
-      this.$_editor_selectImage()
+      this.$refs.inputImg.click()
     },
     $_editor_insertToEditor (url) {
       const range = this.quillNewsEditor.getSelection()
@@ -130,16 +131,10 @@ export default {
           console.error(err)
         })
     },
-    $_editor_selectImage () {
-      const input = document.createElement('input')
-      input.setAttribute('type', 'file')
-      input.setAttribute('accept', 'image/*')
-      input.click()
-      input.onchange = () => {
-        const file = input.files[0]
-        if (/^image\//.test(file.type)) {
-          this.$_editor_saveImage(file)
-        }
+    $_editor_changeHandler () {
+      const file = this.$refs.inputImg.files[0]
+      if (/^image\//.test(file.type)) {
+        this.$_editor_saveImage(file)
       }
     },
     $_editor_toggleHtml () {
@@ -217,5 +212,7 @@ export default {
         top 42px
       &.review
         top 0
+  &__input
+    display none
 
 </style>
