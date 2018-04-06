@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import { SITE_DOMAIN_DEV, SITE_DOMAIN, } from 'src/constants'
-import { currEnv, } from 'src/util/comm'
 import { renderComment, } from 'src/util/talk'
 import { updatedAtYYYYMMDD, getImageUrl, } from '../util/comm'
 import _ from 'lodash'
@@ -53,12 +51,7 @@ export default {
     updatedAtYYYYMMDD,
     getImageUrl,
     renderComment (ref) {
-      renderComment(
-        this.$el,
-        `${ref}`,
-        `${location.protocol}//${currEnv() !== 'dev' ? SITE_DOMAIN : SITE_DOMAIN_DEV}/post/${this.postId}`,
-        this.$store.state.setting.TALK_SERVER
-      )
+      renderComment(this.$el, `${ref}`, `/post/${this.postId}`, this.$store.state.setting.TALK_SERVER)
     },
     profileImage (post) {
       return this.getImageUrl(post.author.profileImage) || '/public/icons/exclamation.png'

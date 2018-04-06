@@ -27,8 +27,6 @@
 </template>
 
 <script>
-  import { SITE_DOMAIN, SITE_DOMAIN_DEV, } from 'src/constants'
-  import { currEnv, } from 'src/util/comm'
   import { get, } from 'lodash'
   import { renderComment, } from '../../../src/util/talk'
   import CommentCount from '../../components/comment/CommentCount.vue'
@@ -62,12 +60,7 @@
         document.querySelector(`.videosList__item-comment.video-${id}`).classList.toggle('hidden')
         const rendered = document.querySelector(`.videosList__item-comment.video-${id} iframe`)
         if (!rendered) {
-          renderComment(
-            this.$el,
-            `.videosList__item-comment.video-${id} > .comment`,
-            `${location.protocol}//${currEnv() !== 'dev' ? SITE_DOMAIN : SITE_DOMAIN_DEV}/post/${id}`,            
-            this.$store.state.setting.TALK_SERVER
-          )
+          renderComment(this.$el, `.videosList__item-comment.video-${id} > .comment`, `/post/${id}`, this.$store.state.setting.TALK_SERVER)
         }
       },
       get,
