@@ -15,6 +15,7 @@ const useragent = require('express-useragent')
 const uuidv4 = require('uuid/v4')
 const { PAGE_CACHE_EXCLUDING, GOOGLE_CLIENT_ID, TALK_SERVER } = require('./api/config')
 const { SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT } = require('./api/config')
+const config = require('./api/config')
 const { createBundleRenderer } = require('vue-server-renderer')
 
 const debug = require('debug')('READR:server')
@@ -203,7 +204,14 @@ function render (req, res, next) {
         window.gapi && window.gapi.load('client', this.gapiLoadedHandler);
       </script>` : '',
       include_recaptcha: req.url.match(targ_exp_login) ? `<script src='https://www.google.com/recaptcha/api.js'></script>` : '',
-    TALK_SERVER
+    setting: {
+      TALK_SERVER: config.TALK_SERVER,
+      POST_ACTIVE: config.POST_ACTIVE,
+      POST_TYPE: config.POST_TYPE,
+      PROJECT_STATUS: config.PROJECT_STATUS,
+      TAG_ACTIVE: config.TAG_ACTIVE,
+      GOOGLE_RECAPTCHA_SITE_KEY: config.GOOGLE_RECAPTCHA_SITE_KEY,
+    }
   }
   const handleError = err => {
     if (err.url) {

@@ -17,7 +17,8 @@
 </template>
 
 <script>
-  import { SITE_DOMAIN_DEV, } from '../../../src/constants'
+  import { SITE_DOMAIN, SITE_DOMAIN_DEV, } from 'src/constants'
+  import { currEnv, } from 'src/util/comm'
   import { get, } from 'lodash'
   import { renderComment, } from '../../../src/util/talk'
   import AppShareButton from '../../components/AppShareButton.vue'
@@ -44,11 +45,21 @@
     },
     watch: {
       video () {
-        renderComment(this.$el, `.comment`, `${location.protocol}//${SITE_DOMAIN_DEV}/post/${get(this.video, [ 'id', ])}`)
+        renderComment(
+          this.$el,
+          `.comment`,
+          `${location.protocol}//${currEnv() !== 'dev' ? SITE_DOMAIN : SITE_DOMAIN_DEV}/post/${get(this.video, [ 'id', ])}`,          
+          this.$store.state.setting.TALK_SERVER
+        )
       },
     },
     mounted () {
-      renderComment(this.$el, `.comment`, `${location.protocol}//${SITE_DOMAIN_DEV}/post/${get(this.video, [ 'id', ])}`)
+      renderComment(
+        this.$el,
+        `.comment`,
+        `${location.protocol}//${currEnv() !== 'dev' ? SITE_DOMAIN : SITE_DOMAIN_DEV}/post/${get(this.video, [ 'id', ])}`,
+        this.$store.state.setting.TALK_SERVER
+      )
     },
     methods: {
       moment,
