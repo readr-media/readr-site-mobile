@@ -224,7 +224,8 @@ export default {
               this.inputConfirmPassword = ''
   
               logout(this.$store).then(() => {
-                return removeToken().then(() => {
+                const domain = get(this.$store, 'state.setting.DOMAIN')
+                return removeToken(domain).then(() => {
                   location && location.replace('/')
                 })
               })
