@@ -10,9 +10,13 @@ export function consoleLogOnDev ({ msg, }) {
   }
 }
 
+const debug = require('debug')('CLIENT:comm')
+
 export function currEnv () {
   if (process.env.VUE_ENV === 'client') {
-    if (location.host.indexOf(SITE_DOMAIN) === 0 || location.host.indexOf(`www.${SITE_DOMAIN}`) === 0) {
+    debug('SITE_DOMAIN', SITE_DOMAIN)
+    debug('location.hostname', location.hostname, (location.hostname.indexOf(SITE_DOMAIN) === 0 || location.hostname.indexOf(`www.${SITE_DOMAIN}`) === 0))
+    if (location.hostname.indexOf(SITE_DOMAIN) === 0 || location.hostname.indexOf(`www.${SITE_DOMAIN}`) === 0|| location.hostname.indexOf(`m.${SITE_DOMAIN}`) === 0) {
       return 'prod'
     } else {
       return 'dev'
