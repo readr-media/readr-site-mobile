@@ -1,10 +1,10 @@
 <template>
   <div class="baselightbox-post">
     <article class="baselightbox-post__article">
-      <img class="baselightbox-post__author-thumbnail" :src="!isPostEmpty ? profileImage(post) : ''">
+      <img class="baselightbox-post__author-thumbnail" :src="authorThumbnailImg" v-if="isClientSide">
       <section class="article-content">
         <h2 class="article-content__date" v-text="!isPostEmpty ? updatedAtYYYYMMDD(post.updatedAt) : ''"></h2>
-        <h2 class="article-content__author-nickname" v-text="!isPostEmpty ? post.author.nickname : ''"></h2>
+        <h2 class="article-content__author-nickname" v-text="authorNickname"></h2>
         <h1 class="article-content__title" v-text="!isPostEmpty ? post.title : ''"></h1>
         <div class="article-content__paragraph-container" v-html="!isPostEmpty ? post.content : ''"></div>
       </section>
@@ -22,7 +22,7 @@
 
 <script>
 import { renderComment, } from 'src/util/talk'
-import { updatedAtYYYYMMDD, getImageUrl, } from '../util/comm'
+import { updatedAtYYYYMMDD, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from '../util/comm'
 import _ from 'lodash'
 
 export default {
@@ -46,20 +46,23 @@ export default {
     isPostEmpty () {
       return _.isEmpty(this.post)
     },
+    isClientSide,
+    authorNickname () {
+      return getArticleAuthorNickname(this.post)
+    },
+    authorThumbnailImg () {
+      return getArticleAuthorThumbnailImg(this.post)
+    },
   },
   methods: {
     updatedAtYYYYMMDD,
-    getImageUrl,
     renderComment (ref) {
       renderComment(this.$el, `${ref}`, `/post/${this.postId}`, this.$store.state.setting.TALK_SERVER)
     },
-    profileImage (post) {
-      return this.getImageUrl(post.author.profileImage) || '/public/icons/exclamation.png'
-    },
   },
-  // updated () {
-  //   if (this.post.id) this.renderComment(`.baselightbox-post__comment > .comment.comment-${this.post.id}`)
-  // },
+  updated () {
+    if (this.post.id) this.renderComment(`.baselightbox-post__comment > .comment.comment-${this.post.id}`)
+  },
 }
 </script>
 
@@ -78,6 +81,7 @@ export default {
     min-width 45px
     height 45px
     border-radius 45px
+    object-fit cover
   &__comment
     margin-top 17px
     border-top 1px solid #979797

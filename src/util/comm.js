@@ -50,8 +50,6 @@ export function getImageUrl (url) {
   let hostname
   if (browser) {
     hostname = location.hostname
-  } else {
-    hostname = process.env.HOST || 'localhost'
   }
   if (hostname === 'localhost') {
     return `http://${SITE_DOMAIN_DEV}${url}`
@@ -68,6 +66,14 @@ export function getHost () {
     const port = parseInt(process.env.PORT) || 8080
     return `${host}:${port}`
   }
+}
+
+export function getArticleAuthorNickname (articleData) {
+  return _.get(articleData, 'authorNickname') || _.get(articleData, 'author.nickname') || _.get(articleData, 'nickname')
+}
+
+export function getArticleAuthorThumbnailImg (articleData) {
+  return getImageUrl(_.get(articleData, 'authorProfileImage') || (_.get(articleData, 'author.profileImage') || _.get(articleData, 'profileImage') || '/public/icons/exclamation.png'))
 }
 
 export function isScrollBarReachBottom (ratio = 0) {
@@ -118,4 +124,8 @@ export function updatedAtYYYYMMDD (isoDate) {
 
 export function isCurrentRoutePath (path) {
   return pathToRegexp(path).test(this.$route.path)
+}
+
+export function isClientSide () {
+  return _.get(this.$store, 'state.isClientSide', false)
 }
