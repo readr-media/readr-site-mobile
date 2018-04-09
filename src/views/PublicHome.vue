@@ -3,7 +3,7 @@
     <BaseLightBox v-show="showLightBox" @closeLightBox="closeLightBox">
       <BaseLightBoxPost :showLightBox="showLightBox" :post="postLightBox"/>
     </BaseLightBox>
-    <Invite></Invite>
+    <Invite v-if="currEnv === 'dev' && isClientSide"></Invite>
     <main>
       <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
       <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
@@ -13,7 +13,7 @@
 <script>
   import { PROJECT_STATUS, } from '../../api/config'
   import { get, find, uniq, concat, } from 'lodash'
-  import { isScrollBarReachBottom, isCurrentRoutePath, } from '../util/comm'
+  import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from '../util/comm'
   import { createStore, } from '../store'
   import HomeArticleMain from '../components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from '../components/home/HomeNavigationMobile.vue'
@@ -117,6 +117,10 @@
       }
     },
     computed: {
+      currEnv,
+      isClientSide () {
+        return get(this.$store, 'state.isClientSide', false)
+      },
       postsLatest () {
         return get(this.$store.state.publicPosts, 'items', [])
       },
