@@ -213,7 +213,7 @@
           } else if (status === 'error') {
             console.log(res)
           } else {
-            this.currentPageLatest += 1
+            this.currentPage += 1
             if (this.$store.state.isLoggedIn) {
               const ids = res.items.map(post => `${post.id}`)
               fetchFollowing(this.$store, {
