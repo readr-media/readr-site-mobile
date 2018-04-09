@@ -253,6 +253,7 @@
         this.itemsSelected = []
         this.itemsSelected.push(params)
         this.loading = true
+        console.log('addPost', params)
         addPost(this.$store, params)
           .then(() => {
             this.$_guestEditor_updatePostList({ needUpdateCount: true, })
