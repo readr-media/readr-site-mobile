@@ -2,14 +2,14 @@
   <li class="editors-intro-main">
     <figure class="editors-intro-main__profile">
       <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__thumbnail">
-        <img :src="editor.profileImage || '/public/icons/exclamation.png'" alt="">
+        <img :src="authorThumbnailImg" alt="" v-if="isClientSide">
       </router-link>
       <figcaption class="editors-intro-main__meta-container">
         <img class="editors-intro-main__follow-icon" v-if="editorIsNotCurrentUser" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow">
       </figcaption>
     </figure>
     <div class="editors-intro-main__info">
-      <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__nickname"><p v-text="editor.nickname"></p></router-link>
+      <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__nickname"><p v-text="authorNickname"></p></router-link>
       <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__description"><p v-text="trimDescription ? descritpionTrim : editor.description"></p></router-link>
     </div>
   </li>
@@ -17,6 +17,7 @@
 
 <script>
 import { find, } from 'lodash'
+import { isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from 'src/util/comm'
 
 const publishAction = (store, data) => {
   return store.dispatch('PUBLISH_ACTION', {
@@ -67,6 +68,13 @@ export default {
       } else {
         return ''
       }
+    },
+    isClientSide,
+    authorNickname () {
+      return getArticleAuthorNickname(this.editor)
+    },
+    authorThumbnailImg () {
+      return getArticleAuthorThumbnailImg(this.editor)
     },
   },
   methods: {
@@ -131,7 +139,7 @@ export default {
       width 100%
       height 100%
       object-position center center
-      object-size cover
+      object-fit cover
   &__meta-container
     display flex
     justify-content center
