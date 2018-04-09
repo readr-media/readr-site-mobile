@@ -77,7 +77,9 @@
     },
     watch: {
       currUrl () {
-        this.$refs.headerMenu.classList.remove('open')
+        if (this.$refs.headerMenu) {
+          this.$refs.headerMenu.classList.remove('open')
+        }
       },
     },
     beforeMount () {

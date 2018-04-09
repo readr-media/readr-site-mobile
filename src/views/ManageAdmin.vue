@@ -3,13 +3,13 @@
     <template v-if="showMain">
       <TheControlBar
         @addAccount="addMember"
-        @addNews="showEditorHandler({ postPanel: 'add', postType: config.type.NEWS })"
-        @addReview="showEditorHandler({ postPanel: 'add', postType: config.type.REVIEW })"
-        @addVideo="showEditorHandler({ postPanel: 'add', postType: config.type.VIDEO })"
+        @addNews="showEditorHandler({ postPanel: 'add', postType: setting.POST_TYPE.NEWS })"
+        @addReview="showEditorHandler({ postPanel: 'add', postType: setting.POST_TYPE.REVIEW })"
+        @addVideo="showEditorHandler({ postPanel: 'add', postType: setting.POST_TYPE.VIDEO })"
         @closeControlBar="closeControlBar"
-        @editNews="showDraftListHandler(config.type.NEWS)"
+        @editNews="showDraftListHandler(setting.POST_TYPE.NEWS)"
         @editProfile="showProfileHandler"
-        @editReview="showDraftListHandler(config.type.REVIEW)"
+        @editReview="showDraftListHandler(setting.POST_TYPE.REVIEW)"
         @openPanel="openPanel">
       </TheControlBar>
       <main class="backstage-container">
@@ -117,9 +117,8 @@
   </div>
 </template>
 <script>
-  import { POST_ACTIVE, POST_TYPE, TAG_ACTIVE, } from '../../api/config'
   import { SECTIONS_DEFAULT, } from '../constants'
-  import _ from 'lodash'
+  import { filter, find, forEach, get, includes, } from 'lodash'
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
   import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
@@ -147,7 +146,7 @@
     return store.dispatch('ADD_TAGS', {
       params: {
         text: text,
-        updated_by: _.get(store, [ 'state', 'profile', 'id', ]),
+        updated_by: get(store, [ 'state', 'profile', 'id', ]),
       },
     })
   }
@@ -162,7 +161,7 @@
     return store.dispatch('DELETE_TAGS', {
       params: {
         ids: ids,
-        updated_by: _.get(store, [ 'state', 'profile', 'id', ]),
+        updated_by: get(store, [ 'state', 'profile', 'id', ]),
       },
     })
   }
@@ -292,9 +291,6 @@
         activePanel: 'accounts',
         activeTab: 'reviews',
         alertType: 'post',
-        config: {
-          type: POST_TYPE,
-        },
         currPage: DEFAULT_PAGE,
         currPagePostsDraft: DEFAULT_PAGE,
         currSort: DEFAULT_SORT,
@@ -308,8 +304,9 @@
         postActiveChanged: false,
         postForPublishInEditor: {},
         postPanel: 'add',
-        postType: POST_TYPE.REVIEW,
+        postType: this.$store.state.setting.POST_TYPE.REVIEW,
         postsSelected: [],
+        setting: this.$store.state.setting,
         showAlert: false,
         showDraftList: false,
         showEditor: false,
@@ -325,29 +322,29 @@
     },
     computed: {
       followingByUser () {
-        return _.get(this.$store, [ 'state', 'followingByUser', ], [])
+        return get(this.$store, [ 'state', 'followingByUser', ], [])
       },
       itemsSelectedID () {
         const items = []
-        _.forEach(this.itemsSelected, (item) => {
+        forEach(this.itemsSelected, (item) => {
           items.push(item.id)
         })
         return items
       },
       posts () {
-        return _.get(this.$store, [ 'state', 'posts', ], [])
+        return get(this.$store, [ 'state', 'posts', ], [])
       },
       postsDraft () {
-        return _.get(this.$store, [ 'state', 'postsDraft', ], [])
+        return get(this.$store, [ 'state', 'postsDraft', ], [])
       },
       profile () {
-        return _.get(this.$store, [ 'state', 'profile', ], {})
+        return get(this.$store, [ 'state', 'profile', ], {})
       },
       sections () {
         return SECTIONS_DEFAULT
       },
       tags () {
-        return _.get(this.$store, [ 'state', 'tags', ], [])
+        return get(this.$store, [ 'state', 'tags', ], [])
       },
     },
     watch: {
@@ -375,7 +372,7 @@
         this.alertType = 'post'
         this.itemsSelected = []
         this.itemsSelected.push(params)
-        if (params.active === POST_ACTIVE.ACTIVE) {
+        if (params.active === this.setting.POST_ACTIVE.ACTIVE) {
           this.postForPublishInEditor = params
           this.isPublishPostInEditor = true
           this.itemsActive = params.active
@@ -403,7 +400,7 @@
         }
       },
       addTag (tagName) {
-        this.itemsActive = TAG_ACTIVE.ACTIVE
+        this.itemsActive = this.setting.TAG_ACTIVE.ACTIVE
         this.needConfirm = false
         this.loading = true
         addTags(this.$store, tagName)
@@ -426,7 +423,7 @@
         this.$emit('closeControlBar')
       },
       deletePost () {
-        this.itemsActive = POST_ACTIVE.DEACTIVE
+        this.itemsActive = this.setting.POST_ACTIVE.DEACTIVE
         this.postActiveChanged = true
         this.needConfirm = true
         this.showAlert = true
@@ -435,7 +432,7 @@
         deletePosts(this.$store, {
           params: {
             ids: this.itemsSelectedID,
-            updated_by: _.get(this.$store.state, [ 'profile', 'id', ]),
+            updated_by: get(this.$store.state, [ 'profile', 'id', ]),
           },
         }).then(() => {
           this.updatePostList({ needUpdateCount: true, })
@@ -486,10 +483,10 @@
             this.alertType = 'post'
             Promise.all([
               getPostsByUser(this.$store, {
-                where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.REVIEW, },
+                where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.REVIEW, },
               }),
               getPostsCount(this.$store, {
-                where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.REVIEW, },
+                where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.REVIEW, },
               }),
             ])
             .then(() => this.loading = false)
@@ -499,10 +496,10 @@
             this.alertType = 'post'
             Promise.all([
               getPosts(this.$store, {
-                where: { active: [ POST_ACTIVE.ACTIVE, POST_ACTIVE.PENDING, ], type: [ POST_TYPE.REVIEW, POST_TYPE.NEWS, ], },
+                where: { active: [ this.setting.POST_ACTIVE.ACTIVE, this.setting.POST_ACTIVE.PENDING, ], type: [ this.setting.POST_TYPE.REVIEW, this.setting.POST_TYPE.NEWS, ], },
               }),
               getPostsCount(this.$store, {
-                where: { active: [ POST_ACTIVE.ACTIVE, POST_ACTIVE.PENDING, ], type: [ POST_TYPE.REVIEW, POST_TYPE.NEWS, ], },
+                where: { active: [ this.setting.POST_ACTIVE.ACTIVE, this.setting.POST_ACTIVE.PENDING, ], type: [ this.setting.POST_TYPE.REVIEW, this.setting.POST_TYPE.NEWS, ], },
               }),
             ])
             .then(() => this.loading = false)
@@ -521,10 +518,10 @@
             this.alertType = 'video'
             Promise.all([
               getPosts(this.$store, {
-                where: { type: POST_TYPE.VIDEO, },
+                where: { type: this.setting.POST_TYPE.VIDEO, },
               }),
               getPostsCount(this.$store, {
-                where: { type: POST_TYPE.VIDEO, },
+                where: { type: this.setting.POST_TYPE.VIDEO, },
               }),
             ])
             .then(() => this.loading = false)
@@ -571,7 +568,7 @@
           }
         } else {
           const params = {}
-          params.updated_by = _.get(this.$store.state, [ 'profile', 'id', ])
+          params.updated_by = get(this.$store.state, [ 'profile', 'id', ])
           params.ids = this.itemsSelectedID
           publishPosts(this.$store, params)
             .then(() => {
@@ -593,14 +590,14 @@
             this.postActiveChanged = true
             this.isPublishPostInEditor = false
             this.itemsActive = itemsActive
-            this.itemsSelected = _.filter(this.posts, (o) => {
-              return _.includes(ids, o.id)
+            this.itemsSelected = filter(this.posts, (o) => {
+              return includes(ids, o.id)
             })
             break
           case 'tag':
-            this.itemsActive = TAG_ACTIVE.DEACTIVE
-            this.itemsSelected = _.filter(this.tags, (o) => {
-              return _.includes(ids, o.id)
+            this.itemsActive = this.setting.TAG_ACTIVE.DEACTIVE
+            this.itemsSelected = filter(this.tags, (o) => {
+              return includes(ids, o.id)
             })
             break
         }
@@ -610,20 +607,20 @@
       showDraftListHandler (type) {
         this.loading = true
         switch (type) {
-          case POST_TYPE.REVIEW:
+          case this.setting.POST_TYPE.REVIEW:
             Promise.all([
               getPostsByUser(this.$store, {
                 where: {
-                  author: _.get(this.profile, [ 'id', ]),
-                  active: POST_ACTIVE.DRAFT,
-                  type: POST_TYPE.REVIEW,
+                  author: get(this.profile, [ 'id', ]),
+                  active: this.setting.POST_ACTIVE.DRAFT,
+                  type: this.setting.POST_TYPE.REVIEW,
                 },
               }),
               getPostsCount(this.$store, {
                 where: {
-                  author: _.get(this.profile, [ 'id', ]),
-                  active: POST_ACTIVE.DRAFT,
-                  type: POST_TYPE.REVIEW,
+                  author: get(this.profile, [ 'id', ]),
+                  active: this.setting.POST_ACTIVE.DRAFT,
+                  type: this.setting.POST_TYPE.REVIEW,
                 },
               }),
             ])
@@ -633,20 +630,20 @@
             })
             .catch(() => this.loading = false)
             break
-          case POST_TYPE.NEWS:
+          case this.setting.POST_TYPE.NEWS:
             Promise.all([
               getPostsByUser(this.$store, {
                 where: {
-                  author: _.get(this.profile, [ 'id', ]),
-                  active: POST_ACTIVE.DRAFT,
-                  type: POST_TYPE.NEWS,
+                  author: get(this.profile, [ 'id', ]),
+                  active: this.setting.POST_ACTIVE.DRAFT,
+                  type: this.setting.POST_TYPE.NEWS,
                 },
               }),
               getPostsCount(this.$store, {
                 where: {
-                  author: _.get(this.profile, [ 'id', ]),
-                  active: POST_ACTIVE.DRAFT,
-                  type: POST_TYPE.NEWS,
+                  author: get(this.profile, [ 'id', ]),
+                  active: this.setting.POST_ACTIVE.DRAFT,
+                  type: this.setting.POST_TYPE.NEWS,
                 },
               }),
             ])
@@ -670,8 +667,8 @@
           this.post = {}
           this.postType = postType
         } else {
-          this.post = _.find(this.posts, { 'id': id, }) || _.find(this.postsDraft, { 'id': id, })
-          this.postType = _.get(this.post, [ 'type', ])
+          this.post = find(this.posts, { 'id': id, }) || find(this.postsDraft, { 'id': id, })
+          this.postType = get(this.post, [ 'type', ])
           this.itemsSelected.push(this.post)
         }
         this.postPanel = postPanel
@@ -687,10 +684,10 @@
             this.activeTab = 'reviews'
             Promise.all([
               getPostsByUser(this.$store, {
-                where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.REVIEW, },
+                where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.REVIEW, },
               }),
               getPostsCount(this.$store, {
-                where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.REVIEW, },
+                where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.REVIEW, },
               }),
             ])
             .then(() => this.loading = false)
@@ -700,10 +697,10 @@
             this.activeTab = 'news'
             Promise.all([
               getPostsByUser(this.$store, {
-                where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.NEWS, },
+                where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.NEWS, },
               }),
               getPostsCount(this.$store, {
-                where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.NEWS, },
+                where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.NEWS, },
               }),
             ])
             .then(() => this.loading = false)
@@ -711,14 +708,14 @@
             break
           case 2:
             this.activeTab = 'followings'
-            getFollowing(this.$store, { subject: _.get(this.profile, [ 'id', ]), resource: 'member', })
+            getFollowing(this.$store, { subject: get(this.profile, [ 'id', ]), resource: 'member', })
               .then(() => this.loading = false)
               .catch(() => this.loading = false)
               break
         }
       },
       unfollow (resource, object) {
-        const subject = _.get(this.profile, [ 'id', ]) 
+        const subject = get(this.profile, [ 'id', ]) 
         const objectID = object.toString()
         unfollow(this.$store, resource, subject, objectID) 
         .then(() => {
@@ -730,11 +727,11 @@
         this.page = DEFAULT_PAGE
         switch (resource) {
           case 'review':
-            return getFollowing(this.$store, { subject: _.get(this.profile, [ 'id', ]), resource: 'post', resourceType: resource, })
+            return getFollowing(this.$store, { subject: get(this.profile, [ 'id', ]), resource: 'post', resourceType: resource, })
           case 'news':
-            return getFollowing(this.$store, { subject: _.get(this.profile, [ 'id', ]), resource: 'post', resourceType: resource, })
+            return getFollowing(this.$store, { subject: get(this.profile, [ 'id', ]), resource: 'post', resourceType: resource, })
           default:
-            getFollowing(this.$store, { subject: _.get(this.profile, [ 'id', ]), resource: resource, })
+            getFollowing(this.$store, { subject: get(this.profile, [ 'id', ]), resource: resource, })
         }
       },
       updatePost(params, activeChanged) {
@@ -764,23 +761,23 @@
               case 'reviews':
                 if (needUpdateCount) {
                   getPostsCount(this.$store, {
-                    where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.REVIEW, },
+                    where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.REVIEW, },
                   })
                 }
                 getPostsByUser(this.$store, {
                   page: this.page,
-                  where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.REVIEW, },
+                  where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.REVIEW, },
                 })
                 break
               case 'news':
                 if (needUpdateCount) {
                   getPostsCount(this.$store, {
-                    where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.NEWS, },
+                    where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.NEWS, },
                   })
                 }
                 getPostsByUser(this.$store, {
                   page: this.page,
-                  where: { author: _.get(this.profile, [ 'id', ]), type: POST_TYPE.NEWS, },
+                  where: { author: get(this.profile, [ 'id', ]), type: this.setting.POST_TYPE.NEWS, },
                 })
                 break
             }
@@ -788,13 +785,13 @@
           case 'posts':
             if (needUpdateCount) {
               getPostsCount(this.$store, {
-                where: { active: [ POST_ACTIVE.ACTIVE, POST_ACTIVE.PENDING, ], type: [ POST_TYPE.REVIEW, POST_TYPE.NEWS, ], },
+                where: { active: [ this.setting.POST_ACTIVE.ACTIVE, this.setting.POST_ACTIVE.PENDING, ], type: [ this.setting.POST_TYPE.REVIEW, this.setting.POST_TYPE.NEWS, ], },
               })
             }
             getPosts(this.$store, {
               page: this.page,
               sort: this.sort,
-              where: { active: [ POST_ACTIVE.ACTIVE, POST_ACTIVE.PENDING, ], type: [ POST_TYPE.REVIEW, POST_TYPE.NEWS, ], },
+              where: { active: [ this.setting.POST_ACTIVE.ACTIVE, this.setting.POST_ACTIVE.PENDING, ], type: [ this.setting.POST_TYPE.REVIEW, this.setting.POST_TYPE.NEWS, ], },
             })
             .then(() => this.loading = false)
             .catch(() => this.loading = false)
@@ -802,13 +799,13 @@
           case 'videos':
             if (needUpdateCount) {
               getPostsCount(this.$store, {
-                where: { type: POST_TYPE.VIDEO, },
+                where: { type: this.setting.POST_TYPE.VIDEO, },
               })
             }
             getPosts(this.$store, {
               page: this.page,
               sort: this.sort,
-              where: { type: POST_TYPE.VIDEO, },
+              where: { type: this.setting.POST_TYPE.VIDEO, },
             })
             .then(() => this.loading = false)
             .catch(() => this.loading = false)

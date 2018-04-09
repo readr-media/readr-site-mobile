@@ -80,7 +80,7 @@
           margin-top 15px
       button
         width calc(50% - 15px)
-        height 20px
+        height 30px
         margin 0 10px 15px 0
         color #fff
         font-size .6875rem
