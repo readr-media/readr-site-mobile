@@ -118,7 +118,7 @@
 </template>
 <script>
   import { SECTIONS_DEFAULT, } from '../constants'
-  import { filter, find, forEach, get, includes, } from 'lodash'
+  import { filter, find, forEach, get, includes, unionBy, } from 'lodash'
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
   import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
@@ -584,19 +584,16 @@
       },
       showAlertHandler (ids, itemsActive) {
         this.itemsSelected = []
+        const unionPosts = unionBy(this.posts, this.postsDraft, 'id')
         switch (this.alertType) {
           case 'post':
           case 'video':
-            console.log('showAlertHandler 1', this.itemsSelected)
             this.postActiveChanged = true
             this.isPublishPostInEditor = false
             this.itemsActive = itemsActive
-            console.log('showAlertHandler 2', this.posts)
-            console.log('showAlertHandler 3', ids)
-            this.itemsSelected = filter(this.posts, (o) => {
+            this.itemsSelected = filter(unionPosts, (o) => {
               return includes(ids, o.id)
             })
-            console.log('showAlertHandler 4', this.itemsSelected)
             break
           case 'tag':
             this.itemsActive = this.setting.TAG_ACTIVE.DEACTIVE
