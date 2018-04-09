@@ -587,12 +587,16 @@
         switch (this.alertType) {
           case 'post':
           case 'video':
+            console.log('showAlertHandler 1', this.itemsSelected)
             this.postActiveChanged = true
             this.isPublishPostInEditor = false
             this.itemsActive = itemsActive
+            console.log('showAlertHandler 2', this.posts)
+            console.log('showAlertHandler 3', ids)
             this.itemsSelected = filter(this.posts, (o) => {
               return includes(ids, o.id)
             })
+            console.log('showAlertHandler 4', this.itemsSelected)
             break
           case 'tag':
             this.itemsActive = this.setting.TAG_ACTIVE.DEACTIVE
