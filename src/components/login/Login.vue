@@ -1,6 +1,6 @@
 <template>
   <div class="login" @keyup="keyupHandler">
-    <TextItem class="login__input-email" type="text"
+    <TextItem class="login__input-email" type="email"
       :placeHolder="$t('login.WORDING_EMAIL_PLACEHOLDER')"
       :alert.sync="alert.mail"
       :value.sync="formData.mail"></TextItem>
