@@ -201,7 +201,7 @@
         return this.postType === POST_TYPE.VIDEO
       },
       tags () {
-        let tags = _.get(this.$store, [ 'state', 'tags', ], [])
+        let tags = _.get(this.$store, [ 'state', 'tags', ], []) || []
         return _.filter(tags, (tag) => {
           return !_.includes(this.tagsSelectedID, tag.id)
         })
@@ -216,6 +216,7 @@
     },
     watch: {
       post () {
+        this.tagsSelected = []
         const tags = _.get(this.post, [ 'tags', ]) || []
         tags.forEach((tag) => {
           this.tagsSelected.push(tag)
