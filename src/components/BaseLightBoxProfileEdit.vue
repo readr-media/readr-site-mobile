@@ -376,6 +376,7 @@ $plus-sign
     border-radius 50%
     border 1px solid #808080
     overflow hidden
+    object-fit cover
   &__upload
     r = 30px
     position absolute
