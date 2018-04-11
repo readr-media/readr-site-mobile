@@ -6,6 +6,7 @@ const { camelizeKeys, } = require('humps')
 const { authorize, constructScope, fetchPermissions, } = require('./services/perm')
 const { initBucket, makeFilePublic, uploadFileToBucket, deleteFilesInFolder, publishAction, } = require('./gcs.js')
 const { processImage, } = require('./sharp.js')
+const { setupClientCache, } = require('./middle/comm')
 const { verifyToken, } = require('./middle/member/comm')
 const bodyParser = require('body-parser')
 const config = require('./config')
@@ -50,13 +51,6 @@ const fetchStaticJson = (req, res, next, jsonFileName) => {
       console.error(err)  
     }
   })
-}
-
-const setupClientCache = (req, res, next) => {
-  res.header("Cache-Control", "no-cache, no-store, must-revalidate")
-  res.header("Pragma", "no-cache")
-  res.header("Expires", "0")
-  next()
 }
 
 router.use('/grouped', function(req, res, next) {
@@ -128,6 +122,7 @@ const fetchPromise = (url) => {
 router.use('/activate', verifyToken, require('./middle/member/activation'))
 router.use('/following', require('./middle/following'))
 router.use('/initmember', authVerify, require('./middle/member/initMember'))
+router.use('/invitation', authVerify, require('./middle/member/invitation'))
 router.use('/member', [ authVerify, authorize, ], require('./middle/member'))
 router.use('/comment', require('./middle/comment'))
 router.use('/register', authVerify, require('./middle/member/register'))
@@ -207,6 +202,9 @@ router.get('/profile', [ authVerify, setupClientCache, ], (req, res) => {
     const profile = response[ 0 ][ 'items' ][ 0 ]
     const perms = response[ 1 ]
     const scopes = constructScope(perms, profile.role)
+    res.header("Cache-Control", "no-cache, no-store, must-revalidate")
+    res.header("Pragma", "no-cache")
+    res.header("Expires", "0")
     res.json({
       name: profile.name,
       nickname: profile.nickname,
@@ -227,24 +225,6 @@ router.get('/profile', [ authVerify, setupClientCache, ], (req, res) => {
 
 router.get('/status', [ authVerify, setupClientCache, ], function(req, res) {
   res.status(200).send(true)
-})
-
-router.get('/project/list', (req, res) => {
-  fetchPromise(req.url, req)
-  .then((response) => {
-    res.status(200).send(response)
-  })
-  .catch((err) => {
-    if (err.status === 404) {
-      res.status(404).send(err)
-      console.error(`public project list not found from : ${req.url}`)
-      console.error(err)
-    } else if (err.status === 500) {
-      res.status(500).send(err)
-      console.error(`error during fetch data from : ${req.url}`)
-      console.error(err)
-    }
-  })
 })
 
 /**
@@ -298,8 +278,7 @@ router.post('/image/:sourceType', authVerify, upload.single('image'), (req, res)
   const bucket = initBucket(GCP_FILE_BUCKET)
   const file = req.file
   const destination = req.params.sourceType === 'member' ? `${GCS_IMG_MEMBER_PATH}/${file.originalname}` : GCS_IMG_POST_PATH
-  console.error(`---- api image url`, url)
-  console.error(`---- api image file`, file)
+  
   processImage(file, req.params.sourceType)
     .then((images) => {
       const origImg = req.params.sourceType === 'member' ? _.trim(images[images.length - 1], 'tmp/') : _.trim(images[0], 'tmp/')
@@ -311,12 +290,12 @@ router.post('/image/:sourceType', authVerify, upload.single('image'), (req, res)
             contentType: file.mimetype,
           },
         }).then((bucketFile) => {
-          console.error(`file ${fileName}(${path}) completed uploading to bucket `)
+          console.info(`file ${fileName}(${path}) completed uploading to bucket `)
           fs.unlink(path, (err) => {
             if (err) {
               console.error(`Error: delete ${path} fail`)
             }
-            console.error(`successfully deleted ${path}`)
+            console.info(`successfully deleted ${path}`)
           })
           makeFilePublic(bucketFile)
         })
@@ -421,7 +400,7 @@ router.route('*')
   .get(fetchFromRedis, function (req, res, next) {
     const url = `${apiHost}${req.url}`
     if (res.redis) {
-      console.log('fetch data from Redis.', req.url)
+      console.error('fetch data from Redis.', req.url)
       const resData = JSON.parse(res.redis)
       res.json(resData)
     } else {

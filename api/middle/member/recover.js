@@ -1,6 +1,7 @@
 const { fetchMem, sendRecoverPwdEmail, verifyToken, } = require('./comm')
-const { redisFetching, redisWriting, } = require('../redisHandler')
 const { get, } = require('lodash')
+const { redisFetching, redisWriting, } = require('../redisHandler')
+const { setupClientCache, } = require('../comm')
 const Cookies = require('cookies')
 const config = require('../../config')
 const debug = require('debug')('READR:api:member:recoverpwd')
@@ -11,13 +12,6 @@ const router = express.Router()
 const superagent = require('superagent')
 
 const apiHost = config.API_PROTOCOL + '://' + config.API_HOST + ':' + config.API_PORT
-
-const setupClientCache = (req, res, next) => {
-  res.header("Cache-Control", "no-cache, no-store, must-revalidate")
-  res.header("Pragma", "no-cache")
-  res.header("Expires", "0")
-  next()
-}
 
 const authVerify = jwtExpress({
   secret: config.JWT_SECRET,

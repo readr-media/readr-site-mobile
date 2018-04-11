@@ -18,6 +18,7 @@ import {
   deleteTags,
   fetchCommentCount,
   fetchMeComments,
+  fetchInvitationQuota,
   getDisposableToken,
   getFollowingByResource,
   getFollowingByUser,
@@ -36,6 +37,7 @@ import {
   getTags,
   getTagsCount,
   getRewardPointsTransactions,
+  invite,
   login,
   publishAction,
   publishPosts,
@@ -52,9 +54,8 @@ import {
   uploadImage,
   verifyRecaptchaToken,
 } from '../api'
-import { camelizeKeys, } from 'humps'
 
-const debug = require('debug')('READR:STORE:actions')
+const debug = require('debug')('CLIENT:STORE:actions')
 export default {
   ADD_MEMBER: ({ commit, dispatch, state, }, { params, }) => {
     return addMember(params)
@@ -112,6 +113,11 @@ export default {
   FETCH_COMMENTS_ME: ({ commit, dispatch, state, }) => {
     return fetchMeComments().then((comments) => {
       commit('SET_COMMENTS_ME', { comments, })
+    })
+  },
+  FETCH_INVITATIONO_QUOTA: ({ commit, dispatch, state, }) => {
+    return fetchInvitationQuota().then((quota) => {
+      commit('SET_INVITATION_QUOTA', { quota, })
     })
   },
   GET_FOLLOWING_BY_RESOURCE: ({ commit, dispatch, state, }, params) => {
@@ -239,7 +245,6 @@ export default {
               commit('SET_PUBLIC_POSTS', { posts: [], })
             }
           }
-          // reject('end')
           resolve({ status: 'end', res: {},})
         }
       })
@@ -284,7 +289,9 @@ export default {
       getPublicVideos({ params, })
       .then(({ status, body, }) => {
         if (status === 200) {
-          body.items =  _.concat(orig, body.items)
+          if (params.page > 1) {
+            body.items =  _.concat(orig, body.items)
+          }
           commit('SET_PUBLIC_VIDEOS', { videos: body, })
           resolve()
         }
@@ -365,6 +372,9 @@ export default {
       resolve()
     })
   },
+  INVITE: ({ commit, dispatch, state, }, { params, }) => {
+    return invite(params)
+  },
   PUBLISH_ACTION: ({ commit, dispatch, state, }, { params, }) => {
     return new Promise((resolve, reject) => {
       publishAction({ params, }).then(({ status, }) => {
@@ -444,5 +454,14 @@ export default {
   },
   VERIFY_RECAPTCHA_TOKEN: ({ commit, dispatch, state, }, { token, }) => {
     return verifyRecaptchaToken(token)
+  },
+  /**
+   * invitation
+   */
+  INVITATION_SWITCH_ON: ({ commit, dispatch, state, }, { params, }) => {
+    commit('INVITATION_SWITCH_ON', {})
+  },
+  INVITATION_SWITCH_OFF: ({ commit, dispatch, state, }, { params, }) => {
+    commit('INVITATION_SWITCH_OFF', {})
   },
 }

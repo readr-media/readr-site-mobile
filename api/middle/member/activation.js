@@ -1,5 +1,6 @@
 const { buildUserForTalk, } = require('../talk')
 const { fetchMem, } = require('./comm')
+const { setupClientCache, } = require('../comm')
 const _ = require('lodash')
 const Cookies = require('cookies')
 const config = require('../../config')
@@ -10,13 +11,6 @@ const router = express.Router()
 const superagent = require('superagent')
 
 const apiHost = config.API_PROTOCOL + '://' + config.API_HOST + ':' + config.API_PORT
-
-const setupClientCache = (req, res, next) => {
-  res.header("Cache-Control", "no-cache, no-store, must-revalidate")
-  res.header("Pragma", "no-cache")
-  res.header("Expires", "0")
-  next()
-}
 
 const activateMem = (member) => new Promise((resolve) => {
   const url = `${apiHost}/member`
@@ -67,14 +61,14 @@ const activate = (req, res) => {
           const tokenForActivation = jwtService.generateActivateAccountJwt({
             id: decoded.id,
             role: decoded.role || 1,
-            type: 'init',
+            type: decoded.type, // this type should be 'init'
           })
           const cookies = new Cookies( req, res, {} )
           cookies.set('setup', tokenForActivation, {
             httpOnly: false,
             domain: config.DOMAIN,
             expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-          })      
+          })
           res.redirect(302, '/setup/init')
         }
       } else {
