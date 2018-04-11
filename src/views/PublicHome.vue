@@ -3,7 +3,7 @@
     <BaseLightBox v-show="showLightBox" @closeLightBox="closeLightBox">
       <BaseLightBoxPost :showLightBox="showLightBox" :post="postLightBox"/>
     </BaseLightBox>
-    <Invite v-if="currEnv === 'dev' && isClientSide"></Invite>
+    <Invite></Invite>
     <main>
       <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
       <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
