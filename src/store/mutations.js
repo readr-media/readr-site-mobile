@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Vue from 'vue'
 const { camelize, } = require('humps')
-const debug = require('debug')('READR:STORE:mutations')
+const debug = require('debug')('CLIENT:STORE:mutations')
 
 export default {
   ADD_ITEM_TO_FOLLOWING_BY_USER: (state, data) => {
@@ -90,7 +90,7 @@ export default {
     state['postsDraftCount'] = meta.total
   },
   SET_PUBLIC_POSTS: (state, { posts, }) => {
-    debug('posts', posts)
+    debug('public posts', posts)
     state['publicPosts'] = posts
   },
   SET_PUBLIC_MEMBER: (state, { member, }) => {
@@ -129,6 +129,9 @@ export default {
   SET_REWARD_POINTS_TRANSACTIONS: (state, { transactions, }) => {
     state['rewardPointsTransactions'] = transactions
   },
+  SET_INVITATION_QUOTA: (state, { quota, }) => {
+    state['invitation_quota'] = quota
+  },
   UPDATED_PROFILE: (state, { profile, }) => {
     // Update the entry when user saving the profile value which has been edited
     Object.entries(profile).forEach((entry) => {
@@ -142,5 +145,14 @@ export default {
       _.get(state, 'publicPosts.items', []),
       _.get(posts, 'items', [])
     )
+  },
+  /**
+   * invitation
+   */
+  INVITATION_SWITCH_ON: (state) => {
+    state['invitation_switch_status'] = true
+  },
+  INVITATION_SWITCH_OFF: (state) => {
+    state['invitation_switch_status'] = false
   },
 }

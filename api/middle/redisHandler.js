@@ -46,18 +46,17 @@ class TimeoutHandler {
     this.init(callback)
   }
   init (callback) {
-    debug('TimeoutHandler setting up...')
     this.timeoutHandler = setInterval(() => {
       this.timeout -= 1000
-      debug('Redis counting down...', this.timeout) 
+      debug('Redis counting down...', this.timeout)
       if (this.isResponded) {
         this.destroy()
-        debug('this.timeoutHandler destroying...') 
+        debug('this.timeoutHandler destroying...')
         return
       }
       if (this.timeout <= 0) {
         this.destroy()
-        debug('ERROR: Timeout occured while connecting to redis.') 
+        debug('ERROR: Timeout occured while connecting to redis.')
         callback && callback({ error: 'ERROR: Timeout occured while connecting to redis.', data: null, })
       }
     }, 1000)
@@ -72,36 +71,36 @@ const redisFetching = (key, callback) => {
   debug('Fetching data from redis.')
   debug(decodeURIComponent(key))
   const timeoutHandler = new TimeoutHandler(callback)
-  const onFinished = (error, data) => { 
-    timeoutHandler.isResponded = true 
-    timeoutHandler.destroy() 
-    if (timeoutHandler.timeout <= 0) { return } 
-    callback && callback({ error, data, }) 
-  } 
+  const onFinished = (error, data) => {
+    timeoutHandler.isResponded = true
+    timeoutHandler.destroy()
+    if (timeoutHandler.timeout <= 0) { return }
+    callback && callback({ error, data, })
+  }
   redisPoolRead.get(decodeURIComponent(key), (error, data) => {
     if (!error) {
       redisPoolRead.ttl(decodeURIComponent(key), (err, dt) => {
         if (!err && dt) {
           debug('Ttl:', dt)
-          if (dt <= -1) {
+          if (dt === -1) {
             redisPoolWrite.del(decodeURIComponent(key), (e) => {
               if (e) {
                 console.error('REDIS: deleting key ', decodeURIComponent(key), 'from redis in fail ', e)
               }
               console.error('REDIS: deleting key ', decodeURIComponent(key), 'from redis in fail ', e)
-              onFinished(e, data) 
+              onFinished(e, data)
             })
           } else {
-            onFinished(err, data) 
+            onFinished(err, data)
           }
         } else {
           console.error('REDIS: fetching ttl in fail ', err)
-          onFinished(err, data) 
+          onFinished(err, data)
         }
       })
     } else {
       console.error('REDIS: fetching key/data in fail ', error)
-      onFinished(error, data) 
+      onFinished(error, data)
     }
   })
 }
@@ -126,6 +125,32 @@ const redisWriting = (key, data, callback, timeout) => {
     }
   })
 }
+
+const redisFetchCmd = (cmd, key, field, callback) => {
+  const timeoutHandler = new TimeoutHandler(callback)
+  const onFinished = (error, data) => {
+    timeoutHandler.isResponded = true
+    timeoutHandler.destroy()
+    if (timeoutHandler.timeout <= 0) { return }
+    callback && callback({ error, data, })
+  }
+  redisPoolRead.send_command(cmd, [ key, ...field, ], function (err, data) {
+    onFinished(err, data)
+  })
+}
+const redisWriteCmd = (cmd, key, value, callback) => {
+  const timeoutHandler = new TimeoutHandler(callback)
+  const onFinished = (error, data) => {
+    timeoutHandler.isResponded = true
+    timeoutHandler.destroy()
+    if (timeoutHandler.timeout <= 0) { return }
+    callback && callback({ error, data, })
+  }
+  redisPoolWrite.send_command(cmd, [ key, ...value, ], function (err, data) {
+    onFinished(err, data)
+  })
+}
+
 const insertIntoRedis = (req, res) => {
   redisWriting(req.url, res.dataString, () => {
     // next()
@@ -141,10 +166,42 @@ const fetchFromRedis = (req, res, next) => {
     }
   })
 }
+const fetchFromRedisCmd = (req, res, next) => {
+  const cmd = req.redis_get.cmd
+  const key = req.redis_get.key
+  const field = req.redis_get.field || []
+  debug(`Goin to get(${cmd}) data from redis.`, key, field)
+  redisFetchCmd(cmd, key, field, ({ error, data, }) => {
+    if (!error) {
+      res.redis = data
+      next()
+    } else {
+      console.error(`Error occurred during fetching(${cmd}) data from redis.`)
+      console.error(error)
+      next(error)
+    }
+  })
+}
+const insertIntoRedisSadd = (req) => {
+  const key = req.sadd.key
+  const value = req.sadd.value
+  debug('Abt to SADD data to redis.', key, value)
+  redisWriteCmd('SADD', key, value, ({ error, }) => {
+    if (!error) {
+      // next()
+    } else {
+      // next(error)
+    }    
+  })
+}
 
 module.exports = {
   fetchFromRedis,
+  fetchFromRedisCmd,
   insertIntoRedis,
+  insertIntoRedisSadd,
+  redisFetchCmd,
   redisFetching,
   redisWriting,
+  redisWriteCmd,
 }

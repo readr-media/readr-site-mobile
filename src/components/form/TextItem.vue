@@ -2,18 +2,38 @@
   <div class="text-item" :class="{ alert: flag }">
     <input ref="input"
       v-model="currValue"
-      :style="{ width: width }"
+      :style="{
+          width,
+          height,
+          borderLeft: border,
+          borderTop: border,
+          borderBottom: border,
+          borderRight: !flag ? border : undefined,
+          margin,
+          padding,
+          fontSize,
+          backgroundColor,
+          color,
+        }"
       :disabled="disabled"
       :type="type"
       :placeholder="placeHolder"
       @focus="focus"
       @focusout="focusout"
       @keyup="keyup">
-    <span class="text-item__alert" @click="doFucus"></span>
-    <span class="text-item__msg" :class="{ long: isTooLong }" v-text="msg" v-if="show"></span>
+    <span class="text-item__alert" @click="doFucus"
+      :style="{
+        height,
+        backgroundColor,
+        borderRight: border,   
+        borderTop: border,
+        borderBottom: border,             
+      }"></span>
+    <span class="text-item__msg" v-text="msg" v-if="show" :class="{ long: isTooLong, bottom: alertPosition && alertPosition === 'bottom', }"></span>
   </div>
 </template>
 <script>
+  import validator from 'validator'
   export default {
     data () {
       return {
@@ -45,7 +65,22 @@
     mounted () {
       this.currValue = this.value
     },
-    props: [ 'alert', 'type', 'placeHolder', 'disabled', 'initValue', 'width', 'value', ],
+    props: [
+        'alert',
+        'alertPosition',
+        'type',
+        'placeHolder',
+        'disabled',
+        'initValue',
+        'width',
+        'height',
+        'border',
+        'margin',
+        'padding',
+        'fontSize',
+        'backgroundColor',
+        'color',
+      ],
     watch: {
       alert: function () {
         this.flag = this.alert.flag
@@ -57,7 +92,7 @@
         this.$refs['input'].value = this.initValue
       },
       currValue: function () {
-        this.$emit('update:value', this.currValue)
+        this.$emit('update:value', validator.trim(this.currValue || '') || undefined)
       },
     },
   }
@@ -113,8 +148,7 @@
       border none
       width 100%
       height 35px
-      font-size .9375rem
-      line-height 35px
+      font-size 1.125rem
       padding 0 10px
       vertical-align top
       background-color #ffffff
@@ -167,6 +201,12 @@
         left -17.5px
         top 7.5px
         display block
+      &.bottom
+        right 0
+        left auto
+        top 100%
+        &::before, &::after
+          content none
   .closed-beta
     .text-item
       &.alert
@@ -210,6 +250,4 @@
           content none
         &::after
           content none
-      
-      
 </style>
