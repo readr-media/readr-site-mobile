@@ -321,7 +321,7 @@
       $_postPanel_showTagList () {
         this.$refs.tagsList.classList.remove('hidden')
       },
-      $_postPanel_submit (active, unionTag) {
+      $_postPanel_submit (active, unionTag = this.tagsSelectedID) {
         switch (this.panelType) {
           case 'add':
             this.postParams.active = active
