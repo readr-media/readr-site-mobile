@@ -25,7 +25,7 @@
   const MAXRESULT_PROJECTS = 2
   const MAXRESULT_VIDEOS = 1
   const DEFAULT_PAGE = 1
-  const DEFAULT_SORT = '-updated_at'
+  const DEFAULT_SORT = '-published_at'
   const DEFAULT_CATEGORY = 'latest'
 
   const fetchFollowing = (store, params) => {
