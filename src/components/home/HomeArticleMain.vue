@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     dateDiffFromNow () {
-      return dateDiffFromNow(this.articleData.updatedAt)
+      return dateDiffFromNow(this.articleData.publishedAt)
     },
     isClientSide,
     shareUrl () {
