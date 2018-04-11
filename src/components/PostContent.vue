@@ -3,14 +3,16 @@
     <h1 class="post-content__title" v-text="post.title"></h1>
     <div class="editor-writing">
       <router-link :to="`/post/${post.id}`" class="editor-writing__container">
-        <template v-for="(p, i) in postContent">
-          <p class="editor-writing__paragraph--visible" v-if="i === 0">
-            <span v-html="firstParagraph"></span>
-            <span v-if="(p.length > 150 || postContent.length > 1) ? !isReadMore : false">
+        <template v-for="(p, i) in postContentProcessed">
+          <!-- post content for initial display -->
+          <p class="editor-writing__paragraph--visible" v-if="i <= shouldContentStopAtIndex" :key="`${post.id}-${i}`">
+            <span v-html="p"></span>
+            <span v-if="shouldShowReadMoreButton(i)">
               ......<span class="editor-writing__more" @click="toogleReadmore($event)" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
             </span>
           </p>
-          <p :class="`editor-writing__paragraph--${isReadMore ? 'visible' : 'invisible'}`" v-else v-html="p"></p>
+          <!-- rest of the post content -->
+          <p :class="`editor-writing__paragraph--${isReadMoreClicked ? 'visible' : 'invisible'}`" v-else v-html="p" :key="`${post.id}-${i}`"></p>
         </template>
       </router-link>
     </div>
@@ -18,6 +20,7 @@
       <div class="editor-writing-source__content">
         <h1 class="editor-writing-source__title" v-text="linkTitleTrim"></h1>
         <div class="editor-writing-source__description">
+          <!-- <p v-text="linkDescriptionTrim"></p> -->
           <p class="editor-writing-source__cite" v-if="post.linkName">{{ $t('homepage.WORDING_HOME_POST_SOURCE') }}{{ post.linkName }}</p>
         </div>
       </div>
@@ -30,7 +33,7 @@
   import { find, get, map, } from 'lodash'
   import AppArticleNav from 'src/components/AppArticleNav.vue'
   import sanitizeHtml from 'sanitize-html'
-  import truncate from 'truncate'
+  import truncate from 'html-truncate'
 
   const dom = require('xmldom').DOMParser
   const seializer  = require('xmldom').XMLSerializer
@@ -39,12 +42,7 @@
     name: 'PostContent',
     computed: {
       commentCount () {
-        return get(find(get(this.$store, 'state.commentCount'), { postId: this.post.id, }), 'count', 0)
-      },
-      firstParagraph () {
-        const limit = 150
-        if (!this.postContent[0]) return ''
-        return !this.isReadMore ? this.postContent[0].slice(0, limit) : this.postContent[0]
+        return get(find(get(this.$store, 'state.commentCount'), { postId: this.post.id, }), 'count') || 0
       },
       hasSource () {
         return this.post.linkTitle && this.post.linkDescription
@@ -56,11 +54,52 @@
         return truncate(this.post.linkDescription, 45)
       },
       postContent () {
-        if (!this.post.content || this.post.content.length === 0) { return }
+        if (!this.post.content || this.post.content.length === 0) { return [] }
         const wrappedContent = sanitizeHtml(this.post.content, { allowedTags: false, selfClosing: [ 'img', ], })
         const doc = new dom().parseFromString(wrappedContent)
         const postParagraphs = map(get(doc, 'childNodes'), (p) => (sanitizeHtml(new seializer().serializeToString(p), { allowedTags: [ 'img', ], })))
         return postParagraphs
+      },
+      postContentProcessed () {
+        if (this.postContentWordCountTotal <= this.showContentWordLimit){
+          return this.postContent
+        } else {
+          return this.postContent.map((paragraph, index) => {
+            if (!this.isReadMoreClicked && index === this.shouldContentStopAtIndex && this.isStopParagraphWordCountExceedLimit) {
+              const wordCountBeforeStop = this.postContentWordCount.reduce((acc, curr, currIndex) => currIndex < this.shouldContentStopAtIndex ? acc + curr : acc, 0)
+              return truncate(paragraph, this.showContentWordLimit - wordCountBeforeStop, { ellipsis: null, })
+            }
+            return paragraph
+          })
+        }
+      },
+      postContentWordCount () {
+        return this.postContent.map(paragraph => paragraph.length)
+      },
+      postContentWordCountTotal () {
+        return this.postContentWordCount.reduce((acc, curr) => acc + curr, 0)
+      },
+      shouldContentStopAtIndex () {
+        let count = 0
+        let index = 0
+        if (this.postContentWordCountTotal <= this.showContentWordLimit) return this.postContent.length
+        while (count + this.postContent[index].length <= this.showContentWordLimit) {
+          const currentParagraph = this.postContent[index]
+          const currentParagraphWordLength = currentParagraph.length
+          if (index < this.postContent.length - 1) {
+            index += 1
+          }
+          count += currentParagraphWordLength
+        }
+        return index
+      },
+      isStopLastParagraphBeforeTruncate () {
+        return this.shouldContentStopAtIndex === this.postContent.length - 1
+      },
+      isStopParagraphWordCountExceedLimit () {
+        const stopParagraph = this.postContent[this.shouldContentStopAtIndex]
+        const stopParagraphWordLength = stopParagraph.length
+        return stopParagraphWordLength > this.showContentWordLimit
       },
     },
     components: {
@@ -68,13 +107,20 @@
     },
     data () {
       return {
-        isReadMore: false,
+        isReadMoreClicked: false,
+        showContentWordLimit: 150,
       }
     },
     methods: {
       toogleReadmore (event) {
         if (event) event.preventDefault()
-        this.isReadMore = true
+        this.isReadMoreClicked = true
+      },
+      isLastParagraphAfterTruncate (index) {
+        return index === this.shouldContentStopAtIndex
+      },      
+      shouldShowReadMoreButton (index) {
+        return !this.isReadMoreClicked && (!this.isStopLastParagraphBeforeTruncate || this.isStopParagraphWordCountExceedLimit) && this.isLastParagraphAfterTruncate(index)
       },
     },
     mounted () {},
@@ -84,7 +130,7 @@
 <style lang="stylus">
   .post-content
     &__title
-      font-size 15px
+      font-size 18px
       font-weight 600
       margin 0
   .editor-writing
@@ -99,7 +145,7 @@
       min-width 100%
       min-height 20px
       & > p
-        font-size 14px
+        font-size 15px
         font-weight 300
         text-align justify
         line-height 1.4
@@ -123,7 +169,6 @@
         display block
       &--invisible
         display none
-
   .editor-writing-source
     height 102px
     border solid 0.5px #d3d3d3
@@ -153,5 +198,4 @@
       font-weight 300
       color #808080
       align-self flex-end
-      
 </style>
