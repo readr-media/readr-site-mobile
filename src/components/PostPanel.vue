@@ -18,7 +18,7 @@
       <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_PUBLISH_DATE')}：`"></label>
       <no-ssr>
         <datepicker
-          v-model="post.date"
+          v-model="post.publishedAt"
           :format="dateFormat"
           :input-class="'datepicker__input'"
           :language="'zh'">
@@ -360,6 +360,7 @@
         }
       },
       $_postPanel_submitHandler (active) {
+        const postActive = active || _.get(this.post, [ 'active', ])
         this.postParams = _.omit(
           _.mapKeys(Object.assign({}, this.post), (value, key) => _.snakeCase(key)),
           [ 'author', 'comment_amount', 'created_at', 'like_amount', 'tags', 'updated_at', ]
@@ -370,8 +371,10 @@
           this.postParams.og_title = _.get(this.post, [ 'ogTitle', ]) || _.get(this.post, [ 'title', ]) || ''
         }
 
-        if (Date.parse(_.get(this.post, [ 'date', ]))) {
-          this.postParams.published_at = _.get(this.post, [ 'date', ])
+        if (Date.parse(_.get(this.post, [ 'publishedAt', ]))) {
+          this.postParams.published_at = _.get(this.post, [ 'publishedAt', ])
+        } else if (postActive === POST_ACTIVE.ACTIVE && !this.postParams.published_at) {
+          this.postParams.published_at = new Date(Date.now())
         }
         
         if (this.metaChanged) {
