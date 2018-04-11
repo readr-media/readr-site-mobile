@@ -71,7 +71,7 @@
     background-color #444746
     width 100%
     height 100%
-    padding 0px 20px
+    padding 25px 20px 40px
     margin 0
     > div
       width 100%

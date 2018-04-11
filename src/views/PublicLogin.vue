@@ -48,12 +48,9 @@
 <style lang="stylus" scoped>
 .login-page
   width 100%
-  height 100vh
-  background-color #fff
-  // &__container
   margin auto
   padding 0
-  display flex
+  background-color #fff
   &__aside
     width 75px
     height 100%

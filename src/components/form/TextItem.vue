@@ -169,23 +169,47 @@
         display block
   .closed-beta
     .text-item
+      &.alert
+        > input
+          width calc(100% - 25px)
+        .text-item__alert
+          background-color transparent
+          background-size 15px 15px
+          border none
+          border-bottom 1px solid #fff
+
       input
         height 25px
         padding 5px 0 5px 5px
         color #fff
+        font-size 1rem
         line-height 25px
         background-color #444746
         border-bottom 1px solid #fff
         border-top none
         border-left none
         border-radius 0
+
       &__alert
         width 25px
         height 25px
-      &.alert
-        > input
-          width calc(100% - 25px)
-        .text-item__alert
-          background-size 15px 15px
-          border none
+
+      &__msg
+        position relative
+        left 0
+        right 0
+        min-height 0
+        padding 0
+        color #ddcf21
+        text-align right
+        background-color transparent
+        box-shadow none
+        &.long
+          width 100%
+        &::before
+          content none
+        &::after
+          content none
+      
+      
 </style>
