@@ -68,7 +68,7 @@
     },
     data () {
       return {
-        inviteableCount: 10,
+        inviteableCount: 0,
         emails: {},
         emailAlert: {},
         emailsStatus: {},
