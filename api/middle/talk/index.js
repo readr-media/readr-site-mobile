@@ -67,6 +67,7 @@ const updateUser = (col, selector, data_query) => new Promise(resolve => MongoCl
 }))
 
 const syncAvatar = (email, url) => updateUser(
+  'users',
   { 'profiles.id': { $in: [ email.toLowerCase(), ], }, },
   { $set: { metadata: { avatar: url, }, }, }
 )
