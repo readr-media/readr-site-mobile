@@ -1,5 +1,5 @@
 <template>
-  <section class="invite" :class="{ hide: quota <= 0, }">
+  <section class="invite" >
     <div class="invite__title" @click="$_invite_toggle">
       <span class="invite__title-text" v-text="$t('INVITATION.TITLE')"></span>
       <div class="invite__title-count">
@@ -52,7 +52,8 @@
     },
     computed: {
       activeItemsCount () {
-        return this.inviteableCount
+        // return this.inviteableCount
+        return 10
       },
       inputBackgroundColor () {
         return this.isProcessing ? '#f6f6f6' : undefined
