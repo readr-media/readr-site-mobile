@@ -57,7 +57,7 @@ export default {
   methods: {
     updatedAtYYYYMMDD,
     renderComment (ref) {
-      renderComment(this.$el, `${ref}`, `/post/${this.postId}`, this.$store.state.setting.TALK_SERVER)
+      renderComment(this.$el, `${ref}`, `/post/${this.post.id}`, this.$store.state.setting.TALK_SERVER)
     },
   },
   updated () {
