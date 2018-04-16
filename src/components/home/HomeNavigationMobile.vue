@@ -25,11 +25,11 @@
     </nav>
     <div class="homeNavigationMobile__content">
       <template v-if="active === 'projectsInProgress'">
-        <div v-for="p in projectsInProgress" :key="p.id" class="homeNavigationMobile__progress">
+        <a v-for="p in projectsInProgress" :key="p.id" :href="projectUrl(p.slug)" target="_blank" class="homeNavigationMobile__progress">
           <div class="homeNavigationMobile__progress-title" v-text="p.title"></div>
           <div class="homeNavigationMobile__progress-percentage" v-text="`0%`"></div>
           <div class="homeNavigationMobile__progress-donate"><img src="/public/icons/encoruage-white.png" alt=""></div>
-        </div>
+        </a>
       </template>
       <!-- <template v-if="active === 'video' && videoLink">
         <div class="homeNavigationMobile__video">
@@ -45,6 +45,7 @@
 <script>
   import { currentYPosition, elmYPosition, } from 'kc-scroll'
   import { get, } from 'lodash'
+  import { getProjectUrl, } from 'src/util/comm'
   import CommentCount from '../../components/comment/CommentCount.vue'
   import ProjectBlock from '../../components/ProjectBlock.vue'
 
@@ -101,6 +102,12 @@
         this.active === active ? this.active = undefined : this.active = active
       },
       get,
+      projectUrl (slug) {
+        if (slug) {
+          return getProjectUrl(slug)
+        }
+        return '/'
+      },
     },
   }
 </script>
@@ -142,6 +149,7 @@
     &__progress
       display flex
       border-bottom 1px solid #d3d3d3
+      color black
       &:last-of-type
         border-bottom none
       &-title

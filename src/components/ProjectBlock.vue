@@ -1,14 +1,14 @@
 <template>
-  <div class="projectBlock">
+  <a :href="projectUrl" target="_blank" class="projectBlock">
     <div class="projectBlock__content">
-      <a class="projectBlock__img" href=""><img :src="get(project, [ 'heroImage' ])" :alt="get(project, [ 'title' ])"></a>
+      <div class="projectBlock__img"><img :src="get(project, [ 'heroImage' ])" :alt="get(project, [ 'title' ])"></div>
       <div class="projectBlock__info">
-        <h2><a href="" v-text="get(project, [ 'title' ])"></a></h2>
-        <p><a href="" v-text="get(project, [ 'description' ])"></a></p>
+        <h2 v-text="get(project, [ 'title' ])"></h2>
+        <p v-text="get(project, [ 'description' ])"></p>
         <div>
           <div
             class="projectBlock__info-comment"
-            @click="$_projectBlock_renderComment(get(project, [ 'id' ]))">
+            @click="$_projectBlock_renderComment(get(project, [ 'id' ]), $event)">
             <img src="/public/icons/comment-blue.png">
             <CommentCount class="projectBlock__info-comment-count"></CommentCount>
           </div>
@@ -20,11 +20,12 @@
       </div>
     </div>
     <div class="projectBlock__comment hidden" :class="`project-${get(project, [ 'id' ])}`"></div>
-  </div>
+  </a>
 </template>
 <script>
   import { get, } from 'lodash'
   import { renderComment, } from '../../src/util/talk'
+  import { getProjectUrl, } from 'src/util/comm'
   import CommentCount from '../components/comment/CommentCount.vue'
   
   export default {
@@ -38,8 +39,17 @@
         required: true,
       },
     },
+    computed: {
+      projectUrl () {
+        if (this.project.slug) {
+          return getProjectUrl(this.project.slug)
+        }
+        return '/'
+      },
+    },
     methods: {
-      $_projectBlock_renderComment (id) {
+      $_projectBlock_renderComment (id, event) {
+        if (event) event.preventDefault()
         document.querySelector(`.projectBlock__comment.project-${id}`).classList.toggle('hidden')
         const rendered = document.querySelector(`.projectBlock__comment.project-${id} iframe`)
         if (window.Coral && !rendered) {
@@ -52,6 +62,8 @@
 </script>
 <style lang="stylus" scoped>
   .projectBlock
+    display block
+    color black
     padding 15px
     background-color #fff
     border-bottom 1px solid #d3d3d3

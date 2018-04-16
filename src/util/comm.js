@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Cookie from 'vue-cookie'
 import uuidv4 from 'uuid/v4'
 import pathToRegexp from 'path-to-regexp'
-import { SITE_DOMAIN, SITE_DOMAIN_DEV, } from '../constants'
+import { SITE_DOMAIN, SITE_DOMAIN_DEV, MM_SITE_DOMAIN, OLD_PROJECTS_SLUGS, } from '../constants'
 
 export function consoleLogOnDev ({ msg, }) {
   if (currEnv() === 'dev') {
@@ -118,6 +118,7 @@ export function getValue (o = {}, p = [], d = '') {
 }
 
 export function updatedAtYYYYMMDD (isoDate) {
+  if (!isoDate) return isoDate
   const date = isoDate.split('T')[0]
   return date.replace(/-/g, '/')
 }
@@ -128,4 +129,8 @@ export function isCurrentRoutePath (path) {
 
 export function isClientSide () {
   return _.get(this.$store, 'state.isClientSide', false)
+}
+
+export function getProjectUrl (slug) {
+  return OLD_PROJECTS_SLUGS.includes(slug) ? `http://${MM_SITE_DOMAIN}/projects/${slug}` : `http://${SITE_DOMAIN}/project/${slug}`
 }
