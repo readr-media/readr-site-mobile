@@ -65,7 +65,12 @@
       getImageUrl,
     },
     mounted () {},
-    props: [ 'profile', ],
+    props: {
+      profile: {
+        type: Object,
+        default: {},
+      },
+    },
   }
 </script>
 <style lang="stylus" scoped>
