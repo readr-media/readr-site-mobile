@@ -5,12 +5,12 @@
     </div> -->
     <div class="home-article-main__author">
       <figure class="author-info">
-        <router-link class="author-info__thumbnail" :to="`/profile/${get(articleData, 'author.id')}`">
+        <router-link class="author-info__thumbnail" :to="authorPublicProfileUrl">
           <img :src="authorThumbnailImg" alt="" v-if="isClientSide">
         </router-link>
         <figcaption class="author-info__meta">
           <p class="author-info__date" v-text="dateDiffFromNow"></p>
-          <router-link class="author-info__nickname" :to="`/profile/${get(articleData, 'author.id')}`">
+          <router-link class="author-info__nickname" :to="authorPublicProfileUrl">
             <p class="author-info__nickname" v-text="authorNickname"></p>
           </router-link>
         </figcaption>
@@ -52,6 +52,12 @@ export default {
     }
   },
   computed: {
+    authorId () {
+      return get(this.articleData, 'author.id') || get(this.articleData, 'author')
+    },
+    authorPublicProfileUrl () {
+      return this.authorId ? `/profile/${this.authorId}` : '#'
+    },
     dateDiffFromNow () {
       return dateDiffFromNow(this.articleData.publishedAt)
     },
@@ -147,71 +153,4 @@ export default {
       border-style solid
       border-width 0 12px 20px 12px
       border-color transparent transparent #ffffff transparent
-
-  .editor-writing
-    margin 10px 0
-    &__container 
-      // min-height 105px
-      // overflow hidden
-      // text-overflow: ellipsis;
-      & > p
-        font-size 15px
-        font-weight 300
-        text-align justify
-        line-height 1.4
-        margin 0
-        // text-overflow: ellipsis;
-      p > br
-        display none
-      p > img
-        width 100%
-      p + p
-        margin-top 6px
-    &__more
-      font-weight 500
-      color #a7a7a7
-      cursor pointer
-      &:hover
-        border-bottom 1px solid currentColor
-    &__paragraph
-      &--visible
-        display block
-      &--invisible
-        display none
-
-  .editor-writing-source
-    border solid 1px #d3d3d3
-    // padding 8px 15px 5px 19.5px
-    display flex
-    justify-content space-between
-    &__content
-      width 50%
-      position relative
-    &__title
-      max-height calc(.75rem * 3)
-      font-size 12px
-      font-weight 500
-      line-height 1.5
-      color #808080
-      margin 0
-    &__description
-      & > p
-        font-weight 300
-        color #808080
-        line-height 1.4
-        margin 5px 0 0 0
-        text-align justify
-    &__figure
-      margin 0
-      display flex
-      align-self center
-      width 50%
-      object-fit cover
-      object-position center
-    &__cite
-      font-size 11px
-      font-weight 300
-      color #808080
-      align-self flex-end
-      
 </style>

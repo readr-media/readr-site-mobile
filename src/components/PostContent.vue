@@ -8,7 +8,7 @@
           <p class="editor-writing__paragraph--visible" v-if="i <= shouldContentStopAtIndex" :key="`${post.id}-${i}`">
             <span v-html="p"></span>
             <span v-if="shouldShowReadMoreButton(i)">
-              ......<span class="editor-writing__more" @click="toogleReadmore($event)" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
+              <span class="editor-writing__more" @click="toogleReadmore($event)" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
             </span>
           </p>
           <!-- rest of the post content -->
@@ -34,6 +34,7 @@
   import AppArticleNav from 'src/components/AppArticleNav.vue'
   import sanitizeHtml from 'sanitize-html'
   import truncate from 'html-truncate'
+  import { POST_TYPE, } from '../../api/config'
 
   const dom = require('xmldom').DOMParser
   const seializer  = require('xmldom').XMLSerializer
@@ -53,6 +54,9 @@
       linkDescriptionTrim () {
         return truncate(this.post.linkDescription, 45)
       },
+      isNews () {
+        return get(this.post, 'type', POST_TYPE.REVIEW) === POST_TYPE.NEWS
+      },
       postContent () {
         if (!this.post.content || this.post.content.length === 0) { return [] }
         const wrappedContent = sanitizeHtml(this.post.content, { allowedTags: false, selfClosing: [ 'img', ], })
@@ -64,10 +68,15 @@
         if (this.postContentWordCountTotal <= this.showContentWordLimit){
           return this.postContent
         } else {
+          const ellipsis = '......'
           return this.postContent.map((paragraph, index) => {
-            if (!this.isReadMoreClicked && index === this.shouldContentStopAtIndex && this.isStopParagraphWordCountExceedLimit) {
-              const wordCountBeforeStop = this.postContentWordCount.reduce((acc, curr, currIndex) => currIndex < this.shouldContentStopAtIndex ? acc + curr : acc, 0)
-              return truncate(paragraph, this.showContentWordLimit - wordCountBeforeStop, { ellipsis: null, })
+            if (!this.isReadMoreClicked && index === this.shouldContentStopAtIndex) {
+              if (this.isStopParagraphWordCountExceedLimit) {
+                const wordCountBeforeStop = this.postContentWordCount.reduce((acc, curr, currIndex) => currIndex < this.shouldContentStopAtIndex ? acc + curr : acc, 0)
+                return truncate(paragraph, this.showContentWordLimit - wordCountBeforeStop, { ellipsis: ellipsis, })
+              } else if (!this.isStopLastParagraphBeforeTruncate) {
+                return paragraph + ellipsis
+              }
             }
             return paragraph
           })
@@ -118,9 +127,9 @@
       },
       isLastParagraphAfterTruncate (index) {
         return index === this.shouldContentStopAtIndex
-      },      
+      },
       shouldShowReadMoreButton (index) {
-        return !this.isReadMoreClicked && (!this.isStopLastParagraphBeforeTruncate || this.isStopParagraphWordCountExceedLimit) && this.isLastParagraphAfterTruncate(index)
+        return !this.isNews && !this.isReadMoreClicked && (!this.isStopLastParagraphBeforeTruncate || this.isStopParagraphWordCountExceedLimit) && this.isLastParagraphAfterTruncate(index)
       },
     },
     mounted () {},
@@ -133,8 +142,9 @@
       font-size 18px
       font-weight 600
       margin 0
+      line-height 1.5
   .editor-writing
-    margin 10px 0
+    margin 18px 0
     &__container 
       // min-height 105px
       // overflow hidden
@@ -146,9 +156,9 @@
       min-height 20px
       & > p
         font-size 15px
-        font-weight 300
+        font-weight 400
         text-align justify
-        line-height 1.4
+        line-height 1.5
         margin 0
         // text-overflow: ellipsis;
       p > br
