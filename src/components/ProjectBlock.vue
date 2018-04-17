@@ -19,7 +19,9 @@
         </div>
       </div>
     </div>
-    <div class="projectBlock__comment hidden" :class="`project-${get(project, [ 'id' ])}`"></div>
+    <div class="projectBlock__comment hidden" :class="`project-${get(project, [ 'id' ])}`">
+      <div class="comment"></div>
+    </div>
   </a>
 </template>
 <script>
