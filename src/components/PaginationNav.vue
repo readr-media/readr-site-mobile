@@ -22,10 +22,11 @@
             pagesArr.push(i + 1)
           }
         } else if (this.currPage > this.totalPages - 3) {
+          const base = this.totalPages <= 5 ? 0 : this.totalPages - 5
           this.setRestPage('left')
-          for (let i = this.totalPages - 5; i < this.totalPages; i += 1) {
+          for (let i = base; i < this.totalPages; i += 1) {
             pagesArr.push(i + 1)
-          }
+          }          
         } else {
           this.setRestPage('both')
           for (let i = this.currPage - 3; i < this.currPage + 2; i += 1) {
@@ -37,7 +38,7 @@
     },
     data () {
       return {
-        currPage: 1,
+        curr_page: this.currPage,
         showLeftRest: false,
         showRightRest: false,
       }
@@ -45,13 +46,13 @@
     name: 'PaginationNav',
     methods: {
       clickHandler (i) {
-        this.currPage = i
+        this.curr_page = i
       },
       clickPrev () {
-        this.currPage = this.currPage > 1 ? this.currPage - 1 : this.currPage
+        this.curr_page = this.curr_page > 1 ? this.curr_page - 1 : this.curr_page
       },
       clickNext () {
-        this.currPage = this.currPage < this.totalPages ? this.currPage + 1 : this.currPage
+        this.curr_page = this.curr_page < this.totalPages ? this.curr_page + 1 : this.curr_page
       },
       setRestPage (restCase) {
         if (this.totalPages > 5) {
@@ -83,14 +84,17 @@
       }, false)
     },
     props: {
+      currPage: {
+        default: 1,
+      },
       totalPages: {
         default: 0,
       },
     },
     watch: {
-      currPage: function () {
-        this.$emit('pageChanged', this.currPage)
-      },
+      curr_page: function () {
+        this.$emit('update:currPage', this.curr_page)
+      },      
     },
   }
 </script>

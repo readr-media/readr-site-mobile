@@ -1,6 +1,6 @@
 <template>
   <section class="postListInTab">
-    <PaginationNav v-if="parent !== 'RewardPointsInTab'" class="postListInTab__pagination" :totalPages="totalPages" @pageChanged="$_postListInTab_pageChanged"></PaginationNav>
+    <PaginationNav v-if="parent !== 'RewardPointsInTab'" class="postListInTab__pagination" :totalPages="totalPages" :currPage.sync="currPage"></PaginationNav>
     <div v-for="p in posts" :key="p.id" class="postListInTab__post">
       <div
         class="postListInTab__active"
@@ -51,6 +51,7 @@
         config: {
           active: POST_ACTIVE,
         },
+        currPage: 1,
         postConfig: POST_ACTIVE,
       }
     },
@@ -93,11 +94,13 @@
           .join('')
         return origin
       },
-      $_postListInTab_pageChanged (index) {
-        this.$emit('filterChanged', { page: index, })
-      },
       $_shouldHighlightStatus (post) {
         return post.active === this.config.active.DRAFT || (this.parent === 'RewardPointsInTab' && post.active === this.config.active.ACTIVE)
+      },
+    },
+    watch: {
+      currPage () {
+        this.$emit('filterChanged', { page: this.currPage, })
       },
     },
   }

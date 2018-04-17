@@ -5,7 +5,7 @@
         <input v-model="addTag" type="text" :placeholder="$t('TAG_LIST.ADD_PLACEHOLDER')">
         <button :disabled="!tagNameValidated" @click="$_tagList_addTag" v-text="$t('TAG_LIST.ADD')"></button>
       </div>
-      <pagination-nav :totalPages="totalPages" @pageChanged="$_tagList_pageChanged"></pagination-nav>
+      <pagination-nav :totalPages="totalPages" :currPage.sync="currPage"></pagination-nav>
     </div>
     <table>
       <thead>
@@ -82,6 +82,7 @@
       return {
         addTag: '',
         checkedIems: [],
+        currPage: 1,
       }
     },
     computed: {
@@ -95,6 +96,9 @@
     watch: {
       tags () {
         this.addTag = ''
+      },
+      currPage () {
+        this.$emit('filterChanged', { page: this.currPage, })
       },
     },
     methods: {
@@ -139,9 +143,6 @@
           order = field
         }
         this.$emit('filterChanged', { sort: order, })
-      },
-      $_tagList_pageChanged (index) {
-        this.$emit('filterChanged', { page: index, })
       },
       $_tagList_toggleHandler (event, id) {
         if (event.target.checked) {
