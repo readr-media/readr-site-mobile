@@ -67,6 +67,10 @@ button
     width 100%
     height 100vh
     overflow hidden
+.locked
+  width 100%
+  height 100vh
+  overflow hidden
 
 .main-container
   width 90%

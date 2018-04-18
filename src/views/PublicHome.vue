@@ -1,6 +1,6 @@
 <template>
   <section class="home main">
-    <BaseLightBox v-show="showLightBox" @closeLightBox="closeLightBox">
+    <BaseLightBox v-show="showLightBox" :showLightBox="showLightBox" @closeLightBox="closeLightBox">
       <BaseLightBoxPost :showLightBox="showLightBox" :post="postLightBox"/>
     </BaseLightBox>
     <Invite></Invite>
@@ -86,21 +86,22 @@
 
   export default {
     name: 'AppHome',
-    asyncData ({ store, route, }) {
-      let reqs = [
-        fetchPosts(store),
-        fetchPosts(store, { category: 'hot', }),
-        fetchProjectsList(store, { max_result: 5, status: PROJECT_STATUS.WIP, }),
-        fetchProjectsList(store, { max_result: 2, status: PROJECT_STATUS.DONE, }),
-        fetchVideos(store),
-      ]
+    // Uncomment this when v1.0 is released
+    // asyncData ({ store, route, }) {
+    //   let reqs = [
+    //     fetchPosts(store),
+    //     fetchPosts(store, { category: 'hot', }),
+    //     fetchProjectsList(store, { max_result: 5, status: PROJECT_STATUS.WIP, }),
+    //     fetchProjectsList(store, { max_result: 2, status: PROJECT_STATUS.DONE, }),
+    //     fetchVideos(store),
+    //   ]
 
-      if (route.params.postId) {
-        reqs.push(fetchPost(store, { id: route.params.postId, }))
-      }
+    //   if (route.params.postId) {
+    //     reqs.push(fetchPost(store, { id: route.params.postId, }))
+    //   }
 
-      return Promise.all(reqs)
-    },
+    //   return Promise.all(reqs)
+    // },
     components: {
       HomeArticleMain,
       HomeNavigationMobile,
@@ -178,26 +179,61 @@
       }
     },
     beforeMount () {
-      if (this.$store.state.isLoggedIn) {
-        const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
-        const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
-        const postIdFeaturedProject = get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
-        const ids = uniq(concat(postIdsLatest, postIdsHot))
+      let reqs = [
+        fetchPosts(this.$store),
+        fetchPosts(this.$store, { category: 'hot', }),
+        fetchProjectsList(this.$store, { max_result: 5, status: PROJECT_STATUS.WIP, }),
+        fetchProjectsList(this.$store, { max_result: 2, status: PROJECT_STATUS.DONE, }),
+        fetchVideos(this.$store),
+      ]
 
-        if (ids.length !== 0) {
-          fetchFollowing(this.$store, {
-            resource: 'post',
-            ids: ids,
-          })
-        }
-
-        if (postIdFeaturedProject.length !== 0) {
-          fetchFollowing(this.$store, {
-            resource: 'project',
-            ids: postIdFeaturedProject,
-          })
-        }
+      if (this.$route.params.postId) {
+        reqs.push(fetchPost(this.$store, { id: this.$route.params.postId, }))
       }
+
+      Promise.all(reqs).then(() => {
+        if (this.$store.state.isLoggedIn) {
+          const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
+          const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
+          const postIdFeaturedProject = get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
+          const ids = uniq(concat(postIdsLatest, postIdsHot))
+
+          if (ids.length !== 0) {
+            fetchFollowing(this.$store, {
+              resource: 'post',
+              ids: ids,
+            })
+          }
+
+          if (postIdFeaturedProject.length !== 0) {
+            fetchFollowing(this.$store, {
+              resource: 'project',
+              ids: postIdFeaturedProject,
+            })
+          }
+        }
+      })
+      // Uncomment this when v1.0 is released
+      // if (this.$store.state.isLoggedIn) {
+      //   const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
+      //   const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
+      //   const postIdFeaturedProject = get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
+      //   const ids = uniq(concat(postIdsLatest, postIdsHot))
+
+      //   if (ids.length !== 0) {
+      //     fetchFollowing(this.$store, {
+      //       resource: 'post',
+      //       ids: ids,
+      //     })
+      //   }
+
+      //   if (postIdFeaturedProject.length !== 0) {
+      //     fetchFollowing(this.$store, {
+      //       resource: 'project',
+      //       ids: postIdFeaturedProject,
+      //     })
+      //   }
+      // }
     },
     mounted () {
       window.addEventListener('scroll', () => {
