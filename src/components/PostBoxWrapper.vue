@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-  import pathToRegexp from 'path-to-regexp'
+  // import pathToRegexp from 'path-to-regexp'
 
   export default {
     name: 'PostBoxWrapper',
@@ -21,7 +21,8 @@
     },
     methods: {
       close () {
-        pathToRegexp('/post/:postId').test(this.$route.path) ? this.$emit('closeLightBox') : this.$emit('update:showLightBox', false)
+        // pathToRegexp('/post/:postId').test(this.$route.path) ? this.$emit('closeLightBox') : this.$emit('update:showLightBox', false)
+        this.$router.go(-1)
       },      
     },
     mounted () {},
@@ -29,11 +30,6 @@
       showPostBox: {
         type: Boolean,
         default: false,
-      },
-    },
-    watch: {
-      showPostBox () {
-        this.showPostBox && window.scrollTo(0, 0)
       },
     },
   }
@@ -56,7 +52,6 @@
     &__aside
       width 100vw
       min-height 100vh
-      // background-color #fff
       position absolute
       left 100vw
       top 0
