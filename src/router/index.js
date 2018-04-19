@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import pathToRegexp from 'path-to-regexp'
+// import pathToRegexp from 'path-to-regexp'
 import { ReadrPerm, } from '../util/services'
 
 Vue.use(Router)
@@ -31,34 +31,18 @@ const PublicSetPassword = () => import('../views/PublicSetPassword.vue')
 const PageNotFound = () => import('../views/PageNotFound.vue')
 const ServerError = () => import('../views/ServerError.vue')
 
+const debug = require('debug')('CLIENT:router')
 const router = new Router({
   mode: 'history',
   fallback: false,
-  scrollBehavior: (to, from) => {
-    const keepPosition = [
-      {
-        from: '/',
-        to: '/post/:postId',
-      },
-      {
-        from: '/hot',
-        to: '/post/:postId',
-      },
-      {
-        from: '/post/:postId',
-        to: '/',
-      },
-      {
-        from: '/post/:postId',
-        to: '/hot',
-      },
-    ]
-    .map(route =>({ from: pathToRegexp(route.from), to: pathToRegexp(route.to), }))
-    .reduce((acc, cur) => acc || (cur.from.test(from.path) && cur.to.test(to.path)), false)
-
-    if (!keepPosition) {
+  scrollBehavior: (to, from, savedPosition) => {
+    debug('savedPosition', savedPosition)
+    if (savedPosition) {
+      return savedPosition
+    } else {
       return { y: 0, }
     }
+ 
   },
   routes: [
     { path: '/', component: PublicHome, meta: { permission: 'member', }, },

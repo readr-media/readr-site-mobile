@@ -1,12 +1,12 @@
 <template>
   <section class="home main">
-    <PostBoxWrapper :showPostBox.sync="showPostBox" @closeLightBox="closeLightBox">
+    <PostBoxWrapper :showPostBox.sync="showPostBox">
       <Invite></Invite>
       <main>
         <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
         <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
       </main>
-      <BaseLightBoxPost :showLightBox="showPostBox" :post="postLightBox" slot="postContent" /> 
+      <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent" /> 
     </PostBoxWrapper>
   </section>
 </template>
@@ -134,8 +134,8 @@
       postSingle () {
         return get(this.$store.state.publicPostSingle, 'items[0]', {})
       },
-      postLightBox () {
-        if (this.showLightBox) {
+      postBox () {
+        if (this.showPostBox) {
           const findPostInList = find(this.postsHome, [ 'id', Number(this.$route.params.postId), ])
           return findPostInList || this.postSingle
         } else {
@@ -143,9 +143,6 @@
         }
       },
       showPostBox () {
-        return this.isCurrentRoutePath('/post/:postId')
-      },
-      showLightBox () {
         return this.isCurrentRoutePath('/post/:postId')
       },
       postsHome () {
@@ -247,9 +244,6 @@
       })
     },
     methods: {
-      closeLightBox () {
-        this.$router.push(this.articlesListMainCategory)
-      },
       isCurrentRoutePath,
       $_home_loadmore () {
         fetchPosts(this.$store, { mode: 'update', max_result: 10, page: this.currentPage + 1, })
