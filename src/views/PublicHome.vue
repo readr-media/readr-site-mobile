@@ -1,25 +1,26 @@
 <template>
   <section class="home main">
-    <BaseLightBox v-show="showLightBox" :showLightBox="showLightBox" @closeLightBox="closeLightBox">
-      <BaseLightBoxPost :showLightBox="showLightBox" :post="postLightBox"/>
-    </BaseLightBox>
-    <Invite></Invite>
-    <main>
-      <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
-      <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
-    </main>
+    <PostBoxWrapper :showPostBox.sync="showPostBox" @closeLightBox="closeLightBox">
+      <Invite></Invite>
+      <main>
+        <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
+        <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
+      </main>
+      <BaseLightBoxPost :showLightBox="showPostBox" :post="postLightBox" slot="postContent" /> 
+    </PostBoxWrapper>
   </section>
 </template>
 <script>
-  import { PROJECT_STATUS, } from '../../api/config'
+  import { PROJECT_STATUS, } from 'api/config'
   import { get, find, uniq, concat, } from 'lodash'
-  import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from '../util/comm'
-  import { createStore, } from '../store'
-  import HomeArticleMain from '../components/home/HomeArticleMain.vue'
-  import HomeNavigationMobile from '../components/home/HomeNavigationMobile.vue'
+  import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
+  import { createStore, } from 'src/store'
+  import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
+  import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
   import BaseLightBox from 'src/components/BaseLightBox.vue'
   import BaseLightBoxPost from 'src/components/BaseLightBoxPost.vue'
-  import Invite from '../components/invitation/Invite.vue'
+  import Invite from 'src/components/invitation/Invite.vue'
+  import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
   
   const MAXRESULT_POSTS = 10
   const MAXRESULT_PROJECTS = 2
@@ -27,6 +28,7 @@
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-published_at'
   const DEFAULT_CATEGORY = 'latest'
+  // const debug = require('debug')('CLIENT:PublicHome')
 
   const fetchFollowing = (store, params) => {
     if (params.subject) {
@@ -108,13 +110,14 @@
       BaseLightBox,
       BaseLightBoxPost,
       Invite,
+      PostBoxWrapper,
     },
     data () {
       return {
+        articlesListMainCategory: this.$route.path !== '/hot' ? '/' : '/hot',
         currentPage: DEFAULT_PAGE,
         endPage: false,
         isReachBottom: false,
-        articlesListMainCategory: this.$route.path !== '/hot' ? '/' : '/hot',
       }
     },
     computed: {
@@ -138,6 +141,9 @@
         } else {
           return {}
         }
+      },
+      showPostBox () {
+        return this.isCurrentRoutePath('/post/:postId')
       },
       showLightBox () {
         return this.isCurrentRoutePath('/post/:postId')

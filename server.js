@@ -90,6 +90,9 @@ app.use('/distribution', serve('./distribution', true))
 app.use('/public', serve('./public', true))
 app.use('/manifest.json', serve('./manifest.json', true))
 app.use('/service-worker.js', serve('./distribution/service-worker.js'))
+app.use('/assets', (req, res) => {
+  res.status(404).send('404 | Page Not Found!')
+})
 
 app.use('/talk', (req, res) => {
   debug('req', req.url)
