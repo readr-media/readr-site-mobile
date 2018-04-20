@@ -5,7 +5,11 @@
         <img class="comment-icon__thumbnail" src="/public/icons/comment-blue.png" alt="comment">
         <CommentCount class="comment-icon__count" :commentAmount="commentCount" :postId="postId" :type="'publicPostsHot'"></CommentCount>
       </span>
-      <img class="follow-icon" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow">
+      <!-- <img class="follow-icon" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow"> -->
+      <span class="follow-icon" @click="toogleFollow($event)">
+        <img class="follow-icon__thumbnail" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow">
+        <span class="follow-icon__hint" v-text="$t('follow.WORDING_FOLLOW_LIST_FOLLOW')"></span>
+      </span>
     </nav>
     <div :class="`article-nav__comment`">
       <div :class="`comment comment-${postId}`"></div>
@@ -69,7 +73,8 @@ export default {
     renderComment (ref) {
       renderComment(this.$el, `${ref}`, `/post/${this.postId}`, this.$store.state.setting.TALK_SERVER)
     },
-    toogleFollow () {
+    toogleFollow (event) {
+      if (event) event.preventDefault()
       if (!this.$store.state.isLoggedIn) {
         alert('please login first')
       } else {
@@ -113,26 +118,41 @@ export default {
   flex-direction column
   margin-top 10px
   &__nav-btns
-    height 20px
+    height 30px
     margin-top auto // for automatically placing nav to the botom of the container
 
 $icon-size
-  width 20px
-  height 20px
+  width 25px
+  height 25px
 .comment-icon
   cursor pointer
   &__thumbnail
     @extends $icon-size
   &__count
     position relative
-    top 2px
-    right 3px
-    font-size 11px
+    top 0px
+    right 6px
+    font-size 14px
     color #11b8c9
+// .follow-icon
+//   @extends $icon-size
+//   margin-left 4.5px
+//   cursor pointer
 .follow-icon
-  @extends $icon-size
-  margin-left 4.5px
   cursor pointer
+  &__thumbnail
+    @extends $icon-size
+    margin-left 4.5px
+    cursor pointer
+  &__hint
+    position relative
+    // right 5px
+    bottom 2px
+    font-size 14px
+    -webkit-font-smoothing antialiased
+    -moz-font-smoothing antialiased
+    color #11b8c9
+    font-weight 600
 .donate-icon
   width 20px
   height 25px

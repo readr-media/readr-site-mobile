@@ -1,36 +1,60 @@
 <template>
   <div class="post-content">
-    <h1 class="post-content__title" v-text="post.title"></h1>
-    <div class="editor-writing">
-      <router-link :to="`/post/${post.id}`" class="editor-writing__container">
-        <template v-for="(p, i) in postContentProcessed">
-          <!-- post content for initial display -->
-          <p class="editor-writing__paragraph--visible" v-if="i <= shouldContentStopAtIndex" :key="`${post.id}-${i}`">
-            <span v-html="p"></span>
-            <span v-if="shouldShowReadMoreButton(i)">
-              <span class="editor-writing__more" @click="toogleReadmore($event)" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
-            </span>
-          </p>
-          <!-- rest of the post content -->
-          <p :class="`editor-writing__paragraph--${isReadMoreClicked ? 'visible' : 'invisible'}`" v-else v-html="p" :key="`${post.id}-${i}`"></p>
-        </template>
-      </router-link>
-    </div>
-    <a class="editor-writing-source" v-if="hasSource" :href="post.link" target="_blank">
-      <div class="editor-writing-source__content">
-        <h1 class="editor-writing-source__title" v-text="linkTitleTrim"></h1>
-        <div class="editor-writing-source__description">
-          <!-- <p v-text="linkDescriptionTrim"></p> -->
-          <p class="editor-writing-source__cite" v-if="post.linkName">{{ $t('homepage.WORDING_HOME_POST_SOURCE') }}{{ post.linkName }}</p>
-        </div>
+    <!-- template for post type is review and others -->
+    <template v-if="isNews">
+      <img class="post-content__leading-image" v-if="post.ogImage && isClientSide" :src="getImageUrl(post.ogImage)" alt="" @load="setLeadingImageOrientation(getImageUrl(post.ogImage), $event)">
+      <h1 class="post-content__title--news" v-text="post.title"></h1>
+      <div class="editor-writing--news">
+        <router-link :to="`/post/${post.id}`" class="editor-writing__container">
+          <template v-for="(p, i) in postContentProcessed">
+            <!-- post content for initial display -->
+            <p class="editor-writing__paragraph--visible" v-if="i <= shouldContentStopAtIndex" :key="`${post.id}-${i}`">
+              <span v-html="p"></span>
+              <span v-if="shouldShowReadMoreButton(i)">
+                <span class="editor-writing__more" @click="toogleReadmore($event)" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
+              </span>
+            </p>
+            <!-- rest of the post content -->
+            <p :class="`editor-writing__paragraph--${isReadMoreClicked ? 'visible' : 'invisible'}`" v-else v-html="p" :key="`${post.id}-${i}`"></p>
+          </template>
+          <p class="editor-writing__more--news" v-text="$t('homepage.WORDING_HOME_POST_MORE_NEWS')"></p>
+        </router-link>
       </div>
-      <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
-    </a>
+    </template>
+    <template v-if="!isNews">
+      <h1 class="post-content__title" v-text="post.title"></h1>
+      <div class="editor-writing">
+        <router-link :to="`/post/${post.id}`" class="editor-writing__container">
+          <template v-for="(p, i) in postContentProcessed">
+            <!-- post content for initial display -->
+            <p class="editor-writing__paragraph--visible" v-if="i <= shouldContentStopAtIndex" :key="`${post.id}-${i}`">
+              <span v-html="p"></span>
+              <span v-if="shouldShowReadMoreButton(i)">
+                <span class="editor-writing__more" @click="toogleReadmore($event)" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
+              </span>
+            </p>
+            <!-- rest of the post content -->
+            <p :class="`editor-writing__paragraph--${isReadMoreClicked ? 'visible' : 'invisible'}`" v-else v-html="p" :key="`${post.id}-${i}`"></p>
+          </template>
+        </router-link>
+      </div>
+      <a class="editor-writing-source" v-if="hasSource" :href="post.link" target="_blank">
+        <div class="editor-writing-source__content">
+          <h1 class="editor-writing-source__title" v-text="linkTitleTrim"></h1>
+          <div class="editor-writing-source__description">
+            <!-- <p v-text="linkDescriptionTrim"></p> -->
+            <p class="editor-writing-source__cite" v-if="post.linkName">{{ $t('homepage.WORDING_HOME_POST_SOURCE') }}{{ post.linkName }}</p>
+          </div>
+        </div>
+        <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
+      </a>
+    </template>
     <AppArticleNav :postId="this.post.id" :commentCount="commentCount"></AppArticleNav>
   </div>
 </template>
 <script>
   import { find, get, map, } from 'lodash'
+  import { onImageLoaded, getImageUrl, isClientSide, } from 'src/util/comm'
   import AppArticleNav from 'src/components/AppArticleNav.vue'
   import sanitizeHtml from 'sanitize-html'
   import truncate from 'html-truncate'
@@ -131,20 +155,54 @@
       shouldShowReadMoreButton (index) {
         return !this.isNews && !this.isReadMoreClicked && (!this.isStopLastParagraphBeforeTruncate || this.isStopParagraphWordCountExceedLimit) && this.isLastParagraphAfterTruncate(index)
       },
+      setOgImageOrientation (src, event) {
+        onImageLoaded(src).then(({ width, height, }) => {
+          width < height ? event.target.style.objectFit = 'contain' : event.target.style.objectFit = 'cover'
+        }).catch(() => { event.target.style.objectFit = 'cover' })
+      },
+      setLeadingImageOrientation (src, event) {
+        onImageLoaded(src).then(({ width, height, }) => {
+          width < height ? event.target.style.objectFit = 'contain' : event.target.style.objectFit = 'cover'
+        }).catch(() => { event.target.style.objectFit = 'cover' })
+      },
+      isClientSide,
+      getImageUrl,
     },
     mounted () {},
     props: [ 'post', ],
   }
 </script>
 <style lang="stylus">
+  font-family = 'Songti TC', 'SimSun'
   .post-content
     &__title
       font-size 18px
       font-weight 600
       margin 0
       line-height 1.5
+      &--news
+        font-size 20px
+        font-weight bold
+        margin 0 0 11px 0
+        line-height 1.5
+        color #4a4a4a
+        font-family font-family
+    &__leading-image
+      // width = 100% is equal to 100vw - 15px - 15px
+      // keep the aspect ratio to 16:9
+      width 100%
+      height calc((100vw - 15px - 15px) * 0.5625)
+      background-color #444746
+      margin-bottom 22px
   .editor-writing
     margin 18px 0
+    &--news
+      margin 18px 0 10px 0
+      padding-bottom 4.5px
+      border-bottom solid 0.5px #979797
+      p
+        color #4a4a4a
+        font-family font-family
     &__container 
       // min-height 105px
       // overflow hidden
@@ -174,6 +232,9 @@
       cursor pointer
       &:hover
         border-bottom 1px solid currentColor
+      &--news
+        color #11b8c9 !important
+        margin-top 24px !important
     &__paragraph
       &--visible
         display block
@@ -194,6 +255,7 @@
       font-weight 500
       color #808080
       margin 0
+      line-height 1.4
     &__figure
       order 0
       margin 0
