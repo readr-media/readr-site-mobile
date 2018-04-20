@@ -68,6 +68,10 @@ export function getHost () {
   }
 }
 
+export function getArticleAuthorId (articleData) {
+  return _.get(articleData, 'author.id') || _.get(articleData, 'author')
+}
+
 export function getArticleAuthorNickname (articleData) {
   return _.get(articleData, 'authorNickname') || _.get(articleData, 'author.nickname') || _.get(articleData, 'nickname')
 }
@@ -143,4 +147,20 @@ export function isClientSide () {
 
 export function getProjectUrl (slug) {
   return OLD_PROJECTS_SLUGS.includes(slug) ? `http://${MM_SITE_DOMAIN}/projects/${slug}` : `http://${SITE_DOMAIN}/project/${slug}`
+}
+
+export function onImageLoaded(url) {
+  var image = new Image()
+  image.src = url
+
+  return new Promise((resolve, reject) => {
+    if (!url) reject()
+    if (image.complete) {
+      resolve(image)
+    } else {
+      image.onload = function () {
+        resolve(image)
+      }
+    }
+  })
 }

@@ -1,6 +1,6 @@
 <template>
   <section class="home main">
-    <PostBoxWrapper :showPostBox.sync="showPostBox">
+    <PostBoxWrapper :showPostBox.sync="showPostBox" :hadRouteBeenNavigate="hadRouteBeenNavigate">
       <Invite></Invite>
       <main>
         <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
@@ -115,6 +115,7 @@
     data () {
       return {
         articlesListMainCategory: this.$route.path !== '/hot' ? '/' : '/hot',
+        hadRouteBeenNavigate: false,
         currentPage: DEFAULT_PAGE,
         endPage: false,
         isReachBottom: false,
@@ -169,6 +170,7 @@
       },
       '$route' (to, from) {
         this.articlesListMainCategory = this.isCurrentRoutePath('/post/:postId') ? from.path : to.path
+        if (!this.hadRouteBeenNavigate) this.hadRouteBeenNavigate = true
       },
     },
     beforeRouteEnter (to, from, next) {
