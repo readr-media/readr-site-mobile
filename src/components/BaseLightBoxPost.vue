@@ -135,7 +135,7 @@ export default {
     },
   },
   updated () {
-    // if (this.post.id && !this.isNews) this.renderComment(`.baselightbox-post__comment > .comment.comment-${this.post.id}`)
+    if (this.post.id && !this.isNews) this.renderComment(`.baselightbox-post__comment > .comment.comment-${this.post.id}`)
   },
 }
 </script>

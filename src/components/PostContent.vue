@@ -1,6 +1,6 @@
 <template>
   <div class="post-content">
-    <!-- template for post type is review and others -->
+    <!-- template for post type is news -->
     <template v-if="isNews">
       <img class="post-content__leading-image" v-if="post.ogImage && isClientSide" :src="getImageUrl(post.ogImage)" alt="" @load="setLeadingImageOrientation(getImageUrl(post.ogImage), $event)">
       <h1 class="post-content__title--news" v-text="post.title"></h1>
@@ -21,6 +21,7 @@
         </router-link>
       </div>
     </template>
+    <!-- template for post type is review and others -->
     <template v-if="!isNews">
       <h1 class="post-content__title" v-text="post.title"></h1>
       <div class="editor-writing">

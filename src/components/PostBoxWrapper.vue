@@ -22,7 +22,7 @@
     methods: {
       close () {
         // pathToRegexp('/post/:postId').test(this.$route.path) ? this.$emit('closeLightBox') : this.$emit('update:showLightBox', false)
-        this.$router.go(-1)
+        this.hadRouteBeenNavigate ? this.$router.back() : this.$router.push('/')
       },      
     },
     mounted () {},
@@ -30,6 +30,10 @@
       showPostBox: {
         type: Boolean,
         default: false,
+      },
+      hadRouteBeenNavigate: {
+        type: Boolean,
+        required: true,
       },
     },
   }
