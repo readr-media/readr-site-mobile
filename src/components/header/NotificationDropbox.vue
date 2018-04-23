@@ -67,7 +67,7 @@
       },      
     },
     mounted () {
-      window.addEventListener('wheel', (event) => {
+      window.addEventListener('touchmove', (event) => {
         const targ = event.target
         const is_descendant = isDescendant(targ, { parent: this.$el, })
         if (is_descendant && this.isBoxActive) {
@@ -95,6 +95,7 @@
     border-top solid 1px #d3d3d3
     border-bottom solid 1px #d3d3d3
     padding-bottom 35px
+    overflow auto
     // > div:not(:last-child)
       // border-bottom 1px solid #d3d3d3
     > div
