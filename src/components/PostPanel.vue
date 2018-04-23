@@ -1,21 +1,24 @@
 <template>
   <section class="postPanel">
     <div class="postPanel__input">
-      <input v-model="post.title" type="text" class="postPanel__title" :placeholder="$t('post_editor.WORDING_POSTEDITOR_INPUT_TITLE')">
+      <input v-model="post.title" type="text" class="postPanel__title" :placeholder="$t('POST_PANEL.TITLE_PLACEHOLDER')">
     </div>
-    <text-editor
-      v-if="!isVideo"
+    <quill-editor-review
+      v-if="postType === config.type.REVIEW"
       :content="post.content"
-      :type="postType"
       @updateContent="$_postPanel_updateContent">
-    </text-editor>
+    </quill-editor-review>
+    <quill-editor-news
+      v-if="postType === config.type.NEWS"
+      :content="post.content"
+      @updateContent="$_postPanel_updateContent">
+    </quill-editor-news>
     <div class="postPanel__input postPanel__link">
-      <label v-if="!isVideo" for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_NEWS')}${$t('post_editor.WORDING_POSTEDITOR_LINK')}：`"></label>
-      <label v-if="isVideo" for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_VIDEO')}${$t('post_editor.WORDING_POSTEDITOR_LINK')}：`"></label>
+      <label for="" v-text="`${$t('POST_PANEL.NEWS')}${$t('POST_PANEL.LINK')}：`"></label>
       <input v-model="post.link" type="url" @change="$_postPanel_metaChanged">
     </div>
     <div v-if="$can('editPostOg')" class="postPanel__input postPanel--publishDate">
-      <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_PUBLISH_DATE')}：`"></label>
+      <label for="" v-text="`${$t('POST_PANEL.PUBLISH_DATE')}：`"></label>
       <no-ssr>
         <datepicker
           v-model="post.publishedAt"
@@ -26,9 +29,9 @@
       </no-ssr>
     </div>
     <div
-      v-if="$can('editPostOg') && !isVideo"
+      v-if="$can('editPostOg')"
       class="postPanel__input">
-      <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_TAG')}：`"></label>
+      <label for="" v-text="`${$t('POST_PANEL.TAG')}：`"></label>
       <div class="postPanel__tags">
         <div class="postPanel__tags-box" @mousedown.prevent="$_postPanel_focusTagInput">
           <template>
@@ -44,7 +47,7 @@
           </template>
         </div>
         <div ref="tagsList" class="postPanel__tags-list hidden">
-          <button v-show="tags.length === 0" class="noResult" v-text="$t('post_editor.WORDING_POSTEDITOR_NOT_FOUND')"></button>
+          <button v-show="tags.length === 0" class="noResult" v-text="$t('POST_PANEL.NOT_FOUND')"></button>
           <template>
             <button v-for="(t) in tags" :key="t.id" @mousedown="$_postPanel_addTag(t.id)" v-text="t.text"></button>
           </template>
@@ -52,21 +55,21 @@
       </div>
     </div>
     <div v-if="$can('editPostOg')" class="postPanel__input">
-      <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_OG_TITLE')}：`"></label>
+      <label for="" v-text="`${$t('POST_PANEL.OG_TITLE')}：`"></label>
       <input v-model="post.ogTitle" type="text">
     </div>
     <div v-if="$can('editPostOg')" class="postPanel__input">
-      <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_OG_DESCRIPTION')}：`"></label>
+      <label for="" v-text="`${$t('POST_PANEL.OG_DESCRIPTION')}：`"></label>
       <input v-model="post.ogDescription" type="text">
     </div>
     <div v-if="$can('editPostOg')" class="postPanel__input share">
-      <label for="" v-text="`${$t('post_editor.WORDING_POSTEDITOR_OG_IMAGE')}：`"></label>
+      <label for="" v-text="`${$t('POST_PANEL.OG_IMAGE')}：`"></label>
       <input v-model="post.ogImage" type="text" readonly>
       <button class="postPanel__btn--img" @click="$_postPanel_addOgImage">
-        <img src="/public/icons/upload.png" :alt="$t('post_editor.WORDING_POSTEDITOR_UPLOAD')">
+        <img src="/public/icons/upload.png" :alt="$t('POST_PANEL.UPLOAD')">
       </button>
       <button class="postPanel__btn--img" @click="$_postPanel_deleteOgImage">
-        <img src="/public/icons/delete.png" :alt="$t('post_editor.WORDING_POSTEDITOR_DELETE')">
+        <img src="/public/icons/delete.png" :alt="$t('POST_PANEL.DELETE')">
       </button>
     </div>
     <div v-show="post.ogImage && $can('editPostOg')" class="postPanel__ogImg">
@@ -77,41 +80,41 @@
         v-if="$can('deletePost') && (panelType === 'edit')"
         class="postPanel__btn"
         @click="$_postPanel_deletePost"
-        v-text="$t('post_editor.WORDING_POSTEDITOR_DELETE')">
+        v-text="$t('POST_PANEL.DELETE')">
       </button>
       <button
         v-if="(panelType === 'edit') && $can('editPostOg') && (post.active !== config.active.DRAFT)"
         class="postPanel__btn"
         :disabled="isEmpty"
         @click="$_postPanel_submitHandler(config.active.DRAFT)"
-        v-text="$t('post_editor.WORDING_POSTEDITOR_RETURN_TO_DRAFT')">
+        v-text="$t('POST_PANEL.RETURN_TO_DRAFT')">
       </button>
       <button
         v-if="(panelType === 'edit')"
         class="postPanel__btn"
         @click="$_postPanel_submitHandler()"
-        v-text="$t('post_editor.WORDING_POSTEDITOR_SAVE')">
+        v-text="$t('POST_PANEL.SAVE')">
       </button>
       <button
         v-if="isClientSide && (panelType === 'add') && $can('addPost')"
         class="postPanel__btn"
         :disabled="isEmpty"
         @click="$_postPanel_submitHandler(config.active.DRAFT)"
-        v-text="$t('post_editor.WORDING_POSTEDITOR_SAVE_DRAFT')">
+        v-text="$t('POST_PANEL.SAVE_DRAFT')">
       </button>
       <button
         v-if="isClientSide && !$can('publishPost')"
         class="postPanel__btn"
         :disabled="isEmpty"
         @click="$_postPanel_submitHandler(config.active.PENDING)"
-        v-text="$t('post_editor.WORDING_POSTEDITOR_SAVE_PENDING')">
+        v-text="$t('POST_PANEL.SAVE_PENDING')">
       </button>
       <button
         v-if="isClientSide && $can('publishPost') && (post.active !== config.active.ACTIVE)"
         class="postPanel__btn"
         :disabled="isEmpty"
         @click="$_postPanel_submitHandler(config.active.ACTIVE)"
-        v-text="$t('post_editor.WORDING_POSTEDITOR_PUBLISH')">
+        v-text="$t('POST_PANEL.PUBLISH')">
       </button>
     </div>
   </section>
@@ -120,13 +123,13 @@
   import { 
     IMAGE_UPLOAD_MAX_SIZE,
   } from '../constants'
-  import { POST_ACTIVE, POST_TYPE, } from '../../api/config'
   import _ from 'lodash'
   import AlertPanel from './AlertPanel.vue'
   import BaseLightBox from './BaseLightBox.vue'
   import Datepicker from 'vuejs-datepicker'
-  import TextEditor from './TextEditor.vue'
   import NoSSR from 'vue-no-ssr'
+  import QuillEditorNews from './QuillEditorNews.vue'
+  import QuillEditorReview from './QuillEditorReview.vue'
   import validator from 'validator'
   
   const MAXRESULT = 20
@@ -173,8 +176,9 @@
       'alert-panel': AlertPanel,
       'base-light-box': BaseLightBox,
       'datepicker': Datepicker,
-      'text-editor': TextEditor,
       'no-ssr': NoSSR,
+      'quill-editor-news': QuillEditorNews,
+      'quill-editor-review': QuillEditorReview,
     },
     props: {
       post: {
@@ -193,7 +197,8 @@
     data () {
       return {
         config: {
-          active: POST_ACTIVE,
+          active: this.$store.state.setting.POST_ACTIVE,
+          type: this.$store.state.setting.POST_TYPE,
         },
         dateFormat: 'yyyy/MM/d',
         metaChanged: false,
@@ -211,9 +216,6 @@
         return _.isEmpty(_.trim(_.get(this.post, [ 'link', ], '')))
           && _.isEmpty(_.trim(_.get(this.post, [ 'title', ], '')))
           && _.isEmpty(_.trim(_.replace(_.get(this.post, [ 'content', ], ''), /<[^>]*>/g, '')))
-      },
-      isVideo () {
-        return this.postType === POST_TYPE.VIDEO
       },
       tags () {
         let tags = _.get(this.$store, [ 'state', 'tags', ], []) || []
@@ -347,7 +349,7 @@
 
             if (activeChanged) {
               switch (this.postParams.active) {
-                case POST_ACTIVE.ACTIVE:
+                case this.$store.state.setting.POST_ACTIVE.ACTIVE:
                   this.$emit('publishPost', this.postParams)
                   break
                 default:
@@ -373,7 +375,7 @@
 
         if (Date.parse(_.get(this.post, [ 'publishedAt', ]))) {
           this.postParams.published_at = _.get(this.post, [ 'publishedAt', ])
-        } else if (postActive === POST_ACTIVE.ACTIVE && !this.postParams.published_at) {
+        } else if (postActive === this.$store.state.setting.POST_ACTIVE.ACTIVE && !this.postParams.published_at) {
           this.postParams.published_at = new Date(Date.now())
         }
         
@@ -383,7 +385,7 @@
           this.postParams.link_title = ''
           this.postParams.link_description = ''
           this.postParams.link_image = ''
-          if (validator.isURL(link, { protocols: [ 'http','https', ], }) && !this.isVideo) {
+          if (validator.isURL(link, { protocols: [ 'http','https', ], })) {
             link = encodeURI(link)
             getMeta(this.$store, link)
             .then((res) => {
