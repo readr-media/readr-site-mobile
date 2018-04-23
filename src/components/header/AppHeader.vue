@@ -14,11 +14,11 @@
       <p v-text="userNickname"></p>
       <img src="/public/icons/account.png" alt="">
     </div>
+    <Notification class="header__item"></Notification>
     <div v-if="isClientSide" class="header__item header--status" >
       <a v-if="!isLoggedIn" class="header__status-item" href="/login" v-text="$t('header.WORDING_HEADER_LOGIN')"></a>
       <div v-else-if="isLoggedIn" class="header__status-item" @click="logout" v-text="$t('header.WORDING_HEADER_LOGOUT')"></div>
     </div>
-
     <section ref="headerMenu" class="header__menu">
       <ul>
         <!-- <li><a><img src="/public/icons/fb.png" alt=""></a></li> -->
@@ -32,10 +32,11 @@
   </div>
 </template>
 <script>
-  import { ROLE_MAP, } from '../constants'
+  import { ROLE_MAP, } from 'src/constants'
   import { filter, includes, get, } from 'lodash'
-  import { removeToken, } from '../util/services'
+  import { removeToken, } from 'src/util/services'
   import SearchTool from 'src/components/search/SearchTool.vue'
+  import Notification from 'src/components/header/Notification.vue'
 
   const debug = require('debug')('CLIENT:AppHeader')
   // const checkLoginStatus = (store) => {
@@ -51,6 +52,7 @@
   export default {
     name: 'AppHeader',
     components: {
+      Notification,
       SearchTool,
     },
     props: [ 'sections', ],
@@ -141,6 +143,7 @@
       left 15px
       width 50px
       height auto
+      z-index 2
       img
         width 100%
     &__item

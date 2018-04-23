@@ -149,6 +149,17 @@ export function getProjectUrl (slug) {
   return OLD_PROJECTS_SLUGS.includes(slug) ? `http://${MM_SITE_DOMAIN}/projects/${slug}` : `http://${SITE_DOMAIN}/project/${slug}`
 }
 
+export function isDescendant (child, { parent = document.body, }) {
+  let node = child.parentNode
+  while (node !== null && node !== undefined) {
+    if (node === parent) {
+      return true
+    }
+    node = node.parentNode
+  }
+  return false
+}
+
 export function onImageLoaded(url) {
   var image = new Image()
   image.src = url

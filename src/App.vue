@@ -12,7 +12,7 @@
   import { SECTIONS_DEFAULT, } from './constants'
   import { get, } from 'lodash'
   import AppFooter from './components/AppFooter.vue'
-  import AppHeader from './components/AppHeader.vue'
+  import AppHeader from './components/header/AppHeader.vue'
   export default {
     components: {
       AppFooter,

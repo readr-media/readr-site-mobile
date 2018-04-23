@@ -256,6 +256,11 @@ export function getMembersCount () {
   return _doFetchStrict(url, {}) 
 } 
 
+export function getNotification (id) {
+  let url = `${host}/api/member/notification/${id}`
+  return _doFetchStrict(url, {})  
+}
+
 export function getPublicMember ({ params, }) {
   let url = `${host}/api/public/profile/${params.id}`
   // url = `${url}/profile/${params.id}`
@@ -485,6 +490,11 @@ export function updateMember ({ params, type, }) {
   return _doPut(url, params)
     .then(res => ({ status: res.status, }))
     .catch(err => err)
+}
+
+export function updateNotificationStatus ({ params, }) {
+  const url = `${host}/api/member/notification/ack`
+  return _doPut(url, params)
 }
 
 export function updatePassword ({ params, }) {

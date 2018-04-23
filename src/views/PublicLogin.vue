@@ -9,7 +9,7 @@
   import { SECTIONS_DEFAULT, } from '../constants'
   // import LoginPanel from '../components/LoginPanel.vue'
   import LoginPanelPackingTest from '../components/LoginPanelPackingTest.vue'
-  import AppHeader from '../components/AppHeader.vue'
+  import AppHeader from '../components/header/AppHeader.vue'
   import AppAsideNav from '../components/AppAsideNav.vue'
   
   export default {
