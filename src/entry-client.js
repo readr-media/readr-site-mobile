@@ -84,6 +84,9 @@ if (store.state.unauthorized) {
   router.push(store.state.targ_url) 
 } 
 
+const { UserAgent, } = require('express-useragent') 
+store.state.useragent = new UserAgent().parse(navigator.userAgent)
+
 // wait until router has resolved all async before hooks
 // and async components...
 router.onReady(() => {

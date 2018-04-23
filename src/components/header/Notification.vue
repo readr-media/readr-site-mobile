@@ -24,6 +24,9 @@
       NotificationDropbox,
     },
     computed: {
+      currPath () {
+        return get(this.$route, 'fullPath')
+      },      
       currUser () {
         return get(this.$store, 'state.profile.id')
       },
@@ -62,6 +65,12 @@
       this.$el.ondragstart = function () { return false }
       this.$el.onselectstart = function () { return false }
     },
+    watch: { 
+      currPath () { 
+        debug('Mutation detected: currPath.')
+        this.updateNotification() 
+      }, 
+    }, 
   }
 </script>
 <style lang="stylus" scoped>
