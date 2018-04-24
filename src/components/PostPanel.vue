@@ -368,7 +368,7 @@
         }
 
         if (Date.parse(this.date)) {
-          this.postParams.published_at = this.date
+          this.postParams.published_at = new Date(this.date)
         } else if (postActive === this.$store.state.setting.POST_ACTIVE.ACTIVE && !this.postParams.published_at) {
           this.postParams.published_at = new Date(Date.now())
         }
