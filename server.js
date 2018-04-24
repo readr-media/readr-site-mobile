@@ -119,6 +119,7 @@ function render (req, res, next) {
   }
 
   const s = Date.now()
+  let isUnauthorized = false
   let isPageNotFound = false
   let isErrorOccurred = false  
 
@@ -137,10 +138,10 @@ function render (req, res, next) {
     }
   }
 
-  // if (_.filter(PAGE_CACHE_EXCLUDING, (p) => (req.url.indexOf(p) > -1)).length === 0) {
-  //   !curr_host.match(targ_exp) && res.setHeader('Cache-Control', 'public, max-age=3600')  
-  // }
-  res.setHeader('Cache-Control', 'public, max-age=3600')  
+  if (_.filter(PAGE_CACHE_EXCLUDING, (p) => (req.url.indexOf(p) > -1)).length === 0) {
+    !curr_host.match(targ_exp) && res.setHeader('Cache-Control', 'public, max-age=3600')  
+  }
+  // res.setHeader('Cache-Control', 'public, max-age=3600')  
   res.setHeader("Content-Type", "text/html")
   res.setHeader("Server", serverInfo)
 
@@ -222,6 +223,7 @@ function render (req, res, next) {
     }
   }
   const handleError = err => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')  
     if (err.url) {
       res.redirect(err.url)
     }
@@ -229,19 +231,22 @@ function render (req, res, next) {
     if (err.code === 404) {
       status = 404
       isPageNotFound = true
+    }  else if (err.code === 403) { 
+      status = 403 
+      isUnauthorized = true 
+      res.status(status).send(`<script>location.replace('/login')</script>`) 
+      return 
     } else {
       status = 500
       isErrorOccurred = true
     }
     renderer.renderToString(Object.assign({}, context, { url: `/${status}` }), (e, h) => {
       if (!e) {
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')  
         res.status(status).send(h)
         if (!isProd) {
           console.log(`whole request: ${Date.now() - s}ms`)
         }    
-      } else {
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')  
+      }else {
         res.status(500).send('500 | Internal Server Error')
         console.error(`Error occurred  during render : ${req.url}`)
         console.error(e.stack)
@@ -259,7 +264,7 @@ function render (req, res, next) {
       console.error(`KILLING PROCESS IN 1 SECOND(At ${(new Date).toString()})`)
       process.exit(1)
     }
-    if (isPageNotFound || isErrorOccurred) {
+    if (isPageNotFound || isErrorOccurred || isUnauthorized) {
       try {
         global.gc()
       } catch (e) {
