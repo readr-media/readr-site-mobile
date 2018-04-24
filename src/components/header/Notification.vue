@@ -1,5 +1,5 @@
 <template>
-  <div class="notification" @click="toggle">
+  <div class="notification" tabIndex="0" @click="toggle" @focusout="focusout">
     <div class="notification__light" :class="{ on: isBoxActive }" v-if="notReadYetCount !== 0"><span v-text="notReadYetCount"></span></div>
     <div class="notification__light bell" v-else></div>
     <NotificationDropbox class="notification__dropbox"
@@ -43,6 +43,9 @@
       }
     },
     methods: {
+      focusout () {
+        this.isBoxActive = false
+      },
       toggle () {
         this.isBoxActive = !this.isBoxActive
         if (!this.isBoxActive) {
@@ -75,6 +78,7 @@
 </script>
 <style lang="stylus" scoped>
   .notification
+    outline none
     &__light
       background-color #d0021b
       width 18px
