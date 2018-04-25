@@ -173,6 +173,7 @@ export default {
     'DATETIME_PLACEHOLDER': '請選擇發布時間',
     'DELETE' : '刪除',
     'EDITOR' : '編輯器',
+    'IN_SAVE': '儲存中',
     'LINK' : '連結',
     'NEWS' : '新聞',
     'NOT_FOUND' : 'No results found',
