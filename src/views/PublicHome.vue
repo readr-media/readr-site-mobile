@@ -13,6 +13,7 @@
 <script>
   import { PROJECT_STATUS, PROJECT_PUBLISH_STATUS, } from 'api/config'
   import { get, find, uniq, concat, } from 'lodash'
+  import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
@@ -84,6 +85,27 @@
         max_result: MAXRESULT_VIDEOS,
       },
     })
+  }
+
+  const pageJump = ({ store, to, next, }) => {
+    if ('postId' in to.params && to.params.postId) {
+      fetchPost(store, { id: to.params.postId, }).then(({ status, }) => {
+        if (status === 'error') {
+          if (process.browser) {
+            // next('/404')
+          } else {
+            const e = new Error()
+            e.massage = 'Page Not Found'
+            e.code = '404'
+            throw e  
+          }
+        } else {
+          next()
+        }
+      })
+    } else {
+      next()
+    }
   }
 
   export default {
@@ -174,20 +196,11 @@
       },
     },
     beforeRouteEnter (to, from, next) {
-      if ('postId' in to.params) {
-        next(vm => {
-          fetchPost(vm.$store, { id: to.params.postId, }).then(({ status, }) => {
-            if (status === 'error') {
-              const e = new Error()
-              e.massage = 'Page Not Found'
-              e.code = '404'
-              throw e  
-            }
-          })
-        })
-      } else {
-        next()
-      }
+      const store = createStore()
+      pageJump({ store, to, next, })
+    },
+    beforeRouteUpdate (to, from, next) {
+      pageJump({ store: this.$store, to, next, })
     },
     beforeMount () {
       let reqs = [
