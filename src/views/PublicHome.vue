@@ -14,7 +14,6 @@
   import { PROJECT_STATUS, } from 'api/config'
   import { get, find, uniq, concat, } from 'lodash'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
-  import { createStore, } from 'src/store'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
   import BaseLightBox from 'src/components/BaseLightBox.vue'
@@ -174,10 +173,16 @@
       },
     },
     beforeRouteEnter (to, from, next) {
-      const store = createStore()
       if ('postId' in to.params) {
-        fetchPost(store, { id: to.params.postId, }).then(({ status, }) => {
-          status === 'error' ? next('/404') : next()
+        next(vm => {
+          fetchPost(vm.$store, { id: to.params.postId, }).then(({ status, }) => {
+            if (status === 'error') {
+              const e = new Error()
+              e.massage = 'Page Not Found'
+              e.code = '404'
+              throw e  
+            }
+          })
         })
       } else {
         next()
