@@ -17,7 +17,6 @@ const fs = require('fs')
 const jwtExpress = require('express-jwt')
 // const jwtService = require('./service.js')
 const multer  = require('multer')
-// const ogs = require('open-graph-scraper')
 const upload = multer({ dest: 'tmp/', })
 
 const { fetchFromRedis, insertIntoRedis, redisFetching, } = require('./middle/redisHandler')
