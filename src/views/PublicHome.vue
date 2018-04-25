@@ -11,7 +11,7 @@
   </section>
 </template>
 <script>
-  import { PROJECT_STATUS, } from 'api/config'
+  import { PROJECT_STATUS, PROJECT_PUBLISH_STATUS, } from 'api/config'
   import { get, find, uniq, concat, } from 'lodash'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
@@ -72,6 +72,7 @@
         max_result: max_result,
         where: {
           status: status,
+          publish_status: PROJECT_PUBLISH_STATUS.DRAFT,
         },
       },
     })
