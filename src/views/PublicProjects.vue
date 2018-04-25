@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { PROJECT_STATUS, } from '../../api/config'
+import { PROJECT_STATUS, PROJECT_PUBLISH_STATUS, } from '../../api/config'
 import { get, } from 'lodash'
 import { isScrollBarReachBottom, } from '../util/comm'
 import Invite from '../components/invitation/Invite.vue'
@@ -30,6 +30,7 @@ const fetchProjectsList = (store, {
       sort: sort,
       where: {
         status: PROJECT_STATUS.DONE,
+        publish_status: PROJECT_PUBLISH_STATUS.DRAFT,
       },
     },
   })
