@@ -25,10 +25,10 @@
     </nav>
     <div class="homeNavigationMobile__content">
       <template v-if="active === 'projectsInProgress'">
-        <a v-for="p in projectsInProgress" :key="p.id" :href="projectUrl(p.slug)" target="_blank" class="homeNavigationMobile__progress">
+        <a v-for="p in projectsInProgress" :key="p.id" class="homeNavigationMobile__progress">
           <div class="homeNavigationMobile__progress-title" v-text="p.title"></div>
-          <div class="homeNavigationMobile__progress-percentage" v-text="`0%`"></div>
-          <div class="homeNavigationMobile__progress-donate"><img src="/public/icons/encoruage-white.png" alt=""></div>
+          <div class="homeNavigationMobile__progress-percentage" v-text="`${p.progress}%`"></div>
+          <!-- <div class="homeNavigationMobile__progress-donate"><img src="/public/icons/encoruage-white.png" alt=""></div> -->
         </a>
       </template>
       <!-- <template v-if="active === 'video' && videoLink">
@@ -70,7 +70,7 @@
     },
     data () {
       return {
-        active: undefined,
+        active: 'projectsDone',
       }
     },
     computed: {
@@ -164,7 +164,7 @@
       &-percentage, &-donate
         width 40px
         height 40px
-        background-color #ddcf21
+        background-color #11b8c9
       &-percentage
         color #fff
         font-size .9375rem
