@@ -16,8 +16,7 @@ import ProjectBlock from '../components/ProjectBlock.vue'
 
 const MAX_RESULT = 8
 const DEFAULT_PAGE = 1
-const DEFAULT_SORT = '-updated_at'
-
+const DEFAULT_SORT = 'project_order,-updated_at'
 const fetchProjectsList = (store, {
   max_result = MAX_RESULT,
   page = DEFAULT_PAGE,
@@ -38,9 +37,9 @@ const fetchProjectsList = (store, {
 
 export default {
   name: 'ProjectsList',
-  asyncData ({ store, }) {
-    return fetchProjectsList(store)
-  },
+  // asyncData ({ store, }) {
+  //   return fetchProjectsList(store)
+  // },
   components: {
     ProjectBlock,
     Invite,
@@ -57,6 +56,10 @@ export default {
       return get(this.$store, [ 'state', 'publicProjects', 'done', ], [])
     },
   },
+  beforeMount () {
+    // Beta version code
+    fetchProjectsList(this.$store, {})
+  },  
   mounted () {
     window.addEventListener('scroll', this.$_projects_loadmoreHandler)
   },
