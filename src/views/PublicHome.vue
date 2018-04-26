@@ -27,6 +27,7 @@
   const MAXRESULT_VIDEOS = 1
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-published_at'
+  const DEFAULT_PROJECT_SORT = 'project_order,-updated_at'
   const DEFAULT_CATEGORY = 'latest'
   // const debug = require('debug')('CLIENT:PublicHome')
 
@@ -75,6 +76,7 @@
           status: status,
           publish_status: PROJECT_PUBLISH_STATUS.DRAFT,
         },
+        sort: DEFAULT_PROJECT_SORT,
       },
     })
   }
