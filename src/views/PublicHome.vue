@@ -67,7 +67,7 @@
 
   const fetchProjectsList = (store, {
     max_result = MAXRESULT_PROJECTS,
-    publish_status = PROJECT_PUBLISH_STATUS.UNPUBLISHED,
+    publish_status = PROJECT_PUBLISH_STATUS.PUBLISHED,
     status,
   } = {}) => {
     return store.dispatch('GET_PUBLIC_PROJECTS', {
@@ -209,7 +209,7 @@
       let reqs = [
         fetchPosts(this.$store),
         fetchPosts(this.$store, { category: 'hot', }),
-        fetchProjectsList(this.$store, { max_result: 5, status: PROJECT_STATUS.WIP, publish_status: PROJECT_PUBLISH_STATUS.UNPUBLISHED, }),
+        fetchProjectsList(this.$store, { max_result: 5, status: PROJECT_STATUS.WIP, }),
         fetchProjectsList(this.$store, { max_result: 2, status: PROJECT_STATUS.DONE, }),
         fetchVideos(this.$store),
       ]
