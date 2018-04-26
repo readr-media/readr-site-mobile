@@ -76,12 +76,12 @@
     &__img
       position relative
       display block
-      width 50%
+      width 60px
       font-size 0
       &::before
         content ''
         display block
-        padding-top 66.66%
+        padding-top 100%
         height 0
       img
         position absolute
@@ -91,10 +91,10 @@
         object-fit cover
         object-position 50% 50%
     &__info
+      flex 1
       display flex
       flex-direction column
       justify-content space-between
-      width 50%
       padding 2px 0 0 10px
       h2
         margin 0
@@ -134,6 +134,7 @@
       &:last-of-type
         margin-bottom 20px
       &__img
+        width 50%
         &::before
           padding-top 56.25%
       &__info
@@ -143,8 +144,11 @@
         p
           display block
           margin 0
+          max-height 4.21875rem
           font-size .9375rem
+          text-overflow ellipsis
           line-height 1.5
+          overflow hidden
           a
             display block
             max-width 100%
