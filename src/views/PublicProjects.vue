@@ -17,6 +17,7 @@ import ProjectBlock from '../components/ProjectBlock.vue'
 const MAX_RESULT = 8
 const DEFAULT_PAGE = 1
 const DEFAULT_SORT = 'project_order,-updated_at'
+
 const fetchProjectsList = (store, {
   max_result = MAX_RESULT,
   page = DEFAULT_PAGE,
@@ -29,7 +30,7 @@ const fetchProjectsList = (store, {
       sort: sort,
       where: {
         status: PROJECT_STATUS.DONE,
-        publish_status: PROJECT_PUBLISH_STATUS.DRAFT,
+        publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED,
       },
     },
   })
