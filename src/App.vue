@@ -10,9 +10,11 @@
 
 <script>
   import { SECTIONS_DEFAULT, } from './constants'
-  import { get, } from 'lodash'
+  import { get, } from 'lodash' 
+  import { logTrace, } from 'src/util/services'   
   import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/header/AppHeader.vue'
+  import Tap from 'tap.js'
   export default {
     components: {
       AppFooter,
@@ -21,18 +23,28 @@
     data () {
       return {
         openControlBar: false,
+        doc: {}, 
+        globalTapevent: {}, 
       }
     },
     computed: {
+      currUser () { 
+        return get(this.$store, 'state.profile.id') 
+      }, 
       isLogin () {
         return get(this.$route, [ 'fullPath', ]).split('/')[1] === 'login'
       },
       sections () {
         return SECTIONS_DEFAULT
       },
+      useragent () { 
+        return get(this.$store, 'state.useragent') 
+      }, 
     },
     mounted () {
       this.$store.dispatch('UPDATE_CLIENT_SIDE')
+      this.doc = document
+      this.$_app_launchLogger()
     },
     methods: {
       $_app_closeControlBar () {
@@ -40,6 +52,19 @@
       },
       $_app_openControlBar () {
         this.openControlBar = true
+      },
+      $_app_launchLogger () { 
+        this.globalTapevent = new Tap(this.doc) 
+        this.doc.addEventListener('tap', (event) => { 
+          logTrace({ 
+            category: 'whole-site', 
+            description: 'ele clicked', 
+            eventType: 'click', 
+            sub: this.currUser, 
+            target: event.target, 
+            useragent: this.useragent, 
+          }) 
+        }) 
       },
     },
   }

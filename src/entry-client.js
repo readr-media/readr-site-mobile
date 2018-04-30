@@ -122,4 +122,6 @@ router.onReady(() => {
 // service worker
 if ('https:' === location.protocol && navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js')
+  navigator.serviceWorker.ready.then(() => debug('Ready!', navigator.serviceWorker))
+  navigator.serviceWorker.addEventListener('message', event => debug('Got Msg from dervice-worker!' + event.data))
 }

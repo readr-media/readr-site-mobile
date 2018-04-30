@@ -3,6 +3,7 @@ const merge = require('webpack-merge')
 const base = require('./webpack.base.config')
 const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const config = merge(base, {
   entry: {
@@ -13,6 +14,9 @@ const config = merge(base, {
     }
   },
   plugins: [
+    new CopyWebpackPlugin([ 
+      { from:'./src/trace-worker.js', to:'trace-worker.js' }, 
+    ]),
     new webpack.ProvidePlugin({
       'window.Quill': 'quill',
       'Quill': 'quill/dist/quill.js',
@@ -51,6 +55,9 @@ if (process.env.NODE_ENV === 'production') {
       cacheId: 'readr-site-mobile',
       filename: 'service-worker.js',
       minify: true,
+      importScripts: [ 
+        { filename: 'trace-worker.js' }, 
+      ],
       dontCacheBustUrlsMatching: /./,
       staticFileGlobsIgnorePatterns: [/\.map$/, /\.json$/],
       runtimeCaching: [
