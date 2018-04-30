@@ -5,7 +5,7 @@
       <div
         class="postListInTab__active"
         :class="[ $_shouldHighlightStatus(p) ? 'draft' : '' ]"
-        v-text="$_postListInTab_getActive(p)">
+        v-text="$_postListInTab_getPublishStatus(p)">
       </div>
       <div class="postListInTab__content">
         <div class="postListInTab__title">
@@ -17,15 +17,15 @@
         </div>
         <p v-else-if="p.content" class="postListInTab__descr" v-text="$_postListInTab_getDescr(p.content)"></p>
       </div>
-      <div v-if="!(!$can('editOtherPost') && p.active !== config.active.DRAFT)" class="postListInTab__control--mobile">
-        <button class="postListInTab__btn" @click="$_postListInTab_editPost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_EDIT')"></button>
-        <button class="postListInTab__btn" @click="$_postListInTab_deletePost(p.id)" v-text="$t('post_list.WORDING_POSTLIST_DELETE')"></button>
+      <div v-if="!(!$can('editOtherPost') && p.publishStatus !== config.publishStatus.DRAFT)" class="postListInTab__control--mobile">
+        <button class="postListInTab__btn" @click="$_postListInTab_editPost(p.id)" v-text="$t('POST_LIST.EDIT')"></button>
+        <button class="postListInTab__btn" @click="$_postListInTab_deletePost(p.id)" v-text="$t('POST_LIST.DELETE')"></button>
       </div>
     </div>
   </section>
 </template>
 <script>
-  import { POST_ACTIVE, } from '../../api/config'
+  import { POST_PUBLISH_STATUS, } from '../../api/config'
   import _ from 'lodash'
   import PaginationNav from './PaginationNav.vue'
 
@@ -49,10 +49,9 @@
     data () {
       return {
         config: {
-          active: POST_ACTIVE,
+          publishStatus: POST_PUBLISH_STATUS,
         },
         currPage: 1,
-        postConfig: POST_ACTIVE,
       }
     },
     computed: {
@@ -62,23 +61,23 @@
     },
     methods: {
       $_postListInTab_deletePost (id) {
-        this.$emit('deletePost', [ id, ], POST_ACTIVE.DEACTIVE)
+        this.$emit('deletePost', [ id, ], POST_PUBLISH_STATUS.DELETED)
       },
       $_postListInTab_editPost (id) {
         this.$emit('editPost', { postPanel: 'edit', id: id, })
       },
-      $_postListInTab_getActive (post) {
-        switch (post.active) {
-          case POST_ACTIVE.ACTIVE:
-            return this.parent !== 'RewardPointsInTab' ? this.$t('post_list.WORDING_POSTLIST_ACTIVE_PUBLISH') : this.$t('post_list.WORDING_POSTLIST_ACTIVE_PUBLISH_PROJECT')
-          case POST_ACTIVE.DRAFT:
-            return this.$t('post_list.WORDING_POSTLIST_ACTIVE_DRAFT')
-          case POST_ACTIVE.PENDING:
-            return this.parent !== 'RewardPointsInTab' ? this.$t('post_list.WORDING_POSTLIST_ACTIVE_PENDING') : this.$t('post_list.WORDING_POSTLIST_ACTIVE_PENDING_PROJECT')
-          case POST_ACTIVE.UNPUBLISH:
-            return this.$t('post_list.WORDING_POSTLIST_ACTIVE_UNPUBLISH')
+      $_postListInTab_getPublishStatus (post) {
+        switch (post.publishStatus) {
+          case POST_PUBLISH_STATUS.PUBLISHED:
+            return this.parent !== 'RewardPointsInTab' ? this.$t('POST_LIST.PUBLISH_STATUS_PUBLISHED') : this.$t('POST_LIST.PUBLISH_STATUS_PUBLISHED_PROJECT')
+          case POST_PUBLISH_STATUS.DRAFT:
+            return this.$t('POST_LIST.PUBLISH_STATUS_DRAFT')
+          case POST_PUBLISH_STATUS.PENDING:
+            return this.parent !== 'RewardPointsInTab' ? this.$t('POST_LIST.PUBLISH_STATUS_PENDING') : this.$t('POST_LIST.PUBLISH_STATUS_PENDING_PROJECT')
+          case POST_PUBLISH_STATUS.UNPUBLISHED:
+            return this.$t('POST_LIST.PUBLISH_STATUS_UNPUBLISHED')
           default:
-            return this.$t('post_list.WORDING_POSTLIST_ACTIVE_DRAFT')
+            return this.$t('POST_LIST.PUBLISH_STATUS_DRAFT')
         }
       },
       $_postListInTab_getDescr (content) {
@@ -95,7 +94,7 @@
         return origin
       },
       $_shouldHighlightStatus (post) {
-        return post.active === this.config.active.DRAFT || (this.parent === 'RewardPointsInTab' && post.active === this.config.active.ACTIVE)
+        return post.publishStatus === POST_PUBLISH_STATUS.DRAFT || (this.parent === 'RewardPointsInTab' && post.publishStatus === POST_PUBLISH_STATUS.PUBLISHED)
       },
     },
     watch: {
