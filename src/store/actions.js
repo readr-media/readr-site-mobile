@@ -277,6 +277,7 @@ export default {
     return getPublicProjectsList({ params, })
       .then(({ status, body, }) => {
         if (status === 200) {
+          const loadmoreItems = body.items
           let orig
           switch (projectStatus) {
             case PROJECT_STATUS.WIP:
@@ -284,19 +285,22 @@ export default {
                 orig = _.values(_.get(state, [ 'publicProjects', 'inProgress', ], []))
                 body.items =  _.concat(orig, body.items)
               }
-              return commit('SET_PUBLIC_PROJECTS', { status: 'inProgress', publicProjects: body.items, })
+              commit('SET_PUBLIC_PROJECTS', { status: 'inProgress', publicProjects: body.items, })
+              return loadmoreItems
             case PROJECT_STATUS.DONE:
               if (params.page > 1) {
                 orig = _.values(_.get(state, [ 'publicProjects', 'done', ], []))
                 body.items =  _.concat(orig, body.items)
               }
-              return commit('SET_PUBLIC_PROJECTS', { status: 'done', publicProjects: body.items, })
+              commit('SET_PUBLIC_PROJECTS', { status: 'done', publicProjects: body.items, })
+              return loadmoreItems
             default:
               if (params.page > 1) {
                 orig = _.values(_.get(state, [ 'publicProjects', 'normal', ], []))
                 body.items =  _.concat(orig, body.items)
               }
-              return commit('SET_PUBLIC_PROJECTS', { status: 'normal', publicProjects: body.items, })
+              commit('SET_PUBLIC_PROJECTS', { status: 'normal', publicProjects: body.items, })
+              return loadmoreItems
           }
         }
       })
