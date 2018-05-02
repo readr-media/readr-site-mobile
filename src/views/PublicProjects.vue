@@ -36,8 +36,22 @@ const fetchProjectsList = (store, {
   })
 }
 
+const fetchFollowing = (store, params) => {
+  if (params.subject) {
+    return store.dispatch('GET_FOLLOWING_BY_USER', {
+      subject: params.subject,
+      resource: 'project',
+    })
+  } else {
+    return store.dispatch('GET_FOLLOWING_BY_RESOURCE', {
+      resource: 'project',
+      ids: params.ids,
+    })
+  }
+}
+
 export default {
-  name: 'ProjectsList',
+  name: 'PublicProjects',
   // asyncData ({ store, }) {
   //   return fetchProjectsList(store)
   // },
@@ -60,6 +74,14 @@ export default {
   beforeMount () {
     // Beta version code
     fetchProjectsList(this.$store, {})
+    .then(() => {
+      if (this.$store.state.isLoggedIn) {
+        const projectIds = get(this.$store, 'state.publicProjects.done', []).map(project => `${project.id}`)
+        fetchFollowing(this.$store, {
+          ids: projectIds,
+        })
+      }
+    })
   },  
   mounted () {
     window.addEventListener('scroll', this.$_projects_loadmoreHandler)
@@ -70,10 +92,17 @@ export default {
         const origCount = get(this.projects, [ 'length', ], 0)
         this.loading = true
         fetchProjectsList(this.$store, { page: this.currentPage + 1, })
-        .then(() => {
+        .then((res) => {
           this.currentPage += 1
-          get(this.projects, [ 'length', ], 0) <= origCount ? this.hasMore = false : ''
+          get(this.projects, [ 'length', ], 0) <= origCount ? this.hasMore = false : true
           this.loading = false
+          if (this.hasMore && this.$store.state.isLoggedIn) {
+            const projectIds = res.map(project => `${project.id}`)
+            fetchFollowing(this.$store, {
+              mode: 'update',
+              ids: projectIds,
+            })
+          }
         })
       }
     },
