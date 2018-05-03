@@ -261,6 +261,21 @@ export function getNotification (id) {
   return _doFetchStrict(url, {})  
 }
 
+export function getMemo ({ params, }) {
+  let url = `${host}/api/memo/${_.get(params, 'memoId')}`
+  return _doFetchStrict(url, {})
+}
+
+export function getMemos ({ params, }) {
+  let url = `${host}/api/memos`
+  const query = _buildQuery(params)
+  debug('params', params)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }  
+  return _doFetchStrict(url, {})
+}
+
 export function getPublicMember ({ params, }) {
   let url = `${host}/api/public/profile/${params.id}`
   // url = `${url}/profile/${params.id}`
