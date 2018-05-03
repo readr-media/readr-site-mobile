@@ -55,7 +55,6 @@
       Notification,
       SearchTool,
     },
-    props: [ 'sections', ],
     computed: {
       currUrl () {
         return get(this.$route, [ 'fullPath', ])

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <app-header v-if="!isLogin" :sections="sections" @openControlBar="$_app_openControlBar"></app-header>
+    <app-header v-if="!isLogin" @openControlBar="$_app_openControlBar"></app-header>
     <transition name="fade" mode="out-in">
       <router-view class="view" :openControlBar="openControlBar" @closeControlBar="$_app_closeControlBar"></router-view>
     </transition>
@@ -9,7 +9,6 @@
 </template>
 
 <script>
-  import { SECTIONS_DEFAULT, } from './constants'
   import { get, } from 'lodash' 
   import { logTrace, } from 'src/util/services'   
   import AppFooter from './components/AppFooter.vue'
@@ -33,9 +32,6 @@
       }, 
       isLogin () {
         return get(this.$route, [ 'fullPath', ]).split('/')[1] === 'login'
-      },
-      sections () {
-        return SECTIONS_DEFAULT
       },
       useragent () { 
         return get(this.$store, 'state.useragent') 

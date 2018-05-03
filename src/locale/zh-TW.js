@@ -328,5 +328,13 @@ export default {
       '4': '直播',
     },
     'PUBLISH': '發表了新的',
-  },  
+  },
+  'SECTIONS': { 
+    'CHIEF_EDITOR_TALK': '視角', 
+    'CELEBRITIES_TALK': '對話', 
+    'HOT_TALK': '焦點', 
+    'CHIEF_EDITOR_LIST': '客座', 
+    'PROJECTS': '議題', 
+    'PROJECTS_IN_PROGRESS': '進行中議題',     
+  },
 }

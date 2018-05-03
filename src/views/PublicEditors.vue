@@ -16,7 +16,6 @@
 
 <script>
 import { ROLE_MAP, } from '../constants'
-import AppAsideNav from '../components/AppAsideNav.vue'
 import AppTitledList from '../components/AppTitledList.vue'
 import EditorsIntro from '../components/editors/EditorsIntro.vue'
 import Invite from '../components/invitation/Invite.vue'
@@ -51,7 +50,6 @@ export default {
     })
   },
   components: {
-    AppAsideNav,
     AppTitledList,
     EditorsIntro,
     Invite,

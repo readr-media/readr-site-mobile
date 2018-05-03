@@ -33,7 +33,6 @@
   import { find, get, map, } from 'lodash'
   import { dateDiffFromNow, isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
   import About from 'src/components/About.vue'
-  import AppAsideNav from 'src/components/AppAsideNav.vue'
   import PostContent from 'src/components/PostContent.vue'
   import Tab from 'src/components/Tab.vue'
   import Spinner from 'src/components/Spinner.vue'
@@ -84,7 +83,6 @@
     name: 'Profile',
     components: {
       About,
-      AppAsideNav,
       PostContent,
       Tab,
       Spinner,
