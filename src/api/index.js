@@ -11,7 +11,21 @@ const host = getHost()
 
 function _buildQuery (params = {}) {
   let query = {}
-  const whitelist = [ 'where', 'max_result', 'page', 'sort', 'sorting', 'ids', 'custom_editor', 'updated_by', 'keyword', 'stats', 'role', ]
+  const whitelist = [
+    'where',
+    'max_result',
+    'page',
+    'sort',
+    'sorting',
+    'ids',
+    'custom_editor',
+    'updated_by',
+    'keyword',
+    'stats',
+    'role',
+    'publish_status',
+    'project_id',    
+  ]
   whitelist.forEach((ele) => {
     if (params.hasOwnProperty(ele)) {
       if (ele === 'where') {
@@ -22,7 +36,7 @@ function _buildQuery (params = {}) {
         Object.keys(where).forEach((key) => {
           query[key] = JSON.stringify(where[key])
         })
-      } else if (ele === 'ids') {
+      } else if (ele === 'ids' || ele === 'project_id') {
         query[ele] = JSON.stringify(params[ele])
       } else {
         query[ele] = params[ele]
@@ -259,6 +273,21 @@ export function getMembersCount () {
 export function getNotification (id) {
   let url = `${host}/api/member/notification/${id}`
   return _doFetchStrict(url, {})  
+}
+
+export function getMemo ({ params, }) {
+  let url = `${host}/api/memo/${_.get(params, 'memoId')}`
+  return _doFetchStrict(url, {})
+}
+
+export function getMemos ({ params, }) {
+  let url = `${host}/api/memos`
+  const query = _buildQuery(params)
+  debug('params', params)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }  
+  return _doFetchStrict(url, {})
 }
 
 export function getPublicMember ({ params, }) {

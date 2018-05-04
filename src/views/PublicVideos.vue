@@ -15,7 +15,6 @@
 <script>
   // import { currentYPosition, elmYPosition } from 'kc-scroll'
   import { filter, find, get, xor, } from 'lodash'
-  import AppAsideNav from '../components/AppAsideNav.vue'
   import VideosHighlight from '../components/videos/VideosHighlight.vue'
   import VideosList from '../components/videos/VideosList.vue'
 
@@ -50,7 +49,6 @@
       ])
     },
     components: {
-      AppAsideNav,
       VideosHighlight,
       VideosList,
     },

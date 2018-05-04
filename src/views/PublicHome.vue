@@ -17,7 +17,6 @@
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
-  import BaseLightBox from 'src/components/BaseLightBox.vue'
   import BaseLightBoxPost from 'src/components/BaseLightBoxPost.vue'
   import Invite from 'src/components/invitation/Invite.vue'
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
@@ -132,7 +131,6 @@
     components: {
       HomeArticleMain,
       HomeNavigationMobile,
-      BaseLightBox,
       BaseLightBoxPost,
       Invite,
       PostBoxWrapper,

@@ -24,6 +24,8 @@ import {
   getFollowingByUser,
   getMembers,
   getMembersCount,
+  getMemo,
+  getMemos,
   getMeta,
   getNotification,
   getPost,
@@ -33,6 +35,7 @@ import {
   getPublicMember,
   getPublicMembers,
   getPublicPosts,
+  getPublicProject,
   getPublicProjectsList,
   getPublicVideos,
   getPublicVideosCount,
@@ -188,6 +191,35 @@ export default {
       }
     })
   },
+  GET_MEMO: ({ commit, dispatch, state, }, { params, }) => { 
+    return getMemo({ params, }).then(({ status, body, }) => { 
+      debug('GET_MEMO', body) 
+      if (status === 200) { 
+        commit('SET_MEMO_SINGLE', { item: Object.assign({}, _.get(body, 'items', {}), { type: 'memo', }), }) 
+      } 
+    }) 
+  }, 
+  GET_MEMOS: ({ commit, dispatch, state, }, { params, mode, }) => {
+    return getMemos({ params, }).then(({ status, body, }) => {
+      if (status === 200) {
+        if (mode == 'set') {
+          commit('SET_MEMOS', { items: _.map(_.get(body, 'items', []), i => {
+            i.type = 'memo'
+            return i
+          }), })
+        } else if (mode === 'update') {
+          if (_.get(body, 'items', []).length === 0) {
+            return { status: 'end', }
+          }
+          commit('UPDATE_MEMOS', { items: _.map(_.get(body, 'items', []), i => {
+            i.type = 'memo'
+            return i
+          }), })          
+        }
+        return { status, }
+      }
+    })
+  },  
   GET_META: ({ commit, dispatch, state, }, { url, }) => {
     return getMeta(url)
   },
@@ -272,6 +304,17 @@ export default {
       })
     }) 
   },
+  GET_PUBLIC_PROJECT: ({ commit, dispatch, state, }, { params, }) => { 
+    return getPublicProjectsList({ params, }).then(({ status, body, }) => { 
+      debug('Get single pro!', status, body) 
+      if (status === 200) { 
+        commit('SET_PUBLIC_PROJECT_SINGLE', { item: _.get(body, [ 'items', 0, ]), }) 
+        return _.get(body, [ 'items', 0, ]) 
+      } else { 
+        return { status, } 
+      } 
+    }) 
+  },  
   GET_PUBLIC_PROJECTS: ({ commit, dispatch, state, }, { params, }) => {
     const projectStatus = _.get(params, [ 'where', 'status', ])
     return getPublicProjectsList({ params, })

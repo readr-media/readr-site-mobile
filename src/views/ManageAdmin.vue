@@ -118,7 +118,6 @@
 </template>
 <script>
   import { POST_PUBLISH_STATUS, POST_TYPE, TAG_ACTIVE, } from '../../api/config'
-  import { SECTIONS_DEFAULT, } from '../constants'
   import { filter, find, forEach, get, includes, unionBy, } from 'lodash'
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
@@ -346,9 +345,6 @@
       },
       profile () {
         return get(this.$store, [ 'state', 'profile', ], {})
-      },
-      sections () {
-        return SECTIONS_DEFAULT
       },
       tags () {
         return get(this.$store, [ 'state', 'tags', ], [])

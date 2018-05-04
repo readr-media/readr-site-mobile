@@ -17,6 +17,7 @@ const PublicAgreement = () => import('../views/PublicAgreement.vue')
 const PublicEditors = () => import('../views/PublicEditors.vue')
 const PublicHome = () => import('../views/PublicHome.vue')
 const PublicLogin = () => import('../views/PublicLogin.vue')
+const PublicMemo = () => import('../views/PublicMemo.vue')
 const PublicProfile = () => import('../views/PublicProfile.vue')
 const PublicProjects = () => import('../views/PublicProjects.vue')
 const PublicSearch = () => import('../views/PublicSearch.vue')
@@ -50,6 +51,7 @@ const router = new Router({
     { path: '/guesteditor', component: ManageGuestEditor, meta: { permission: 'guesteditor', }, },
     { path: '/login', component: PublicLogin, },
     { path: '/member', component: ManageMember, meta: { permission: 'member', }, },
+    { path: '/memo/:id/:subItem?', component: PublicMemo, meta: { permission: 'member', }, },
     { path: '/profile/:id', component: PublicProfile, meta: { permission: 'member', }, },
     { path: '/projects', component: PublicProjects, meta: { permission: 'member', }, },
     { path: '/search/:keyword', component: PublicSearch, meta: { permission: 'member', }, },

@@ -80,6 +80,12 @@ export default {
   SET_MEMBERS_COUNT: (state, { count, }) => {
     state['membersCount'] = count
   },
+  SET_MEMOS: (state, { items, }) => { 
+    state['memos'] = items 
+  },
+  SET_MEMO_SINGLE: (state, { item, }) => { 
+    state['memoSingle'] = item 
+  },   
   SET_NOTIFICATION: (state, { items, }) => {
     state['notification'] = items
   },
@@ -109,6 +115,9 @@ export default {
   SET_PUBLIC_PROJECTS: (state, { status, publicProjects, }) => {
     Vue.set(state['publicProjects'], status, publicProjects)
   },
+  SET_PUBLIC_PROJECT_SINGLE: (state, { item, }) => { 
+    state['publicProjectSingle'] = item 
+  }, 
   SET_PUBLIC_VIDEOS: (state, { videos, }) => {
     state['publicVideos'] = videos.items
   },
@@ -149,6 +158,9 @@ export default {
       _.get(posts, 'items', [])
     )
   },
+  UPDATE_MEMOS: (state, { items, }) => { 
+    state['memos'] = _.concat(_.get(state, `memos`, []), items) 
+  }, 
   /**
    * invitation
    */
