@@ -18,7 +18,7 @@
     name: 'CommentCount',
     computed: {
       getAssetUrl () {
-        return getAssetUrl(`/post/${this.postId}`)
+        return getAssetUrl(this.assetUrl || `/post/${this.postId}`)
       },
     },
     methods: {
@@ -44,6 +44,9 @@
       this.seUpfetchCommentCountInterval()
     },
     props: {
+      assetUrl: {
+        type: String,
+      },
       commentAmount: {
         default: () => 0,
       },

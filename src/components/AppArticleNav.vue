@@ -3,7 +3,7 @@
     <nav class="article-nav__nav-btns">
       <span class="comment-icon" @click="renderComment(`.article-nav__comment > .comment.comment-${postId}`)">
         <img class="comment-icon__thumbnail" src="/public/icons/comment-blue.png" alt="comment">
-        <CommentCount class="comment-icon__count" :commentAmount="commentCount" :postId="postId" :type="'publicPostsHot'"></CommentCount>
+        <CommentCount class="comment-icon__count" :commentAmount="commentCount" :assetUrl="assetUrl" :postId="postId" :type="'publicPostsHot'"></CommentCount>
       </span>
       <!-- <img class="follow-icon" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow"> -->
       <span class="follow-icon" @click="toogleFollow($event)">
@@ -40,6 +40,9 @@ const updateStoreFollowingByResource = (store, { action, resource, resourceId, u
 
 export default {
   props: {
+    assetUrl: {
+      type: String,
+    },
     articleType: {
       type: String,
       default: 'post',
@@ -71,7 +74,7 @@ export default {
   },
   methods: {
     renderComment (ref) {
-      renderComment(this.$el, `${ref}`, `/post/${this.postId}`, this.$store.state.setting.TALK_SERVER)
+      renderComment(this.$el, `${ref}`, this.assetUrl || `/post/${this.postId}`, this.$store.state.setting.TALK_SERVER)
     },
     toogleFollow (event) {
       if (event) event.preventDefault()
