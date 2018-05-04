@@ -11,7 +11,7 @@
   </section>
 </template>
 <script>
-  import { PROJECT_STATUS, PROJECT_PUBLISH_STATUS, } from 'api/config'
+  import { POINT_OBJECT_TYPE, PROJECT_STATUS, PROJECT_PUBLISH_STATUS, } from 'api/config'
   import { get, find, uniq, concat, } from 'lodash'
   import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
@@ -77,6 +77,16 @@
           publish_status: publish_status,
         },
         sort: DEFAULT_PROJECT_SORT,
+      },
+    })
+  }
+
+  const fetchPointHistories = (store, { objectIds, objectType, }) => {
+    return store.dispatch('GET_POINT_HISTORIES', {
+      params: {
+        memberId: get(store, [ 'state', 'profile', 'id', ]),
+        objectType: objectType,
+        objectIds: objectIds,
       },
     })
   }
@@ -222,6 +232,7 @@
           const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
           const postIdFeaturedProject = get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
           const ids = uniq(concat(postIdsLatest, postIdsHot))
+          const projectInProgressIds = get(this.$store, 'state.publicProjects.inProgress', []).map(project => project.id)
 
           if (ids.length !== 0) {
             fetchFollowing(this.$store, {
@@ -235,6 +246,10 @@
               resource: 'project',
               ids: postIdFeaturedProject,
             })
+          }
+
+          if (projectInProgressIds.length !== 0) {
+            fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectInProgressIds, })
           }
         }
       })

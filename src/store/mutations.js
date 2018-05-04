@@ -89,6 +89,9 @@ export default {
   SET_NOTIFICATION: (state, { items, }) => {
     state['notification'] = items
   },
+  SET_POINT_HISTORIES: (state, { histories, }) => {
+    state['pointHistories'] = histories.items || []
+  },
   SET_POSTS: (state, { posts, }) => {
     state['posts'] = posts.items
   },
@@ -137,9 +140,6 @@ export default {
     debug('searchResult:')
     debug(searchResult)
     state['searchResult']['items'] = searchResult[ 'items' ]
-  },
-  SET_REWARD_POINTS_TRANSACTIONS: (state, { transactions, }) => {
-    state['rewardPointsTransactions'] = transactions
   },
   SET_INVITATION_QUOTA: (state, { quota, }) => {
     state['invitation_quota'] = quota

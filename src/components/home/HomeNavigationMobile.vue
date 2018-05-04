@@ -25,11 +25,7 @@
     </nav>
     <div class="homeNavigationMobile__content">
       <template v-if="active === 'projectsInProgress'">
-        <a v-for="p in projectsInProgress" :key="p.id" class="homeNavigationMobile__progress">
-          <div class="homeNavigationMobile__progress-title" v-text="p.title"></div>
-          <div class="homeNavigationMobile__progress-percentage" v-text="`${p.progress}%`"></div>
-          <!-- <div class="homeNavigationMobile__progress-donate"><img src="/public/icons/encoruage-white.png" alt=""></div> -->
-        </a>
+        <ProjectsFigureProgress v-for="p in projectsInProgress" :key="p.id" :project="p"></ProjectsFigureProgress>
       </template>
       <!-- <template v-if="active === 'video' && videoLink">
         <div class="homeNavigationMobile__video">
@@ -48,12 +44,14 @@
   import { getProjectUrl, } from 'src/util/comm'
   import CommentCount from '../../components/comment/CommentCount.vue'
   import ProjectBlock from '../../components/ProjectBlock.vue'
+  import ProjectsFigureProgress from '../../components/projects/ProjectsFigureProgress.vue'
 
   export default {
     name: 'HomeNavigationMobile',
     components: {
       CommentCount,
       ProjectBlock,
+      ProjectsFigureProgress,
     },
     props: {
       projectsDone: {
