@@ -16,6 +16,7 @@ import Leading from 'src/components/leading/Leading.vue'
 import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
 import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, } from 'api/config'
 import { find, get, } from 'lodash'
+import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
 
 const MAXRESULT_POSTS = 10
 const DEFAULT_PAGE = 1
@@ -92,9 +93,30 @@ export default {
     return {
       currPage: DEFAULT_PAGE,
       hadRouteBeenNavigate: false,
+      isReachBottom: false,
+      isLoadMoreEnd: false,
     }
   },
-  methods: {},
+  methods: {
+    isScrollBarReachBottom,
+    isElementReachInView,
+    loadmore () {
+      // this.shouldShowSpinner = true
+      return fetchMemos(this.$store, {
+        mode: 'update',
+        proj_ids: [ Number(get(this.$route, 'params.id')), ],
+        page: this.currPage,
+      }).then((res) => {
+        // this.shouldShowSpinner = false
+        debug('Loadmore done. Status', res, get(res, 'status'))
+        if (get(res, 'status') === 200) {
+          this.currPage += 1
+        } else if (get(res, 'status') === 'end') {
+          this.isLoadMoreEnd = true
+        }
+      })
+    },    
+  },
   beforeRouteUpdate (to, from, next) {
     debug('this.showLightBox', this.showPostBox)
     debug('this.postBox', this.postBox)
@@ -122,14 +144,24 @@ export default {
           /**
           * Forbidden.
           */
+          this.isLoadMoreEnd = true
           this.$router.push('/')
           return
         }
       }),
-    ]).then(() => {})
+    ])
   }, 
-  mounted () {},
+  mounted () {
+    window.addEventListener('scroll', () => {
+      this.isReachBottom = this.isElementReachInView('.memo', 0.5) || this.isScrollBarReachBottom()
+    })    
+  },
   watch: {
+    isReachBottom () {
+      debug('Mutation detected: isReachBottom', this.isReachBottom)
+      if (!this.isReachBottom || this.isLoadMoreEnd) { return }
+      this.loadmore()
+    },    
     '$route' (to, from) {
       // this.articlesListMainCategory = this.isCurrentRoutePath('/post/:postId') ? from.path : to.path
       // if (!this.hadRouteBeenNavigate) this.hadRouteBeenNavigate = true
@@ -139,4 +171,7 @@ export default {
   },
 }
 </script>
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.memo
+  padding-bottom 50px
+</style>
