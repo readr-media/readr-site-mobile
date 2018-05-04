@@ -44,7 +44,7 @@
     width 100vw
     overflow hidden
     > div
-      transition left .1s ease-out
+      transition left 0.25s ease-out
     &__main
       width 100vw
       position relative
