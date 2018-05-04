@@ -15,7 +15,7 @@ import Invite from 'src/components/invitation/Invite.vue'
 import Leading from 'src/components/leading/Leading.vue'
 import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
 import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, } from 'api/config'
-import { get, } from 'lodash'
+import { find, get, } from 'lodash'
 
 const MAXRESULT_POSTS = 10
 const DEFAULT_PAGE = 1
@@ -79,6 +79,7 @@ export default {
     postBox () {
       if (this.showPostBox) {
         const findPostInList = find(this.posts, { 'id' : Number(this.$route.params.subItem), })
+        debug('Number(this.$route.params.subItem)', Number(this.$route.params.subItem), this.$route.params.subItem)
         debug('findPostInList', findPostInList)
         debug('this.postSingle', this.postSingle)
         return findPostInList || this.postSingle
@@ -100,12 +101,7 @@ export default {
     debug('this.postSingle', this.postSingle)
     debug(`get(this.$route, 'params.subItem')`, get(to, 'params.subItem'))
     debug('this.hadRouteBeenNavigate', this.hadRouteBeenNavigate)
-
-    Promise.all([
-      get(to, 'params.subItem')
-        ? fetchMemoSingle(this.$store, get(to, 'params.subItem'))
-        : Promise.resolve(),
-      ]).then(() => next())
+    next()
   },  
   beforeMount () {
     Promise.all([
