@@ -93,6 +93,17 @@ export default {
     'WORDING_PROJECT_HOT_KEYWORD' : '熱門關鍵字',
     'WORDING_PROJECT' : '',
   },
+  'PROJECT': {
+    'DEDUCTING': '扣除中',
+    'DISCUSS': '加入討論',
+    'ENCOURAGE': '鼓勵一下',
+    'HOT_KEYWORD': '熱門關鍵字',
+    'JOIN_CONFIRM': '確認加入',
+    'JOIN_CONTENT_1': '快來開放編輯室參與新聞製作',
+    'JOIN_CONTENT_2': '加入此議題需要',
+    'JOIN_CONTENT_POINT': '點',
+    'PROGRESS': '目前進度',
+  },
   'alert': {
     'WORDING_ALERTPANEL_ADD_SUCCESSFUL' : '已新增',
     'WORDING_ALERTPANEL_AUTHOR' : '作者',

@@ -28,6 +28,7 @@ import {
   getMemos,
   getMeta,
   getNotification,
+  getPointHistories,
   getPost,
   getPosts,
   getPostsCount,
@@ -41,7 +42,6 @@ import {
   getPublicVideosCount,
   getTags,
   getTagsCount,
-  getRewardPointsTransactions,
   invite,
   login,
   publishAction,
@@ -222,6 +222,13 @@ export default {
   },  
   GET_META: ({ commit, dispatch, state, }, { url, }) => {
     return getMeta(url)
+  },
+  GET_POINT_HISTORIES: ({ commit, dispatch, state, }, { params, }) => {
+    return getPointHistories({ params, }).then(({ status, body, }) => {
+      if (status === 200) {
+        commit('SET_POINT_HISTORIES', { histories: body, })
+      }
+    })
   },
   GET_POST: ({ commit, dispatch, state, }, { params, }) => {
     return new Promise((resolve, reject) => {
@@ -413,13 +420,6 @@ export default {
     return getTagsCount().then(({ status, body, }) => {
       if (status === 200) {
         commit('SET_TAGS_COUNT', { meta: body.meta, })
-      }
-    })
-  },
-  GET_REWARD_POINTS_TRANSACTIONS: ({ commit, dispatch, state, }, { params, }) => {
-    return getRewardPointsTransactions({ params, }).then(({ status, body, }) => {
-      if (status === 200) {
-        commit('SET_REWARD_POINTS_TRANSACTIONS', { transactions: body, })
       }
     })
   },
