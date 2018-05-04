@@ -18,7 +18,7 @@ import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, } from 'api/config'
 import { find, get, } from 'lodash'
 import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
 
-const MAXRESULT_POSTS = 1
+const MAXRESULT_POSTS = 10
 const DEFAULT_PAGE = 1
 const DEFAULT_SORT = '-memo_order,-updated_at'
 
