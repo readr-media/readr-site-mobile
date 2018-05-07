@@ -26,14 +26,15 @@ const updateTalkId = (member, talkId) => new Promise((resolve) => {
 
 const buildUserForTalk = (member) => new Promise((resolve) => {
   debug('Talk server host:', `${config.TALK_SERVER}/api/v1/users`)
-  const username = member.id.replace(/@[A-Za-z0-9.*+?^=!:${}()#%~&_@\-`|[\]/\\]*$/, '')
+  debug(member)
+  const username = member.mail.replace(/@[A-Za-z0-9.*+?^=!:${}()#%~&_@\-`|[\]/\\]*$/, '')
   superagent
     .post(`${config.TALK_SERVER}/api/v1/users`)
     .send({ 
       email: member.mail, // should make sure that it is email
       username,
-      password: member.id,
-      confirmPassword: member.id,
+      password: member.mail,
+      confirmPassword: member.mail,
     })
     .end((err, res) => {
       debug('Finished insert member to Talk')
@@ -58,6 +59,8 @@ const checkoutUserPerms = (role) => fetchPermissions().then((perms) => {
 })
 
 const updateUser = (col, selector, data_query) => new Promise(resolve => MongoClient.connect(mongourl, (err, client) => {
+  debug('selector', selector)
+  debug('data_query', data_query)
   const db = client.db('talk')
   const collection = db.collection(col)
   collection.updateOne(selector, data_query, function () {
@@ -71,6 +74,7 @@ const syncAvatar = (email, url) => updateUser(
   { 'profiles.id': { $in: [ email.toLowerCase(), ], }, },
   { $set: { metadata: { avatar: url, }, }, }
 )
+
 const updateUserForTalk = (email, { username, metadata, role, }) => {
   const data = {}
   const constructMetadata = metadata ? new Promise(resolve => {

@@ -3,9 +3,9 @@ import { filter, get, } from 'lodash'
 import { getHost, } from './comm'
 import Cookie from 'vue-cookie'
 import superagent from 'superagent'
-import moment from 'moment' 
-import sanitizeHtml from 'sanitize-html' 
-import truncate from 'html-truncate' 
+import moment from 'moment'
+import sanitizeHtml from 'sanitize-html'
+import truncate from 'html-truncate'
 import uuidv4 from 'uuid/v4'
 
 const debug = require('debug')('CLIENT:services')
@@ -84,10 +84,10 @@ export function getProfile (cookie) {
       .end(function (err, res) {
         if (err) {
           debug(err)
-          resolve(err)
+          resolve({ status: res.status, err, })
         } else {
           debug({ status: res.status, body: camelizeKeys(res.body), })
-          resolve({ profile: camelizeKeys(res.body), })
+          resolve({ profile: camelizeKeys(res.body), status: res.status, })
         }
       })
     } else {
@@ -171,21 +171,21 @@ export function logTrace ({ category, description, eventType, sub, target, usera
     target,
     useragent,
   })
-  .then(log => {
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      debug('send log status to sw.')
-      navigator.serviceWorker.controller.postMessage({
-        url: '/api/trace',
-        params: log,
-        action: 'trace',
-      });
-      return { status: 200, body: null, }
-    } else {
-      debug('Log')
-      return logTraceXHR(log)
-    }
-  })
-  .then(res => {
-    debug('res from logTracing:', res)
-  })
+    .then(log => {
+      if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        debug('send log status to sw.')
+        navigator.serviceWorker.controller.postMessage({
+          url: '/api/trace',
+          params: log,
+          action: 'trace',
+        });
+        return { status: 200, body: null, }
+      } else {
+        debug('Log')
+        return logTraceXHR(log)
+      }
+    })
+    .then(res => {
+      debug('res from logTracing:', res)
+    })
 }
