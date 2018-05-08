@@ -58,7 +58,7 @@ Vue.mixin({
     }).catch(({ err, res, }) => { 
       debug(err, res) 
       const domain = get(store, 'state.setting.DOMAIN')
-      removeToken(domain).then(() => next('/login')) 
+      removeToken(domain).then(() => location.replace('/login')) 
     })
   },
   beforeRouteUpdate (to, from, next) {
