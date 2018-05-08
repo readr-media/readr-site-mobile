@@ -3,7 +3,7 @@
     <div class="projects-figure-progress__title" v-text="projectName"></div>
     <div class="projects-figure-progress__block projects-figure-progress--progress" v-text="`${projectProgress}%`"></div>
     <router-link v-if="deducted" :to="`/memo/${get(this.project, 'id')}`" class="projects-figure-progress__block projects-figure-progress--link"><img src="/public/icons/microphone.png" :alt="$t('PROJECT.DISCUSS')"></router-link>
-    <div v-else class="projects-figure-progress__block projects-figure-progress--encoruage" @click="$_projectsFigureProgress_openLightBox"><img src="/public/icons/encoruage-white.png" :alt="$t('PROJECT.ENCOURAGE')"></div>
+    <div v-else class="projects-figure-progress__block projects-figure-progress--encoruage" @click="$_projectsFigureProgress_openLightBox"><img src="/public/icons/participate-white.png" :alt="$t('PROJECT.ENCOURAGE')"></div>
     <base-light-box :showLightBox.sync="showLightBox" borderStyle="nonBorder">
       <div class="project-memo-alert">
         <div class="project-memo-alert__content">
