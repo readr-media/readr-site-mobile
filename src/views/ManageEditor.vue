@@ -90,14 +90,11 @@
     </base-light-box>
     <base-light-box class="text-editor" :showLightBox.sync="showEditor">
       <post-panel
-        v-if="showEditor"
-        :post="post"
-        :panelType="postPanel"
-        :postType="postType"
-        @addPost="$_editor_addPost"
-        @deletePost="$_editor_deletePost"
-        @publishPost="$_editor_publishPost"
-        @updatePost="$_editor_updatePost">
+        :action="postPanel"
+        :editorType="postType"
+        :initialPost="post"
+        @closeEditor="showEditor = false"
+        @updateList="$_editor_updatePostList">
       </post-panel>
     </base-light-box>
     <base-light-box :isAlert="true" :showLightBox.sync="showAlert">
@@ -126,7 +123,7 @@
   import PostList from '../components/PostList.vue'
   import PostListDetailed from '../components/PostListDetailed.vue'
   import PostListInTab from '../components/PostListInTab.vue'
-  import PostPanelB from '../components/PostPanel.vue'
+  import PostPanel from '../components/PostPanel.vue'
   import Tab from '../components/Tab.vue'
   import TagList from '../components/TagList.vue'
   import TheControlBar from '../components/TheControlBar.vue'
@@ -135,10 +132,6 @@
   const MAXRESULT = 20
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-updated_at'
-
-  const addPost = (store, params) => {
-    return store.dispatch('ADD_POST', { params, })
-  }
 
   const addTags = (store, text = '') => {
     return store.dispatch('ADD_TAGS', {
@@ -247,10 +240,6 @@
     })
   }
 
-  const updatePost = (store, params) => {
-    return store.dispatch('UPDATE_POST', { params, })
-  }
-
   export default {
     name: 'AppEditor',
     components: {
@@ -263,7 +252,7 @@
       'post-list': PostList,
       'post-list-detailed': PostListDetailed,
       'post-list-tab': PostListInTab,
-      'post-panel': PostPanelB,
+      'post-panel': PostPanel,
       'tag-list': TagList,
       'video-list': VideoList,
     },
@@ -356,36 +345,6 @@
       .catch(() => this.loading = false)
     },
     methods: {
-      $_editor_addPost (params) {
-        this.alertType = 'post'
-        this.itemsSelected = []
-        this.itemsSelected.push(params)
-        if (params.publish_status === POST_PUBLISH_STATUS.PUBLISHED) {
-          this.postForPublishInEditor = params
-          this.isPublishPostInEditor = true
-          this.itemsStatus = params.publish_status
-          this.postStatusChanged = true
-          this.needConfirm = true
-          this.showAlert = true
-        } else {
-          this.loading = true
-          addPost(this.$store, params)
-            .then(() => {
-              this.$_editor_updatePostList({ needUpdateCount: true, })
-              this.showEditor = false
-              this.itemsStatus = params.publish_status
-              this.postStatusChanged = true
-              this.needConfirm = false
-              this.showAlert = true
-            })
-            .catch(() => {
-              this.alertType = 'error'
-              this.needConfirm = false
-              this.showAlert = true
-              this.loading = false
-            })
-        }
-      },
       $_editor_addTag (tagName) {
         this.itemsStatus = TAG_ACTIVE.ACTIVE
         this.needConfirm = false
@@ -408,12 +367,6 @@
       },
       $_editor_closeControlBar () {
         this.$emit('closeControlBar')
-      },
-      $_editor_deletePost () {
-        this.itemsStatus = POST_PUBLISH_STATUS.DELETED
-        this.postStatusChanged = true
-        this.needConfirm = true
-        this.showAlert = true
       },
       $_editor_deletePosts () {
         deletePosts(this.$store, {
@@ -511,58 +464,24 @@
             break
         }
       },
-      $_editor_publishPost (params) {
-        this.postForPublishInEditor = params
-        this.isPublishPostInEditor = true
-        this.itemsStatus = params.publish_status
-        this.postStatusChanged = true
-        this.needConfirm = true
-        this.showAlert = true
-      },
       $_editor_publishPostHandler () {
         this.alertType = 'post'
-        if (this.isPublishPostInEditor) {
-          if (this.postPanel === 'add') {
-            addPost(this.$store, this.postForPublishInEditor)
-              .then(() => {
-                this.$_editor_updatePostList({ needUpdateCount: true, })
-                this.showEditor = false
-                this.needConfirm = false
-              })
-              .catch(() => {
-                this.alertType = 'error'
-                this.needConfirm = false
-                this.showAlert = true
-              })
-          } else {
-            updatePost(this.$store, this.postForPublishInEditor)
-              .then(() => {
-                this.$_editor_updatePostList({ needUpdateCount: false, })
-                this.showEditor = false
-                this.showDraftList = false
-                this.needConfirm = false
-              })
-              .catch(() => {
-                this.alertType = 'error'
-                this.needConfirm = false
-                this.showAlert = true
-              })
-          }
-        } else {
-          const params = {}
-          params.updated_by = _.get(this.$store.state, [ 'profile', 'id', ])
-          params.ids = this.itemsSelectedID
-          publishPosts(this.$store, params)
-            .then(() => {
-              this.$_editor_updatePostList({ needUpdateCount: true, })
-              this.needConfirm = false
-            })
-            .catch(() => {
-              this.alertType = 'error'
-              this.needConfirm = false
-              this.showAlert = true
-            })
-        }
+        this.loading = true
+        const params = {}
+        params.updated_by = _.get(this.$store.state, [ 'profile', 'id', ])
+        params.ids = this.itemsSelectedID
+        publishPosts(this.$store, params)
+          .then(() => {
+            this.$_editor_updatePostList({ needUpdateCount: true, })
+            this.needConfirm = false
+            this.loading = false
+          })
+          .catch(() => {
+            this.alertType = 'error'
+            this.needConfirm = false
+            this.showAlert = true
+            this.loading = false
+          })
       },
       $_editor_showAlert (ids, itemsStatus) {
         this.itemsSelected = []
@@ -717,27 +636,9 @@
             getFollowing(this.$store, { subject: _.get(this.profile, [ 'id', ]), resource: resource, })
         }
       },
-      $_editor_updatePost(params, statusChanged) {
-        this.alertType = 'post'
-        this.itemsStatus = params.publish_status 
-        this.postStatusChanged = statusChanged
-        updatePost(this.$store, params)
-          .then(() => {
-            this.$_editor_updatePostList({})
-            this.showEditor = false
-            this.showDraftList = false
-            this.showAlert = true
-            this.needConfirm = false
-          })
-          .catch(() => {
-            this.alertType = 'error'
-            this.needConfirm = false
-            this.showAlert = true
-          })
-      },
-      $_editor_updatePostList ({ sort, page, needUpdateCount = false, }) {
+      $_editor_updatePostList ({ sort, page, needUpdateCount = false, } = {}) {
         this.sort = sort || this.sort
-        this.page = page || this.sort
+        this.page = page || this.page
         switch (this.activePanel) {
           case 'records':
             switch (this.activeTab) {
