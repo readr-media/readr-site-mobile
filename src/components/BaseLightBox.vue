@@ -71,12 +71,12 @@
 <style lang="stylus" scoped>
 
 .baseLightBox
-  position fixed
+  position absolute
   top 0
   left 0
   right 0
   bottom 0
-  z-index 999
+  z-index 1000
   display flex
   justify-content center
   align-items center
@@ -85,7 +85,9 @@
   background-color rgba(0,0,0,.6)
   &.text-editor
     .baseLightBox__container
-      padding 55px 0 120px
+      padding 55px 0 0px
+      &.alert
+        padding 0
   &__btn
     &--close
       cursor pointer

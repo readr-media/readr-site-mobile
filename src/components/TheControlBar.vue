@@ -8,7 +8,7 @@
           <button @click="$_controlBar_clickHandler('editReview')" v-text="$t('CONTROL_BAR.EDIT_DRAFT')"></button>
         </div>
       </div>
-      <div v-if="$can('addPost')" class="controlBar__menu-item">
+      <div v-if="$can('editPostOg')" class="controlBar__menu-item">
         <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.NEWS')"></div>
         <div class="controlBar__menu-item-box">
           <button @click="$_controlBar_clickHandler('addNews')" v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
