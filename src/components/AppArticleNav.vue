@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     renderComment (ref) {
-      renderComment(this.$el, `${ref}`, this.assetUrl || `/post/${this.postId}`, this.$store.state.setting.TALK_SERVER)
+      renderComment(this.$el, `${ref}`, this.assetUrl || `/${this.articleType}/${this.postId}`, this.$store.state.setting.TALK_SERVER)
     },
     toogleFollow (event) {
       if (event) event.preventDefault()
