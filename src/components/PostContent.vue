@@ -57,7 +57,7 @@
         <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
       </a>
     </template>
-    <AppArticleNav :postId="this.post.id" :assetUrl="targetUrl" :commentCount="commentCount"></AppArticleNav>
+    <AppArticleNav :postId="this.post.id" :articleType="this.post.flag" :assetUrl="targetUrl" :commentCount="commentCount"></AppArticleNav>
   </div>
 </template>
 <script>
@@ -155,7 +155,7 @@
         return stopParagraphWordLength > this.showContentWordLimit
       },
       targetUrl () {
-        switch (this.post.type) {
+        switch (this.post.flag) {
           case 'memo':
             return `/memo/${get(this.$route, 'params.id')}/${get(this.post, 'id')}`
           default:

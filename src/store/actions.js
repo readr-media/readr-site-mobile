@@ -196,7 +196,7 @@ export default {
     return getMemo({ params, }).then(({ status, body, }) => { 
       debug('GET_MEMO', body) 
       if (status === 200) { 
-        commit('SET_MEMO_SINGLE', { item: Object.assign({}, _.get(body, 'items', {}), { type: 'memo', }), }) 
+        commit('SET_MEMO_SINGLE', { item: Object.assign({}, _.get(body, 'items', {}), { flag: 'memo', }), }) 
       } 
     }) 
   }, 
@@ -205,7 +205,7 @@ export default {
       if (status === 200) {
         if (mode == 'set') {
           commit('SET_MEMOS', { items: _.map(_.get(body, 'items', []), i => {
-            i.type = 'memo'
+            i.flag = 'memo'
             return i
           }), })
         } else if (mode === 'update') {
@@ -213,7 +213,7 @@ export default {
             return { status: 'end', }
           }
           commit('UPDATE_MEMOS', { items: _.map(_.get(body, 'items', []), i => {
-            i.type = 'memo'
+            i.flag = 'memo'
             return i
           }), })          
         }
