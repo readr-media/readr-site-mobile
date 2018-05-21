@@ -413,9 +413,9 @@
 
         this.post.publish_status = publishStatus
         this.post.updated_by = get(this.$store.state, 'profile.id')
-        this.post.og_title = this.post.og_title || this.post.ogTitle
-        this.post.og_description = this.post.og_description || this.post.ogDescription
-        this.post.og_image = this.post.og_image || this.post.ogImage
+        this.post.og_title = this.post.og_title || ''
+        this.post.og_description = this.post.og_description || ''
+        this.post.og_image = this.post.og_image || ''
 
         Promise.all([ this.$_postPanel_getLinkMeta(), this.$_postPanel_addNewTag(), ])
         .then((value) => {
