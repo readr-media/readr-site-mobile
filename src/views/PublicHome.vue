@@ -3,7 +3,7 @@
     <PostBoxWrapper :showPostBox.sync="showPostBox" :hadRouteBeenNavigate="hadRouteBeenNavigate">
       <Invite></Invite>
       <main>
-        <HomeNavigationMobile v-if="hasNavigation" :projectsDone="projectsDone" :projectsInProgress="projectsInProgress" :video="video"></HomeNavigationMobile>
+        <HomeNavigationMobile v-if="hasNavigation" :memos="memos" :reports="reports" :video="video"></HomeNavigationMobile>
         <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
       </main>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent" /> 
@@ -11,7 +11,7 @@
   </section>
 </template>
 <script>
-  import { POINT_OBJECT_TYPE, PROJECT_STATUS, PROJECT_PUBLISH_STATUS, } from 'api/config'
+  import { MEMO_PUBLISH_STATUS, POINT_OBJECT_TYPE, REPORT_PUBLISH_STATUS, } from 'api/config'
   import { get, find, uniq, concat, } from 'lodash'
   import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
@@ -21,12 +21,12 @@
   import Invite from 'src/components/invitation/Invite.vue'
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
   
+  const MAXRESULT_MEMOS = 2
   const MAXRESULT_POSTS = 10
-  const MAXRESULT_PROJECTS = 2
+  const MAXRESULT_REPORTS = 4
   const MAXRESULT_VIDEOS = 1
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-published_at'
-  const DEFAULT_PROJECT_SORT = 'project_order,-updated_at'
   const DEFAULT_CATEGORY = 'latest'
   // const debug = require('debug')('CLIENT:PublicHome')
 
@@ -36,6 +36,21 @@
     } else {
       return store.dispatch('GET_FOLLOWING_BY_RESOURCE', params)
     }
+  }
+
+  const fetchMemos = (store, {
+    max_result = MAXRESULT_MEMOS,
+    sort = DEFAULT_SORT,
+  } = {}) => {
+    return store.dispatch('GET_PUBLIC_MEMOS', {
+      params: {
+        max_result: max_result,
+        where: {
+          publish_status: MEMO_PUBLISH_STATUS.PUBLISHED,
+        },
+        sort: sort,
+      },
+    })
   }
 
   const fetchPost = (store, { id, }) => {
@@ -64,29 +79,27 @@
     })
   }
 
-  const fetchProjectsList = (store, {
-    max_result = MAXRESULT_PROJECTS,
-    publish_status = PROJECT_PUBLISH_STATUS.PUBLISHED,
-    status,
-  } = {}) => {
-    return store.dispatch('GET_PUBLIC_PROJECTS', {
-      params: {
-        max_result: max_result,
-        where: {
-          status: status,
-          publish_status: publish_status,
-        },
-        sort: DEFAULT_PROJECT_SORT,
-      },
-    })
-  }
-
   const fetchPointHistories = (store, { objectIds, objectType, }) => {
     return store.dispatch('GET_POINT_HISTORIES', {
       params: {
         memberId: get(store, [ 'state', 'profile', 'id', ]),
         objectType: objectType,
         objectIds: objectIds,
+      },
+    })
+  }
+
+  const fetchReportsList = (store, {
+    max_result = MAXRESULT_REPORTS,
+    sort = DEFAULT_SORT,
+  } = {}) => {
+    return store.dispatch('GET_PUBLIC_REPORTS', {
+      params: {
+        max_result: max_result,
+        where: {
+          publish_status: REPORT_PUBLISH_STATUS.PUBLISHED,
+        },
+        sort: sort,
       },
     })
   }
@@ -156,17 +169,14 @@
     },
     computed: {
       currEnv,
+      hasNavigation () {
+        return this.memos.length !== 0 || this.reports.length !== 0
+      },
       isClientSide () {
         return get(this.$store, 'state.isClientSide', false)
       },
-      postsLatest () {
-        return get(this.$store.state.publicPosts, 'items', [])
-      },
-      postsHot () {
-        return get(this.$store.state.publicPostsHot, 'items', [])
-      },
-      postSingle () {
-        return get(this.$store.state.publicPostSingle, 'items[0]', {})
+      memos () {
+        return get(this.$store.state, 'publicMemos', [])
       },
       postBox () {
         if (this.showPostBox) {
@@ -176,20 +186,23 @@
           return {}
         }
       },
-      showPostBox () {
-        return this.isCurrentRoutePath('/post/:postId')
+      postSingle () {
+        return get(this.$store.state.publicPostSingle, 'items[0]', {})
       },
       postsHome () {
         return this.articlesListMainCategory !== '/hot' ? this.postsLatest : this.postsHot
       },
-      hasNavigation () {
-        return this.projectsDone.length !== 0 || this.projectsInProgress.length !== 0
+      postsHot () {
+        return get(this.$store.state.publicPostsHot, 'items', [])
       },
-      projectsDone () {
-        return get(this.$store, [ 'state', 'publicProjects', 'done', ], [])
+      postsLatest () {
+        return get(this.$store.state.publicPosts, 'items', [])
       },
-      projectsInProgress () {
-        return get(this.$store, [ 'state', 'publicProjects', 'inProgress', ], [])
+      reports () {
+        return get(this.$store, [ 'state', 'publicReports', ], [])
+      },
+      showPostBox () {
+        return this.isCurrentRoutePath('/post/:postId')
       },
       video () {
         return get(this.$store, [ 'state', 'publicVideos', 0, ])
@@ -215,10 +228,10 @@
     },
     beforeMount () {
       let reqs = [
+        fetchMemos(this.$store),
         fetchPosts(this.$store),
         fetchPosts(this.$store, { category: 'hot', }),
-        fetchProjectsList(this.$store, { max_result: 5, status: PROJECT_STATUS.WIP, }),
-        fetchProjectsList(this.$store, { max_result: 2, status: PROJECT_STATUS.DONE, }),
+        fetchReportsList(this.$store),
         fetchVideos(this.$store),
       ]
 
@@ -230,9 +243,9 @@
         if (this.$store.state.isLoggedIn) {
           const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
           const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
-          const postIdFeaturedProject = get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
+          const reportIds = get(this.$store.state, 'publicReports', []).map(report => `${report.id}`)
           const ids = uniq(concat(postIdsLatest, postIdsHot))
-          const projectInProgressIds = get(this.$store, 'state.publicProjects.inProgress', []).map(project => project.id)
+          const projectIds = uniq(get(this.$store, 'state.publicMemos', []).map(memo => memo.projectId))
 
           if (ids.length !== 0) {
             fetchFollowing(this.$store, {
@@ -241,15 +254,15 @@
             })
           }
 
-          if (postIdFeaturedProject.length !== 0) {
+          if (reportIds.length !== 0) {
             fetchFollowing(this.$store, {
-              resource: 'project',
-              ids: postIdFeaturedProject,
+              resource: 'report',
+              ids: reportIds,
             })
           }
 
-          if (projectInProgressIds.length !== 0) {
-            fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectInProgressIds, })
+          if (projectIds.length !== 0) {
+            fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
           }
         }
       })

@@ -1,25 +1,26 @@
 <template>
-  <a :href="projectUrl" target="_blank" class="projectBlock">
-    <div class="projectBlock__content">
-      <div class="projectBlock__img"><img :src="get(project, [ 'heroImage' ])" :alt="get(project, [ 'title' ])"></div>
-      <div class="projectBlock__info">
-        <h2 v-text="get(project, [ 'title' ])"></h2>
-        <p v-text="get(project, [ 'description' ])"></p>
+  <a :href="reportUrl" target="_blank" class="reportBlock">
+    <div class="reportBlock__content">
+      <div class="reportBlock__info">
+        <h3 v-if="report.project.title" v-text="report.project.title"></h3>
+        <h2 v-text="get(report, 'title')"></h2>
+        <p v-text="get(report, 'description')"></p>
         <div>
           <div
-            class="projectBlock__info-comment"
-            @click="$_projectBlock_renderComment(get(project, [ 'id' ]), $event)">
+            class="reportBlock__info-comment"
+            @click="$_reportBlock_renderComment(get(report, 'id'), $event)">
             <img src="/public/icons/comment-blue.png">
-            <CommentCount class="projectBlock__info-comment-count"></CommentCount>
+            <CommentCount class="reportBlock__info-comment-count"></CommentCount>
           </div>
-          <div class="projectBlock__info-views">
+          <div class="reportBlock__info-views">
             <img src="/public/icons/view-blue.png">
-            <span></span>
+            <span v-text="report.views || 0"></span>
           </div>
         </div>
       </div>
+      <div class="reportBlock__img"><img :src="get(report, 'heroImage') || '/public/icons/readr-logo.png'" :alt="get(report, 'title')"></div>
     </div>
-    <div class="projectBlock__comment hidden" :class="`project-${get(project, [ 'id' ])}`">
+    <div class="reportBlock__comment hidden" :class="`report-${get(report, 'id')}`">
       <div class="comment"></div>
     </div>
   </a>
@@ -27,35 +28,35 @@
 <script>
   import { get, } from 'lodash'
   import { renderComment, } from '../../src/util/talk'
-  import { getProjectUrl, } from 'src/util/comm'
+  import { getReportUrl, } from 'src/util/comm'
   import CommentCount from '../components/comment/CommentCount.vue'
   
   export default {
-    name: 'ProjectBlock',
+    name: 'ReportBlock',
     components: {
       CommentCount,
     },
     props: {
-      project: {
+      report: {
         type: Object,
         required: true,
       },
     },
     computed: {
-      projectUrl () {
-        if (this.project.slug) {
-          return getProjectUrl(this.project.slug)
+      reportUrl () {
+        if (this.report.slug) {
+          return getReportUrl(this.report.slug)
         }
         return '/'
       },
     },
     methods: {
-      $_projectBlock_renderComment (id, event) {
+      $_reportBlock_renderComment (id, event) {
         if (event) event.preventDefault()
-        document.querySelector(`.projectBlock__comment.project-${id}`).classList.toggle('hidden')
-        const rendered = document.querySelector(`.projectBlock__comment.project-${id} iframe`)
+        document.querySelector(`.reportBlock__comment.report-${id}`).classList.toggle('hidden')
+        const rendered = document.querySelector(`.reportBlock__comment.report-${id} iframe`)
         if (window.Coral && !rendered) {
-          renderComment(this.$el, `.projectBlock__comment.project-${id} > .comment`, `/post/${id}`, this.$store.state.setting.TALK_SERVER)
+          renderComment(this.$el, `.reportBlock__comment.report-${id} > .comment`, `/post/${id}`, this.$store.state.setting.TALK_SERVER)
         }
       },
       get,
@@ -63,12 +64,14 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .projectBlock
+  .reportBlock
     display block
     color black
     padding 15px
     background-color #fff
     border-bottom 1px solid #d3d3d3
+    &:first-of-type
+      border-top 3px solid #ddcf21
     &:last-of-type
       border-bottom none
     &__content
@@ -76,7 +79,8 @@
     &__img
       position relative
       display block
-      width 60px
+      width 70px
+      margin-left 10px
       font-size 0
       &::before
         content ''
@@ -95,10 +99,10 @@
       display flex
       flex-direction column
       justify-content space-between
-      padding 2px 0 0 10px
+      padding 2px 0 0 0
       h2
-        margin 0
-        font-size .9375rem
+        margin 0 0 5px
+        font-size .8125rem
         line-height 1.5
         a
           display block
@@ -109,6 +113,10 @@
           text-align justify
           text-overflow ellipsis
           overflow hidden
+      h3
+        margin 0 0 3px
+        color #808080
+        font-size .625rem
       p
         display none
       > div
@@ -125,12 +133,19 @@
           color #11b8c9
       &-views
         margin-left 35px
+        color #11b8c9
+        span
+          position relative
+          top 3px
+          left -3px
     &__comment
       &.hidden
         display none
 
   @media (min-width 768px)
-    .projectBlock
+    .reportBlock
+      &:first-of-type
+        border-top none
       &:last-of-type
         margin-bottom 20px
       &__img

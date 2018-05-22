@@ -97,6 +97,8 @@ export default {
     'DEDUCTING': '扣除中',
     'DISCUSS': '加入討論',
     'ENCOURAGE': '參與專題製作',
+    'ENCOURAGE_1': '參與',
+    'ENCOURAGE_2': '專題製作',
     'HOT_KEYWORD': '熱門關鍵字',
     'JOIN_CONFIRM': '確認加入',
     'JOIN_CONTENT_1': '快來開放編輯室參與新聞製作',
@@ -151,6 +153,11 @@ export default {
     'WORDING_HOME_POST_MORE' : '更多',
     'WORDING_HOME_POST_MORE_NEWS' : '查看更多',
     'WORDING_HOME_POST_SOURCE' : '出處：',
+  },
+  'HOME_NAV': {
+    'MEMO': '筆記',
+    'REPORT': '報導',
+    'VIDEO': '對話',
   },
   'homeNavigation': { 
     'WORDING_HOME_NAV_IN_PROGRESS' : '進行中', 
