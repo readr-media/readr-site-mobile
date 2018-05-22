@@ -4,7 +4,7 @@
       <h3 v-if="projectName" v-text="projectName"></h3>
       <h2 v-text="memo.title"></h2>
     </div>
-    <router-link v-if="deducted" :to="`/memo/${get(this.memo, 'projectId')}`" class="projects-figure-progress__block projects-figure-progress--link">
+    <router-link v-if="deducted" :to="`/series/${get(this.memo, 'projectId')}`" class="projects-figure-progress__block projects-figure-progress--link">
       <img src="/public/icons/microphone-grey.png" :alt="$t('PROJECT.DISCUSS')">
       <p v-text="$t('PROJECT.DISCUSS')"></p>
     </router-link>
@@ -91,7 +91,7 @@
           fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
           .then(() => {
             this.deducting = false
-            this.$router.push(`/memo/${get(this.memo, 'projectId')}`)
+            this.$router.push(`/series/${get(this.memo, 'projectId')}`)
           })
         })
       },

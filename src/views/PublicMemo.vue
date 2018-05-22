@@ -14,8 +14,8 @@ import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
 import Invite from 'src/components/invitation/Invite.vue'
 import Leading from 'src/components/leading/Leading.vue'
 import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
-import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, } from 'api/config'
-import { find, get, } from 'lodash'
+import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
+import { find, get, sortBy, union, } from 'lodash'
 import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
 
 const MAXRESULT_POSTS = 10
@@ -57,6 +57,22 @@ const fetchProjectSingle = (store, proj_id) => {
     },
   })
 }
+const fetchReportsList = (store, {
+  max_result = 10,
+  proj_ids = [],
+  sort = '-updated_at',
+} = {}) => {
+  return store.dispatch('GET_PUBLIC_REPORTS', {
+    params: {
+      max_result: max_result,
+      project_id: proj_ids,
+      where: {
+        publish_status: REPORT_PUBLISH_STATUS.PUBLISHED,
+      },
+      sort: sort,
+    },
+  })
+}
 
 export default {
   name: 'PublicMemo',
@@ -69,7 +85,7 @@ export default {
   },
   computed: {
     posts () {
-      return get(this.$store, 'state.memos')
+      return sortBy(union(get(this.$store, 'state.memos', []), get(this.$store, 'state.publicReports', [])), [ (p) => -p.publishedAt, ])
     },
     showPostBox () {
       return typeof(get(this.$route, 'params.subItem')) === 'string'
@@ -136,6 +152,7 @@ export default {
               proj_ids: [ Number(get(this.$route, 'params.id')), ],
               page: this.currPage,
             }).then(() => { this.currPage += 1 }),
+            fetchReportsList(this.$store, { proj_ids: [ Number(get(this.$route, 'params.id')), ], }),
             get(this.$route, 'params.subItem')
               ? fetchMemoSingle(this.$store, get(this.$route, 'params.subItem'))
               : Promise.resolve(),
