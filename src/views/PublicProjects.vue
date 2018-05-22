@@ -2,7 +2,7 @@
   <section class="projects main">
     <Invite></Invite>
     <template v-for="p in projects" >
-      <ProjectBlock :key="p.id" :project="p"></ProjectBlock>
+      <ReportBlock :key="p.id" :project="p"></ReportBlock>
     </template>
   </section>
 </template>
@@ -12,7 +12,7 @@ import { PROJECT_STATUS, PROJECT_PUBLISH_STATUS, } from '../../api/config'
 import { get, } from 'lodash'
 import { isScrollBarReachBottom, } from '../util/comm'
 import Invite from '../components/invitation/Invite.vue'
-import ProjectBlock from '../components/ProjectBlock.vue'
+import ReportBlock from '../components/ReportBlock.vue'
 
 const MAX_RESULT = 8
 const DEFAULT_PAGE = 1
@@ -56,7 +56,7 @@ export default {
   //   return fetchProjectsList(store)
   // },
   components: {
-    ProjectBlock,
+    ReportBlock,
     Invite,
   },
   data () {

@@ -2,11 +2,11 @@
   <section class="homeNavigationMobile">
     <nav>
       <div
-        v-if="projectsInProgress.length !== 0"
+        v-if="reports.length !== 0"
         class="homeNavigationMobile__item"
-        :class="{ active: active === 'projectsInProgress' }"
-        @click="$_homeNavigationMobile_changePanel('projectsInProgress')">
-        <span v-text="`${$t('homeNavigation.WORDING_HOME_NAV_IN_PROGRESS')}${$t('homeNavigation.WORDING_HOME_NAV_PROJECT')}`"></span>
+        :class="{ active: active === 'report' }"
+        @click="$_homeNavigationMobile_changePanel('report')">
+        <span v-text="$t('HOME_NAV.REPORT')"></span>
       </div>
       <!-- <div
         v-if="video && videoLink"
@@ -16,24 +16,24 @@
         <span v-text="$t('homeNavigation.WORDING_HOME_NAV_VIDEO')"></span>
       </div> -->
       <div
-        v-if="projectsDone.length !== 0"
+        v-if="memos.length !== 0"
         class="homeNavigationMobile__item"
-        :class="{ active: active === 'projectsDone' }"
-        @click="$_homeNavigationMobile_changePanel('projectsDone')">
-        <span v-text="$t('homeNavigation.WORDING_HOME_NAV_PROJECT')"></span>
+        :class="{ active: active === 'memo' }"
+        @click="$_homeNavigationMobile_changePanel('memo')">
+        <span v-text="$t('HOME_NAV.MEMO')"></span>
       </div>
     </nav>
     <div class="homeNavigationMobile__content">
-      <template v-if="active === 'projectsInProgress'">
-        <ProjectsFigureProgress v-for="p in projectsInProgress" :key="p.id" :project="p"></ProjectsFigureProgress>
+      <template v-if="active === 'report'">
+        <ReportBlock v-for="r in reports" :key="r.id" :report="r"></ReportBlock>
       </template>
       <!-- <template v-if="active === 'video' && videoLink">
         <div class="homeNavigationMobile__video">
           <iframe :src="videoLink" frameborder="0" allowfullscreen></iframe>
         </div>
       </template> -->
-      <template v-if="active === 'projectsDone'">
-        <ProjectBlock v-for="p in projectsDone" :key="p.id" :project="p"></ProjectBlock>
+      <template v-if="active === 'memo'">
+        <MemoFigure v-for="m in memos" :key="m.id" :memo="m"></MemoFigure>
       </template>
     </div>
   </section>
@@ -41,24 +41,24 @@
 <script>
   import { currentYPosition, elmYPosition, } from 'kc-scroll'
   import { get, } from 'lodash'
-  import { getProjectUrl, } from 'src/util/comm'
+  import { getReportUrl, } from 'src/util/comm'
   import CommentCount from '../../components/comment/CommentCount.vue'
-  import ProjectBlock from '../../components/ProjectBlock.vue'
-  import ProjectsFigureProgress from '../../components/projects/ProjectsFigureProgress.vue'
+  import ReportBlock from '../../components/ReportBlock.vue'
+  import MemoFigure from '../../components/projects/MemoFigure.vue'
 
   export default {
     name: 'HomeNavigationMobile',
     components: {
       CommentCount,
-      ProjectBlock,
-      ProjectsFigureProgress,
+      MemoFigure,
+      ReportBlock,
     },
     props: {
-      projectsDone: {
+      memos: {
         type: Array,
         required: true,
       },
-      projectsInProgress: {
+      reports: {
         type: Array,
         required: true,
       },
@@ -68,7 +68,7 @@
     },
     data () {
       return {
-        active: 'projectsDone',
+        active: 'report',
       }
     },
     computed: {
@@ -102,7 +102,7 @@
       get,
       projectUrl (slug) {
         if (slug) {
-          return getProjectUrl(slug)
+          return getReportUrl(slug)
         }
         return '/'
       },
@@ -131,8 +131,18 @@
           height 0
           transform translateX(-50%)
           border-style solid
-          border-width 10px 5px 0 5px
-          border-color #ddcf21 transparent transparent transparent
+          border-width 0 7.5px 13px 7.5px
+          border-color transparent transparent #ddcf21 transparent
+        &::after
+          content ''
+          position absolute
+          bottom -13px
+          width 0
+          height 0
+          transform translateX(-50%)
+          border-style solid
+          border-width 0 6px 10.4px 6px
+          border-color transparent transparent #fff transparent
       &:last-of-type
         span
           border-right none
@@ -209,15 +219,9 @@
         height auto
         &.active
           &::before
-            top 50%
-            right -10px
-            bottom auto
-            width 0
-            height 0
-            transform translateY(-50%)
-            border-style solid
-            border-width 5px 0 5px 10px
-            border-color transparent transparent transparent #ddcf21
+            content none
+          &::after
+            content none
         &:last-of-type
           span
             border-bottom none
@@ -232,6 +236,7 @@
           writing-mode vertical-lr
       &__content
         margin 0
+        border-left 3px solid #ddcf21
       &__progress
         &:last-of-type
           margin-bottom 20px

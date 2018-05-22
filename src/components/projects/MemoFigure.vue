@@ -1,15 +1,23 @@
 <template>
   <div class="projects-figure-progress">
-    <div class="projects-figure-progress__title" v-text="projectName"></div>
-    <div class="projects-figure-progress__block projects-figure-progress--progress" v-text="`${projectProgress}%`"></div>
-    <router-link v-if="deducted" :to="`/memo/${get(this.project, 'id')}`" class="projects-figure-progress__block projects-figure-progress--link"><img src="/public/icons/microphone.png" :alt="$t('PROJECT.DISCUSS')"></router-link>
-    <div v-else class="projects-figure-progress__block projects-figure-progress--encoruage" @click="$_projectsFigureProgress_openLightBox"><img src="/public/icons/participate-white.png" :alt="$t('PROJECT.ENCOURAGE')"></div>
+    <div class="projects-figure-progress__title">
+      <h3 v-if="projectName" v-text="projectName"></h3>
+      <h2 v-text="memo.title"></h2>
+    </div>
+    <router-link v-if="deducted" :to="`/memo/${get(this.memo, 'projectId')}`" class="projects-figure-progress__block projects-figure-progress--link">
+      <img src="/public/icons/microphone-grey.png" :alt="$t('PROJECT.DISCUSS')">
+      <p v-text="$t('PROJECT.DISCUSS')"></p>
+    </router-link>
+    <div v-else class="projects-figure-progress__block projects-figure-progress--encoruage" @click="$_projectsFigureProgress_openLightBox">
+      <img src="/public/icons/participate-grey.png" :alt="`${$t('PROJECT.ENCOURAGE_1')}${$t('PROJECT.ENCOURAGE_2')}`">
+      <p>{{ $t('PROJECT.ENCOURAGE_1') }}<br>{{ $t('PROJECT.ENCOURAGE_2') }}</p>
+    </div>
     <base-light-box :showLightBox.sync="showLightBox" borderStyle="nonBorder">
       <div class="project-memo-alert">
         <div class="project-memo-alert__content">
           <h2 v-text="$t('PROJECT.JOIN_CONTENT_1')"></h2>
           <h1 v-text="projectName"></h1>
-          <h2>{{ $t('PROJECT.JOIN_CONTENT_2') }}<strong v-text="get(project, [ 'memoPoints' ], 0) || 0"></strong>{{ $t('PROJECT.JOIN_CONTENT_POINT') }}</h2>
+          <h2>{{ $t('PROJECT.JOIN_CONTENT_2') }}<strong v-text="get(memo, 'project.memoPoints', 0) || 0"></strong>{{ $t('PROJECT.JOIN_CONTENT_POINT') }}</h2>
           <button
             :disabled="deducting"
             @click="$_projectsFigureProgress_deductPoints()"
@@ -48,12 +56,12 @@
   }
 
   export default {
-    name: 'ProjectsFigureProgress',
+    name: 'MemoFigure',
     components: {
       BaseLightBox,
     },
     props: {
-      project: {
+      memo: {
         type: Object,
         default: {},
       },
@@ -68,25 +76,22 @@
       deducted () {
         const pointHistories = get(this.$store, 'state.pointHistories', []) || []
         const objectIds = pointHistories.map(history => history.objectId)
-        return includes(objectIds, get(this.project, 'id'))
+        return includes(objectIds, get(this.memo, 'projectId'))
       },
       projectName () {
-        return get(this.project, [ 'title', ])
-      },
-      projectProgress () {
-        return get(this.project, [ 'progress', ])
+        return get(this.memo, 'project.title')
       },
     },
     methods: {
       $_projectsFigureProgress_deductPoints () {
         this.deducting = true
-        deductPoints(this.$store, { objectId: get(this.project, 'id'), memoPoints: get(this.project, 'memoPoints') || 0, })
+        deductPoints(this.$store, { objectId: get(this.memo, 'projectId'), memoPoints: get(this.memo, 'project.memoPoints') || 0, })
         .then(() => {
-          const projectInProgressIds = get(this.$store, 'state.publicProjects.inProgress', []).map(project => project.id)
-          fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectInProgressIds, })
+          const projectIds = get(this.$store, 'state.publicMemos', []).map(memo => memo.id)
+          fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
           .then(() => {
             this.deducting = false
-            this.$router.push(`/memo/${get(this.project, 'id')}`)
+            this.$router.push(`/memo/${get(this.memo, 'projectId')}`)
           })
         })
       },
@@ -102,6 +107,9 @@
 .projects-figure-progress
   display flex
   color black
+  background-color #fff
+  &:first-of-type
+    border-top 3px solid #ddcf21
   & + .projects-figure-progress
     border-top 1px solid #d3d3d3
   &__title
@@ -112,37 +120,34 @@
     white-space nowrap
     text-overflow ellipsis
     overflow hidden
-    background-color #fff
+    h2, h3
+      margin 0
+    h2
+      font-size .8125rem
+    h3
+      color #808080
+      font-size .625rem
   &__block
-    width 40px
-    height 40px
-    background-color #11b8c9
+    display flex
+    align-items center
+    margin 10px 0
+    padding 0 10px 0 5px
+    border-left 1px solid #979797
+    img
+      width 25px
+      height 25px
+    p
+      margin 0 0 0 5px
+      color #808080
+      font-size .6875rem
+      user-select none
   &--progress
     color #fff
     font-size .9375rem
     text-align center
     line-height 40px
     border-right 1px solid #fff
-  &--link
-    position relative
-    border-left 1px solid #fff
-    img
-      position absolute
-      top 50%
-      left 50%
-      transform translate(-50%, -50%)
-      width 15px
-      height auto
-  &--encoruage
-    position relative
-    border-left 1px solid #fff
-    img
-      position absolute
-      top 50%
-      left 50%
-      transform translate(-50%, -50%)
-      width 20px
-      height auto
+  
 
 .project-memo-alert
   position relative
@@ -183,5 +188,10 @@
       transition color .5s
       &:disabled
         color rgba(17, 184, 201, .6)
+  
+@media (min-width 768px)
+  .projects-figure-progress
+    &:first-of-type
+      border-top none
 </style>
 
