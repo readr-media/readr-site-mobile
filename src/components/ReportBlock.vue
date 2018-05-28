@@ -8,7 +8,7 @@
         <div>
           <div
             class="reportBlock__info-comment"
-            @click="$_reportBlock_renderComment(get(report, 'id'), $event)">
+            @click="$_reportBlock_renderComment(get(report, [ 'id' ]))">
             <img src="/public/icons/comment-blue.png">
             <CommentCount class="reportBlock__info-comment-count"></CommentCount>
           </div>
@@ -20,21 +20,25 @@
       </div>
       <div class="reportBlock__img"><img :src="get(report, 'heroImage') || '/public/icons/readr-logo.png'" :alt="get(report, 'title')"></div>
     </div>
-    <div class="reportBlock__comment hidden" :class="`report-${get(report, 'id')}`">
-      <div class="comment"></div>
-    </div>
+    <CommentContainer :class="`reportBlock__comment hidden report-${get(report, [ 'id' ])}`" v-if="showComment" :asset="reportUrl"></CommentContainer> 
   </a>
 </template>
 <script>
   import { get, } from 'lodash'
-  import { renderComment, } from '../../src/util/talk'
   import { getReportUrl, } from 'src/util/comm'
-  import CommentCount from '../components/comment/CommentCount.vue'
+  import CommentCount from 'src/components/comment/CommentCount.vue'
+  import CommentContainer from 'src/components/comment/CommentContainer.vue' 
   
   export default {
     name: 'ReportBlock',
     components: {
       CommentCount,
+      CommentContainer,
+    },
+    data () { 
+      return { 
+        showComment: false, 
+      } 
     },
     props: {
       report: {
@@ -51,13 +55,10 @@
       },
     },
     methods: {
-      $_reportBlock_renderComment (id, event) {
+      $_reportBlock_renderComment (id) {
         if (event) event.preventDefault()
         document.querySelector(`.reportBlock__comment.report-${id}`).classList.toggle('hidden')
-        const rendered = document.querySelector(`.reportBlock__comment.report-${id} iframe`)
-        if (window.Coral && !rendered) {
-          renderComment(this.$el, `.reportBlock__comment.report-${id} > .comment`, `/post/${id}`, this.$store.state.setting.TALK_SERVER)
-        }
+        !this.showComment && (this.showComment = true) 
       },
       get,
     },

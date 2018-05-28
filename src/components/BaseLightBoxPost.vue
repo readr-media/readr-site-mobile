@@ -43,20 +43,18 @@
           <div class="article-content__paragraph-container" v-html="!isPostEmpty ? post.content : ''"></div>
         </section>
       </article>
-      <section class="baselightbox-post__comment">
-        <div v-if="post.id" :class="`comment comment-${post.id}`"></div>
-      </section>
+      <CommentContainer class="baselightbox-post__comment" v-if="showComment" :asset="asset"></CommentContainer>
     </template>
   </div>
 </template>
 
 <script>
-import { renderComment, } from 'src/util/talk'
-import { updatedAtYYYYMMDD, isClientSide, getArticleAuthorId, getArticleAuthorNickname, getArticleAuthorThumbnailImg, getImageUrl, onImageLoaded, } from '../util/comm'
+import { updatedAtYYYYMMDD, isClientSide, getArticleAuthorId, getArticleAuthorNickname, getArticleAuthorThumbnailImg, getImageUrl, onImageLoaded, } from 'src/util/comm'
 import { POST_TYPE, } from '../../api/config'
 import { get, find,  map, isEmpty, } from 'lodash'
-import sanitizeHtml from 'sanitize-html'
 import AppArticleNav from 'src/components/AppArticleNav.vue'
+import CommentContainer from 'src/components/comment/CommentContainer.vue'
+import sanitizeHtml from 'sanitize-html'
 
 const dom = require('xmldom').DOMParser
 const seializer  = require('xmldom').XMLSerializer
@@ -73,6 +71,7 @@ export default {
   },
   components: {
     AppArticleNav,
+    CommentContainer,
   },
   watch: {
     showLightBox (val) {
@@ -82,6 +81,9 @@ export default {
     },
   },
   computed: {
+    asset () { 
+      return `${get(this.$store, 'state.setting.HOST')}/${get(this.post, 'flag') || 'post'}/${this.post.id}` 
+    },    
     isPostEmpty () {
       return isEmpty(this.post)
     },
@@ -109,12 +111,14 @@ export default {
       return get(find(get(this.$store, 'state.commentCount'), { postId: this.post.id, }), 'count') || 0
     },
   },
+  data () { 
+    return { 
+      showComment: false,
+    } 
+  }, 
   methods: {
     getImageUrl,
     updatedAtYYYYMMDD,
-    renderComment (ref) {
-      renderComment(this.$el, `${ref}`, `/${get(this.post, 'flag') || 'post'}/${this.post.id}`, this.$store.state.setting.TALK_SERVER)
-    },
     isImg (content) {
       const regexp = /<img([\w\W]+?)\/>/
       return regexp.test(content)
@@ -135,7 +139,9 @@ export default {
     },
   },
   updated () {
-    if (this.post.id && !this.isNews) this.renderComment(`.baselightbox-post__comment > .comment.comment-${this.post.id}`)
+    if (this.post.id && !this.isNews) { 
+      this.showComment = true 
+    }     
   },
 }
 </script>
