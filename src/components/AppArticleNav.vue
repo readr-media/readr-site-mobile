@@ -23,7 +23,7 @@ import _ from 'lodash'
 import CommentCount from 'src/components/comment/CommentCount.vue'
 
 const publishAction = (store, data) => {
-  return store.dispatch('PUBLISH_ACTION', {
+  return store.dispatch('FOLLOW', {
     params: data,
   })
 }
