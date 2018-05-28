@@ -49,6 +49,7 @@ import {
   getPublicVideosCount,
   getTags,
   getTagsCount,
+  hideComment,  
   invite,
   login,
   publishPosts,
@@ -489,6 +490,9 @@ export default {
       }
     })
   },
+  HIDE_COMMENT: ({ commit, dispatch, state, }, { params, }) => {
+    return hideComment({ params, })
+  },  
   LOGIN: ({ commit, dispatch, state, }, { params, token, }) => {
     return login(params, token).then(({ status, profile, }) => {
       commit('SET_LOGGEIN_STATUS', { body: true, })
