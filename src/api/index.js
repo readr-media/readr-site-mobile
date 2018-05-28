@@ -222,7 +222,12 @@ export function deleteComment ({ params, }) {
   // }   
   return _doDelete(url, params) 
 } 
- 
+
+export function hideComment ({ params, }) { 
+  let url = `${host}/api/comment/hide` 
+  return _doPut(url, params) 
+} 
+
 export function updateComment ({ params, }) { 
   const url = `${host}/api/comment` 
   return _doPut(url, params,) 
