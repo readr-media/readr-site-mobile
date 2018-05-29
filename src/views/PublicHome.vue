@@ -243,7 +243,7 @@
         if (this.$store.state.isLoggedIn) {
           const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
           const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
-          const reportIds = get(this.$store.state, 'publicReports', []).map(report => `${report.id}`)
+          // const reportIds = get(this.$store.state, 'publicReports', []).map(report => `${report.id}`)
           const ids = uniq(concat(postIdsLatest, postIdsHot))
           const projectIds = uniq(get(this.$store, 'state.publicMemos', []).map(memo => memo.projectId))
 
@@ -254,12 +254,12 @@
             })
           }
 
-          if (reportIds.length !== 0) {
-            fetchFollowing(this.$store, {
-              resource: 'report',
-              ids: reportIds,
-            })
-          }
+          // if (reportIds.length !== 0) {
+          //   fetchFollowing(this.$store, {
+          //     resource: 'report',
+          //     ids: reportIds,
+          //   })
+          // }
 
           if (projectIds.length !== 0) {
             fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
