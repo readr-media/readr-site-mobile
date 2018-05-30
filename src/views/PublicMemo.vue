@@ -14,6 +14,7 @@ import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
 import Invite from 'src/components/invitation/Invite.vue'
 import Leading from 'src/components/leading/Leading.vue'
 import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
+import moment from 'moment'
 import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
 import { find, get, sortBy, union, } from 'lodash'
 import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
@@ -85,7 +86,7 @@ export default {
   },
   computed: {
     posts () {
-      return sortBy(union(get(this.$store, 'state.memos', []), get(this.$store, 'state.publicReports', [])), [ (p) => -p.publishedAt, ])
+      return sortBy(union(get(this.$store, 'state.memos', []), get(this.$store, 'state.publicReports', [])), [ p => -moment(p.publishedAt), ])
     },
     showPostBox () {
       return typeof(get(this.$route, 'params.subItem')) === 'string'

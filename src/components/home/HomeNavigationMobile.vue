@@ -81,7 +81,16 @@
     },
     mounted () {
       this.isStream ? this.active = 'video' : ''
-      window.addEventListener('scroll', () => {
+      window.addEventListener('scroll', this.$_homeNavigationMobile_handleScroll)
+    },
+    beforeDestroy () {
+      window.removeEventListener('scroll', this.$_homeNavigationMobile_handleScroll)
+    },
+    methods: {
+      $_homeNavigationMobile_changePanel (active) {
+        this.active === active ? this.active = undefined : this.active = active
+      },
+      $_homeNavigationMobile_handleScroll () {
         if (this.active) {
           const headerHeight = document.querySelector(`.header`).offsetHeight
           const contentHeight = document.querySelector(`.homeNavigationMobile__content`).offsetHeight
@@ -93,11 +102,6 @@
               currentYPosition() + headerHeight > elmYPosition('.homeNavigationMobile__content') ? this.active = undefined : ''
           }
         }
-      })
-    },
-    methods: {
-      $_homeNavigationMobile_changePanel (active) {
-        this.active === active ? this.active = undefined : this.active = active
       },
       get,
       projectUrl (slug) {
