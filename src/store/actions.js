@@ -176,7 +176,7 @@ export default {
   GET_FOLLOWING_BY_USER: ({ commit, dispatch, state, }, params) => {
     return getFollowingByUser(params).then(({ status, body, }) => {
       if (status === 200) {
-        commit('SET_FOLLOWING_BY_USER', { following: body, })
+        commit('SET_FOLLOWING_BY_USER', { following: body, userId: params.subject, })
       }
     })
   },
@@ -546,10 +546,10 @@ export default {
     return updateComment({ params, }) 
   }, 
   UPDATE_FOLLOWING_BY_USER: ({ commit, dispatch, state, }, { params, }) => {
-    if (params.action === 'follow' && params.resource === 'post') {
-      commit('ADD_ITEM_TO_FOLLOWING_BY_USER', params.data)
+    if (params.action === 'follow') {
+      commit('ADD_ITEM_TO_FOLLOWING_BY_USER', params)
     } else {
-      commit('REMOVE_ITEM_FROM_FOLLOWING_BY_USER', params.data)
+      commit('REMOVE_ITEM_FROM_FOLLOWING_BY_USER', params)
     }
   },
   UPDATE_FOLLOWING_BY_RESOURCE: ({ commit, dispatch, state, }, { params, }) => {

@@ -24,6 +24,9 @@
           </div>
         </div>
       </template>
+      <template slot="2">
+        <FollowingListInTab></FollowingListInTab>
+      </template>
     </Tab>
   </main>
 </template>
@@ -33,6 +36,7 @@
   import { concat, find, get, map, uniq, } from 'lodash'
   import { dateDiffFromNow, isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
   import About from 'src/components/About.vue'
+  import FollowingListInTab from '../components/FollowingListInTab.vue'
   import PostContent from 'src/components/PostContent.vue'
   import Tab from 'src/components/Tab.vue'
   import Spinner from 'src/components/Spinner.vue'
@@ -91,6 +95,7 @@
     name: 'Profile',
     components: {
       About,
+      FollowingListInTab,
       PostContent,
       Tab,
       Spinner,
@@ -212,7 +217,10 @@
         // }), 
         getMemberPublic(this.$store, { 
           id: Number(get(to, 'params.id')), 
-        }), 
+        }),
+        getFollowing(this.$store, {
+          subject: get(this.$route, 'params.id'), resource: 'member',
+        }),
       ]).then(() =>{
         if (this.$store.state.isLoggedIn) {
           const postIdsReview = get(this.$store, 'state.publicPostNews.items', []).map(post => `${post.id}`) 
@@ -248,6 +256,9 @@
         }),
         getMemberPublic(this.$store, {
           id: Number(get(this.$route, 'params.id')),
+        }),
+        getFollowing(this.$store, {
+          subject: get(this.$route, 'params.id'), resource: 'member',
         }),
       ]).then(() => {
         if (this.$store.state.isLoggedIn) {
