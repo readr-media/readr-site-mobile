@@ -52,7 +52,7 @@ export default {
     },
     editorFollowers () {
       if (this.$store.state.isLoggedIn) {
-        const editorFollowersData = find(this.$store.state.followingByResource['member'], { resourceid: `${this.editor.id}`, })
+        const editorFollowersData = find(this.$store.state.followingByResource['member'], { resourceid: this.editor.id, })
         return editorFollowersData ? editorFollowersData.follower : []
       } else {
         return []
@@ -87,7 +87,7 @@ export default {
             action: 'follow',
             resource: 'member',
             subject: this.$store.state.profile.id,
-            object: `${this.editor.id}`,
+            object: this.editor.id,
           })
           updateStoreFollowingByResource(this.$store, {
             action: 'follow',
@@ -100,7 +100,7 @@ export default {
             action: 'unfollow',
             resource: 'member',
             subject: this.$store.state.profile.id,
-            object: `${this.editor.id}`,
+            object: this.editor.id,
           })
           updateStoreFollowingByResource(this.$store, {
             action: 'unfollow',
