@@ -1,5 +1,5 @@
 <template>
-  <div class="memo">
+  <div class="series">
     <PostBoxWrapper :showPostBox.sync="showPostBox" :hadRouteBeenNavigate="hadRouteBeenNavigate">
       <Invite></Invite>
       <Leading></Leading>
@@ -21,7 +21,7 @@ import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
 
 const MAXRESULT_POSTS = 10
 const DEFAULT_PAGE = 1
-const DEFAULT_SORT = '-memo_order,-updated_at'
+const DEFAULT_SORT = '-memo_order,-created_at'
 
 const debug = require('debug')('CLIENT:PublicMemo')
 const fetchMemos = (store, {
@@ -47,21 +47,21 @@ const fetchMemoSingle = (store, memoId) => {
     params: { memoId, },
   })
 }
-const fetchProjectSingle = (store, proj_id) => {
+const fetchProjectSingle = (store, proj_slug) => {
   return store.dispatch('GET_PUBLIC_PROJECT', {
     params: {
       where: {
         status: [ PROJECT_STATUS.WIP, PROJECT_STATUS.DONE, ],
         publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED,
       },
-      ids: [ proj_id, ],
+      slugs: [ proj_slug, ],
     },
   })
 }
 const fetchReportsList = (store, {
   max_result = 10,
   proj_ids = [],
-  sort = '-updated_at',
+  sort = '-created_at',
 } = {}) => {
   return store.dispatch('GET_PUBLIC_REPORTS', {
     params: {
@@ -76,7 +76,7 @@ const fetchReportsList = (store, {
 }
 
 export default {
-  name: 'PublicMemo',
+  name: 'PublicSeries',
   components: {
     BaseLightBoxPost,
     HomeArticleMain,
@@ -109,6 +109,7 @@ export default {
   data () {
     return {
       currPage: DEFAULT_PAGE,
+      currRefId: 0,
       hadRouteBeenNavigate: false,
       isReachBottom: false,
       isLoadMoreEnd: false,
@@ -121,7 +122,7 @@ export default {
       // this.shouldShowSpinner = true
       return fetchMemos(this.$store, {
         mode: 'update',
-        proj_ids: [ Number(get(this.$route, 'params.id')), ],
+        proj_ids: [ this.currRefId, ],
         page: this.currPage,
       }).then((res) => {
         // this.shouldShowSpinner = false
@@ -144,16 +145,22 @@ export default {
   },  
   beforeMount () {
     Promise.all([
-      fetchProjectSingle(this.$store, Number(get(this.$route, 'params.id'))).then((proj) => {
+      fetchProjectSingle(this.$store, get(this.$route, 'params.slug')).then((proj) => {
         debug(proj)
+        this.currRefId = get(proj, 'id') 
         if (proj) {
           return Promise.all([
-            fetchMemos(this.$store, {
-              mode: this.currPage === 1 ? 'set' : 'update',
-              proj_ids: [ Number(get(this.$route, 'params.id')), ],
-              page: this.currPage,
-            }).then(() => { this.currPage += 1 }),
-            fetchReportsList(this.$store, { proj_ids: [ Number(get(this.$route, 'params.id')), ], }),
+            Promise.all([
+              fetchMemos(this.$store, {
+                mode: this.currPage === 1 ? 'set' : 'update',
+                proj_ids: [ this.currRefId, ],
+                page: this.currPage,
+              }),
+              fetchReportsList(this.$store, {
+                proj_ids: [ this.currRefId, ],
+                page: this.currPage,
+              }),
+            ]).then(() => { this.currPage += 1 }),
             get(this.$route, 'params.subItem')
               ? fetchMemoSingle(this.$store, get(this.$route, 'params.subItem'))
               : Promise.resolve(),
@@ -190,6 +197,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.memo
+.series
   padding-bottom 50px
 </style>

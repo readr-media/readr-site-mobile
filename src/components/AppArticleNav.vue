@@ -10,13 +10,14 @@
         <img class="follow-icon__thumbnail" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow">
         <span class="follow-icon__hint" v-text="$t('FOLLOWING.FOLLOW')"></span>
       </span>
+      <span v-else></span>
     </nav>
     <CommentContainer v-if="showComment" :asset="asset"></CommentContainer>
   </div>
 </template>
 
 <script>
-import { find, get,  } from 'lodash'
+import { find, get, } from 'lodash'
 import CommentContainer from 'src/components/comment/CommentContainer.vue'
 import CommentCount from 'src/components/comment/CommentCount.vue'
 
@@ -40,7 +41,7 @@ export default {
   },
   computed: {
     asset () {
-      return `${get(this.$store, 'state.setting.HOST')}/${this.articleType}/${this.postId}`
+      return `${get(this.$store, 'state.setting.HOST')}/${this.articleType === 'memo' ? `series/${get(this.$route, 'params.slug')}` : this.articleType}/${this.postId}`
     },    
     isFollow () {
       return this.$store.state.isLoggedIn && this.postFollowers.indexOf(this.$store.state.profile.id) !== -1
