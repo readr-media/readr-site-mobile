@@ -82,7 +82,7 @@ export default {
   },
   computed: {
     asset () { 
-      return `${get(this.$store, 'state.setting.HOST')}/${get(this.post, 'flag') || 'post'}/${this.post.id}` 
+      return `${get(this.$store, 'state.setting.HOST')}/${get(this.post, 'flag') === 'memo' ? `series/${get(this.$route, 'params.slug')}` : 'post'}/${this.post.id}` 
     },    
     isPostEmpty () {
       return isEmpty(this.post)
