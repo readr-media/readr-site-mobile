@@ -63,7 +63,7 @@
         <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
       </a>
     </template>
-    <AppArticleNav :postId="this.post.id" :articleType="this.post.flag" :assetUrl="targetUrl" :commentCount="commentCount"></AppArticleNav>
+    <AppArticleNav :postId="get(this.post, 'flag') === 'report' ? this.post.slug : this.post.id" :articleType="this.post.flag" :commentCount="commentCount"></AppArticleNav>
   </div>
 </template>
 <script>
