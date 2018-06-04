@@ -28,7 +28,7 @@ export default {
       return get(this.project, 'description', '')
     },
     project () {
-      return get(this.$store, 'state.publicProjectSingle')
+      return get(this.$store, 'state.publicProjectSingle', {})
     },
   },
   methods: {},
