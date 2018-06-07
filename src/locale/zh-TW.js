@@ -362,7 +362,7 @@ export default {
     'CELEBRITIES_TALK': '對話', 
     'HOT_TALK': '焦點', 
     'CHIEF_EDITOR_LIST': '客座', 
-    'PROJECTS': '議題', 
+    'PROJECTS': '專題', 
     'PROJECTS_IN_PROGRESS': '進行中議題',     
   },
 }

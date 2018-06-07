@@ -1,5 +1,5 @@
 <template>
-  <div class="projects-figure-progress">
+  <router-link class="projects-figure-progress" :to="`/series/${get(this.memo, 'project.slug')}`">
     <div class="projects-figure-progress__title">
       <h3 v-if="projectName" v-text="projectName"></h3>
       <h2 v-text="memo.title"></h2>
@@ -26,7 +26,7 @@
         </div>
       </div>
     </base-light-box>
-  </div>
+  </router-link>
 </template>
 
 <script>
