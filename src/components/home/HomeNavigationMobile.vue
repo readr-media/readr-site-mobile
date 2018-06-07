@@ -1,163 +1,82 @@
 <template>
   <section class="homeNavigationMobile">
     <nav>
-      <div
-        v-if="reports.length !== 0"
-        class="homeNavigationMobile__item"
-        :class="{ active: active === 'report' }"
-        @click="$_homeNavigationMobile_changePanel('report')">
-        <span v-text="$t('HOME_NAV.REPORT')"></span>
-      </div>
-      <!-- <div
-        v-if="video && videoLink"
-        class="homeNavigationMobile__item"
-        :class="{ active: active === 'video' }"
-        @click="$_homeNavigationMobile_changePanel('video')">
-        <span v-text="$t('homeNavigation.WORDING_HOME_NAV_VIDEO')"></span>
-      </div> -->
-      <div
-        v-if="memos.length !== 0"
-        class="homeNavigationMobile__item"
-        :class="{ active: active === 'memo' }"
-        @click="$_homeNavigationMobile_changePanel('memo')">
-        <span v-text="$t('HOME_NAV.MEMO')"></span>
-      </div>
-    </nav>
-    <div class="homeNavigationMobile__content">
-      <template v-if="active === 'report'">
-        <ReportBlock v-for="r in reports" :key="r.id" :report="r"></ReportBlock>
-      </template>
-      <!-- <template v-if="active === 'video' && videoLink">
-        <div class="homeNavigationMobile__video">
-          <iframe :src="videoLink" frameborder="0" allowfullscreen></iframe>
+      <router-link class="homeNavigationMobile__item-container" to="/reports">
+        <div class="homeNavigationMobile__item">
+          <span class="homeNavigationMobile__title-sub" v-text="$t('SECTIONS.PROJECTS')"></span>
+          <div class="indicator-icon">
+            <div class="indicator-icon__vertical-line"></div>
+            <div class="indicator-icon__horizontal-line"></div>
+            <div class="indicator-icon__dot"></div>
+          </div>
+          <span class="homeNavigationMobile__title-main" v-text="$t('HOME_NAV.REPORT')"></span>
         </div>
-      </template> -->
-      <template v-if="active === 'memo'">
-        <MemoFigure v-for="m in memos" :key="m.id" :memo="m"></MemoFigure>
-      </template>
-    </div>
+      </router-link>
+      <router-link class="homeNavigationMobile__item-container" to="/memos">
+        <div class="homeNavigationMobile__item">
+          <span class="homeNavigationMobile__title-sub" v-text="$t('SECTIONS.PROJECTS')"></span>
+          <div class="indicator-icon">
+            <div class="indicator-icon__vertical-line"></div>
+            <div class="indicator-icon__horizontal-line"></div>
+            <div class="indicator-icon__dot"></div>
+          </div>
+          <span class="homeNavigationMobile__title-main" v-text="$t('HOME_NAV.MEMO')"></span>
+        </div>
+      </router-link>
+    </nav>
   </section>
 </template>
-<script>
-  import { currentYPosition, elmYPosition, } from 'kc-scroll'
-  import { get, } from 'lodash'
-  import { getReportUrl, } from 'src/util/comm'
-  import CommentCount from '../../components/comment/CommentCount.vue'
-  import ReportBlock from '../../components/ReportBlock.vue'
-  import MemoFigure from '../../components/projects/MemoFigure.vue'
 
+<script>
   export default {
     name: 'HomeNavigationMobile',
-    components: {
-      CommentCount,
-      MemoFigure,
-      ReportBlock,
-    },
-    props: {
-      memos: {
-        type: Array,
-        required: true,
-      },
-      reports: {
-        type: Array,
-        required: true,
-      },
-      video: {
-        required: true,
-      },
-    },
-    data () {
-      return {
-        active: 'report',
-      }
-    },
-    computed: {
-      isStream () {
-        return get(this.video, [ 'type', ]) === 3
-      },
-      videoLink () {
-        return get(this.video, [ 'link', ])
-      },
-    },
-    mounted () {
-      this.isStream ? this.active = 'video' : ''
-      window.addEventListener('scroll', this.$_homeNavigationMobile_handleScroll)
-    },
-    beforeDestroy () {
-      window.removeEventListener('scroll', this.$_homeNavigationMobile_handleScroll)
-    },
-    methods: {
-      $_homeNavigationMobile_changePanel (active) {
-        this.active === active ? this.active = undefined : this.active = active
-      },
-      $_homeNavigationMobile_handleScroll () {
-        if (this.active) {
-          const headerHeight = document.querySelector(`.header`).offsetHeight
-          const contentHeight = document.querySelector(`.homeNavigationMobile__content`).offsetHeight
-          switch (this.active) {
-            case 'video':
-              currentYPosition() + headerHeight + contentHeight / 2 > elmYPosition('.homeNavigationMobile__content') + contentHeight ? this.active = undefined : ''
-              break
-            default:
-              currentYPosition() + headerHeight > elmYPosition('.homeNavigationMobile__content') ? this.active = undefined : ''
-          }
-        }
-      },
-      get,
-      projectUrl (slug) {
-        if (slug) {
-          return getReportUrl(slug)
-        }
-        return '/'
-      },
-    },
   }
 </script>
+
 <style lang="stylus" scoped>
   .homeNavigationMobile
     margin-top 20px
-    margin-bottom 20px
+    margin-bottom 10px
     nav
       display flex
       background-color #fff
-    &__item
+    &__title-sub
+      font-size 12px
+      color #808080
+    &__title-main
+      font-size 15px
+      font-weight 600
+      color #000000
+    &__item-container
       flex 1
       position relative
+      padding 5px 0
       height 30px
+      display flex
+      justify-content center
+      align-items center
+      & + &
+        .homeNavigationMobile__item
+          border-left solid .5px #d3d3d3
+      // disable seperator if item is after .router-link-exact-active
+      .router-link-exact-active + & 
+        .homeNavigationMobile__item
+          border-left none
+    &__item
+      width 100%
+      position relative
       text-align center
-      &.active
-        background-color #ddcf21
-        &::before
-          content ''
-          position absolute
-          bottom -10px
-          width 0
-          height 0
-          transform translateX(-50%)
-          border-style solid
-          border-width 0 7.5px 13px 7.5px
-          border-color transparent transparent #ddcf21 transparent
-        &::after
-          content ''
-          position absolute
-          bottom -13px
-          width 0
-          height 0
-          transform translateX(-50%)
-          border-style solid
-          border-width 0 6px 10.4px 6px
-          border-color transparent transparent #fff transparent
-      &:last-of-type
-        span
-          border-right none
+      color black
+      display flex
+      justify-content center
+      align-items center
       span
         display block
-        width 100%
+        // width 100%
         height 15px
-        margin 7.5px 0
+        margin 0
         font-size .9375rem
         line-height 1
-        border-right 1px solid #d3d3d3
     &__progress
       display flex
       border-bottom 1px solid #d3d3d3
@@ -206,6 +125,47 @@
         right 0
         width 100%
         height 100%
+
+  .router-link-exact-active
+    background-color #ddcf21
+    &::before
+      content ''
+      position absolute
+      bottom -10px
+      width 0
+      height 0
+      transform translateX(-50%)
+      border-style solid
+      border-width 0 7.5px 13px 7.5px
+      border-color transparent transparent #ddcf21 transparent
+    &::after
+      content ''
+      position absolute
+      bottom -13px
+      width 0
+      height 0
+      transform translateX(-50%)
+      border-style solid
+      border-width 0 6px 10.4px 6px
+      border-color transparent transparent #fff transparent
+
+  .indicator-icon
+    display flex
+    justify-content center
+    align-items center
+    margin 0 5px
+    &__vertical-line
+      height 10px
+      border-left 1px solid #808080
+    &__horizontal-line
+      width 10px
+      border-bottom 1px solid #808080
+    &__dot
+      r = 5px
+      width r
+      height r
+      border-radius r
+      background-color #808080
 
   @media (min-width 768px)
     .homeNavigationMobile

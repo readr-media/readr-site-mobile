@@ -1,24 +1,26 @@
 <template>
   <a :href="reportUrl" target="_blank" class="reportBlock">
     <div class="reportBlock__content">
+      <div class="reportBlock__img"><img :src="get(report, 'heroImage') || '/public/icons/readr-logo.png'" :alt="get(report, 'title')"></div>
       <div class="reportBlock__info">
         <h3 v-if="report.project.title" v-text="report.project.title"></h3>
         <h2 v-text="get(report, 'title')"></h2>
         <p v-text="get(report, 'description')"></p>
         <div>
-          <div
-            class="reportBlock__info-comment"
-            @click="$_reportBlock_renderComment(get(report, [ 'id' ]))">
-            <img src="/public/icons/comment-blue.png">
+          <div class="reportBlock__info-comment">
+            <img src="/public/icons/comment-quote.png">
             <CommentCount class="reportBlock__info-comment-count"></CommentCount>
           </div>
           <div class="reportBlock__info-views">
             <img src="/public/icons/view-blue.png">
             <span v-text="report.views || 0"></span>
           </div>
+          <!-- <div v-if="isLoggedIn" class="follow-icon" @click="toogleFollow($event)">
+            <img class="follow-icon__thumbnail" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow">
+            <span class="follow-icon__hint" v-text="$t('FOLLOWING.FOLLOW')"></span>
+          </div> -->
         </div>
       </div>
-      <div class="reportBlock__img"><img :src="get(report, 'heroImage') || '/public/icons/readr-logo.png'" :alt="get(report, 'title')"></div>
     </div>
     <CommentContainer :class="`reportBlock__comment hidden report-${get(report, [ 'id' ])}`" v-if="showComment" :asset="reportUrl"></CommentContainer> 
   </a>
@@ -37,7 +39,8 @@
     },
     data () { 
       return { 
-        showComment: false, 
+        showComment: false,
+        resource: 'report',
       } 
     },
     props: {
@@ -53,12 +56,53 @@
         }
         return '/'
       },
+      isLoggedIn () {
+        return this.$store.state.isLoggedIn
+      },
+      isFollow () {
+        // return this.$store.state.isLoggedIn && this.postFollowers.indexOf(this.$store.state.profile.id) !== -1
+        return false
+      },
     },
     methods: {
       $_reportBlock_renderComment (id) {
         if (event) event.preventDefault()
         document.querySelector(`.reportBlock__comment.report-${id}`).classList.toggle('hidden')
         !this.showComment && (this.showComment = true) 
+      },
+      toogleFollow (event) {
+        if (event) event.preventDefault()
+        // if (!this.$store.state.isLoggedIn) {
+        //   alert('please login first')
+        // } else {
+        //   if (!this.isFollow) {
+        //     publishAction(this.$store, {
+        //       action: 'follow',
+        //       resource: this.resource,
+        //       subject: this.$store.state.profile.id,
+        //       object: this.postId,
+        //     })
+        //     updateStoreFollowingByResource(this.$store, {
+        //       action: 'follow',
+        //       resource: this.resource,
+        //       resourceId: this.postId,
+        //       userId: this.$store.state.profile.id,
+        //     })
+        //   } else {
+        //     publishAction(this.$store, {
+        //       action: 'unfollow',
+        //       resource: this.resource,
+        //       subject: this.$store.state.profile.id,
+        //       object: this.postId,
+        //     })
+        //     updateStoreFollowingByResource(this.$store, {
+        //       action: 'unfollow',
+        //       resource: this.resource,
+        //       resourceId: this.postId,
+        //       userId: this.$store.state.profile.id,
+        //     })
+        //   }
+        // }
       },
       get,
     },
@@ -68,7 +112,7 @@
   .reportBlock
     display block
     color black
-    padding 15px
+    padding 9.5px 14.5px
     background-color #fff
     border-bottom 1px solid #d3d3d3
     &:first-of-type
@@ -81,7 +125,7 @@
       position relative
       display block
       width 70px
-      margin-left 10px
+      margin 0 10px 0 0
       font-size 0
       &::before
         content ''
@@ -142,6 +186,24 @@
     &__comment
       &.hidden
         display none
+
+  .follow-icon
+    cursor pointer
+    margin 0 0 0 25px
+    &__thumbnail
+      width 25px
+      height 25px
+      margin-left 4.5px
+      cursor pointer
+    &__hint
+      position relative
+      // right 5px
+      bottom 2px
+      font-size 14px
+      -webkit-font-smoothing antialiased
+      -moz-font-smoothing antialiased
+      color #11b8c9
+      font-weight 600
 
   @media (min-width 768px)
     .reportBlock
