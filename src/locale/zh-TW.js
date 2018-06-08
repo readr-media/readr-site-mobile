@@ -363,6 +363,8 @@ export default {
     'HOT_TALK': '焦點', 
     'CHIEF_EDITOR_LIST': '客座', 
     'PROJECTS': '專題', 
-    'PROJECTS_IN_PROGRESS': '進行中議題',     
+    'PROJECTS_IN_PROGRESS': '進行中議題',
+    'SERIES': '專題',
+    'SERIES_LIST': '專題列表', 
   },
 }
