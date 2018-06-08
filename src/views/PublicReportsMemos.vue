@@ -20,8 +20,8 @@ import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
 import Invite from 'src/components/invitation/Invite.vue'
 import ReportBlock from 'src/components/ReportBlock.vue'
 import MemoFigure from 'src/components/projects/MemoFigure.vue'
-import { MEMO_PUBLISH_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
-import { get, } from 'lodash'
+import { MEMO_PUBLISH_STATUS, REPORT_PUBLISH_STATUS, POINT_OBJECT_TYPE, } from 'api/config'
+import { get, uniq, } from 'lodash'
 
 const MAXRESULT = 50
 const DEFAULT_SORT = '-published_at'
@@ -40,6 +40,7 @@ const fetchMemos = (store, {
     },
   })
 }
+
 const fetchReportsList = (store, {
   max_result = MAXRESULT,
   sort = DEFAULT_SORT,
@@ -51,6 +52,16 @@ const fetchReportsList = (store, {
         publish_status: REPORT_PUBLISH_STATUS.PUBLISHED,
       },
       sort: sort,
+    },
+  })
+}
+
+const fetchPointHistories = (store, { objectIds, objectType, }) => {
+  return store.dispatch('GET_POINT_HISTORIES', {
+    params: {
+      memberId: get(store, [ 'state', 'profile', 'id', ]),
+      objectType: objectType,
+      objectIds: objectIds,
     },
   })
 }
@@ -92,7 +103,12 @@ export default {
     },
     fetchData () {
       const requests = this.setRequests(this.$route.path)
-      Promise.all(requests)
+      Promise.all(requests).then(() => {
+        const projectIds = uniq(get(this.$store, 'state.publicMemos', []).map(memo => memo.projectId))
+        if (projectIds.length !== 0) {
+          fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
+        }
+      })
     },
   },
   beforeMount () {
@@ -104,7 +120,7 @@ export default {
 <style lang="stylus" scoped>
 .reports-memos
   background-color #e6e6e6
-  margin 0 0 34px 0
+  padding 40px 0 34px 0
 </style>
 
 
