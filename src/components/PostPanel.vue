@@ -1,6 +1,6 @@
 <template>
   <section class="post-panel">
-    <div class="post-panel-container">
+    <div v-if="isClientSide" class="post-panel-container">
       <div class="input input--title" :class="{ 'input--error': includes(errors, 'title') }">
         <input v-model="post.title" type="text" :disabled="loading" :placeholder="$t('POST_PANEL.TITLE_PLACEHOLDER')">
         <p v-if="includes(errors, 'title')" v-text="`${$t('POST_PANEL.VALIDATION_MSG')}${$t('POST_PANEL.TITLE')}`"></p>

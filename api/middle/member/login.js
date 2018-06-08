@@ -60,7 +60,7 @@ const login = (req, res) => {
           uuid: get(mem, 'uuid'), 
           mail: get(mem, 'mail', req.body.email), 
           role: get(mem, 'role', 1), 
-          profileImage: get(mem, 'profileImage'), 
+          profileImage: get(mem, 'profile_image'), 
           points: get(mem, 'points'), 
           scopes,
         },})

@@ -29,7 +29,7 @@
   // const DEFAULT_SORT = '-updated_at'
   
   export default {
-    name: 'AppMember',
+    name: 'ManageMember',
     components: {
       'app-tab': Tab,
       'base-light-box': BaseLightBox,

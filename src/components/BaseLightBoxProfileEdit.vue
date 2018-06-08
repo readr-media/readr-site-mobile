@@ -5,7 +5,7 @@
         <button class="profile-edit__close"><img src="/public/icons/close-white.png" alt=""></button>
         <div class="portrait">
           <div class="portrait__container" @click="profileEditorUploadThumbnail">
-            <img class="portrait__thumbnail" :src="getImageUrl(thumbnail)" alt="thumbnail">
+            <img v-if="isClientSide" class="portrait__thumbnail" :src="getImageUrl(thumbnail)" alt="thumbnail">
             <div class="portrait__upload">
               <input ref="inputPortraitImg" type="file" accept="image/*" class="editor__input" style="display: none;" @change="inputChangeHandler">
             </div>
@@ -118,6 +118,9 @@ export default {
     //     this.inputDescription = newValue
     //   }
     // },
+    isClientSide () {
+      return get(this.$store, 'state.isClientSide', false)
+    },
     thumbnail () {
       return get(this.profile, [ 'profileImage', ]) || '/public/icons/exclamation.png'
     },
