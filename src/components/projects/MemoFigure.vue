@@ -1,16 +1,18 @@
 <template>
-  <router-link class="projects-figure-progress" :to="`/series/${get(this.memo, 'project.slug')}`">
-    <div class="projects-figure-progress__title">
-      <h3 v-if="projectName" v-text="projectName"></h3>
-      <h2 v-text="memo.title"></h2>
-    </div>
-    <router-link v-if="deducted" :to="`/series/${get(this.memo, 'project.slug')}`" class="projects-figure-progress__block projects-figure-progress--link">
-      <img src="/public/icons/microphone-grey.png" :alt="$t('PROJECT.DISCUSS')">
-      <p v-text="$t('PROJECT.DISCUSS')"></p>
-    </router-link>
-    <div v-else class="projects-figure-progress__block projects-figure-progress--encoruage" @click="$_projectsFigureProgress_openLightBox">
-      <img src="/public/icons/participate-grey.png" :alt="`${$t('PROJECT.ENCOURAGE_1')}${$t('PROJECT.ENCOURAGE_2')}`">
-      <p>{{ $t('PROJECT.ENCOURAGE_1') }}<br>{{ $t('PROJECT.ENCOURAGE_2') }}</p>
+  <div class="projects-figure-progress">
+    <div class="projects-figure-progress__container" @click="navigateToMemo">
+      <div class="projects-figure-progress__title">
+        <h3 v-if="projectName" v-text="projectName"></h3>
+        <h2 v-text="memo.title"></h2>
+      </div>
+      <router-link v-if="deducted" :to="`/series/${get(this.memo, 'project.slug')}`" class="projects-figure-progress__block projects-figure-progress--link">
+        <img src="/public/icons/microphone-grey.png" :alt="$t('PROJECT.DISCUSS')">
+        <p v-text="$t('PROJECT.DISCUSS')"></p>
+      </router-link>
+      <div v-else class="projects-figure-progress__block projects-figure-progress--encoruage" @click="$_projectsFigureProgress_openLightBox">
+        <img src="/public/icons/participate-grey.png" :alt="`${$t('PROJECT.ENCOURAGE_1')}${$t('PROJECT.ENCOURAGE_2')}`">
+        <p>{{ $t('PROJECT.ENCOURAGE_1') }}<br>{{ $t('PROJECT.ENCOURAGE_2') }}</p>
+      </div>
     </div>
     <base-light-box :showLightBox.sync="showLightBox" borderStyle="nonBorder">
       <div class="project-memo-alert">
@@ -26,7 +28,7 @@
         </div>
       </div>
     </base-light-box>
-  </router-link>
+  </div>
 </template>
 
 <script>
@@ -81,6 +83,9 @@
       projectName () {
         return get(this.memo, 'project.title')
       },
+      memoURL () {
+        return `/series/${get(this.memo, 'project.slug')}`
+      },
     },
     methods: {
       $_projectsFigureProgress_deductPoints () {
@@ -91,12 +96,15 @@
           fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
           .then(() => {
             this.deducting = false
-            this.$router.push(`/series/${get(this.memo, 'projectId')}`)
+            this.$router.push(this.memoURL)
           })
         })
       },
       $_projectsFigureProgress_openLightBox () {
         this.showLightBox = true
+      },
+      navigateToMemo () {
+        this.deducted ? this.$router.push(this.memoURL) : this.$_projectsFigureProgress_openLightBox()
       },
       get,
     },
@@ -112,6 +120,9 @@
     border-top 3px solid #ddcf21
   & + .projects-figure-progress
     border-top 1px solid #d3d3d3
+  &__container
+    display flex
+    width 100%
   &__title
     flex 1
     padding 10px
