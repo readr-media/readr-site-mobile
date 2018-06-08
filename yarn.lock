@@ -7692,6 +7692,10 @@ prettyjson@^1.1.2:
     colors "^1.1.2"
     minimist "^1.2.0"
 
+prevent-scroll@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/prevent-scroll/-/prevent-scroll-2.0.0.tgz#e8f6d3b7942baea9dedb82de81aef82b85af6fef"
+
 private@^0.1.6, private@^0.1.7, private@^0.1.8:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
@@ -8039,9 +8043,9 @@ readdirp@^2.0.0:
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
 
-readr-comment@^1.0.3:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/readr-comment/-/readr-comment-1.0.6.tgz#cf33327efac54786a0b2d2650ce4ea8a812f02ee"
+readr-comment@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/readr-comment/-/readr-comment-1.0.15.tgz#33e93ea060215f172c940a09fd3b4a104299b7cc"
   dependencies:
     babel-cli "^6.22.2"
     babel-core "^6.18.2"
@@ -8055,6 +8059,8 @@ readr-comment@^1.0.3:
     ismobilejs "^0.4.1"
     lodash "^4.17.10"
     moment "^2.22.1"
+    prevent-scroll "^2.0.0"
+    sanitize-html "^1.18.2"
 
 redent@^1.0.0:
   version "1.0.0"
