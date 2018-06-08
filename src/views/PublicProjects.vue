@@ -18,8 +18,9 @@ const MAX_RESULT = 3
 
 const fetchFollowing = (store, params) => {
   return store.dispatch('GET_FOLLOWING_BY_RESOURCE', {
-    resource: 'project',
+    mode: params.mode,
     ids: params.ids,
+    resource: 'project',
   })
 }
 
