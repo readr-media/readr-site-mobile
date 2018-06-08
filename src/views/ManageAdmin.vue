@@ -235,7 +235,7 @@
   }
 
   export default {
-    name: 'admin-page',
+    name: 'ManageAdmin',
     components: {
       'app-tab': Tab,
       AlertPanel,

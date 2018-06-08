@@ -216,7 +216,7 @@
   }
 
   export default {
-    name: 'AppEditor',
+    name: 'ManageEditor',
     components: {
       'alert-panel': AlertPanelB,
       'app-tab': Tab,

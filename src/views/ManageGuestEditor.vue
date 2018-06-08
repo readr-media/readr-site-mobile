@@ -111,7 +111,7 @@
   }
 
   export default {
-    name: 'GuestEditor',
+    name: 'ManageGuestEditor',
     components: {
       'alert-panel': AlertPanel,
       'app-tab': Tab,
