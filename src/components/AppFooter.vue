@@ -12,7 +12,7 @@
     <router-link to="/editors" class="footer__item" :class="{ active: currentPath === 'editors' }">
       <img src="/public/icons/editors.png" alt="">
     </router-link>
-    <router-link to="/projects" class="footer__item" :class="{ active: currentPath === 'projects' }">
+    <router-link to="/series-list" class="footer__item" :class="{ active: currentPath === 'projects' }">
       <img src="/public/icons/projects.png" alt="">
     </router-link>
   </footer>
