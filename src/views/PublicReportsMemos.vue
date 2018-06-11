@@ -20,7 +20,7 @@ import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
 import Invite from 'src/components/invitation/Invite.vue'
 import ReportBlock from 'src/components/ReportBlock.vue'
 import MemoFigure from 'src/components/projects/MemoFigure.vue'
-import { MEMO_PUBLISH_STATUS, REPORT_PUBLISH_STATUS, POINT_OBJECT_TYPE, } from 'api/config'
+import { MEMO_PUBLISH_STATUS, REPORT_PUBLISH_STATUS, POINT_OBJECT_TYPE, PROJECT_PUBLISH_STATUS, } from 'api/config'
 import { get, uniq, } from 'lodash'
 
 const MAXRESULT = 50
@@ -35,6 +35,7 @@ const fetchMemos = (store, {
       max_result: max_result,
       where: {
         publish_status: MEMO_PUBLISH_STATUS.PUBLISHED,
+        project_publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED,
       },
       sort: sort,
     },
@@ -50,6 +51,7 @@ const fetchReportsList = (store, {
       max_result: max_result,
       where: {
         publish_status: REPORT_PUBLISH_STATUS.PUBLISHED,
+        project_publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED,
       },
       sort: sort,
     },
