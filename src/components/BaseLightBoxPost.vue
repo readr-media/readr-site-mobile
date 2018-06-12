@@ -41,9 +41,11 @@
           <h2 class="article-content__author-nickname" v-text="authorNickname"></h2>
           <h1 class="article-content__title" v-text="!isPostEmpty ? post.title : ''"></h1>
           <div class="article-content__paragraph-container" v-html="!isPostEmpty ? post.content : ''"></div>
+          <a class="article-content__source-link" :href="post.link" target="_blank" v-text="post.linkTitle"></a>
+          <AppArticleNav :postId="post.id" :articleType="this.post.flag" :commentCount="commentCount" :inLightbox="true" @toogleComment="toogleComment"/>
         </section>
       </article>
-      <CommentContainer class="baselightbox-post__comment" v-if="showComment" :asset="asset"></CommentContainer>
+      <CommentContainer class="baselightbox-post__comment" v-show="showComment" v-if="shouldRenderComment" :asset="asset"></CommentContainer>
     </template>
   </div>
 </template>
@@ -77,6 +79,12 @@ export default {
     showLightBox (val) {
       if (!val) {
         this.$emit('closeEditor')
+      }
+    },
+    post () {
+      if (this.post.id && !this.isNews ) {
+        this.shouldRenderComment = true
+        this.showComment = true
       }
     },
   },
@@ -113,7 +121,8 @@ export default {
   },
   data () { 
     return { 
-      showComment: false,
+      showComment: true,
+      shouldRenderComment: false,
     } 
   }, 
   methods: {
@@ -137,11 +146,9 @@ export default {
         width < height ? event.target.classList.add('portrait') : event.target.classList.add('landscape')
       }).catch(() => { event.target.classList.add('landscape') })
     },
-  },
-  updated () {
-    if (this.post.id && !this.isNews) { 
-      this.showComment = true 
-    }     
+    toogleComment () {
+      this.showComment = !this.showComment
+    },
   },
 }
 </script>
@@ -200,6 +207,14 @@ export default {
             display none
           & > img
             width 100%
+      &__source-link
+        font-size 15px
+        text-align justify
+        line-height 1.5
+        color #0a5780
+        text-decoration underline
+        margin 20px 0
+        display block
 
   font-family = 'Songti TC', 'SimSun'
   &--news
