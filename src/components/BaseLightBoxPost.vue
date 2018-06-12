@@ -216,7 +216,6 @@ export default {
         margin 20px 0
         display block
 
-  font-family = 'Songti TC', 'SimSun'
   &--news
     width 100%
     // height 90vh
@@ -224,7 +223,7 @@ export default {
     .baselightbox-post
       &__leading-image
         width 100%
-        height 177px
+        height auto
         background-color #444746
       &__article-container
         width 100%
@@ -258,18 +257,15 @@ export default {
         color black
     .article-content
       h1
-        font-family font-family
         font-size 20px
         line-height 1.5
         margin 15px 0 10px 0
       h2
-        font-family font-family
         font-size 18px
         line-height 1.5
         font-weight bold
         margin 23.5px 0 15px 0
       p
-        font-family font-family
         font-size 15px
         letter-spacing 0.5px
         line-height 1.6
@@ -282,7 +278,6 @@ export default {
         flex-direction column
         align-items center
       figcaption
-        font-family font-family
         font-size 14px
         line-height 1.71
         letter-spacing 0.5px
