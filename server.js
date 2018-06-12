@@ -94,13 +94,6 @@ app.use('/assets', (req, res) => {
   res.status(404).send('404 | Page Not Found!')
 })
 
-app.use('/proxy', (req, res, next) => { 
-  req.url = `/proxy${req.url}` 
-  debug('Attemp to fetch stuff from proxy.') 
-  debug(req.url) 
-  next() 
-}, require('./api/index'))
-
 // since this app has no user-specific content, every page is micro-cacheable.
 // if your app involves user-specific content, you need to implement custom
 // logic to determine whether a request is cacheable based on its url and
@@ -282,7 +275,7 @@ app.get('*', isProd ? render : (req, res, next) => {
   readyPromise.then(() => render(req, res, next))
 })
 
-app.use('/api', require('./api/index'))
+app.use('/api', require('readr-web-api'))
 
 const port = process.env.PORT || 8080
 const server = app.listen(port, () => {
