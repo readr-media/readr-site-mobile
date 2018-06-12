@@ -33,6 +33,7 @@ const fetchMemos = (store, {
   return store.dispatch('GET_PUBLIC_MEMOS', {
     params: {
       max_result: max_result,
+      member_id: get(store, 'state.profile.id'),
       where: {
         publish_status: MEMO_PUBLISH_STATUS.PUBLISHED,
         project_publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED,
