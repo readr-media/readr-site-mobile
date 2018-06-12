@@ -74,7 +74,11 @@ export default {
   },  
   methods: {
     renderComment () {
-      this.showComment = true
+      if (this.inLightbox) {
+        this.$emit('toogleComment')
+      } else if (!this.inLightbox) {
+        this.showComment = true
+      }
     },
     toogleFollow (event) {
       if (event) event.preventDefault()
@@ -126,6 +130,10 @@ export default {
     commentCount: {
       type: Number,
       required: true,
+    },
+    inLightbox: {
+      type: Boolean,
+      default: false,
     },
   },
 }
