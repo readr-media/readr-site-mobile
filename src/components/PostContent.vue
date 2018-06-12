@@ -232,7 +232,6 @@
   }
 </script>
 <style lang="stylus">
-  font-family = 'Songti TC', 'SimSun'
   .post-content
     a
       color #000
@@ -247,7 +246,6 @@
         margin 0 0 11px 0
         line-height 1.5
         color #4a4a4a
-        font-family font-family
     &__leading-image
       // width = 100% is equal to 100vw - 15px - 15px
       // keep the aspect ratio to 16:9
@@ -274,14 +272,11 @@
       border-bottom solid 0.5px #979797
       p
         color #4a4a4a
-        font-family font-family
       h1
-        font-family font-family
         font-size 35px
         line-height 1.5
         margin 16.5px 0 21px 0
       h2
-        font-family font-family
         font-size 25px
         line-height 1.5
         font-weight bold
@@ -292,7 +287,6 @@
         flex-direction column
         align-items center
       figcaption
-        font-family font-family
         font-size 14px
         line-height 1.71
         letter-spacing 0.5px
