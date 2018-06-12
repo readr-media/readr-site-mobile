@@ -31,7 +31,7 @@ const fetchMemos = (store, {
 }) => {
   return store.dispatch('GET_MEMOS', {
     params: {
-      member_id: get(store, 'state.profile.id'), 
+      member_id: get(store, 'state.profile.id'),
       project_id: proj_ids,
       max_result: MAXRESULT_POSTS,
       page,
@@ -45,7 +45,10 @@ const fetchMemos = (store, {
 }
 const fetchMemoSingle = (store, memoId) => {
   return store.dispatch('GET_MEMO', {
-    params: { memoId, },
+    params: {
+      member_id: get(store, 'state.profile.id'),
+      memoId,
+    },
   })
 }
 const fetchProjectSingle = (store, proj_slug) => {
