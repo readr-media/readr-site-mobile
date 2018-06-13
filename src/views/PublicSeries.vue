@@ -19,7 +19,7 @@ import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, REPORT_PUBLISH_STATUS, } from '
 import { find, get, sortBy, union, } from 'lodash'
 import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
 
-const MAXRESULT_POSTS = 10
+const MAXRESULT_POSTS = 1
 const DEFAULT_PAGE = 1
 const DEFAULT_SORT = '-memo_order,-created_at'
 
