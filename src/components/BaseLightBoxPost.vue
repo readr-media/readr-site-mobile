@@ -1,5 +1,8 @@
 <template>
-  <div :class="[ { 'baselightbox-post--review': !isNews }, { 'baselightbox-post--news': isNews } ]">
+  <div class="baselightbox-post--review" v-if="isContentEmpty">
+    No content found. Or, you may not have the right to fetch this content? 
+  </div>
+  <div :class="[ { 'baselightbox-post--review': !isNews }, { 'baselightbox-post--news': isNews } ]" v-else>
     <!-- template for post type is news -->
     <template v-if="isNews">
       <img class="baselightbox-post__leading-image" v-if="post.ogImage && isClientSide" :src="getImageUrl(post.ogImage)" @load="setLeadingImageOrientation(getImageUrl(post.ogImage), $event)">
@@ -82,7 +85,12 @@ export default {
       }
     },
     post () {
-      if (this.post.id && !this.isNews ) {
+      if (!this.post) {
+        /**
+         * Client may not have the right to fetch this post content.
+         */        
+        this.isContentEmpty = true
+      } else if (this.post.id && !this.isNews ) {
         this.shouldRenderComment = true
         this.showComment = true
       }
@@ -121,6 +129,7 @@ export default {
   },
   data () { 
     return { 
+      isContentEmpty: true,
       showComment: true,
       shouldRenderComment: false,
     } 
@@ -148,6 +157,9 @@ export default {
     },
     toogleComment () {
       this.showComment = !this.showComment
+    },
+    mounted () {
+      this.isContentEmpty = !this.post
     },
   },
 }
