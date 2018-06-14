@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <CommentContainer :class="`reportBlock__comment hidden report-${get(report, [ 'id' ])}`" v-if="showComment" :asset="reportUrl"></CommentContainer> 
+    <CommentContainer :class="`reportBlock__comment hidden report-${get(report, [ 'id' ])}`" v-if="showComment" :asset="reportUrl" :assetId="this.report.id"></CommentContainer> 
   </a>
 </template>
 <script>

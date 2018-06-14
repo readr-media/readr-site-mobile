@@ -12,7 +12,7 @@
       </span>
       <span v-else></span>
     </nav>
-    <CommentContainer v-if="showComment" :asset="asset"></CommentContainer>
+    <CommentContainer v-if="showComment" :asset="asset" :assetId="postId"></CommentContainer>
   </div>
 </template>
 
