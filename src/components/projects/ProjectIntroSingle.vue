@@ -1,6 +1,12 @@
 <template>
   <div class="project-single-intro">
-    <div class="project-single-intro__container" :style="{ backgroundImage: `url(${getImageUrl(get(project, 'heroImage'))})`, }">
+    <div class="project-single-intro__container">
+      <div class="project-single-intro__heroimg">
+        <img :src="getImageUrl(get(project, 'heroImage'))">
+        <div class="project-single-intro__progress-bar" :style="{ width: `${targProgress}%` }">
+          <div class="current-progress"><span v-text="`${currProgress}%`"></span></div>
+        </div>
+      </div>
       <div class="project-single-intro__title">
         <span v-text="title"></span>
       </div>
@@ -10,9 +16,6 @@
     </div>
     <div class="project-single-intro__comment">
       <AppArticleNav :articleType="'project'" :postId="project.slug" :commentCount="project.commentAmount || 0"></AppArticleNav>
-    </div>
-    <div class="project-single-intro__progress-bar" :style="{ width: `${targProgress}%` }">
-      <div class="current-progress"><span v-text="`${currProgress}%`"></span></div>
     </div>
   </div>
 </template>
@@ -90,17 +93,20 @@ export default {
     background-position center left
     background-size cover
     background-repeat no-repeat
-    padding 50px 20px 20px
+    padding 0 0 20px
     width 100%
     height 100%
-    font-size 1.125rem
+    font-size 0.9375rem
     line-height 1.5625rem
     font-weight normal
     position relative
     > div:not(:first-child)
       margin-top 10px
+      padding 0 15px
     > div:not(:last-child)
       margin-bottom 10px
+    > div:first-child
+      margin-bottom 20px      
     > div
       position relative
       z-index 1
@@ -113,16 +119,23 @@ export default {
       height 100%
       top 0
       left 0
+  &__heroimg
+    width 100%
+    display block
+    margin-bottom 25px
+    img
+      width 100%
+      vertical-align middle
   &__title
-    font-size 2rem
+    font-size 1.25rem
     font-weight 600
     line-height normal
   &__comment
-    padding 0 20px
+    padding 0 15px
   &__progress-bar
     position absolute
     height 5px
-    top 0
+    bottom 0
     left 0
     background-color #ddcf21
     transition width 1.5s
