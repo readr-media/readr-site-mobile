@@ -203,4 +203,5 @@ export default {
 <style lang="stylus" scoped>
 .series
   padding-bottom 50px
+  background-color #e6e6e6
 </style>

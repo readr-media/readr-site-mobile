@@ -239,7 +239,7 @@
         height 30px
         margin 15px 10px 15px 0
         color #fff
-        font-size .6875rem
+        font-size 0.9375rem
         font-weight 300
         background-color #11b8c9
         border none

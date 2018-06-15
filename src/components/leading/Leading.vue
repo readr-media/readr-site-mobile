@@ -28,4 +28,6 @@ export default {
 <style lang="stylus" scoped>
 .leading
   width 100%
+  margin-bottom 15px
+  margin-top 20px
 </style>
