@@ -37,7 +37,7 @@ const fetchMemos = (store, {
       page,
       sort: DEFAULT_SORT,
       where: {
-        publish_status: [ 2, ],
+        memo_publish_status: [ 2, ],
       },
     },
     mode,
