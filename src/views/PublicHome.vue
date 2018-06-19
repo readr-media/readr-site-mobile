@@ -47,7 +47,7 @@
         max_result: max_result,
         member_id: get(store, 'state.profile.id'),
         where: {
-          publish_status: MEMO_PUBLISH_STATUS.PUBLISHED,
+          memo_publish_status: MEMO_PUBLISH_STATUS.PUBLISHED,
         },
         sort: sort,
       },
