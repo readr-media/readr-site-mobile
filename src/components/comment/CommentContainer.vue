@@ -78,7 +78,7 @@
       rerenderComment (comment) {
         const params = get(comment, 'parentId')
           ? { parent: get(comment, 'parentId'), sort: 'created_at', }
-          : { resource: this.asset, }
+          : { resource: this.asset, resource_id: this.assetRefId, }
         return new Promise(resolve => {
           setTimeout(() => {
             fetchComment(this.$store, { params, }).then(comments => {
@@ -178,6 +178,7 @@
       fetchComment(this.$store, {
         params: {
           resource: this.asset,
+          resource_id: this.assetId,
         },
       }).then((comments) => {
         debug('comments', comments)
@@ -193,6 +194,9 @@
         type: Number,
         required: true,
       },
+      assetRefId: { 
+        type: Number, 
+      },
     },
     watch: {
       comments_raw () {
@@ -203,6 +207,7 @@
         fetchComment(this.$store, {
           params: {
             resource: this.asset,
+            resource_id: this.assetId,
           },
         }).then((comments) => {
           debug('comments', comments)
@@ -212,3 +217,8 @@
     },    
   }
 </script>
+<style lang="stylus" scoped> 
+  .alert 
+    margin-top 20px 
+    color #d4d4d4 
+</style> 

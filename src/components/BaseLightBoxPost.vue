@@ -31,7 +31,7 @@
           </section>
         </article>
         <div class="nav-container">
-          <AppArticleNav :postId="post.id" :articleType="this.post.flag" :commentCount="commentCount"/>
+          <AppArticleNav :postId="post.id" :postRefId="assetRefId" :articleType="this.post.flag" :commentCount="commentCount"/>
         </div>
       </div>
     </template>
@@ -45,10 +45,16 @@
           <h1 class="article-content__title" v-text="!isPostEmpty ? post.title : ''"></h1>
           <div class="article-content__paragraph-container" v-html="!isPostEmpty ? post.content : ''"></div>
           <a class="article-content__source-link" :href="post.link" target="_blank" v-text="post.linkTitle"></a>
-          <AppArticleNav :postId="post.id" :articleType="this.post.flag" :commentCount="commentCount" :inLightbox="true" @toogleComment="toogleComment"/>
+          <AppArticleNav
+            :postId="post.id"
+            :postRefId="assetRefId" 
+            :articleType="this.post.flag"
+            :commentCount="commentCount"
+            :inLightbox="true" @toogleComment="toogleComment"/>
         </section>
       </article>
-      <CommentContainer class="baselightbox-post__comment" v-show="showComment" v-if="shouldRenderComment" :asset="asset" :assetId="post.id"></CommentContainer>
+      <CommentContainer class="baselightbox-post__comment" v-show="showComment" v-if="shouldRenderComment"
+        :asset="asset" :assetId="post.id" :assetRefId="assetRefId"></CommentContainer>
     </template>
   </div>
 </template>
@@ -99,7 +105,10 @@ export default {
   computed: {
     asset () { 
       return `${get(this.$store, 'state.setting.HOST')}/${get(this.post, 'flag') === 'memo' ? `series/${get(this.$route, 'params.slug')}` : 'post'}/${this.post.id}` 
-    },    
+    },
+    assetRefId () { 
+      return get(this.post, 'project.id') 
+    }, 
     isPostEmpty () {
       return isEmpty(this.post)
     },

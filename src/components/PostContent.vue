@@ -30,6 +30,21 @@
       <a v-if="post.heroImage" class="report__img" :href="getReportUrl(post.slug)" target="_blank"><img :src="getImageUrl(post.heroImage)" alt=""></a>
       <p class="report__descr"><a :href="getReportUrl(post.slug)" v-text="get(post, 'description')" target="_blank"></a></p>
     </template>
+    <template v-else-if="postType === 'memo'"> 
+      <PostContentMemo 
+        :targetUrl="targetUrl" 
+        :postContentProcessed="postContentProcessed" 
+        :shouldContentStopAtIndex="shouldContentStopAtIndex" 
+        :isImg="isImg" 
+        :getImgSrc="getImgSrc" 
+        :setContentImageOrientation="setContentImageOrientation" 
+        :isClientSide="isClientSide" 
+        :shouldShowReadMoreButton="shouldShowReadMoreButton" 
+        :hasSource="hasSource" 
+        :setOgImageOrientation="setOgImageOrientation"
+        :postLinkDecoded="postLinkDecoded"
+        :post="post"></PostContentMemo> 
+    </template>     
     <!-- template for post type is review and others -->
     <template v-else-if="postType === 'normal'">
       <h1 class="post-content__title" v-text="post.title"></h1>
@@ -64,13 +79,19 @@
       </a>
       <a v-else-if="!hasSource" class="editor-writing-no-source" :href="post.link"  target="_blank" v-text="postLinkDecoded"></a>
     </template>
-    <AppArticleNav :postId="get(this.post, 'flag') === 'report' ? this.post.slug : this.post.id" :articleType="this.post.flag" :commentCount="commentCount"></AppArticleNav>
+    <AppArticleNav
+      :articleType="post.flag"
+      :postId="post.id"
+      :postRefId="get(post, 'project.id')" 
+      :slug="get(post, 'flag') === 'report'? post.slug : ''"
+      :commentCount="commentCount"></AppArticleNav>
   </div>
 </template>
 <script>
   import { get, map, some, findIndex, } from 'lodash'
   import { onImageLoaded, getImageUrl, getReportUrl, isClientSide, } from 'src/util/comm'
   import AppArticleNav from 'src/components/AppArticleNav.vue'
+  import PostContentMemo from 'src/components/PostContentMemo.vue'
   import sanitizeHtml from 'sanitize-html'
   import truncate from 'html-truncate'
   import { POST_TYPE, } from '../../api/config'
@@ -142,6 +163,8 @@
           return 'news'
         } else if (get(this.post, 'projectId') && get(this.post, 'flag') === 'report') {
           return 'report'
+        } else if (get(this.post, 'flag') === 'memo'){ 
+          return 'memo'          
         } else {
           return 'normal'
         }
@@ -179,11 +202,12 @@
         }
       },
       postLinkDecoded () {
-        return decodeURI(this.post.link)
+        return decodeURI(this.post.link || '')
       },   
     },
     components: {
       AppArticleNav,
+      PostContentMemo,
     },
     data () {
       return {
