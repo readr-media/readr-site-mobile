@@ -62,6 +62,7 @@
         </div>
         <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
       </a>
+      <a v-else-if="!hasSource" class="editor-writing-no-source" :href="post.link"  target="_blank" v-text="postLinkDecoded"></a>
     </template>
     <AppArticleNav :postId="get(this.post, 'flag') === 'report' ? this.post.slug : this.post.id" :articleType="this.post.flag" :commentCount="commentCount"></AppArticleNav>
   </div>
@@ -176,7 +177,10 @@
           default:
             return `/post/${get(this.post, 'id')}`
         }
-      },      
+      },
+      postLinkDecoded () {
+        return decodeURI(this.post.link)
+      },   
     },
     components: {
       AppArticleNav,
@@ -366,4 +370,9 @@
       font-weight 300
       color #808080
       align-self flex-end
+  .editor-writing-no-source
+    display block
+    color #808080
+    font-size 12px
+    
 </style>
