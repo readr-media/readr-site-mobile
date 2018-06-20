@@ -42,14 +42,14 @@ export default {
   computed: {
     asset () {
       switch (this.articleType) {
-        case 'memo': 
-          return `${get(this.$store, 'state.setting.HOST')}/series/${get(this.$route, 'params.slug')}/${this.postId}` 
-        case 'project': 
-          return `${get(this.$store, 'state.setting.HOST')}/series/${this.postId}` 
-        case 'report': 
-          return `${get(this.$store, 'state.setting.HOST')}/project/${this.postId}` 
-        default:  
-          return `${get(this.$store, 'state.setting.HOST')}/${this.articleType}/${this.postId}` 
+        case 'memo':
+          return `${get(this.$store, 'state.setting.HOST')}/series/${get(this.$route, 'params.slug')}/${this.postId}`
+        case 'project':
+          return `${get(this.$store, 'state.setting.HOST')}/series/${this.postId}`
+        case 'report':
+          return `${get(this.$store, 'state.setting.HOST')}/project/${this.slug}`
+        default: 
+          return `${get(this.$store, 'state.setting.HOST')}/${this.articleType}/${this.postId}`
       }
     },    
     isFollow () {
@@ -132,6 +132,10 @@ export default {
       type: Number,
       required: true,
     },
+    slug: {
+      // For report use.
+      type: String,
+    },    
     inLightbox: {
       type: Boolean,
       default: false,
