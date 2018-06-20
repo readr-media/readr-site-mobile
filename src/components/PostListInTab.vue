@@ -17,7 +17,7 @@
         </div>
         <p v-else-if="p.content" class="postListInTab__descr" v-text="$_postListInTab_getDescr(p.content)"></p>
       </div>
-      <div v-if="!(!$can('editOtherPost') && p.publishStatus !== config.publishStatus.DRAFT)" class="postListInTab__control--mobile">
+      <div v-if="!(!$can('editOtherPost') && p.publishStatus !== config.publishStatus.DRAFT && p.publishStatus !== config.publishStatus.PENDING)" class="postListInTab__control--mobile">
         <button class="postListInTab__btn" @click="$_postListInTab_editPost(p.id)" v-text="$t('POST_LIST.EDIT')"></button>
         <button class="postListInTab__btn" @click="$_postListInTab_deletePost(p.id)" v-text="$t('POST_LIST.DELETE')"></button>
       </div>
