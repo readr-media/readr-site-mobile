@@ -13,7 +13,7 @@
 <script>
   import { MEMO_PUBLISH_STATUS, POINT_OBJECT_TYPE, REPORT_PUBLISH_STATUS, } from 'api/config'
   import { get, find, uniq, concat, } from 'lodash'
-  import { createStore, } from 'src/store'
+  // import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
@@ -221,52 +221,75 @@
       },
     },
     beforeRouteEnter (to, from, next) {
-      const store = createStore()
-      pageJump({ store, to, next, })
+      // const store = createStore()
+      // pageJump({ store, to, next, })
+      next()
     },
     beforeRouteUpdate (to, from, next) {
       pageJump({ store: this.$store, to, next, })
     },
     beforeMount () {
-      let reqs = [
-        fetchMemos(this.$store),
-        fetchPosts(this.$store),
-        fetchPosts(this.$store, { category: 'hot', }),
-        fetchReportsList(this.$store),
-        fetchVideos(this.$store),
-      ]
+      const process = () => {
+        let reqs = [
+          fetchMemos(this.$store),
+          fetchPosts(this.$store),
+          fetchPosts(this.$store, { category: 'hot', }),
+          fetchReportsList(this.$store),
+          fetchVideos(this.$store),
+        ]
 
-      if (this.$route.params.postId) {
-        reqs.push(fetchPost(this.$store, { id: this.$route.params.postId, }))
+        if (this.$route.params.postId) {
+          reqs.push(fetchPost(this.$store, { id: this.$route.params.postId, }))
+        }
+
+        Promise.all(reqs).then(() => {
+          if (this.$store.state.isLoggedIn) {
+            const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
+            const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
+            // const reportIds = get(this.$store.state, 'publicReports', []).map(report => `${report.id}`)
+            const ids = uniq(concat(postIdsLatest, postIdsHot))
+            const projectIds = uniq(get(this.$store, 'state.publicMemos', []).map(memo => memo.projectId))
+
+            if (ids.length !== 0) {
+              fetchFollowing(this.$store, {
+                resource: 'post',
+                ids: ids,
+              })
+            }
+
+            // if (reportIds.length !== 0) {
+            //   fetchFollowing(this.$store, {
+            //     resource: 'report',
+            //     ids: reportIds,
+            //   })
+            // }
+
+            if (projectIds.length !== 0) {
+              fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
+            }
+          }
+        })        
       }
 
-      Promise.all(reqs).then(() => {
-        if (this.$store.state.isLoggedIn) {
-          const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
-          const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
-          // const reportIds = get(this.$store.state, 'publicReports', []).map(report => `${report.id}`)
-          const ids = uniq(concat(postIdsLatest, postIdsHot))
-          const projectIds = uniq(get(this.$store, 'state.publicMemos', []).map(memo => memo.projectId))
-
-          if (ids.length !== 0) {
-            fetchFollowing(this.$store, {
-              resource: 'post',
-              ids: ids,
-            })
+      if (get(this.$route, 'params.postId')) {
+        fetchPost(this.$store, { id: get(this.$route, 'params.postId'), }).then(({ status, }) => {
+          if (status === 'error') {
+            if (process.browser) {
+              this.$router.push('/404')
+            } else {
+              const e = new Error()
+              e.massage = 'Page Not Found'
+              e.code = '404'
+              throw e  
+            }
+          } else {
+            process() 
           }
+        })
+      } else {
+        process()
+      }
 
-          // if (reportIds.length !== 0) {
-          //   fetchFollowing(this.$store, {
-          //     resource: 'report',
-          //     ids: reportIds,
-          //   })
-          // }
-
-          if (projectIds.length !== 0) {
-            fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
-          }
-        }
-      })
       // Uncomment this when v1.0 is released
       // if (this.$store.state.isLoggedIn) {
       //   const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
