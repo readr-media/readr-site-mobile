@@ -2,7 +2,7 @@
   <div :style="{ position: 'relative', }">
     <h1 class="post-content__title" v-text="post.title"></h1>
     <div class="editor-writing">
-      <div class="editor-writing__container">
+      <div class="editor-writing__container" @click="goMemo">
         <template v-for="(p, i) in postContentProcessed">
           <!-- post content for initial display -->
           <p class="editor-writing__paragraph--visible" v-if="i <= shouldContentStopAtIndex" :key="`${post.id}-${i}`">

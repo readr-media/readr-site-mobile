@@ -67,10 +67,12 @@ import AppArticleNav from 'src/components/AppArticleNav.vue'
 import CommentContainer from 'src/components/comment/CommentContainer.vue'
 import sanitizeHtml from 'sanitize-html'
 
+const debug = require('debug')('CLIENT:BaseLightBoxPost')
 const dom = require('xmldom').DOMParser
 const seializer  = require('xmldom').XMLSerializer
 
 export default {
+  name: 'BaseLightBoxPost',
   props: {
     post: {
       type: Object,
@@ -96,10 +98,14 @@ export default {
          * Client may not have the right to fetch this post content.
          */        
         this.isContentEmpty = true
-      } else if (this.post.id && !this.isNews ) {
-        this.shouldRenderComment = true
-        this.showComment = true
+      } else if (this.post.id) {
+        this.isContentEmpty = false
+        if (!this.isNews) {
+          this.shouldRenderComment = true
+          this.showComment = true
+        }
       }
+      debug('watch: this.isContentEmpty', this.isContentEmpty, this.post)
     },
   },
   computed: {
@@ -169,6 +175,7 @@ export default {
     },
     mounted () {
       this.isContentEmpty = !this.post
+      debug('Mounted: this.isContentEmpty', this.isContentEmpty)
     },
   },
 }
