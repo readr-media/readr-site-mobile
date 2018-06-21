@@ -689,36 +689,4 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .admin
-    background-color #e6e6e6
-    width 100%
-    min-height 100vh
-    &__container
-      max-width 1200px
-      margin auto
-      padding 25px 0
-      display flex
-    &__aside
-      width 75px
-      height 100%
-      position sticky
-      // position fixed
-      top 60px
-    &__main
-      margin-left 93.5px
-    .control-bar
-      width 100%
-      margin 0 auto
-    .panel
-      width 100%
-      padding 22px 84px 33px
-      border 5px solid #d8ca21
-      margin 0 auto
-      background-color white
-  @media (min-width 950px)
-    .admin
-      .control-bar
-        max-width 950px
-      .panel
-        max-width 950px
 </style>

@@ -41,6 +41,8 @@
 </script>
 <style lang="stylus" scoped>
 .login-page
+  display flex
+  flex-direction column
   width 100%
   margin auto
   padding 0

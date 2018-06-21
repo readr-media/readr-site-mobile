@@ -4,7 +4,7 @@
     <transition name="fade" mode="out-in">
       <router-view class="view" :openControlBar="openControlBar" @closeControlBar="$_app_closeControlBar"></router-view>
     </transition>
-    <app-footer v-if="!isLogin"></app-footer>
+    <app-footer v-if="!isLogin && !isBackstage"></app-footer>
   </div>
 </template>
 
@@ -29,13 +29,16 @@
     computed: {
       currUser () { 
         return get(this.$store, 'state.profile.id') 
-      }, 
+      },
+      isBackstage () {
+        return this.$route.path.match(/\/(admin|editor|guesteditor|member)$/)
+      },
       isLogin () {
         return get(this.$route, [ 'fullPath', ]).split('/')[1] === 'login'
       },
       useragent () { 
         return get(this.$store, 'state.useragent') 
-      }, 
+      },
     },
     mounted () {
       this.$store.dispatch('UPDATE_CLIENT_SIDE')

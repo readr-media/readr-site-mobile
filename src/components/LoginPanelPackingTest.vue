@@ -18,8 +18,8 @@
         <h2><span class="highlight">目前尚在封測期間，暫不開放註冊</span></h2>
       </div>
     </div>
-    <div class="login-panel__right">
-    </div>
+    <!-- <div class="login-panel__right">
+    </div> -->
   </div>
 </template>
 <script>
@@ -64,6 +64,7 @@
 </script>
 <style lang="stylus" scoped>
   .login-panel
+    flex 1
     display flex
     flex-direction column
     justify-content center

@@ -569,8 +569,9 @@
     max-width 100%
     max-height 100%
     margin 0 auto
-    padding-right 15px
+    padding 0 15px 45px 0
     overflow-y auto
+    -webkit-overflow-scrolling touch
     > p
       margin .2em 0
       color #ff0000

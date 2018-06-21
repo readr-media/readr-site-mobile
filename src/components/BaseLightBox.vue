@@ -71,7 +71,7 @@
 <style lang="stylus" scoped>
 
 .baseLightBox
-  position fixed
+  position absolute
   top 0
   left 0
   right 0
@@ -81,7 +81,7 @@
   justify-content center
   align-items center
   width 100%
-  height 100vh
+  // height 100vh
   background-color rgba(0,0,0,.6)
   &.text-editor
     .baseLightBox__container
