@@ -406,21 +406,4 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .guestEditor
-    background-color #e6e6e6
-    width 100%
-    min-height 100vh
-    &__container
-      max-width 1200px
-      margin auto
-      padding 25px 0
-      display flex
-    &__aside
-      width 75px
-      height 100%
-      position sticky
-      // position fixed
-      top 60px
-    &__record
-      background-color #fff
 </style>
