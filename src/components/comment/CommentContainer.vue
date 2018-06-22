@@ -75,6 +75,15 @@
       }
     },    
     methods: {
+      queryForRedisUse (comment) { 
+        return get(comment, 'parentId') ? {  
+          sort: 'created_at', 
+          parent: get(comment, 'parentId'), 
+        } : {  
+          sort: DEFAULT_SORT, 
+          resource: this.asset, 
+        } 
+      },      
       rerenderComment (comment) {
         const params = get(comment, 'parentId')
           ? { parent: get(comment, 'parentId'), sort: 'created_at', }
@@ -105,6 +114,8 @@
         delComment(this.$store, {
           params: { 
             ids: [ id, ],
+            /** property "query" is for redis cache use */ 
+            query: this.queryForRedisUse(comment),            
           },
         }).then(() => {
           return this.rerenderComment(comment)
@@ -115,6 +126,8 @@
         hideComment(this.$store, {
           params: { 
             ids: [ id, ],
+            /** property "query" is for redis cache use */ 
+            query: this.queryForRedisUse(comment),            
           },
         }).then(() => {
           return this.rerenderComment(comment)
@@ -138,6 +151,8 @@
             parent_id: get(comment, 'parentId') || null,
             resource_name: this.resource.name,
             resource_id: this.resource.id,
+            /** property "query" is for redis cache use */ 
+            query: this.queryForRedisUse(comment),            
           },
         }).then(() => {
           return this.rerenderComment(comment)
@@ -149,6 +164,8 @@
           params: {
             body: get(comment, 'body'),
             id,
+            /** property "query" is for redis cache use */ 
+            query: this.queryForRedisUse(comment),            
           },
         }).then(() => {
           return this.rerenderComment(comment)
