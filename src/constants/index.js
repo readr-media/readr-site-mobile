@@ -1,3 +1,5 @@
+import { ROLE_MAP as ROLE_MAP_CONF, } from 'api/config' 
+import { get, } from 'lodash'
 import projectList from './projectList'
 export const PROJECTS = projectList
 
@@ -5,10 +7,10 @@ export const SITE_DOMAIN = 'readr.tw'
 export const SITE_DOMAIN_DEV = 'dev.readr.tw'
 
 export const ROLE_MAP = [
-  { key: 9, value: '管理員', route: 'admin', },
-  { key: 3, value: '編輯', route: 'editor', },
-  { key: 2, value: '總編', route: 'guesteditor', },
-  { key: 1, value: '會員', route: 'member', },
+  { key: get(ROLE_MAP_CONF, 'ADMIN'), value: '管理員', route: 'admin', },
+  { key: get(ROLE_MAP_CONF, 'EDITOR'), value: '編輯', route: 'editor', },
+  { key: get(ROLE_MAP_CONF, 'GUESTEDITOR'), value: '總編', route: 'guesteditor', },
+  { key: get(ROLE_MAP_CONF, 'MEMBER'), value: '會員', route: 'member', },
 ]
 
 export const SECTIONS_DEFAULT = {
