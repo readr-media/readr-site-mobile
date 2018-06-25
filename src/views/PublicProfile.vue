@@ -223,8 +223,8 @@
         }),
       ]).then(() =>{
         if (this.$store.state.isLoggedIn) {
-          const postIdsReview = get(this.$store, 'state.publicPostNews.items', []).map(post => `${post.id}`) 
-          const postIdsNews = get(this.$store, 'state.publicPostReview.items', []).map(post => `${post.id}`) 
+          const postIdsReview = get(this.$store, 'state.publicPostNews.items', []).map(post => post.id) 
+          const postIdsNews = get(this.$store, 'state.publicPostReview.items', []).map(post => post.id) 
           const ids = uniq(concat(postIdsReview, postIdsNews))
           
           if (ids.length !== 0) { 
@@ -262,8 +262,8 @@
         }),
       ]).then(() => {
         if (this.$store.state.isLoggedIn) {
-          const postIdsReview = get(this.$store, 'state.publicPostNews.items', []).map(post => `${post.id}`) 
-          const postIdsNews = get(this.$store, 'state.publicPostReview.items', []).map(post => `${post.id}`) 
+          const postIdsReview = get(this.$store, 'state.publicPostNews.items', []).map(post => post.id) 
+          const postIdsNews = get(this.$store, 'state.publicPostReview.items', []).map(post => post.id) 
           const ids = uniq(concat(postIdsReview, postIdsNews))
           
           if (ids.length !== 0) { 

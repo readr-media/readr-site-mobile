@@ -244,8 +244,8 @@
 
         Promise.all(reqs).then(() => {
           if (this.$store.state.isLoggedIn) {
-            const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
-            const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
+            const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => post.id)
+            const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => post.id)
             // const reportIds = get(this.$store.state, 'publicReports', []).map(report => `${report.id}`)
             const ids = uniq(concat(postIdsLatest, postIdsHot))
             const projectIds = uniq(get(this.$store, 'state.publicMemos', []).map(memo => memo.projectId))
@@ -329,7 +329,7 @@
           } else {
             this.currentPage += 1
             if (this.$store.state.isLoggedIn) {
-              const ids = res.items.map(post => `${post.id}`)
+              const ids = res.items.map(post => post.id)
               fetchFollowing(this.$store, {
                 mode: 'update',
                 resource: 'post',
