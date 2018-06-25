@@ -67,8 +67,8 @@ export default {
       }),
     ]).then(() => {
       if (this.$store.state.isLoggedIn) {
-        const customEditorsIds = this.$store.state.customEditors.items.map(editor => `${editor.id}`)
-        const asideListMembersIds = this.$store.state.publicMembers[this.asideListRoleValue].items.map(member => `${member.id}`)
+        const customEditorsIds = this.$store.state.customEditors.items.map(editor => editor.id)
+        const asideListMembersIds = this.$store.state.publicMembers[this.asideListRoleValue].items.map(member => member.id)
         const ids = uniq(concat(customEditorsIds, asideListMembersIds))
         fetchFollowing(this.$store, {
           ids: ids,

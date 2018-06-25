@@ -67,7 +67,7 @@ export default {
     fetchProjectsList(this.$store)
     .then(() => {
       if (this.$store.state.isLoggedIn) {
-        const projectIds = get(this.$store, 'state.publicProjects.normal', []).map(project => `${project.id}`)
+        const projectIds = get(this.$store, 'state.publicProjects.normal', []).map(project => project.id)
         fetchFollowing(this.$store, { ids: projectIds, })
       }
     })
@@ -89,7 +89,7 @@ export default {
           get(this.projects, [ 'length', ], 0) <= origCount ? this.hasMore = false : true
           this.loading = false
           if (this.hasMore && this.$store.state.isLoggedIn) {
-            const projectIds = res.map(project => `${project.id}`)
+            const projectIds = res.map(project => project.id)
             fetchFollowing(this.$store, {
               mode: 'update',
               ids: projectIds,
