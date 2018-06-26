@@ -52,8 +52,8 @@ export default {
     },
     editorFollowers () {
       if (this.$store.state.isLoggedIn) {
-        const editorFollowersData = find(this.$store.state.followingByResource['member'], { resourceid: this.editor.id, })
-        return editorFollowersData ? editorFollowersData.follower : []
+        const editorFollowersData = find(this.$store.state.followingByResource['member'], { resourceID: this.editor.id, })
+        return editorFollowersData ? editorFollowersData.followers : []
       } else {
         return []
       }

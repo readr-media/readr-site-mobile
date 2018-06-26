@@ -176,7 +176,7 @@ export default {
   GET_FOLLOWING_BY_USER: ({ commit, dispatch, state, }, params) => {
     return getFollowingByUser(params).then(({ status, body, }) => {
       if (status === 200) {
-        commit('SET_FOLLOWING_BY_USER', { following: body.items, userId: params.subject.id, })
+        commit('SET_FOLLOWING_BY_USER', { following: body.items, userId: params.id, })
       }
     })
   },

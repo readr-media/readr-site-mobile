@@ -21,6 +21,16 @@
         @click="$_followingListInTab_handleResource('project')">
         <span v-text="`${$t('FOLLOWING.FOLLOW')}${$t('FOLLOWING.PROJECT')}`"></span>
       </div>
+      <div
+        :class="{ active: resource === 'report' }"
+        @click="$_followingListInTab_handleResource('report')">
+        <span v-text="`${$t('FOLLOWING.FOLLOW')}${$t('FOLLOWING.REPORT')}`"></span>
+      </div>
+      <div
+        :class="{ active: resource === 'memo' }"
+        @click="$_followingListInTab_handleResource('memo')">
+        <span v-text="`${$t('FOLLOWING.FOLLOW')}${$t('FOLLOWING.MEMO')}`"></span>
+      </div>
     </nav>
     <!-- <pagination-nav></pagination-nav> -->
     <div class="followingListInTab__list">
@@ -62,7 +72,7 @@
       params: {
         action: action,
         resource: resource,
-        id: get(store, 'state.profile.id'),
+        subject: get(store, 'state.profile.id'),
         object: object,
       },
     })
@@ -236,7 +246,7 @@
       display inline-block
       height 15px
       padding 0
-      margin 0 5px
+      margin 5px 5px 0
       color #a8a8a8
       font-size .8125rem
       background transparent
