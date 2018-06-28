@@ -77,7 +77,7 @@
         </div>
         <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
       </a>
-      <a v-else-if="!hasSource" class="editor-writing-no-source" :href="post.link"  target="_blank" v-text="postLinkDecoded"></a>
+      <a v-else-if="post.link && !hasSource" class="editor-writing-no-source" :href="post.link"  target="_blank" v-text="postLinkDecoded"></a>
     </template>
     <AppArticleNav
       :articleType="post.flag"
