@@ -73,7 +73,7 @@
         </MemberAccountEditor>
       </BaseLightBox>
       <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showProfile">
-        <BaseLightBoxProfileEdit :profile="profile" :showLightBox="showProfile" @save="showProfile = false"/>
+        <ProfileEdit :profile="profile" :showLightBox="showProfile" @save="showProfile = false"/>
       </BaseLightBox>
       <BaseLightBox :showLightBox.sync="showDraftList">
         <PostListDetailed
@@ -113,7 +113,6 @@
   import { filter, find, forEach, get, includes, unionBy, } from 'lodash'
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
-  import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import MemberAccountEditor from '../components/admin/MemberAccountEditor.vue'
   import MembersPanel from '../components/admin/MembersPanel.vue'
@@ -121,6 +120,7 @@
   import PostListDetailed from '../components/PostListDetailed.vue'
   import PostListInTab from '../components/PostListInTab.vue'
   import PostPanel from '../components/PostPanel.vue'
+  import ProfileEdit from '../components/member/ProfileEdit.vue'
   import Tab from '../components/Tab.vue'
   import TagList from '../components/TagList.vue'
   import TheControlBar from '../components/TheControlBar.vue'
@@ -240,7 +240,7 @@
       'app-tab': Tab,
       AlertPanel,
       BaseLightBox,
-      BaseLightBoxProfileEdit,
+      ProfileEdit,
       FollowingListInTab,
       MemberAccountEditor,
       MembersPanel,

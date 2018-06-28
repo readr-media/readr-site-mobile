@@ -1,7 +1,8 @@
 /*eslint no-unused-vars: 0*/
 import _ from 'lodash'
-import { POST_PUBLISH_STATUS, POST_TYPE, PROJECT_STATUS, } from '../../api/config'
-import { ROLE_MAP, } from '../../src/constants'
+import { POST_PUBLISH_STATUS, POST_TYPE, PROJECT_STATUS, } from 'api/config'
+import { ROLE_MAP, } from 'src/constants'
+import * as actionsMember from 'src/store/actions/member'
 import {
   addComment, 
   addCommentReport,
@@ -67,10 +68,10 @@ import {
   updateTags,
   uploadImage,
   verifyRecaptchaToken,
-} from '../api'
+} from 'src/api'
 
 const debug = require('debug')('CLIENT:STORE:actions')
-export default {
+export default Object.assign({
   ADD_COMMENT: ({ commit, dispatch, state, }, { params, }) => { 
     return addComment({ params, }) 
   }, 
@@ -597,4 +598,4 @@ export default {
   INVITATION_SWITCH_OFF: ({ commit, dispatch, state, }, { params, }) => {
     commit('INVITATION_SWITCH_OFF', {})
   },
-}
+}, actionsMember)

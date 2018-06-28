@@ -33,10 +33,10 @@
           <span class="form__name">{{ $t('PROFILE.CONFIRM_PASSWORD') }}：</span>
           <input class="form__input" type="password" name="confirm_password" v-model="inputConfirmPassword">
         </div>
-        <!-- <div class="form__item">
-          <span class="form__name">{{ $t('PROFILE.PERSONAL_OPTIONS') }}：</span>
-          <div class="form__personal-options"></div>
-        </div> -->
+        <div class="form__item"> 
+          <span class="form__name" v-text="`${$t('PROFILE.PERSONAL_OPTIONS')}：`"></span> 
+          <Advanced class="form__personal-options" :values.sync="advanced" :fetchPersonalSetting="fetchPersonalSetting"></Advanced> 
+        </div>         
         <button class="profile-edit__save-button" @click="profileEditorSave">{{ $t('PROFILE.SAVE') }}</button>
       </div>
     </div>
@@ -45,12 +45,14 @@
 </template>
 
 <script>
-import { get, } from 'lodash'
-import { removeToken, } from '../util/services'
-import { getImageUrl, } from '../util/comm'
+import Advanced from 'src/components/member/Advanced.vue'
 import validator from 'validator'
+import { camelize, } from 'humps' 
+import { get, map, } from 'lodash'
+import { getImageUrl, } from 'src/util/comm'
+import { removeToken, } from 'src/util/services'
 
-const debug = require('debug')('CLIENT:')
+const debug = require('debug')('CLIENT:ProfileEdit')
 const updateInfo = (store, profile, action) => {
   return store.dispatch(action, {
     params: profile,
@@ -71,15 +73,12 @@ const logout = (store) => {
 const uploadImage = (store, file) => {
   return store.dispatch('UPLOAD_IMAGE', { file, type: 'member', })
 }
-const syncAvatar = (store, params) => {
-  return store.dispatch('SYNC_AVATAR', { params, })
-}
 const deleteMemberProfileThumbnails = (store, id) => {
   return store.dispatch('DELETE_MEMBER_PROFILE_THUMBNAILS', { id, })
 }
 
 export default {
-  name: 'BaseLightBoxProfileEdit',
+  name: 'ProfileEdit',
   props: {
     profile: {
       type: Object,
@@ -89,8 +88,12 @@ export default {
       default: false,
     },
   },
+  components: {
+    Advanced,
+  },
   data () {
     return {
+      advanced: {},
       staticNickname : get(this.profile, [ 'nickname', ], ''),
       // inputNickname: '',
       // inputDescription: '',
@@ -102,25 +105,22 @@ export default {
     }
   },
   computed: {
-    // computedNickname: {
-    //   get () {
-    //     return get(this.profile, [ 'nickname' ], '')
-    //   },
-    //   set (newValue) {
-    //     this.inputNickname = newValue
-    //   }
-    // },
-    // computedDescription: {
-    //   get () {
-    //     return get(this.profile, [ 'description' ], '')
-    //   },
-    //   set (newValue) {
-    //     this.inputDescription = newValue
-    //   }
-    // },
     isClientSide () {
       return get(this.$store, 'state.isClientSide', false)
     },
+    isPersonalSettingMutated () { 
+      let isMutated = false 
+      map(this.advanced, (v, k) => { 
+        const origin = get(this.personalSetting, camelize(k)) 
+        if (origin !== undefined && get(this.personalSetting, camelize(k)) !== v) { 
+          isMutated = true 
+        } 
+      }) 
+      return isMutated 
+    }, 
+    personalSetting () { 
+      return get(this.$store, 'state.personalSetting', {}) 
+    },      
     thumbnail () {
       return get(this.profile, [ 'profileImage', ]) || '/public/icons/exclamation.png'
     },
@@ -140,6 +140,9 @@ export default {
     },
   },
   methods: {
+    fetchPersonalSetting: (store) => { 
+      return store.dispatch('FETCH_PERSONAL_SETTONG') 
+    },
     getImageUrl,
     inputChangeHandler () {
       const file = this.$refs.inputPortraitImg.files[0]
@@ -156,13 +159,7 @@ export default {
             id: this.profile.id,
             edit_mode: 'edit_profile',
             profile_image: res.body.url,
-          }, 'UPDATE_PROFILE').then(() => {
-            debug('Going to sync the avatar to talk db.')
-            return syncAvatar(this.$store, {
-              url: res.body.url,
-              id: this.profile.id,
-            })
-          })
+          }, 'UPDATE_PROFILE')
         })
         .catch((err) => {
           console.error(err)
@@ -192,8 +189,16 @@ export default {
         if (!inputNotChange('Description')) {
           params.description = this.inputDescription
         }
+        if (this.isPersonalSettingMutated) { 
+          debug('go update!!')
+          debug('go update!!')
+          debug('go update!!', this.advanced)
+          params = Object.assign(params, this.advanced) 
+        }
 
-        updateInfo(this.$store, params, 'UPDATE_PROFILE')
+        updateInfo(this.$store, params, 'UPDATE_PROFILE').then(() => { 
+          return this.fetchPersonalSetting(this.$store) 
+        }) 
         // .then(callback)
       }
 
@@ -247,7 +252,7 @@ export default {
         })
       }
 
-      if (!(inputNotChange('Nickname') && inputNotChange('Description'))) {
+      if (!(inputNotChange('Nickname') && inputNotChange('Description')) || this.isPersonalSettingMutated) {
         updateBasicInfo()
       }
       if (!isOldPasswordEmpty() && isConfirmNewPassword()) {
@@ -270,6 +275,7 @@ export default {
   &__main
     width 100%
     padding 20px 15px 45px
+    overflow auto
   &__close
     position absolute
     top 0
@@ -350,9 +356,12 @@ $form__name
     padding 9px 15px
   &__personal-options
     width form-width
-    height 300px
+    // height 300px
     // height 200px
     background-color white
+    border 1px solid white
+    flex 1
+    overflow-y hidden
 
 $portrait-container-size
   width 70px
