@@ -70,13 +70,13 @@
   import _ from 'lodash'
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
-  import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import PaginationNav from '../components/PaginationNav.vue'
   import PostList from '../components/PostList.vue'
   import PostListDetailed from '../components/PostListDetailed.vue'
   import PostListInTab from '../components/PostListInTab.vue'
   import PostPanel from '../components/PostPanel.vue'
+  import ProfileEdit from '../components/member/ProfileEdit.vue'
   import Tab from '../components/Tab.vue'
   import TheControlBar from '../components/TheControlBar.vue'
 
@@ -116,7 +116,7 @@
       'alert-panel': AlertPanel,
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
-      'base-light-box-profile': BaseLightBoxProfileEdit,
+      'base-light-box-profile': ProfileEdit,
       'control-bar': TheControlBar,
       'following-list-tab': FollowingListInTab,
       'pagination-nav': PaginationNav,

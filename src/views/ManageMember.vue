@@ -18,8 +18,8 @@
 </template>
 <script>
   import BaseLightBox from '../components/BaseLightBox.vue'
-  import BaseLightBoxProfileEdit from '../components/BaseLightBoxProfileEdit.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
+  import ProfileEdit from '../components/member/ProfileEdit.vue'
   import Tab from '../components/Tab.vue'
   import TheControlBar from '../components/TheControlBar.vue'
   import { get, } from 'lodash'
@@ -33,7 +33,7 @@
     components: {
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
-      'base-light-box-profile': BaseLightBoxProfileEdit,
+      'base-light-box-profile': ProfileEdit,
       'control-bar': TheControlBar,
       'following-list-tab': FollowingListInTab,
     },
