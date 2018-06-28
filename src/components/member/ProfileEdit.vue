@@ -52,7 +52,7 @@ import { get, map, } from 'lodash'
 import { getImageUrl, } from 'src/util/comm'
 import { removeToken, } from 'src/util/services'
 
-const debug = require('debug')('CLIENT:ProfileEdit')
+// const debug = require('debug')('CLIENT:ProfileEdit')
 const updateInfo = (store, profile, action) => {
   return store.dispatch(action, {
     params: profile,
@@ -190,9 +190,6 @@ export default {
           params.description = this.inputDescription
         }
         if (this.isPersonalSettingMutated) { 
-          debug('go update!!')
-          debug('go update!!')
-          debug('go update!!', this.advanced)
           params = Object.assign(params, this.advanced) 
         }
 
