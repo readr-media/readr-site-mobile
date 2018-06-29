@@ -245,14 +245,14 @@ export default Object.assign({
           }), })
         } else if (mode === 'update') {
           if (_.get(body, 'items', []).length === 0) {
-            return { status: 'end', }
+            return { status: 'end', body, }
           }
           commit('UPDATE_MEMOS', { items: _.map(_.get(body, 'items', []), i => {
             i.flag = 'memo'
             return i
           }), })          
         }
-        return { status, }
+        return { status, body, }
       }
     })
   },  
