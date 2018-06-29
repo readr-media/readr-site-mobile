@@ -30,6 +30,10 @@
   const DEFAULT_CATEGORY = 'latest'
   // const debug = require('debug')('CLIENT:PublicHome')
 
+  const fetchEmotion = (store, params) => {
+    return store.dispatch('FETCH_EMOTION_BY_RESOURCE', params)
+  }
+
   const fetchFollowing = (store, params) => {
     if (params.subject) {
       return store.dispatch('GET_FOLLOWING_BY_USER', params)
@@ -250,16 +254,14 @@
             const ids = uniq(concat(postIdsLatest, postIdsHot))
             const projectIds = uniq(get(this.$store, 'state.publicMemos', []).map(memo => memo.projectId))
             if (ids.length !== 0) {
-              fetchFollowing(this.$store, {
-                resource: 'post',
-                ids: ids,
-              })
+              fetchFollowing(this.$store, { resource: 'post', ids: ids, })
+              fetchEmotion(this.$store, { resource: 'post', ids: ids, emotion: 'like', })
+              fetchEmotion(this.$store, { resource: 'post', ids: ids, emotion: 'dislike', })
             }
             if (reportIds.length !== 0) {
-              fetchFollowing(this.$store, {
-                resource: 'report',
-                ids: reportIds,
-              })
+              fetchFollowing(this.$store, { resource: 'report', ids: reportIds, })
+              fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
+              fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
             }
             if (projectIds.length !== 0) {
               fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
@@ -327,11 +329,9 @@
             this.currentPage += 1
             if (this.$store.state.isLoggedIn) {
               const ids = res.items.map(post => post.id)
-              fetchFollowing(this.$store, {
-                mode: 'update',
-                resource: 'post',
-                ids: ids,
-              })
+              fetchFollowing(this.$store, { mode: 'update', resource: 'post', ids: ids, })
+              fetchEmotion(this.$store, { mode: 'update', resource: 'post', ids: ids, emotion: 'like', })
+              fetchEmotion(this.$store, { mode: 'update', resource: 'post', ids: ids, emotion: 'dislike', })
             }
           }
         })

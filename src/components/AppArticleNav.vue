@@ -10,7 +10,16 @@
         <img class="follow-icon__thumbnail" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow">
         <span class="follow-icon__hint" v-text="$t('FOLLOWING.FOLLOW')"></span>
       </span>
-      <span v-else></span>
+      <template v-if="articleType !== 'project'">
+        <span class="like-icon" @click="toggleEmotion('like')">
+          <img :src="isLike ? '/public/icons/like-blue.png' : '/public/icons/like-line-blue.png'" alt="like">
+          <span v-text="emotionLikeCount"></span>
+        </span>
+        <span class="like-icon dislike" @click="toggleEmotion('dislike')">
+          <img :src="isDislike ? '/public/icons/like-blue.png' : '/public/icons/like-line-blue.png'" alt="unlike">
+          <span v-text="emotionDislikeCount"></span>
+        </span>
+      </template>
     </nav>
     <CommentContainer v-if="showComment" :asset="asset" :assetId="postId" :assetRefId="postRefId"></CommentContainer>
   </div>
@@ -22,6 +31,20 @@ import CommentContainer from 'src/components/comment/CommentContainer.vue'
 import CommentCount from 'src/components/comment/CommentCount.vue'
 
 const publishAction = (store, data) => store.dispatch('FOLLOW', { params: data, })
+const updateEmotion = (store, { resource = 'post', action = 'insert', emotion = 'like', object, }) => {
+  return store.dispatch('UPDATE_EMOTION', {
+    customAttrs: {
+      type: 'emotion',
+      action: action,
+    },
+    dataBuffer: {
+      resource: resource,
+      emotion: emotion,
+      subject: store.state.profile.id,
+      object: object,
+    },
+  })
+}
 const updateStoreFollowingByResource = (store, { action, resource, resourceId, userId, }) => {
   return store.dispatch('UPDATE_FOLLOWING_BY_RESOURCE', {
     params: {
@@ -51,9 +74,23 @@ export default {
         default: 
           return `${get(this.$store, 'state.setting.HOST')}/${this.articleType}/${this.postId}`
       }
-    },    
+    },
+    emotionLikeCount () {
+      return get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'like', ], []), { resourceID: this.postId, }), 'count', 0 ) || 0
+    },
+    emotionDislikeCount () {
+      return get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'dislike', ], []), { resourceID: this.postId, }), 'count', 0 ) || 0
+    },
+    isDislike () {
+      const ids = get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'dislike', ], []), { resourceID: this.postId, }), 'followers', []) || [] 
+      return this.$store.state.isLoggedIn && ids.indexOf(this.$store.state.profile.id) !== -1
+    },
     isFollow () {
       return this.$store.state.isLoggedIn && this.postFollowers.indexOf(this.$store.state.profile.id) !== -1
+    },
+    isLike () {
+      const ids = get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'like', ], []), { resourceID: this.postId, }), 'followers', []) || [] 
+      return this.$store.state.isLoggedIn && ids.indexOf(this.$store.state.profile.id) !== -1
     },
     isLoggedIn () {
       return this.$store.state.isLoggedIn
@@ -111,6 +148,19 @@ export default {
             resourceId: this.postId,
             userId: this.$store.state.profile.id,
           })
+        }
+      }
+    },
+    toggleEmotion (emotion) {
+      if (this.$store.state.isLoggedIn) {
+        const emotionVal = emotion === 'like' ? this.isLike : this.isDislike
+        const oppositeVal = emotion === 'like' ? this.isDislike : this.isLike
+        if (emotionVal) {
+          updateEmotion(this.$store, { resource: this.articleType, action:'delete', emotion: emotion, object: this.postId, })
+        } else if (oppositeVal) {
+          updateEmotion(this.$store, { resource: this.articleType, action:'update', emotion: emotion, object: this.postId, })
+        } else {
+          updateEmotion(this.$store, { resource: this.articleType, action:'insert', emotion: emotion, object: this.postId, })
         }
       }
     },
@@ -186,6 +236,22 @@ $icon-size
     -moz-font-smoothing antialiased
     color #11b8c9
     font-weight 600
+.like-icon
+  margin-left 10px
+  cursor pointer
+  &.dislike
+    img
+      position relative
+      top 5px
+      transform rotate3d(1, 0, 0, 180deg)
+  img
+    @extends $icon-size
+  span
+    margin-left 3px
+    color #11b8c9
+    font-size 14px
+    font-weight 600
+    user-select none
 .donate-icon
   width 20px
   height 25px

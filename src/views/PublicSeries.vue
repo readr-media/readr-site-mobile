@@ -79,6 +79,14 @@ const fetchReportsList = (store, {
   })
 }
 
+const fetchFollowing = (store, params) => {
+  return store.dispatch('GET_FOLLOWING_BY_RESOURCE', params)
+}
+
+const fetchEmotion = (store, params) => {
+  return store.dispatch('FETCH_EMOTION_BY_RESOURCE', params)
+}
+
 export default {
   name: 'PublicSeries',
   components: {
@@ -132,6 +140,10 @@ export default {
         // this.shouldShowSpinner = false
         debug('Loadmore done. Status', res, get(res, 'status'))
         if (get(res, 'status') === 200) {
+          const memoIds = get(this.$store.state, 'memos', []).map(memo => memo.id)
+          fetchFollowing(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, })
+          fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'like', })
+          fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'dislike', })
           this.currPage += 1
         } else if (get(res, 'status') === 'end') {
           this.isLoadMoreEnd = true
@@ -178,7 +190,20 @@ export default {
           return
         }
       }),
-    ])
+    ]).then(() => {
+      const reportIds = get(this.$store.state, 'publicReports', []).map(report => report.id)
+      const memoIds = get(this.$store.state, 'memos', []).map(memo => memo.id)
+      if (reportIds.length > 0) {
+        fetchFollowing(this.$store, { resource: 'report', ids: reportIds, })
+        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
+        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
+      }
+      if (memoIds.length > 0) {
+        fetchFollowing(this.$store, { resource: 'memo', ids: memoIds, })
+        fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'like', })
+        fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'dislike', })
+      }
+    })
   }, 
   mounted () {
     window.addEventListener('scroll', () => {
