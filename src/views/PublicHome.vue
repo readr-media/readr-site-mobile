@@ -87,7 +87,6 @@
   const fetchPointHistories = (store, { objectIds, objectType, }) => {
     return store.dispatch('GET_POINT_HISTORIES', {
       params: {
-        memberId: get(store, [ 'state', 'profile', 'id', ]),
         objectType: objectType,
         objectIds: objectIds,
       },

@@ -34,6 +34,7 @@
                 @filterChanged="filterChanged">
               </PostListInTab>
               <FollowingListInTab slot="2"></FollowingListInTab>
+              <PointManager slot="3"></PointManager>
             </app-tab>
           </section>
         </template>
@@ -116,6 +117,7 @@
   import FollowingListInTab from '../components/FollowingListInTab.vue'
   import MemberAccountEditor from '../components/admin/MemberAccountEditor.vue'
   import MembersPanel from '../components/admin/MembersPanel.vue'
+  import PointManager from 'src/components/point/PointManager.vue'
   import PostList from '../components/PostList.vue'
   import PostListDetailed from '../components/PostListDetailed.vue'
   import PostListInTab from '../components/PostListInTab.vue'
@@ -244,6 +246,7 @@
       FollowingListInTab,
       MemberAccountEditor,
       MembersPanel,
+      PointManager,
       PostList,
       PostListDetailed,
       PostListInTab,
@@ -287,6 +290,7 @@
           this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
           this.$t('tab.WORDING_TAB_NEWS_RECORD'),
           this.$t('tab.WORDING_TAB_FOLLOW_RECORD'),
+          this.$t('tab.WORDING_TAB_REWARD_POINTS_RECORD'), 
         ],
       }
     },

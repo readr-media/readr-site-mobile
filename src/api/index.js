@@ -361,18 +361,6 @@ export function getTagsCount () {
   return fetchInStrict(url, {})
 }
 
-export function getPointHistories ({ params, }) {
-  let url = `${host}/api/points/${params.memberId}`
-  const query = _buildQuery(params)
-  if (params.objectType) {
-    url = `${host}/api/points/${params.memberId}/${params.objectType}`
-  }
-  if (query && (query.length > 0)) {
-    url = url + `?${query}`
-  }
-  return fetchInStrict(url, {})
-}
-
 export function checkLoginStatus ({ params = {},}) {
   const url = `${host}/api/status`
 
