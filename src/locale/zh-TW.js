@@ -237,6 +237,16 @@ export default {
     'WORDING_POINTS_AVAILABLE' : '目前點數',
     'WORDING_POINTS_SPENT' : '使用點數',
     'WORDING_POINTS_SPENT_WHEN' : '使用時間',
+    'UNIT' : '點',
+    'POINT_RECORD' : '點數明細',
+    'PAYMENT_RECORD' : '付款明細',
+    'PARTICIPATE': '參與', 
+    'ENCOURAGE': '鼓勵', 
+    'PAYMENT': { 
+      'PREFIX': '扣款前', 
+      'INFIX': '點，付款金額', 
+      'POSTFIX': '元', 
+    },     
   },
   'tag_list': {
     'WORDING_TAGLIST_ADD' : '新增',
