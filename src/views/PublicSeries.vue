@@ -140,10 +140,12 @@ export default {
         // this.shouldShowSpinner = false
         debug('Loadmore done. Status', res, get(res, 'status'))
         if (get(res, 'status') === 200) {
-          const memoIds = get(this.$store.state, 'memos', []).map(memo => memo.id)
-          fetchFollowing(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, })
-          fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'like', })
-          fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'dislike', })
+          const memoIds = res.body.items.map(post => post.id)
+          if (memoIds.length > 0) {
+            fetchFollowing(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, })
+            fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'like', })
+            fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'dislike', })
+          }
           this.currPage += 1
         } else if (get(res, 'status') === 'end') {
           this.isLoadMoreEnd = true
