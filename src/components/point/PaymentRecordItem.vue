@@ -1,5 +1,5 @@
 <template> 
-  <div class="item"> 
+  <div class="item" @click="checkoutDetail"> 
     <div class="item__timestamp"><span v-text="datetime"></span></div> 
     <div class="item__subject"> 
       <!--span class="prefix" v-text="$t('point.PAYMENT.PREFIX')"></span> 
@@ -37,7 +37,11 @@
         return this.pointOrigin < 0 
       },     
     }, 
-    methods: {}, 
+    methods: {
+      checkoutDetail () {
+        this.$emit('showDetail', Object.assign({ detailType: 'payment', }, this.record))
+      },
+    }, 
     mounted () {}, 
     props: { 
       record: { 

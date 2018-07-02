@@ -1,10 +1,6 @@
 <template> 
-  <div class="item"> 
+  <div class="item" @click="checkoutDetail"> 
     <div class="item__timestamp"><span v-text="datetime"></span></div> 
-    <!--div class="item__subject"> 
-      <span class="object-type" v-text="objectType && $t(`point.${objectType}`)"></span> 
-      <span class="object-name" v-text="objectName"></span> 
-    </div--> 
     <div class="item__deduction"> 
       <span class="value" v-text="0 - deduction"></span> 
       <span class="unit" v-text="$t('point.UNIT')"></span> 
@@ -18,6 +14,7 @@
 <script> 
   import moment from 'moment' 
   import { get, } from 'lodash' 
+
   export default { 
     name: 'PointRecordItem', 
     computed: { 
@@ -33,21 +30,12 @@
       isBalanceNegative () { 
         return this.balance < 0 
       }, 
-      // objectName () { 
-      //   return get(this.record, 'objectName', '--') 
-      // }, 
-      // objectType () { 
-      //   switch (get(this.record, 'objectType', )) { 
-      //     case 1: 
-      //       return 'encourage' 
-      //     case 2: 
-      //       return 'participate' 
-      //     default: 
-      //       return 
-      //   } 
-      // }, 
     }, 
-    methods: {}, 
+    methods: {
+      checkoutDetail () {
+        this.$emit('showDetail', Object.assign({ detailType: 'point', }, this.record))
+      },
+    }, 
     mounted () {}, 
     props: { 
       record: { 
