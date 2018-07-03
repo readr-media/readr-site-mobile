@@ -391,6 +391,11 @@ export default {
       '2': '影片',
       '4': '直播',
     },
+    'OBJECT_TYPE': {
+      'MEMO': '筆記',
+      'REPORT': '報導',
+      'PROJECT': '專題',
+    },    
     'PUBLISH': '發表了新的',
   },
   'SECTIONS': { 
