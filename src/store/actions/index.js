@@ -4,13 +4,13 @@ import { POST_PUBLISH_STATUS, POST_TYPE, PROJECT_STATUS, } from 'api/config'
 import { ROLE_MAP, } from 'src/constants'
 import * as actionsEmotion from 'src/store/actions/emotion'
 import * as actionsMember from 'src/store/actions/member'
+import * as actionsTag from 'src/store/actions/tag'
 import * as actionPoints from 'src/store/actions/points'
 import {
   addComment, 
   addCommentReport,
   addMember,
   addPost,
-  addTags,
   addRewardPointsTransactions,
   checkLoginStatus,
   checkPassword,
@@ -21,7 +21,6 @@ import {
   deletePost,
   deletePosts,
   deletePostSelf,
-  deleteTags,
   fetchComment,
   fetchCommentCount,
   fetchMeComments,
@@ -49,8 +48,6 @@ import {
   getPublicReportsList,
   getPublicVideos,
   getPublicVideosCount,
-  getTags,
-  getTagsCount,
   hideComment,  
   invite,
   login,
@@ -66,7 +63,6 @@ import {
   updateNotificationStatus,
   updatePassword,
   updatePost,
-  updateTags,
   uploadImage,
   verifyRecaptchaToken,
 } from 'src/api'
@@ -84,9 +80,6 @@ export default Object.assign({
   },
   ADD_POST: ({ commit, dispatch, state, }, { params, }) => {
     return addPost(params)
-  },
-  ADD_TAGS: ({ commit, dispatch, state, }, { params, }) => {
-    return addTags(params)
   },
   ADD_REWARD_POINTS_TRANSACTIONS: ({ commit, dispatch, state, }, { params, }) => {
     return addRewardPointsTransactions(params)
@@ -127,9 +120,6 @@ export default Object.assign({
   },
   DELETE_POST_SELF: ({ commit, dispatch, state, }, { id, }) => {
     return deletePostSelf(id)
-  },
-  DELETE_TAGS: ({ commit, dispatch, state, }, { params, }) => {
-    return deleteTags({ params, })
   },
   FETCH_COMMENT: ({ commit, dispatch, state, }, { params, }) => { 
     return fetchComment({ params, }).then(({ status, body, }) => { 
@@ -474,20 +464,6 @@ export default Object.assign({
       return { status, body, }
     })
   },
-  GET_TAGS: ({ commit, dispatch, state, }, { params, }) => {
-    return getTags({ params, }).then(({ status, body, }) => {
-      if (status === 200) {
-        commit('SET_TAGS', { tags: body, })
-      }
-    })
-  },
-  GET_TAGS_COUNT: ({ commit, dispatch, state, }) => {
-    return getTagsCount().then(({ status, body, }) => {
-      if (status === 200) {
-        commit('SET_TAGS_COUNT', { meta: body.meta, })
-      }
-    })
-  },
   HIDE_COMMENT: ({ commit, dispatch, state, }, { params, }) => {
     return hideComment({ params, })
   },  
@@ -573,9 +549,6 @@ export default Object.assign({
   UPDATE_POST: ({ commit, dispatch, state, }, { params, }) => {
     return updatePost({ params, })
   },
-  UPDATE_TAGS: ({ commit, dispatch, state, }, { params, }) => {
-    return updateTags({ params, })
-  },
   UPLOAD_IMAGE: ({ commit, dispatch, }, { file, type, }) => {
     debug('Got a action call to upload image.')
     return uploadImage(file, type)
@@ -592,4 +565,4 @@ export default Object.assign({
   INVITATION_SWITCH_OFF: ({ commit, dispatch, state, }, { params, }) => {
     commit('INVITATION_SWITCH_OFF', {})
   },
-}, actionsEmotion, actionsMember, actionPoints)
+}, actionsEmotion, actionsMember, actionsTag, actionPoints)

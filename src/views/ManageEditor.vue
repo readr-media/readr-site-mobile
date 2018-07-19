@@ -195,7 +195,7 @@
     sort = DEFAULT_SORT,
     keyword = '',
     stats = false,
-  }) => {
+  } = {}) => {
     return store.dispatch('GET_TAGS', {
       params: {
         max_result: max_result,
@@ -207,8 +207,14 @@
     })
   }
 
-  const getTagsCount = (store) => {
-    return store.dispatch('GET_TAGS_COUNT')
+  const getTagsCount = (store, {
+    keyword = '',
+  } = {}) => {
+    return store.dispatch('GET_TAGS_COUNT', {
+      params: {
+        keyword: keyword,
+      },
+    })
   }
 
   const publishPosts = (store, params) => {
@@ -369,14 +375,14 @@
             this.showAlert = true
           })
       },
-      $_editor_filterHandler ({ sort = this.sort, page = this.page, }) {
+      $_editor_filterHandler ({ keyword = '', sort = this.sort, page = this.page, }) {
         switch (this.activePanel) {
           case 'records':
           case 'posts':
           case 'videos':
             return this.$_editor_updatePostList({ sort: sort, page: page, })
           case 'tags':
-            return this.$_editor_updateTagList({ sort: sort, page: page, })
+            return this.$_editor_updateTagList({ keyword: keyword, sort: sort, page: page, needUpdateCount: true, })
         }
       },
       $_editor_openPanel (panel) {
@@ -407,6 +413,7 @@
               getPostsCount(this.$store, {
                 where: { publish_status: [ POST_PUBLISH_STATUS.UNPUBLISHED, POST_PUBLISH_STATUS.PUBLISHED, POST_PUBLISH_STATUS.SCHEDULING, POST_PUBLISH_STATUS.PENDING, ], type: [ POST_TYPE.REVIEW, POST_TYPE.NEWS, ], },
               }),
+              getTags(this.$store, { stats: true, }),
             ])
             .then(() => this.loading = false)
             .catch(() => this.loading = false)
@@ -644,13 +651,14 @@
             break
         }
       },
-      $_editor_updateTagList ({ sort, page, needUpdateCount = false, }) {
+      $_editor_updateTagList ({ keyword = '', sort, page, needUpdateCount = false, }) {
         this.sort = sort || this.sort
         this.page = page || this.page
         if (needUpdateCount) {
-          getTagsCount(this.$store)
+          getTagsCount(this.$store, { keyword: keyword, })
         }
         getTags(this.$store, {
+          keyword: keyword,
           page: this.page,
           sort: this.sort,
           stats: true,
