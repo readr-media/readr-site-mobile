@@ -418,9 +418,7 @@
           const unionTag = value[1]
           const now = new Date(Date.now())
 
-          if (unionTag && unionTag.length !== 0) {
-            this.post.tags = unionTag
-          }
+          this.post.tags = unionTag || []
 
           if (publishStatus === POST_PUBLISH_STATUS.PUBLISHED && !this.publishedDate) {
             this.post.published_at = now
