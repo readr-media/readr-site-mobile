@@ -13,6 +13,7 @@
 </template>
 <script>
   import pathToRegexp from 'path-to-regexp'
+  import preventScroll from 'prevent-scroll'
   
   export default {
     name: 'BaseLightBox',
@@ -54,13 +55,15 @@
     watch: {
       showLightBox (val) {
         if (val) {
-          document.querySelector('.view').classList.add('locked')
+          preventScroll.on()
         } else {
-          document.querySelector('.view').classList.remove('locked')
+          preventScroll.off()
         }
       },
     },
-    mounted () {},
+    mounted () {
+      this.showLightBox && preventScroll.on()
+    },
     methods: {
       $_baseLightBox_close () {
         pathToRegexp('/post/:postId').test(this.$route.path) ? this.$emit('closeLightBox') : this.$emit('update:showLightBox', false)
@@ -71,7 +74,7 @@
 <style lang="stylus" scoped>
 
 .baseLightBox
-  position absolute
+  position fixed
   top 0
   left 0
   right 0
