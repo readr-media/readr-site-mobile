@@ -10,6 +10,7 @@
         <img class="follow-icon__thumbnail" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow">
         <span class="follow-icon__hint" v-text="$t('FOLLOWING.FOLLOW')"></span>
       </span>
+      <span v-else></span>
       <template v-if="articleType !== 'project'">
         <span class="like-icon" @click="toggleEmotion('like')">
           <img :src="isLike ? '/public/icons/like-blue.png' : '/public/icons/like-line-blue.png'" alt="like">
@@ -57,7 +58,7 @@ const updateStoreFollowingByResource = (store, { action, resource, resourceId, u
 }
 
 export default {
-  name: 'AppAritcleNav',
+  name: 'AppArticleNav',
   components: {
     CommentCount,
     CommentContainer,
@@ -86,7 +87,7 @@ export default {
       return this.$store.state.isLoggedIn && ids.indexOf(this.$store.state.profile.id) !== -1
     },
     isFollow () {
-      return this.$store.state.isLoggedIn && this.postFollowers.indexOf(this.$store.state.profile.id) !== -1
+      return this.$store.state.isLoggedIn && this.postFollowers && this.postFollowers.indexOf(this.$store.state.profile.id) !== -1
     },
     isLike () {
       const ids = get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'like', ], []), { resourceID: this.postId, }), 'followers', []) || [] 
