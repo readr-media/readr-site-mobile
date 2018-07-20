@@ -14,64 +14,19 @@
         <p>{{ $t('PROJECT.ENCOURAGE_1') }}<br>{{ $t('PROJECT.ENCOURAGE_2') }}</p>
       </div>
     </div>
-    <base-light-box :showLightBox.sync="showLightBox" borderStyle="nonBorder">
-      <div class="project-memo-alert">
-        <div class="project-memo-alert__content">
-          <h2 v-text="$t('PROJECT.JOIN_CONTENT_1')"></h2>
-          <h1 v-text="projectName"></h1>
-          <h2>{{ $t('PROJECT.JOIN_CONTENT_2') }}<strong v-text="get(memo, 'project.memoPoints', 0) || 0"></strong>{{ $t('PROJECT.JOIN_CONTENT_POINT') }}</h2>
-          <button
-            :disabled="deducting"
-            @click="$_projectsFigureProgress_deductPoints()"
-            v-text="deducting ? `${$t('PROJECT.DEDUCTING')} ...` : $t('PROJECT.JOIN_CONFIRM')">
-          </button>
-        </div>
-      </div>
-    </base-light-box>
   </div>
 </template>
 
 <script>
-  import { POINT_OBJECT_TYPE, } from '../../../api/config'
   import { get, includes, } from 'lodash'
-  import BaseLightBox from '../BaseLightBox.vue'
-  
-  const deductPoints = (store, { objectId, memoPoints, } = {}) => {
-    return store.dispatch('ADD_REWARD_POINTS_TRANSACTIONS', {
-      params: {
-        member_id: get(store, [ 'state', 'profile', 'id', ]),
-        object_type: POINT_OBJECT_TYPE.PROJECT_MEMO,
-        object_id: objectId,
-        points: memoPoints,
-      },
-    })
-  }
-
-  const fetchPointHistories = (store, { objectIds, objectType, }) => {
-    return store.dispatch('GET_POINT_HISTORIES', {
-      params: {
-        objectType: objectType,
-        objectIds: objectIds,
-      },
-    })
-  }
-
+  const switchOnDeductionPanel = (store, item) => store.dispatch('SWITCH_ON_CONSUME_PANEL', { active: true, item, })
   export default {
     name: 'MemoFigure',
-    components: {
-      BaseLightBox,
-    },
     props: {
       memo: {
         type: Object,
         default: {},
       },
-    },
-    data () {
-      return {
-        deducting: false,
-        showLightBox: false,
-      }
     },
     computed: {
       deducted () {
@@ -87,20 +42,8 @@
       },
     },
     methods: {
-      $_projectsFigureProgress_deductPoints () {
-        this.deducting = true
-        deductPoints(this.$store, { objectId: get(this.memo, 'projectId'), memoPoints: get(this.memo, 'project.memoPoints') || 0, })
-        .then(() => {
-          const projectIds = get(this.$store, 'state.publicMemos', []).map(memo => memo.id)
-          fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
-          .then(() => {
-            this.deducting = false
-            this.$router.push(this.memoURL)
-          })
-        })
-      },
       $_projectsFigureProgress_openLightBox () {
-        this.showLightBox = true
+        switchOnDeductionPanel(this.$store, this.memo)
       },
       navigateToMemo () {
         this.deducted ? this.$router.push(this.memoURL) : this.$_projectsFigureProgress_openLightBox()
@@ -157,47 +100,6 @@
     text-align center
     line-height 40px
     border-right 1px solid #fff
-  
-
-.project-memo-alert
-  position relative
-  min-width 100%
-  min-height 100vh
-  background-color #11b8c9
-  background-image url(/public/icons/join.png)
-  background-position center calc(100% - 45px)
-  background-size 110px auto
-  background-repeat no-repeat
-  border 5px solid #fff
-  overflow hidden
-  &__content
-    margin-top 85px
-    text-align center
-    h1
-      margin 1em 0 0
-      color #fff
-      font-size 1.5625rem
-      font-weight 400
-      letter-spacing 1px
-    h2
-      margin .5em 0 0
-      font-size 1.125rem
-      font-weight 400
-      strong
-        color #fff
-        font-size 1.875rem
-        margin 0 .2em
-    button
-      width 150px
-      margin-top 45px
-      padding 11px 0
-      color #11b8c9
-      font-size 1.5625rem
-      background-color #fff
-      border none
-      transition color .5s
-      &:disabled
-        color rgba(17, 184, 201, .6)
   
 @media (min-width 768px)
   .projects-figure-progress

@@ -15,3 +15,17 @@ export const GET_POINT_CURRENT = ({ commit, }, { params, }) => {
     } 
   }) 
 }
+
+export const SWITCH_OFF_CONSUME_PANEL = ({ commit, }, { active, }) => { 
+  return commit('SET_CONSUME_FLAG', { 
+    active, 
+    item: {}, 
+  }) 
+} 
+ 
+export const SWITCH_ON_CONSUME_PANEL = ({ commit, }, { active, item, }) => { 
+  return commit('SET_CONSUME_FLAG', { 
+    active, 
+    item, 
+  }) 
+}

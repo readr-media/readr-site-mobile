@@ -5,6 +5,7 @@
       <router-view class="view" :openControlBar="openControlBar" @closeControlBar="$_app_closeControlBar"></router-view>
     </transition>
     <app-footer v-if="!isLogin && !isBackstage"></app-footer>
+    <Consume></Consume>
   </div>
 </template>
 
@@ -13,11 +14,13 @@
   import { logTrace, } from 'src/util/services'   
   import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/header/AppHeader.vue'
+  import Consume from 'src/components/point/Consume.vue' 
   import Tap from 'tap.js'
   export default {
     components: {
       AppFooter,
       AppHeader,
+      Consume,
     },
     data () {
       return {

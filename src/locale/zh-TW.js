@@ -233,6 +233,10 @@ export default {
     'VALIDATION_MSG': '請輸入',
     'VIDEO' : '影片',
   },
+  'POST_CONTENT': { 
+    'NO_PERMISSION': '此為不存在的內容，或是您沒有權限？', 
+    'GO_JOIN_MEMO': '此筆記目前需要點數，點我加入', 
+  }, 
   'point': {
     'WORDING_POINTS_AVAILABLE' : '目前點數',
     'WORDING_POINTS_SPENT' : '使用點數',
