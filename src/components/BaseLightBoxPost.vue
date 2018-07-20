@@ -1,6 +1,6 @@
 <template>
-  <div class="baselightbox-post--review" v-if="isContentEmpty">
-    <span v-if="isMemo && !isMemoPaid" v-text="$t('POST_CONTENT.GO_JOIN_MEMO')" class="go-join" @click="goJoin"></span> 
+  <div class="baselightbox-post--review no-content" v-if="isContentEmpty">
+    <span v-if="isMemo && !isMemoPaid && !isPostEmpty" v-text="$t('POST_CONTENT.GO_JOIN_MEMO')" class="go-join" @click="goJoin"></span> 
     <span v-else v-text="$t('POST_CONTENT.NO_PERMISSION')"></span> 
   </div>
   <div :class="[ { 'baselightbox-post--review': !isNews && !isMemo }, { 'baselightbox-post--news': isNews || isMemo } ]" v-else>
@@ -64,6 +64,8 @@ export default {
       return get(this.post, 'type', POST_TYPE.REVIEW) === POST_TYPE.NEWS 
     },
     isMemo () { 
+      debug('is memo?', get(this.post, 'flag') === 'memo' )
+      debug('is memo?', this.$route.fullPath.split('/')[ 1 ] === 'series' && get(this.$route, 'params.slug') && get(this.$route, 'params.subItem'))
       return get(this.post, 'flag') === 'memo' 
         || (this.$route.fullPath.split('/')[ 1 ] === 'series' && get(this.$route, 'params.slug') && get(this.$route, 'params.subItem')) 
     },    
@@ -99,6 +101,10 @@ export default {
   }, 
   methods: {
     goJoin () { 
+      debug('this.isPostEmpty', this.isPostEmpty)
+      debug('this.isMemo', this.isMemo)
+      debug('this.isMemoPaid', this.isMemoPaid)
+      debug('go open deduction?', !this.isPostEmpty && this.isMemo && !this.isMemoPaid)
       if (!this.isPostEmpty && this.isMemo && !this.isMemoPaid) { 
         switchOnDeductionPanel(this.$store, this.post) 
       }       
@@ -157,6 +163,8 @@ export default {
       display flex 
       justify-content center 
       align-items center 
+      height 50vh
+
       .go-join 
         padding 10px 20px 
         background-color #d8ca21 
