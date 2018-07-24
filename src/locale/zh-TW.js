@@ -247,6 +247,7 @@ export default {
     'POINT_RECORD' : '點數明細',
     'PROJECT': '專題',
     'ENCOURAGE': '鼓勵', 
+    'DEPOSIT': '儲值',
     'PAYMENT': { 
       'PREFIX': '扣款前', 
       'INFIX': '點，付款金額', 
