@@ -247,7 +247,6 @@ export default {
     'POINT_RECORD' : '點數明細',
     'PROJECT': '專題',
     'ENCOURAGE': '鼓勵', 
-    'DEPOSIT': '儲值',
     'PAYMENT': { 
       'PREFIX': '扣款前', 
       'INFIX': '點，付款金額', 
@@ -260,6 +259,13 @@ export default {
       'REST': '餘額',
       'CONFIRM': '確定',
     },
+    'DEPOSIT': {
+      'GO': '儲值',
+      'DESCRIPTION': '您目前沒有足夠點數，請先付款',
+      'CONFIRM_TO_PAY': '確認付款',
+      'INFAIL': '付款失敗！',
+      'SUCCESSFULLY': '付款成功',
+    },    
   },
   'tag_list': {
     'WORDING_TAGLIST_ADD' : '新增',

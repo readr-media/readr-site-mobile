@@ -211,7 +211,8 @@ function render (req, res, next) {
       DOMAIN: config.DOMAIN,
       DONATION_IS_DEPOSIT_ACTIVE: config.DONATION_IS_DEPOSIT_ACTIVE, 
       DONATION_DEPOSIT_AMOUNT_ONCE: config.DONATION_DEPOSIT_AMOUNT_ONCE,      
-      HOST: `${config.SERVER_PROTOCOL}://${config.SERVER_HOST}`
+      HOST: `${config.SERVER_PROTOCOL}://${config.SERVER_HOST}`,
+      STRIPE_KEY: config.STRIPE_KEY,
     }
   }
   const handleError = err => {

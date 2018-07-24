@@ -7,7 +7,7 @@
           <span class="value" :class="{ negative: isPointsNegative, }" v-text="currentPoints"></span> 
           <span class="postfix" v-text="$t('point.UNIT')"></span>         
         </div>
-        <div class="deposit"><span v-text="$t('point.DEPOSIT')"></span></div>
+        <Deposit class="deposit"><span v-text="$t('point.DEPOSIT.GO')"></span></Deposit>
       </div> 
       <div class="point-manager__infobar--switcher"> 
         <div class="point-record" :class="isActive(0)" @click="check(0)"><span class="radio"></span><span v-text="$t('point.POINT_RECORD')"></span></div> 
@@ -21,6 +21,7 @@
   </div> 
 </template>
 <script>
+  import Deposit from 'src/components/point/Deposit.vue'
   import PaymentRecord from 'src/components/point/PaymentRecord.vue'
   import PointRecord from 'src/components/point/PointRecord.vue'
   import { currentYPosition, elmYPosition, } from 'kc-scroll'
@@ -31,6 +32,7 @@
   export default {
     name: 'PointManager',
     components: {
+      Deposit,
       PaymentRecord,
       PointRecord,
     },
