@@ -26,6 +26,7 @@
   import { currentYPosition, elmYPosition, } from 'kc-scroll'
   import { get, } from 'lodash'
   const fetchCurrPoints = store => store.dispatch('GET_POINT_CURRENT', { params: {}, }) 
+  const loadStripeSDK = store => store.dispatch('LOAD_STRIPE_SDK')
   // const debug = require('debug')('CLIENT:PointManager')
   export default {
     name: 'PointManager',
@@ -56,7 +57,7 @@
       },       
     },
     mounted () {
-      fetchCurrPoints(this.$store) 
+      fetchCurrPoints(this.$store).then(() => loadStripeSDK(this.$store))
       window.addEventListener('scroll', () => {
         const current_top_y = currentYPosition()
         const info_bar_top_Y = elmYPosition('.point-manager__infobar')

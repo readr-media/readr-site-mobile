@@ -266,6 +266,11 @@
         type: Boolean,
       },
     },
+    metaInfo () {
+      return {
+        isStripeNeeded: this.isStripeRequired,
+      }
+    },     
     data () {
       return {
         activePanel: 'accounts',
@@ -298,7 +303,10 @@
     computed: {
       isDonationActive () { 
         return get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false) 
-      },       
+      },    
+      isStripeRequired () {
+        return get(this.$store, 'state.isStripeRequired', false)
+      },         
       itemsSelectedID () {
         const items = []
         forEach(this.itemsSelected, (item) => {
@@ -335,6 +343,9 @@
         } else {
           document.querySelector('.controlBar').classList.remove('open')
         }
+      },
+      isStripeRequired () {
+        this.$forceUpdate()
       },
     },
     beforeMount () {

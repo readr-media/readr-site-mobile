@@ -114,6 +114,11 @@
 
   export default {
     name: 'ManageGuestEditor',
+    metaInfo () {
+      return {
+        isStripeNeeded: this.isStripeRequired,
+      }
+    },       
     components: {
       'alert-panel': AlertPanel,
       'app-tab': Tab,
@@ -162,7 +167,10 @@
     computed: {
       isDonationActive () { 
         return _.get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false) 
-      },        
+      },   
+      isStripeRequired () {
+        return _.get(this.$store, 'state.isStripeRequired', false)
+      },                
       itemsSelectedID () {
         const items = []
         _.forEach(this.itemsSelected, (item) => {
@@ -200,6 +208,9 @@
           document.querySelector('.controlBar').classList.remove('open')
         }
       },
+      isStripeRequired () {
+        this.$forceUpdate()
+      },      
     },
     beforeMount () {
       this.loading = true

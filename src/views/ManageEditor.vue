@@ -225,6 +225,11 @@
 
   export default {
     name: 'ManageEditor',
+    metaInfo () {
+      return {
+        isStripeNeeded: this.isStripeRequired,
+      }
+    },       
     components: {
       'alert-panel': AlertPanelB,
       'app-tab': Tab,
@@ -275,7 +280,10 @@
     computed: {
       isDonationActive () { 
         return _.get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false) 
-      },        
+      },      
+      isStripeRequired () {
+        return _.get(this.$store, 'state.isStripeRequired', false)
+      },          
       itemsSelectedID () {
         const items = []
         _.forEach(this.itemsSelected, (item) => {
@@ -312,6 +320,9 @@
         } else {
           document.querySelector('.controlBar').classList.remove('open')
         }
+      },
+      isStripeRequired () {
+        this.$forceUpdate()
       },
     },
     beforeMount () {

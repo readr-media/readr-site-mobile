@@ -1,4 +1,6 @@
-import { SITE_DOMAIN_DEV, } from '../constants'
+import { SITE_DOMAIN_DEV, } from 'src/constants'
+let isStripeSDKLoaded = false
+// const debug = require('debug')('CLIENT:titleMeta')
 
 function getMetaInfo (vm) {
   const { metaInfo, } = vm.$options
@@ -8,6 +10,7 @@ function getMetaInfo (vm) {
       : metaInfo
   }
 }
+
 
 const serverMetaInfoMixin = {
   created () {
@@ -56,6 +59,21 @@ const clientMetaInfoMixin = {
       if (metaImage) {
         document.head.querySelector(`meta[property='og:image']`).content = metaImage
       }
+    }
+  },
+  updated () {
+    const metaInfo = getMetaInfo(this)
+    if (metaInfo) {
+      /**
+       * If Stripe SDK needed.
+       */
+      const { isStripeNeeded, } = metaInfo
+      if (isStripeNeeded && !isStripeSDKLoaded) {
+        const script = document.createElement('script')
+        script.setAttribute('src', 'https://checkout.stripe.com/checkout.js')
+        document.head.appendChild(script)
+        isStripeSDKLoaded = true
+      }      
     }
   },
 }

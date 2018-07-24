@@ -32,6 +32,11 @@
   
   export default {
     name: 'ManageMember',
+    metaInfo () {
+      return {
+        isStripeNeeded: this.isStripeRequired,
+      }
+    },     
     components: {
       'app-tab': Tab,
       'base-light-box': BaseLightBox,
@@ -55,6 +60,9 @@
     computed: {
       isDonationActive () { 
         return get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false) 
+      },        
+      isStripeRequired () {
+        return get(this.$store, 'state.isStripeRequired', false)
       },         
       profile () {
         return get(this.$store, [ 'state', 'profile', ], {})
@@ -74,6 +82,9 @@
         } else {
           document.querySelector('.controlBar').classList.remove('open')
         }
+      },
+      isStripeRequired () {
+        this.$forceUpdate()
       },
     },
     methods: {
