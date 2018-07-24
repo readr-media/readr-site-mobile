@@ -16,6 +16,10 @@ export const GET_POINT_CURRENT = ({ commit, }, { params, }) => {
   }) 
 }
 
+export const LOAD_STRIPE_SDK = ({ commit, }) => {
+  commit('SET_STRIPE_REQUIREMENT', { isStripeRequired: true, })
+}
+
 export const SWITCH_OFF_CONSUME_PANEL = ({ commit, }, { active, }) => { 
   return commit('SET_CONSUME_FLAG', { 
     active, 

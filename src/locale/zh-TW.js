@@ -121,6 +121,9 @@ export default {
     'JOIN_CONTENT_2': '加入此議題需要',
     'JOIN_CONTENT_POINT': '點',
     'PROGRESS': '目前進度',
+    'DEPOSIT': '前往儲值',
+    'WARNING_DEPOSIT_PREFIX': '您目前點數不足（餘 ',
+    'WARNING_DEPOSIT_POSTFIX': ' 點）',    
   },
   'alert': {
     'WORDING_ALERTPANEL_ADD_SUCCESSFUL' : '已新增',
@@ -259,6 +262,13 @@ export default {
       'REST': '餘額',
       'CONFIRM': '確定',
     },
+    'DEPOSIT': {
+      'GO': '儲值',
+      'DESCRIPTION': '您目前沒有足夠點數，請先付款',
+      'CONFIRM_TO_PAY': '確認付款',
+      'INFAIL': '付款失敗！',
+      'SUCCESSFULLY': '付款成功',
+    },    
   },
   'tag_list': {
     'WORDING_TAGLIST_ADD' : '新增',

@@ -41,6 +41,7 @@ export function createStore () {
       'isLoggedIn': false,
       'invitation_switch_status': false,
       'invitation_quota': 0,
+      'isStripeRequired': false,
       'members': [],
       'membersCount': 0,
       'memos': [],

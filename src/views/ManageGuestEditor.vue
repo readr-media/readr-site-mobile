@@ -12,7 +12,7 @@
     <main class="backstage-container">
       <template v-if="activePanel === 'records'">
         <section class="backstage__records">
-          <app-tab class="backstage__tab" :tabs="tabs" @changeTab="$_guestEditor_tabHandler">
+          <app-tab class="backstage__tab" :tabs="tabs" @changeTab="$_guestEditor_tabHandler" :defaultTab="defaultTab">
             <post-list-tab
               slot="0"
               :posts="posts"
@@ -28,6 +28,7 @@
               @filterChanged="$_guestEditor_filterHandler">
             </post-list-tab>
             <following-list-tab slot="2"></following-list-tab>
+            <PointManager slot="3" v-if="isDonationActive"></PointManager>
           </app-tab>
         </section>
       </template>
@@ -71,6 +72,7 @@
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
+  import PointManager from 'src/components/point/PointManager.vue'    
   import PaginationNav from '../components/PaginationNav.vue'
   import PostList from '../components/PostList.vue'
   import PostListDetailed from '../components/PostListDetailed.vue'
@@ -112,6 +114,11 @@
 
   export default {
     name: 'ManageGuestEditor',
+    metaInfo () {
+      return {
+        isStripeNeeded: this.isStripeRequired,
+      }
+    },       
     components: {
       'alert-panel': AlertPanel,
       'app-tab': Tab,
@@ -124,6 +131,7 @@
       'post-list-detailed': PostListDetailed,
       'post-list-tab': PostListInTab,
       'post-panel': PostPanel,
+      PointManager,
     },
     props: {
       openControlBar: {
@@ -138,6 +146,7 @@
         config: {
           type: POST_TYPE,
         },
+        defaultTab: 0,
         isPublishPostInEditor: false,
         itemsStatus: undefined,
         itemsSelected: [],
@@ -153,14 +162,15 @@
         showDraftList: false,
         showEditor: false,
         showProfile: false,
-        tabs: [
-          this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
-          this.$t('tab.WORDING_TAB_NEWS_RECORD'),
-          this.$t('tab.WORDING_TAB_FOLLOW_RECORD'),
-        ],
       }
     },
     computed: {
+      isDonationActive () { 
+        return _.get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false) 
+      },   
+      isStripeRequired () {
+        return _.get(this.$store, 'state.isStripeRequired', false)
+      },                
       itemsSelectedID () {
         const items = []
         _.forEach(this.itemsSelected, (item) => {
@@ -177,6 +187,15 @@
       profile () {
         return _.get(this.$store, [ 'state', 'profile', ], {})
       },
+      tabs () {
+        const defaultTabs = [
+          this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
+          this.$t('tab.WORDING_TAB_NEWS_RECORD'),
+          this.$t('tab.WORDING_TAB_FOLLOW_RECORD'),
+        ]
+        this.isDonationActive && defaultTabs.push(this.$t('tab.WORDING_TAB_REWARD_POINTS_RECORD')) 
+        return defaultTabs
+      },          
       tags () {
         return _.get(this.$store, [ 'state', 'tags', ], [])
       },
@@ -189,6 +208,9 @@
           document.querySelector('.controlBar').classList.remove('open')
         }
       },
+      isStripeRequired () {
+        this.$forceUpdate()
+      },      
     },
     beforeMount () {
       this.loading = true
@@ -208,6 +230,13 @@
       ])
       .then(() => this.loading = false)
       .catch(() => this.loading = false)
+      
+      if (_.get(this.$route, 'params.panel')) { 
+        this.activePanel = _.get(this.$route, 'params.panel') 
+        if (_.get(this.$route, 'params.tool') === 'point-manager' && this.isDonationActive) { 
+          this.defaultTab = 3 
+        } 
+      }        
     },
     methods: {
       $_guestEditor_alertHandler (showAlert) {

@@ -18,7 +18,7 @@
         </template>
         <template v-else-if="activePanel === 'records'">
           <section class="backstage__records">
-            <app-tab class="backstage__tab" :tabs="tabs" @changeTab="tabHandler">
+            <app-tab class="backstage__tab" :tabs="tabs" @changeTab="tabHandler" :defaultTab="defaultTab">
               <PostListInTab
                 slot="0"
                 :posts="posts"
@@ -34,7 +34,7 @@
                 @filterChanged="filterChanged">
               </PostListInTab>
               <FollowingListInTab slot="2"></FollowingListInTab>
-              <PointManager slot="3"></PointManager>
+              <PointManager slot="3" v-if="isDonationActive"></PointManager>
             </app-tab>
           </section>
         </template>
@@ -266,6 +266,11 @@
         type: Boolean,
       },
     },
+    metaInfo () {
+      return {
+        isStripeNeeded: this.isStripeRequired,
+      }
+    },     
     data () {
       return {
         activePanel: 'accounts',
@@ -274,6 +279,7 @@
         currPage: DEFAULT_PAGE,
         currPagePostsDraft: DEFAULT_PAGE,
         currSort: DEFAULT_SORT,
+        defaultTab: 0,
         isPublishPostInEditor: false,
         itemsStatus: undefined,
         itemsSelected: [],
@@ -292,15 +298,15 @@
         showLightBox: false,
         showMain: false,
         showProfile: false,
-        tabs: [
-          this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
-          this.$t('tab.WORDING_TAB_NEWS_RECORD'),
-          this.$t('tab.WORDING_TAB_FOLLOW_RECORD'),
-          this.$t('tab.WORDING_TAB_REWARD_POINTS_RECORD'), 
-        ],
       }
     },
     computed: {
+      isDonationActive () { 
+        return get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false) 
+      },    
+      isStripeRequired () {
+        return get(this.$store, 'state.isStripeRequired', false)
+      },         
       itemsSelectedID () {
         const items = []
         forEach(this.itemsSelected, (item) => {
@@ -317,6 +323,15 @@
       profile () {
         return get(this.$store, [ 'state', 'profile', ], {})
       },
+      tabs () {
+        const defaultTabs = [
+          this.$t('tab.WORDING_TAB_REVIEW_RECORD'),
+          this.$t('tab.WORDING_TAB_NEWS_RECORD'),
+          this.$t('tab.WORDING_TAB_FOLLOW_RECORD'),
+        ]
+        this.isDonationActive && defaultTabs.push(this.$t('tab.WORDING_TAB_REWARD_POINTS_RECORD')) 
+        return defaultTabs
+      },
       tags () {
         return get(this.$store, [ 'state', 'tags', ], [])
       },
@@ -329,6 +344,9 @@
           document.querySelector('.controlBar').classList.remove('open')
         }
       },
+      isStripeRequired () {
+        this.$forceUpdate()
+      },
     },
     beforeMount () {
       this.loading = true
@@ -338,6 +356,13 @@
       ])
       .then(() => this.loading = false)
       .catch(() => this.loading = false)
+
+      if (get(this.$route, 'params.panel')) { 
+        this.activePanel = get(this.$route, 'params.panel') 
+        if (get(this.$route, 'params.tool') === 'point-manager' && this.isDonationActive) { 
+          this.defaultTab = 3 
+        } 
+      }      
     },
     methods: {
       addMember () {
