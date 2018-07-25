@@ -4,6 +4,7 @@ import { POST_PUBLISH_STATUS, POST_TYPE, PROJECT_STATUS, } from 'api/config'
 import { ROLE_MAP, } from 'src/constants'
 import * as actionsEmotion from 'src/store/actions/emotion'
 import * as actionsMember from 'src/store/actions/member'
+import * as actionsMeta from 'src/store/actions/meta'
 import * as actionsTag from 'src/store/actions/tag'
 import * as actionPoints from 'src/store/actions/points'
 import {
@@ -246,9 +247,6 @@ export default Object.assign({
       }
     })
   },  
-  GET_META: ({ commit, dispatch, state, }, { url, }) => {
-    return getMeta(url)
-  },
   GET_POST: ({ commit, dispatch, state, }, { params, }) => {
     return new Promise((resolve, reject) => {
       getPost({ params, }).then(({ status, body, }) => {
@@ -565,4 +563,4 @@ export default Object.assign({
   INVITATION_SWITCH_OFF: ({ commit, dispatch, state, }, { params, }) => {
     commit('INVITATION_SWITCH_OFF', {})
   },
-}, actionsEmotion, actionsMember, actionsTag, actionPoints)
+}, actionsEmotion, actionsMember, actionsMeta, actionsTag, actionPoints)
