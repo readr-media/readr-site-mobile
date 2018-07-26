@@ -37,6 +37,7 @@ const debug = require('debug')('CLIENT:BaseLightBoxPost')
 const dom = require('xmldom').DOMParser
 const seializer  = require('xmldom').XMLSerializer
 const switchOnDeductionPanel = (store, item) => store.dispatch('SWITCH_ON_CONSUME_PANEL', { active: true, item, }) 
+const switchOffDeductionPanel = store => store.dispatch('SWITCH_OFF_CONSUME_PANEL', { active: false, }) 
 
 export default {
   name: 'BaseLightBoxPost',
@@ -118,6 +119,7 @@ export default {
         switchOnDeductionPanel(this.$store, this.post) 
       } else { 
         this.isContentEmpty = false 
+        switchOffDeductionPanel(this.$store)
       } 
     } else { 
       this.isContentEmpty = true 
