@@ -7,21 +7,24 @@
       </div>    
     </div>
     <div class="notification-dropbox__items">
-      <div class="notification-dropbox__item" :class="{ never: !get(item, 'read') }" v-for="(item, index) in notificationItems" @click="read(`${index}`)">
-        <div class="notification-dropbox__item__avatar-img">
-          <img :src="getImageUrl(get(item, 'profile_image'), 'mobile')" v-if="isClientSide">
-        </div>
-        <div class="notification-dropbox__item__content">
-          <div class="message">
-            <NotificationMessage :item="item"></NotificationMessage>
+      <template v-for="(item, index) in notificationItems">
+        <div class="notification-dropbox__item" :class="{ never: !get(item, 'read') }" @click="read(`${index}`)" v-if="isNotificationDefined(item)">
+          <div class="notification-dropbox__item__avatar-img">
+            <img :src="getImageUrl(get(item, 'profile_image'), 'mobile')" v-if="isClientSide">
           </div>
-          <div class="datetime"><span v-text="dateDiffFromNow(get(item, 'timestamp'))"></span></div>
-        </div>
-      </div>    
+          <div class="notification-dropbox__item__content">
+            <div class="message">
+              <NotificationMessage :item="item"></NotificationMessage>
+            </div>
+            <div class="datetime"><span v-text="dateDiffFromNow(get(item, 'timestamp'))"></span></div>
+          </div>
+        </div>    
+      </template>
     </div>
   </div>
 </template>
 <script>
+  import { NOTIFICATION_TYPE, } from 'src/constants'
   import { dateDiffFromNow, isClientSide, isDescendant, getImageUrl, } from 'src/util/comm'
   import { get, map, } from 'lodash'
   import NotificationMessage from 'src/components/header/NotificationMessage.vue'
@@ -49,6 +52,9 @@
       },
       get,
       getImageUrl,
+      isNotificationDefined (item) { 
+        return get(NOTIFICATION_TYPE, get(item, 'event_type', '').toUpperCase()) ? true : false 
+      },      
       map,
       read (ids) {
         debug('Go into send ack to puc/sub center.')
