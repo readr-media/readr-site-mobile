@@ -28,7 +28,7 @@
         </section>
       </article>
       <div class="nav-container">
-        <AppArticleNav :postId="post.id" :postRefId="assetRefId" :articleType="this.post.flag" :commentCount="commentCount"/>
+        <AppArticleNav :postId="post.id" :postRefId="assetRefId" :articleType="this.post.flag" :commentCount="commentCount" :tags="post.tags"/>
       </div>
     </div>
   </div>
@@ -63,7 +63,8 @@
           width < height ? event.target.classList.add('portrait') : event.target.classList.add('landscape')
         }).catch(() => { event.target.classList.add('landscape') })
       },    
-      updatedAtYYYYMMDD,  
+      updatedAtYYYYMMDD,
+      getImageUrl,
     },
     mounted () {},
     props: { 
