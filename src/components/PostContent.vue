@@ -84,6 +84,7 @@
       :postId="post.id"
       :postRefId="get(post, 'project.id')" 
       :slug="get(post, 'flag') === 'report'? post.slug : ''"
+      :tags="post.tags"
       :commentCount="commentCount"></AppArticleNav>
   </div>
 </template>
