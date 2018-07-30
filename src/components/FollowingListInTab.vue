@@ -2,11 +2,6 @@
   <section class="followingListInTab">
     <nav class="followingListInTab__nav">
       <div
-        :class="{ active: resource === 'member' }"
-        @click="$_followingListInTab_handleResource('member')">
-        <span v-text="$t('FOLLOWING.GUEST_EDITOR')"></span>
-      </div>
-      <div
         :class="{ active: resource === 'post' && resourceType === 'review' }"
         @click="$_followingListInTab_handleResource('review')">
         <span v-text="`${$t('FOLLOWING.FOLLOW')}${$t('FOLLOWING.REVIEW')}`"></span>
@@ -36,7 +31,6 @@
     <div class="followingListInTab__list">
       <div v-for="follow in followingByUser" :key="follow.id" class="followingListInTab__item" :class="resource">
         <div class="followingListInTab__img">
-          <div v-if="resource === 'member'" class="followingListInTab__img-member" :style="{ backgroundImage: `url(${$_followingListInTab_getImage(follow)})` }"></div>
           <template v-if="!isProfilePage">
             <button @click="$_followingListInTab_unfollow(follow.id)"><img src="/public/icons/star-grey.png"></button>
           </template>
@@ -45,8 +39,7 @@
           </template>
         </div>
         <div class="followingListInTab__content" :class="resource">
-          <h2 v-if="resource === 'member'" v-text="follow.nickname"></h2>
-          <h2 v-if="resource !== 'member'" v-text="follow.title"></h2>
+          <h2 v-text="follow.title"></h2>
           <p v-if="$_followingListInTab_getDescription(follow)" v-text="$_followingListInTab_getDescription(follow)"></p>
         </div>
         <div v-if="resource === 'project' || resource === 'report'" class="followingListInTab__og" :style="{ backgroundImage: `url(${$_followingListInTab_getImage(follow)})` }"></div>
@@ -56,10 +49,10 @@
   </section>
 </template>
 <script>
-  import { filter, find, get, } from 'lodash'
+  import { find, get, } from 'lodash'
   import PaginationNav from './PaginationNav.vue'
 
-  const getFollowing = (store, { id = get(store, 'state.profile.id'), resource = 'member', resourceType = '', } = {}) => {
+  const getFollowing = (store, { id = get(store, 'state.profile.id'), resource = 'post', resourceType = 'review', } = {}) => {
     return store.dispatch('GET_FOLLOWING_BY_USER', {
       id: id,
       resource: resource,
@@ -67,7 +60,7 @@
     })
   }
 
-  const publishAction = (store, { action, resource = 'member', object, }) => {
+  const publishAction = (store, { action, resource = 'post', object, }) => {
     return store.dispatch('FOLLOW', {
       params: {
         action: action,
@@ -78,7 +71,7 @@
     })
   }
 
-  const updateStoreFollowingByUser = (store, { action, resource = 'member', object, item, }) => {
+  const updateStoreFollowingByUser = (store, { action, resource = 'post', object, item, }) => {
     return store.dispatch('UPDATE_FOLLOWING_BY_USER', {
       params: {
         action: action,
@@ -97,15 +90,13 @@
     },
     data () {
       return {
-        resource: 'member',
-        resourceType: '',
+        resource: 'post',
+        resourceType: 'review',
       }
     },
     computed: {
       alertText () {
         switch (this.resource) {
-          case 'member':
-            return this.$t('FOLLOWING.GUEST_EDITOR')
           case 'memo':
             return this.$t('FOLLOWING.MEMO')
           case 'post':
@@ -127,9 +118,6 @@
       },
       followingByUser () {
         if (this.isProfilePage) {
-          if (this.resource === 'member') {
-            return filter(get(this.$store, [ 'state', 'followingByUser', get(this.$route, 'params.id'), ], []), o => o.id !== get(this.$store, 'state.profile.id'))
-          }
           return get(this.$store, [ 'state', 'followingByUser', get(this.$route, 'params.id'), ], [])
         }
         return get(this.$store, [ 'state', 'followingByUser', get(this.$store, 'state.profile.id'), ], [])
@@ -164,14 +152,7 @@
         }
       },
       $_followingListInTab_getImage (follow) {
-        let image
-        switch (this.resource) {
-          case 'member':
-            image = get(follow, [ 'profileImage', ]) || `/public/icons/exclamation.png`
-            break
-          default:
-            image = get(follow, [ 'heroImage', ]) || `/public/icons/exclamation.png`
-        }
+        const image = get(follow, [ 'heroImage', ]) || `/public/icons/exclamation.png`
         if (image) {
           return image
         }
@@ -302,8 +283,6 @@
       outline none
       img 
         width 100%
-    &-member
-      margin-bottom 10px
   &__content
     flex 1
     margin-left 10px
