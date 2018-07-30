@@ -4,9 +4,6 @@
       <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__thumbnail">
         <img :src="authorThumbnailImg" alt="" v-if="isClientSide">
       </router-link>
-      <figcaption class="editors-intro-main__meta-container">
-        <img class="editors-intro-main__follow-icon" v-if="editorIsNotCurrentUser" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow">
-      </figcaption>
     </figure>
     <div class="editors-intro-main__info">
       <router-link :to="`/profile/${editor.id}`" class="editors-intro-main__nickname"><p v-text="authorNickname"></p></router-link>
@@ -16,24 +13,7 @@
 </template>
 
 <script>
-import { find, } from 'lodash'
 import { isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from 'src/util/comm'
-
-const publishAction = (store, data) => {
-  return store.dispatch('FOLLOW', {
-    params: data,
-  })
-}
-const updateStoreFollowingByResource = (store, { action, resource, resourceId, userId, }) => {
-  store.dispatch('UPDATE_FOLLOWING_BY_RESOURCE', {
-    params: {
-      action: action,
-      resource: resource,
-      resourceId: resourceId,
-      userId: userId,
-    },
-  })
-}
 
 export default {
   props: {
@@ -47,20 +27,6 @@ export default {
     },
   },
   computed: {
-    isFollow () {
-      return this.$store.state.isLoggedIn && this.editorFollowers.indexOf(this.$store.state.profile.id) !== -1
-    },
-    editorFollowers () {
-      if (this.$store.state.isLoggedIn) {
-        const editorFollowersData = find(this.$store.state.followingByResource['member'], { resourceID: this.editor.id, })
-        return editorFollowersData ? editorFollowersData.followers : []
-      } else {
-        return []
-      }
-    },
-    editorIsNotCurrentUser () {
-      return !this.$store.state.isLoggedIn || this.$store.state.profile.id !== this.editor.id
-    },
     descritpionTrim () {
       const limit = 30
       if (this.editor.description) {
@@ -75,41 +41,6 @@ export default {
     },
     authorThumbnailImg () {
       return getArticleAuthorThumbnailImg(this.editor)
-    },
-  },
-  methods: {
-    toogleFollow () {
-      if (!this.$store.state.isLoggedIn) {
-        alert('please login first')
-      } else {
-        if (!this.isFollow) {
-          publishAction(this.$store, {
-            action: 'follow',
-            resource: 'member',
-            subject: this.$store.state.profile.id,
-            object: this.editor.id,
-          })
-          updateStoreFollowingByResource(this.$store, {
-            action: 'follow',
-            resource: 'member',
-            resourceId: this.editor.id,
-            userId: this.$store.state.profile.id,
-          })
-        } else {
-          publishAction(this.$store, {
-            action: 'unfollow',
-            resource: 'member',
-            subject: this.$store.state.profile.id,
-            object: this.editor.id,
-          })
-          updateStoreFollowingByResource(this.$store, {
-            action: 'unfollow',
-            resource: 'member',
-            resourceId: this.editor.id,
-            userId: this.$store.state.profile.id,
-          })
-        }
-      }
     },
   },
 }
