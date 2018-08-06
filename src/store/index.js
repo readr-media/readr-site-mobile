@@ -35,6 +35,7 @@ export function createStore () {
         'post': [],
         'project': [],
         'report': [],
+        'tag': [],
       },
       'followingByUser': {},
       'isClientSide': false,
