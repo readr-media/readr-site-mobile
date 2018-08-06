@@ -1,5 +1,9 @@
 <template>
   <div class="projects-figure">
+    <TagNav
+      v-if="project.tags && project.tags.length > 0"
+      :tags="project.tags"
+      class="projects-figure__tag-nav" />
     <router-link class="projects-figure-content" :to="`/series/${this.project.slug}`">
       <figure>
         <img v-if="project.heroImage" :src="project.heroImage">
@@ -43,6 +47,7 @@
 </template>
 
 <script>
+import TagNav from 'src/components/tag/TagNav.vue'
 import { find, } from 'lodash'
 import { updatedAtYYYYMMDD, } from '../../util/comm'
 
@@ -59,6 +64,9 @@ const updateStoreFollowingByResource = (store, { action, resource, resourceId, u
 }
 
 export default {
+  components: {
+    TagNav,
+  },
   props: {
     project: {
       type: Object,
@@ -131,6 +139,8 @@ export default {
   &:hover
     transform translateY(-10px)
     box-shadow 5px 15px 5px #bcbcbc
+  &__tag-nav
+    padding 10px
     
    
 .projects-figure-content

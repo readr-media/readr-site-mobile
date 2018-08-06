@@ -12,7 +12,7 @@
 </template>
 <script>
   import { MEMO_PUBLISH_STATUS, POINT_OBJECT_TYPE, REPORT_PUBLISH_STATUS, } from 'api/config'
-  import { get, find, uniq, concat, } from 'lodash'
+  import { get, find, uniq, uniqBy, concat, } from 'lodash'
   // import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
@@ -196,6 +196,9 @@
       postsHome () {
         return this.articlesListMainCategory !== '/hot' ? this.postsLatest : this.postsHot
       },
+      postsHomeTagIds () {
+        return uniqBy(this.postsHome.map(post => post.tags).filter(tags => tags).reduce((all, tags) => all.concat(tags), []), 'id').map(tag => tag.id)
+      },
       postsHot () {
         return get(this.$store.state.publicPostsHot, 'items', [])
       },
@@ -217,6 +220,9 @@
         if (val && !this.endPage) {
           this.$_home_loadmore()
         }
+      },
+      postsHomeTagIds (ids) {
+        fetchFollowing(this.$store, { resource: 'tag', ids: ids, })
       },
       '$route' (to, from) {
         this.articlesListMainCategory = this.isCurrentRoutePath('/post/:postId') ? from.path : to.path

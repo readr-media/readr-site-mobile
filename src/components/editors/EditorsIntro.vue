@@ -56,6 +56,7 @@ export default {
     color #000
   p
     margin 0
+    word-break break-word
   &__profile
     display flex
     flex-direction column

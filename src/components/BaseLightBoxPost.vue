@@ -305,6 +305,10 @@ export default {
         width 100%
     .nav-container
       padding 16px 0
+  &__tags
+    margin-top 10px
+    > div
+      margin-top 5px
 </style>
 
 

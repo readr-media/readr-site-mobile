@@ -86,7 +86,6 @@ export default {
     display flex
     flex-direction column
     justify-content flex-start
-    align-items flex-start
     padding-top 30px
   &__list-aside
     background-color white
