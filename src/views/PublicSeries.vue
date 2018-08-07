@@ -2,7 +2,13 @@
   <div class="series">
     <PostBoxWrapper :showPostBox.sync="showPostBox" :hadRouteBeenNavigate="hadRouteBeenNavigate">
       <Invite></Invite>
-      <Leading></Leading>
+      <Leading>
+        <TagNav
+          v-if="project.tags && project.tags.length > 0"
+          slot="tagNav"
+          :tags="project.tags"
+          class="series__tag-nav" />
+      </Leading>
       <HomeArticleMain v-for="post in posts" :key="post.id" :articleData="post" ></HomeArticleMain>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent"></BaseLightBoxPost>
     </PostBoxWrapper>
@@ -14,6 +20,7 @@ import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
 import Invite from 'src/components/invitation/Invite.vue'
 import Leading from 'src/components/leading/Leading.vue'
 import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
+import TagNav from 'src/components/tag/TagNav.vue'
 import moment from 'moment'
 import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
 import { find, get, sortBy, union, } from 'lodash'
@@ -95,6 +102,7 @@ export default {
     Invite,
     Leading,
     PostBoxWrapper,
+    TagNav,
   },
   computed: {
     posts () {
@@ -116,7 +124,14 @@ export default {
       } else {
         return {}
       }      
-    },    
+    },
+    project () {
+      return get(this.$store, 'state.publicProjectSingle', {})
+    },
+    projectTagIds () {
+      const tags = this.project.tags || []
+      return tags.map(tag => tag.id)
+    },
   },
   data () {
     return {
@@ -217,7 +232,10 @@ export default {
       debug('Mutation detected: isReachBottom', this.isReachBottom)
       if (!this.isReachBottom || this.isLoadMoreEnd) { return }
       this.loadmore()
-    },    
+    },
+    projectTagIds (ids) {
+      fetchFollowing(this.$store, { resource: 'tag', ids: ids, })
+    },
     '$route' (to, from) {
       // this.articlesListMainCategory = this.isCurrentRoutePath('/post/:postId') ? from.path : to.path
       // if (!this.hadRouteBeenNavigate) this.hadRouteBeenNavigate = true
@@ -231,4 +249,9 @@ export default {
 .series
   padding-bottom 50px
   background-color #e6e6e6
+  &__tag-nav
+    margin-bottom 10px
+    padding 0 15px
+    >>> .tag
+      background-color #fff
 </style>
