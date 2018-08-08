@@ -1,18 +1,28 @@
 <template>
   <div class="search">
-    <img src="/public/icons/search-white.png" alt="" @click="toggleSearchBar">
-    <section ref="searchBar" class="searchBar" @click.self="toggleSearchBar">
-      <form action=".">
-        <input
-          ref="searchInput"
-          v-model="currentSearchVal"
-          type="text"
-          :placeholder="$t('header.WORIDNG_HEADER_MEMBER_SEARCH')"
-          @change="checkIsChanged"
-          @keyup="setCurrVal">
-        <button @click.prevent="toggleSearchBar"><img src="/public/icons/close-grey.png" alt=""></button>
-      </form>
-    </section>
+    <div class="search--mobile">
+      <img src="/public/icons/search-white.png" alt="" @click="toggleSearchBar">
+      <section ref="searchBar" class="searchBar" @click.self="toggleSearchBar">
+        <form action=".">
+          <input
+            ref="searchInput"
+            v-model="currentSearchVal"
+            type="text"
+            :placeholder="$t('HEADER.SEARCH')"
+            @change="checkIsChanged"
+            @keyup="setCurrVal">
+          <button @click.prevent="toggleSearchBar"><img src="/public/icons/close-grey.png" alt=""></button>
+        </form>
+      </section>
+    </div>
+    <div class="search--desktop">
+      <input class="search__input" type="text" ref="searchInput"
+        :placeholder="$t('HEADER.SEARCH')"
+        v-model="currentSearchVal"
+        @keyup="setCurrVal"
+        @change="checkIsChanged">
+      <span class="search__icon" @click="goSearch"></span>
+    </div>
   </div>
 </template>
 <script>
@@ -24,13 +34,12 @@
     data () {
       return {
         currentSearchVal: get(this.$refs, 'searchInput.value'),
-        isChanged: true,
-        // searchVal: get(this.$route, [ 'params', 'keyword' ]),
+        isChanged: false,
       }
     },
     computed: {
       searchVal () {
-        return get(this.$route, [ 'params', 'keyword', ])
+        return get(this.$route, 'params.keyword',)
       },
     },
     methods: {
@@ -66,6 +75,24 @@
     img
       width 20px
       height 20px
+    &--desktop
+      display none
+      background-color #fff
+      padding 0 5px 0 8px
+    &__input
+      outline none
+      border none
+      height 20px
+    &__icon
+      display inline-block
+      width 15px
+      height 20px
+      background-image url('/public/icons/search-grey.png')
+      background-position center center
+      background-repeat no-repeat
+      background-size contain
+      vertical-align top
+      cursor pointer
   .searchBar
     position absolute
     top -100vh
@@ -104,32 +131,10 @@
       background-color transparent
       border none
 
-
-    // flex 1
-    // max-width 150px
-    // height 20px
-    // padding 0 5px
-    // margin-right 15px
-    // background-color #fff
-    // &__input
-    //   width calc(100% - 20px)
-    //   height 100%
-    //   padding 2px 0
-    //   margin-right 5px
-    //   font-size 12px
-    //   line-height 1
-    //   vertical-align top
-    //   border none
-    //   outline none
-      
-    // &__icon
-    //   display inline-block
-    //   width 15px
-    //   height 20px
-    //   background-image url('/public/icons/search-grey.png')
-    //   background-position center center
-    //   background-repeat no-repeat
-    //   background-size contain
-    //   vertical-align top
-    //   cursor pointer
+  @media (min-width 769px)
+    .search
+      &--mobile
+        display none
+      &--desktop
+        display block
 </style>
