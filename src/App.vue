@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <app-header v-if="!isLogin" @openControlBar="$_app_openControlBar"></app-header>
+    <app-header v-if="!isLoginPage" @openControlBar="$_app_openControlBar"></app-header>
     <transition name="fade" mode="out-in">
       <router-view class="view" :openControlBar="openControlBar" @closeControlBar="$_app_closeControlBar"></router-view>
     </transition>
-    <app-footer v-if="!isLogin && !isBackstage"></app-footer>
+    <app-footer v-if="!isLoginPage && !isBackstage"></app-footer>
     <Consume></Consume>
   </div>
 </template>
@@ -36,8 +36,8 @@
       isBackstage () {
         return this.$route.path.match(/\/(admin|editor|guesteditor|member)$/)
       },
-      isLogin () {
-        return get(this.$route, [ 'fullPath', ]).split('/')[1] === 'login'
+      isLoginPage () {
+        return /\/login/.test(this.$route.fullPath)
       },
       useragent () { 
         return get(this.$store, 'state.useragent') 
