@@ -4,6 +4,7 @@
       <Invite></Invite>
       <main>
         <HomeNavigationMobile v-if="hasNavigation" :memos="memos" :reports="reports" :video="video"></HomeNavigationMobile>
+        <TagNavList/>
         <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
       </main>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent" /> 
@@ -20,6 +21,7 @@
   import BaseLightBoxPost from 'src/components/BaseLightBoxPost.vue'
   import Invite from 'src/components/invitation/Invite.vue'
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
+  import TagNavList from 'src/components/tag/TagNavList.vue'
   
   const MAXRESULT_MEMOS = 3
   const MAXRESULT_POSTS = 10
@@ -161,6 +163,7 @@
       BaseLightBoxPost,
       Invite,
       PostBoxWrapper,
+      TagNavList,
     },
     data () {
       return {

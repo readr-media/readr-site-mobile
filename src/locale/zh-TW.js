@@ -158,6 +158,8 @@ export default {
     'PROJECT': '專題',
     'REPORT': '報導',
     'REVIEW': '評論',
+    'FOLLOW_TAG': '已追蹤',
+    'UNFOLLOW_TAG': '已取消追蹤',
   },
   'homepage': {
     'WORDING_HOME_POST_MORE' : '更多',
@@ -284,6 +286,15 @@ export default {
     'REVIEW_COUNT' : '評論數',
     'TAG' : '關鍵字詞',
     'UPDATE_AT' : '更新時間',
+  },
+  'TAG_NAV_ASIDE': {
+    'TITLE': {
+      'LATEST': '最新關鍵字',
+      'HOT': '熱門關鍵字',
+    },
+    'CATEGORY': {
+      'PROJECT': '讀 + 專題',
+    },
   },
   'control_bar': {
     'WORDING_CONTROLBAR_ACCOUNT' : '帳號',
