@@ -11,8 +11,8 @@ const DELETE_TAGS = ({ commit, dispatch, state, }, { params, }) => {
   return deleteTags({ params, })
 }
 
-const GET_TAGS = ({ commit, }, { params, }) => {
-  return getTags({ params, }).then(({ status, body, }) => {
+const GET_TAGS = ({ commit, }, { urlParam, params, }) => {
+  return getTags({ urlParam, params, }).then(({ status, body, }) => {
     if (status === 200) {
       commit('SET_TAGS', { tags: body, })
     }
