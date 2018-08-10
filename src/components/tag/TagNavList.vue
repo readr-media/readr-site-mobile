@@ -31,7 +31,7 @@ const getTags = (store, {
   keyword = '',
   stats = false,
 } = {}) => {
-  return store.dispatch('GET_TAGS', {
+  return store.dispatch('GET_PUBLIC_TAGS', {
     urlParam: urlParam,
     params: {
       max_result: max_result,
@@ -39,6 +39,7 @@ const getTags = (store, {
       sorting: sort,
       keyword: keyword,
       stats: stats,
+      tagged_resources: 1,
     },
   })
 }
@@ -49,7 +50,7 @@ export default {
   },
   computed: {
     ...mapState({
-      tags: state => take(state.tags, 3),
+      tags: state => take(state.publicTags, 3),
     }),
   },
   beforeMount () {

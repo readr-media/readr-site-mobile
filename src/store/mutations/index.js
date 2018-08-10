@@ -2,7 +2,8 @@ import _ from 'lodash'
 import Vue from 'vue'
 const { camelize, } = require('humps')
 const debug = require('debug')('CLIENT:STORE:mutations')
-import * as mutationsPoints from 'src/store/mutations/points' 
+import * as mutationsPoints from 'src/store/mutations/points'
+import * as mutationsTag from 'src/store/mutations/tag'
 
 export default Object.assign({
   ADD_ITEM_TO_FOLLOWING_BY_USER: (state, params) => {
@@ -63,12 +64,6 @@ export default Object.assign({
   },
   SET_LOGGEIN_STATUS: (state, { body, }) => {
     state['isLoggedIn'] = body
-  },
-  SET_TAGS: (state, { tags, }) => {
-    state['tags'] = tags.items
-  },
-  SET_TAGS_COUNT: (state, { meta, }) => {
-    state['tagsCount'] = meta.total
   },
   SET_TOKEN: (state, { token, type, }) => {
     switch (type) {
@@ -226,4 +221,4 @@ export default Object.assign({
   INVITATION_SWITCH_OFF: (state) => {
     state['invitation_switch_status'] = false
   },
-}, mutationsPoints)
+}, mutationsPoints, mutationsTag)
