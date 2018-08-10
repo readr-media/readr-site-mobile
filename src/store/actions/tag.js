@@ -11,10 +11,18 @@ const DELETE_TAGS = ({ commit, dispatch, state, }, { params, }) => {
   return deleteTags({ params, })
 }
 
-const GET_TAGS = ({ commit, }, { urlParam, params, }) => {
+const GET_PUBLIC_TAGS = ({ commit, state, }, { urlParam, params, }) => {
   return getTags({ urlParam, params, }).then(({ status, body, }) => {
     if (status === 200) {
-      commit('SET_TAGS', { tags: body, })
+      commit('SET_PUBLIC_TAGS', { tags: body.items, })
+    }
+  })
+}
+
+const GET_TAGS = ({ commit, }, { params, }) => {
+  return getTags({ params, }).then(({ status, body, }) => {
+    if (status === 200) {
+      commit('SET_TAGS', { tags: body.items, })
     }
   })
 }
@@ -34,6 +42,7 @@ const UPDATE_TAGS = ({ commit, dispatch, state, }, { params, }) => {
 export {
   ADD_TAGS,
   DELETE_TAGS,
+  GET_PUBLIC_TAGS,
   GET_TAGS,
   GET_TAGS_COUNT,
   UPDATE_TAGS,
