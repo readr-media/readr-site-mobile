@@ -1,23 +1,28 @@
 <template>
   <div id="app">
-    <app-header v-if="!isLoginPage" @openControlBar="$_app_openControlBar"></app-header>
+    <app-header v-if="!isLoginPage" @openControlBar="openControlBarHandler"></app-header>
     <transition name="fade" mode="out-in">
-      <router-view class="view" :openControlBar="openControlBar" @closeControlBar="$_app_closeControlBar"></router-view>
+      <router-view class="view" :openControlBar="openControlBar" @closeControlBar="closeControlBar"></router-view>
     </transition>
     <app-footer v-if="!isLoginPage && !isBackstage"></app-footer>
     <Consume></Consume>
+    <AlertGDPR v-if="showAlertGDPR" @closeAlertGDPR="showAlertGDPR = false" />
   </div>
 </template>
 
 <script>
   import { get, } from 'lodash' 
-  import { logTrace, } from 'src/util/services'   
+  import { logTrace, } from 'src/util/services'
+  import AlertGDPR from 'src/components/AlertGDPR.vue'
   import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/header/AppHeader.vue'
   import Consume from 'src/components/point/Consume.vue' 
   import Tap from 'tap.js'
+  import VueCookie from 'vue-cookie'
+
   export default {
     components: {
+      AlertGDPR,
       AppFooter,
       AppHeader,
       Consume,
@@ -26,7 +31,8 @@
       return {
         openControlBar: false,
         doc: {}, 
-        globalTapevent: {}, 
+        globalTapevent: {},
+        showAlertGDPR: false,
       }
     },
     computed: {
@@ -44,18 +50,19 @@
       },
     },
     mounted () {
-      this.$store.dispatch('UPDATE_CLIENT_SIDE')
       this.doc = document
-      this.$_app_launchLogger()
+      this.$store.dispatch('UPDATE_CLIENT_SIDE')
+      this.launchLogger()
+      this.showAlertGDPR = !this.getGDPRCookie()
     },
     methods: {
-      $_app_closeControlBar () {
+      closeControlBar () {
         this.openControlBar = false
       },
-      $_app_openControlBar () {
-        this.openControlBar = true
+      getGDPRCookie () {
+        return VueCookie.get('gdpr-accept-cookie')
       },
-      $_app_launchLogger () { 
+      launchLogger () { 
         this.globalTapevent = new Tap(this.doc) 
         this.doc.addEventListener('tap', (event) => { 
           logTrace({ 
@@ -67,6 +74,9 @@
             useragent: this.useragent, 
           }) 
         }) 
+      },
+      openControlBarHandler () {
+        this.openControlBar = true
       },
     },
   }

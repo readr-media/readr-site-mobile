@@ -161,6 +161,11 @@ export default {
     'FOLLOW_TAG': '已追蹤',
     'UNFOLLOW_TAG': '已取消追蹤',
   },
+  'GDPR': {
+    'ACCEPT': '我知道了！',
+    'LEARN_MORE': '了解更多',
+    'MESSAGE': '「本網站使用 cookie 及相關技術分析來改善使用者體驗。」',
+  },
   'homepage': {
     'WORDING_HOME_POST_MORE' : '更多',
     'WORDING_HOME_POST_MORE_NEWS' : '查看更多',
