@@ -12,7 +12,7 @@
 
 <script>
   import { get, } from 'lodash' 
-  import { logTrace, } from 'src/util/services'
+  import { isAlinkDescendant, logTrace, } from 'src/util/services'
   import AlertGDPR from 'src/components/AlertGDPR.vue'
   import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/header/AppHeader.vue'
@@ -53,6 +53,7 @@
       this.doc = document
       this.$store.dispatch('UPDATE_CLIENT_SIDE')
       this.launchLogger()
+      this.sendPageview()
       this.showAlertGDPR = !this.getGDPRCookie()
     },
     methods: {
@@ -65,7 +66,8 @@
       launchLogger () { 
         this.globalTapevent = new Tap(this.doc) 
         this.doc.addEventListener('tap', (event) => { 
-          logTrace({ 
+          const { isAlink, } = isAlinkDescendant(event.target) 
+          isAlink && logTrace({ 
             category: 'whole-site', 
             description: 'ele clicked', 
             eventType: 'click', 
@@ -78,7 +80,22 @@
       openControlBarHandler () {
         this.openControlBar = true
       },
+      sendPageview () { 
+        logTrace({ 
+          category: this.$route.fullPath, 
+          description: 'pageview', 
+          eventType: 'pageview', 
+          sub: this.currUser, 
+          target: {}, 
+          useragent: this.useragent, 
+        }) 
+      },       
     },
+    watch: { 
+      '$route.fullPath': function () { 
+        this.sendPageview() 
+      }, 
+    }, 
   }
 </script>
 
