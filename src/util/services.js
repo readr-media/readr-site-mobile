@@ -118,7 +118,7 @@ function logTraceXHR (params) {
     }    
   })
 }
-function isAlinkDescendant (child) {
+export function isAlinkDescendant (child) {
   let node = child.parentNode
   while (node !== null && node !== undefined) {
     if (node.tagName === 'A') {
