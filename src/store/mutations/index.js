@@ -3,6 +3,7 @@ import Vue from 'vue'
 const { camelize, } = require('humps')
 const debug = require('debug')('CLIENT:STORE:mutations')
 import * as mutationsPoints from 'src/store/mutations/points'
+import * as mutationsPost from 'src/store/mutations/post'
 import * as mutationsTag from 'src/store/mutations/tag'
 
 export default Object.assign({
@@ -221,4 +222,4 @@ export default Object.assign({
   INVITATION_SWITCH_OFF: (state) => {
     state['invitation_switch_status'] = false
   },
-}, mutationsPoints, mutationsTag)
+}, mutationsPoints, mutationsTag, mutationsPost)
