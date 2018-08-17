@@ -23,6 +23,7 @@ const PublicProjects = () => import('../views/PublicProjects.vue')
 const PublicReportsMemos = () => import('../views/PublicReportsMemos.vue')
 const PublicSearch = () => import('../views/PublicSearch.vue')
 const PublicSetPassword = () => import('../views/PublicSetPassword.vue')
+const PublicTag = () => import('../views/PublicTag.vue')
 // const PublicVideos = () => import('../views/PublicVideos.vue')
 
 const PageNotFound = () => import('../views/PageNotFound.vue')
@@ -59,6 +60,7 @@ const router = new Router({
     { path: '/search/:keyword', component: PublicSearch, meta: { permission: 'member', }, },
     { path: '/series-list', component: PublicProjects, meta: { permission: 'member', }, },
     { path: '/setup/:type', component: PublicSetPassword, },
+    { path: '/tag/:tagName', component: PublicTag, meta: { permission: 'member', },  },
     { path: '/404', component: PageNotFound, },
     { path: '/500', component: ServerError, },
     // { path: '/videos', component: PublicVideos, },

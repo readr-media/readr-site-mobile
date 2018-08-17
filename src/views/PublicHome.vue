@@ -235,7 +235,9 @@
     beforeRouteEnter (to, from, next) {
       // const store = createStore()
       // pageJump({ store, to, next, })
-      next()
+      next(vm => {
+        vm.hadRouteBeenNavigate = true
+      })
     },
     beforeRouteUpdate (to, from, next) {
       pageJump({ store: this.$store, to, next, })
