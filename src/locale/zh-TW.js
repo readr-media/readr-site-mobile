@@ -298,7 +298,7 @@ export default {
       'HOT': '熱門關鍵字',
     },
     'CATEGORY': {
-      'PROJECT': '讀 + 專題',
+      'PROJECT': '專題',
     },
   },
   'control_bar': {
