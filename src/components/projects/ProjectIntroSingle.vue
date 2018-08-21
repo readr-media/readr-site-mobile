@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="project-single-intro__comment">
-      <AppArticleNav :articleType="'project'" :postId="project.slug" :commentCount="project.commentAmount || 0"></AppArticleNav>
+      <AppArticleNav :resource="'project'" :postId="project.id" :commentCount="project.commentAmount || 0"></AppArticleNav>
     </div>
   </div>
 </template>

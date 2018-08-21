@@ -94,6 +94,14 @@ const fetchEmotion = (store, params) => {
   return store.dispatch('FETCH_EMOTION_BY_RESOURCE', params)
 }
 
+const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource, resourceType = '', } = {}) => {
+  return store.dispatch('GET_FOLLOWING_BY_USER', {
+    id: id,
+    resource: resource,
+    resource_type: resourceType,
+  })
+}
+
 export default {
   name: 'PublicSeries',
   components: {
@@ -211,16 +219,20 @@ export default {
       const reportIds = get(this.$store.state, 'publicReports', []).map(report => report.id)
       const memoIds = get(this.$store.state, 'memos', []).map(memo => memo.id)
       if (reportIds.length > 0) {
-        fetchFollowing(this.$store, { resource: 'report', ids: reportIds, })
         fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
         fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
       }
       if (memoIds.length > 0) {
-        fetchFollowing(this.$store, { resource: 'memo', ids: memoIds, })
         fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'like', })
         fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'dislike', })
       }
     })
+
+    getUserFollowing(this.$store, { resource: 'post', })
+    getUserFollowing(this.$store, { resource: 'memo', })
+    getUserFollowing(this.$store, { resource: 'report', })
+    getUserFollowing(this.$store, { resource: 'project', })
+    getUserFollowing(this.$store, { resource: 'tag', })
   }, 
   mounted () {
     window.addEventListener('scroll', () => {

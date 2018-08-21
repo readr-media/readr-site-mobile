@@ -80,7 +80,8 @@
       <a v-else-if="post.link && !hasSource" class="editor-writing-no-source" :href="post.link"  target="_blank" v-text="postLinkDecoded"></a>
     </template>
     <AppArticleNav
-      :articleType="post.flag"
+      :resource="post.flag"
+      :resourceType="resourceType"
       :postId="post.id"
       :postRefId="get(post, 'project.id')" 
       :slug="get(post, 'flag') === 'report'? post.slug : ''"
@@ -174,6 +175,16 @@
           return 'memo'          
         } else {
           return 'normal'
+        }
+      },
+      resourceType () {
+        switch (get(this.post, 'type')) {
+          case POST_TYPE.NEWS:
+            return 'news'
+          case POST_TYPE.REVIEW:
+            return 'review'
+          default:
+            return ''
         }
       },
       shouldContentStopAtIndex () {

@@ -12,8 +12,8 @@
   </section>
 </template>
 <script>
-  import { MEMO_PUBLISH_STATUS, POINT_OBJECT_TYPE, REPORT_PUBLISH_STATUS, } from 'api/config'
-  import { get, find, uniq, uniqBy, concat, } from 'lodash'
+  import { MEMO_PUBLISH_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
+  import { get, find, uniqBy, } from 'lodash'
   // import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
@@ -86,14 +86,14 @@
     })
   }
 
-  const fetchPointHistories = (store, { objectIds, objectType, }) => {
-    return store.dispatch('GET_POINT_HISTORIES', {
-      params: {
-        objectType: objectType,
-        objectIds: objectIds,
-      },
-    })
-  }
+  // const fetchPointHistories = (store, { objectIds, objectType, }) => {
+  //   return store.dispatch('GET_POINT_HISTORIES', {
+  //     params: {
+  //       objectType: objectType,
+  //       objectIds: objectIds,
+  //     },
+  //   })
+  // }
 
   const fetchReportsList = (store, {
     max_result = MAXRESULT_REPORTS,
@@ -137,6 +137,14 @@
     } else {
       next()
     }
+  }
+
+  const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource, resourceType = '', } = {}) => {
+    return store.dispatch('GET_FOLLOWING_BY_USER', {
+      id: id,
+      resource: resource,
+      resource_type: resourceType,
+    })
   }
 
   export default {
@@ -256,28 +264,9 @@
           reqs.push(fetchPost(this.$store, { id: this.$route.params.postId, }))
         }
 
-        Promise.all(reqs).then(() => {
-          if (this.$store.state.isLoggedIn) {
-            const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => post.id)
-            const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => post.id)
-            const reportIds = get(this.$store.state, 'publicReports', []).map(report => report.id)
-            const ids = uniq(concat(postIdsLatest, postIdsHot))
-            const projectIds = uniq(get(this.$store, 'state.publicMemos', []).map(memo => memo.projectId))
-            if (ids.length !== 0) {
-              fetchFollowing(this.$store, { resource: 'post', ids: ids, })
-              fetchEmotion(this.$store, { resource: 'post', ids: ids, emotion: 'like', })
-              fetchEmotion(this.$store, { resource: 'post', ids: ids, emotion: 'dislike', })
-            }
-            if (reportIds.length !== 0) {
-              fetchFollowing(this.$store, { resource: 'report', ids: reportIds, })
-              fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
-              fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
-            }
-            if (projectIds.length !== 0) {
-              fetchPointHistories(this.$store, { objectType: POINT_OBJECT_TYPE.PROJECT_MEMO, objectIds: projectIds, })
-            }
-          }
-        })        
+        Promise.all(reqs)
+        
+        getUserFollowing(this.$store, { resource: 'post', })
       }
 
       if (get(this.$route, 'params.postId')) {
@@ -339,7 +328,6 @@
             this.currentPage += 1
             if (this.$store.state.isLoggedIn) {
               const ids = res.items.map(post => post.id)
-              fetchFollowing(this.$store, { mode: 'update', resource: 'post', ids: ids, })
               fetchEmotion(this.$store, { mode: 'update', resource: 'post', ids: ids, emotion: 'like', })
               fetchEmotion(this.$store, { mode: 'update', resource: 'post', ids: ids, emotion: 'dislike', })
             }

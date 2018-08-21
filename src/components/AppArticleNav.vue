@@ -11,7 +11,7 @@
         <span class="follow-icon__hint" v-text="$t('FOLLOWING.FOLLOW')"></span>
       </span>
       <span v-else></span>
-      <template v-if="articleType !== 'project'">
+      <template v-if="resource !== 'project'">
         <span class="like-icon" @click="toggleEmotion('like')">
           <img :src="isLike ? '/public/icons/like-blue.png' : '/public/icons/like-line-blue.png'" alt="like">
           <span v-text="emotionLikeCount"></span>
@@ -29,6 +29,7 @@
 
 <script>
 import { find, get, } from 'lodash'
+import { mapState, } from 'vuex'
 import CommentContainer from 'src/components/comment/CommentContainer.vue'
 import CommentCount from 'src/components/comment/CommentCount.vue'
 
@@ -47,13 +48,13 @@ const updateEmotion = (store, { resource = 'post', action = 'insert', emotion = 
     },
   })
 }
-const updateStoreFollowingByResource = (store, { action, resource, resourceId, userId, }) => {
-  return store.dispatch('UPDATE_FOLLOWING_BY_RESOURCE', {
+
+const toogleFollowingByUserStat = (store, { resource, resourceType = '', targetId, }) => {
+  return store.commit('TOOGLE_FOLLOWING_BY_USER_STAT', {
     params: {
-      action: action,
-      resource: resource,
-      resourceId: resourceId,
-      userId: userId,
+      resource,
+      resourceType,
+      targetId,
     },
   })
 }
@@ -65,8 +66,15 @@ export default {
     CommentContainer,
   },
   computed: {
+    ...mapState({
+      userId: state => state.profile.id,
+      postsFollowingByUser: state => get(state.followingByUserStats, [ 'post', ], {}),
+      memosFollowingByUser: state => get(state.followingByUserStats, [ 'memo', ], {}),
+      reportsFollowingByUser: state => get(state.followingByUserStats, [ 'report', ], {}),
+      projectsFollowingByUser: state => get(state.followingByUserStats, [ 'project', ], {}),
+    }),
     asset () {
-      switch (this.articleType) {
+      switch (this.resource) {
         case 'memo':
           return `${get(this.$store, 'state.setting.HOST')}/series/${get(this.$route, 'params.slug')}/${this.postId}`
         case 'project':
@@ -74,36 +82,43 @@ export default {
         case 'report':
           return `${get(this.$store, 'state.setting.HOST')}/project/${this.slug}`
         default: 
-          return `${get(this.$store, 'state.setting.HOST')}/${this.articleType}/${this.postId}`
+          return `${get(this.$store, 'state.setting.HOST')}/${this.resource}/${this.postId}`
       }
     },
     emotionLikeCount () {
-      return get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'like', ], []), { resourceID: this.postId, }), 'count', 0 ) || 0
+      return get(find(get(this.$store, [ 'state', 'emotionByResource', this.resource, 'like', ], []), { resourceID: this.postId, }), 'count', 0 ) || 0
     },
     emotionDislikeCount () {
-      return get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'dislike', ], []), { resourceID: this.postId, }), 'count', 0 ) || 0
+      return get(find(get(this.$store, [ 'state', 'emotionByResource', this.resource, 'dislike', ], []), { resourceID: this.postId, }), 'count', 0 ) || 0
     },
     isDislike () {
-      const ids = get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'dislike', ], []), { resourceID: this.postId, }), 'followers', []) || [] 
+      const ids = get(find(get(this.$store, [ 'state', 'emotionByResource', this.resource, 'dislike', ], []), { resourceID: this.postId, }), 'followers', []) || [] 
       return this.$store.state.isLoggedIn && ids.indexOf(this.$store.state.profile.id) !== -1
     },
+    dataFollowingByUser () {
+      switch (this.resource) {
+        case 'post':
+          return this.postsFollowingByUser
+        case 'memo':
+          return this.memosFollowingByUser
+        case 'report':
+          return this.reportsFollowingByUser
+        case 'project':
+          return this.projectsFollowingByUser
+        default: 
+          return []
+      }
+    },
     isFollow () {
-      return this.$store.state.isLoggedIn && this.postFollowers && this.postFollowers.indexOf(this.$store.state.profile.id) !== -1
+      return this.$store.state.isLoggedIn &&
+        this.resource === 'post' ? get(this.dataFollowingByUser, [ this.resourceType, this.postId, ], false) : get(this.dataFollowingByUser, this.postId, false)
     },
     isLike () {
-      const ids = get(find(get(this.$store, [ 'state', 'emotionByResource', this.articleType, 'like', ], []), { resourceID: this.postId, }), 'followers', []) || [] 
+      const ids = get(find(get(this.$store, [ 'state', 'emotionByResource', this.resource, 'like', ], []), { resourceID: this.postId, }), 'followers', []) || [] 
       return this.$store.state.isLoggedIn && ids.indexOf(this.$store.state.profile.id) !== -1
     },
     isLoggedIn () {
       return this.$store.state.isLoggedIn
-    },
-    postFollowers () {
-      if (this.$store.state.isLoggedIn) {
-        const postFollowersData = find(this.$store.state.followingByResource[this.articleType], { resourceID: this.postId, })
-        return postFollowersData ? postFollowersData.followers : []
-      } else {
-        return []
-      }
     },
   },
   data () {
@@ -127,30 +142,19 @@ export default {
         if (!this.isFollow) {
           publishAction(this.$store, {
             action: 'follow',
-            resource: this.articleType,
+            resource: this.resource,
             subject: this.$store.state.profile.id,
             object: this.postId,
-          })
-          updateStoreFollowingByResource(this.$store, {
-            action: 'follow',
-            resource: this.articleType,
-            resourceId: this.postId,
-            userId: this.$store.state.profile.id,
           })
         } else {
           publishAction(this.$store, {
             action: 'unfollow',
-            resource: this.articleType,
+            resource: this.resource,
             subject: this.$store.state.profile.id,
             object: this.postId,
           })
-          updateStoreFollowingByResource(this.$store, {
-            action: 'unfollow',
-            resource: this.articleType,
-            resourceId: this.postId,
-            userId: this.$store.state.profile.id,
-          })
         }
+        toogleFollowingByUserStat(this.$store, { resource: this.resource, resourceType: this.resourceType, targetId: this.postId, })
       }
     },
     toggleEmotion (emotion) {
@@ -158,11 +162,11 @@ export default {
         const emotionVal = emotion === 'like' ? this.isLike : this.isDislike
         const oppositeVal = emotion === 'like' ? this.isDislike : this.isLike
         if (emotionVal) {
-          updateEmotion(this.$store, { resource: this.articleType, action:'delete', emotion: emotion, object: this.postId, })
+          updateEmotion(this.$store, { resource: this.resource, action:'delete', emotion: emotion, object: this.postId, })
         } else if (oppositeVal) {
-          updateEmotion(this.$store, { resource: this.articleType, action:'update', emotion: emotion, object: this.postId, })
+          updateEmotion(this.$store, { resource: this.resource, action:'update', emotion: emotion, object: this.postId, })
         } else {
-          updateEmotion(this.$store, { resource: this.articleType, action:'insert', emotion: emotion, object: this.postId, })
+          updateEmotion(this.$store, { resource: this.resource, action:'insert', emotion: emotion, object: this.postId, })
         }
       }
     },
@@ -171,9 +175,13 @@ export default {
     assetUrl: {
       type: String,
     },
-    articleType: {
+    resource: {
       type: String,
       default: 'post',
+    },
+    resourceType: {
+      type: String,
+      default: '',
     },
     postId: {
       // type: [ String, Number ],
