@@ -87,7 +87,7 @@
       rerenderComment (comment) {
         const params = get(comment, 'parentId')
           ? { parent: get(comment, 'parentId'), sort: 'created_at', }
-          : { resource: this.asset, resource_id: this.assetRefId, }
+          : { resource: [ this.asset, ], resource_id: this.assetRefId, }
         return new Promise(resolve => {
           setTimeout(() => {
             fetchComment(this.$store, { params, }).then(comments => {
@@ -194,7 +194,7 @@
     mounted () {
       fetchComment(this.$store, {
         params: {
-          resource: this.asset,
+          resource: [ this.asset, ],
           resource_id: this.assetId,
         },
       }).then((comments) => {
@@ -223,7 +223,7 @@
         debug('Mutation detected: asset', this.asset)
         fetchComment(this.$store, {
           params: {
-            resource: this.asset,
+            resource: [ this.asset, ],
             resource_id: this.assetId,
           },
         }).then((comments) => {
