@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { isEmpty, take, } from 'lodash'
+import { get, take, } from 'lodash'
 import { mapState, } from 'vuex'
 import TagItem from './TagItem.vue'
 
@@ -44,6 +44,14 @@ const getTags = (store, {
   })
 }
 
+const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource, resourceType = '', } = {}) => {
+  return store.dispatch('GET_FOLLOWING_BY_USER', {
+    id: id,
+    resource: resource,
+    resource_type: resourceType,
+  })
+}
+
 export default {
   components: {
     TagItem,
@@ -54,9 +62,8 @@ export default {
     }),
   },
   beforeMount () {
-    if (isEmpty(this.tags)) {
-      getTags(this.$store, { stats: false, })
-    }
+    getTags(this.$store, { stats: false, })
+    getUserFollowing(this.$store, { resource: 'tag', })
   },
 }
 </script>

@@ -42,6 +42,14 @@ const fetchProjectsList = (store, {
   })
 }
 
+const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource, resourceType = '', } = {}) => {
+  return store.dispatch('GET_FOLLOWING_BY_USER', {
+    id: id,
+    resource: resource,
+    resource_type: resourceType,
+  })
+}
+
 export default {
   name: 'PublicProjects',
   // asyncData ({ store, }) {
@@ -73,12 +81,8 @@ export default {
   beforeMount () {
     // Beta version code
     fetchProjectsList(this.$store)
-    .then(() => {
-      if (this.$store.state.isLoggedIn) {
-        const projectIds = get(this.$store, 'state.publicProjects.normal', []).map(project => project.id)
-        fetchFollowing(this.$store, { ids: projectIds, resource: 'project', })
-      }
-    })
+    getUserFollowing(this.$store, { resource: 'project', })
+    getUserFollowing(this.$store, { resource: 'tag', })
   },  
   mounted () {
     window.addEventListener('scroll', this.$_projects_loadmoreHandler)
