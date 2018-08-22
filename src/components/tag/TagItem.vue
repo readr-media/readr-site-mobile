@@ -21,7 +21,8 @@
       <ul v-if="shouldShowRelatedsList && isTagRelatedProjectsExist" class="tag__relateds-list">
         <div class="tag__category" v-text="$t('TAG_NAV_ASIDE.CATEGORY.PROJECT')"></div>
         <TagItemRelatedsListItem
-          v-for="(projects, i) in tag.relatedProjects"
+          v-for="(project, i) in tag.taggedProjects"
+          :data="project"
           :key="i"
           class="tag__relateds-list-item"
         />
