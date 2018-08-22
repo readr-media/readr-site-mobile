@@ -6,6 +6,12 @@ export const PROJECTS = projectList
 export const SITE_DOMAIN = 'readr.tw'
 export const SITE_DOMAIN_DEV = 'dev.readr.tw'
 
+export const URL_FB_FANPAGE = 'https://www.facebook.com/readr.tw'
+export const URL_TWITTER = 'https://twitter.com/Readr12544706'
+export const URL_IG = ''
+
+export const ANNOUNCEMENT_ACCOUNT_ID = '126'
+
 export const ROLE_MAP = [
   { key: get(ROLE_MAP_CONF, 'ADMIN'), value: '管理員', route: 'admin', },
   { key: get(ROLE_MAP_CONF, 'EDITOR'), value: '編輯', route: 'editor', },

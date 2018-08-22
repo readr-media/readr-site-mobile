@@ -1,35 +1,34 @@
 <template>
   <footer ref="footer" class="footer">
-    <router-link to="/" class="footer__item" :class="{ active: currentPath === '' }">
-      <img src="/public/icons/posts.png" alt="">
+    <router-link to="/" class="footer__item">
+      <p v-text="$t('SECTIONS.CHIEF_EDITOR_TALK')"></p>
     </router-link>
-    <router-link to="/hot" class="footer__item" :class="{ active: currentPath === 'hot' }">
-      <img src="/public/icons/hot-posts.png" alt="">
+    <router-link to="/series-list" class="footer__item">
+      <p v-text="$t('SECTIONS.PROJECTS')"></p>
     </router-link>
-    <!-- <router-link to="/videos" class="footer__item" :class="{ active: currentPath === 'videos' }">
-      <img src="/public/icons/videos.png" alt="">
-    </router-link> -->
-    <router-link to="/editors" class="footer__item" :class="{ active: currentPath === 'editors' }">
-      <img src="/public/icons/editors.png" alt="">
+    <router-link to="/editors" class="footer__item">
+      <p v-text="$t('SECTIONS.CHIEF_EDITOR_LIST')"></p>
     </router-link>
-    <router-link to="/series-list" class="footer__item" :class="{ active: currentPath === 'projects' }">
-      <img src="/public/icons/projects.png" alt="">
+    <router-link to="/about" class="footer__item">
+      <p v-text="$t('SECTIONS.ABOUT')"></p>
+    </router-link>
+    <router-link :to="`/profile/${ANNOUNCEMENT_ACCOUNT_ID}`" class="footer__item">
+      <img class="announcement-icon" src="/public/icons/announcement.png" alt="">
     </router-link>
   </footer>
 </template>
 <script>
-  import { get, } from 'lodash'
+  import { ANNOUNCEMENT_ACCOUNT_ID, } from 'src/constants'
 
   export default {
     name: 'AppFooter',
-    computed: {
-      currentPath () {
-        return get(this.$route, [ 'fullPath', ]).split('/')[1]
-      },
+    data () {
+      return {
+        ANNOUNCEMENT_ACCOUNT_ID,
+      }
     },
     mounted () {
       window.addEventListener('touchmove', this.$_footer_touchHandler)
-      
     },
     methods: {
       $_footer_touchHandler (e) {
@@ -57,20 +56,24 @@
     background-color #fff
     border-top 1px solid #d3d3d3
     visibility hidden
+    display flex
     &.active
       visibility visible
     &__item
-      display inline-block
+      flex 1 1 auto
+      display flex
+      justify-content center
+      align-items center
       position relative
       width 25%
       height 100%
-      &.active
-        background-color #ddcf21
+      color black
+      border-left 1px solid #d3d3d3
+      font-size 13px
       img
-        position absolute
-        top 50%
-        left 50%
-        transform translate(-50%, -50%)
-        width 30px
+        width 20px
         height auto
+
+  .router-link-exact-active
+    background-color #ddcf21
 </style>
