@@ -244,6 +244,7 @@
         }
       })
 
+      // TODO: apply new method which can fetching user followings with resource array when this feature will have implemented
       getUserFollowing(this.$store, { resource: 'post', })
       getUserFollowing(this.$store, { resource: 'report', })
       getUserFollowing(this.$store, { resource: 'memo', })
