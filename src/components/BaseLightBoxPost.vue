@@ -90,7 +90,7 @@ export default {
       return postParagraphs
     },
     commentCount () {
-      return get(find(get(this.$store, 'state.commentCount'), { postId: this.post.id, }), 'count') || 0
+      return get(find(get(this.$store, 'state.commentCount'), { postId: this.post.id, }), 'count', get(this.post, 'commentAmount')) || 0
     },
   },
   data () { 
@@ -157,7 +157,7 @@ export default {
   &--review
     width 100%
     // height 620.5px
-    padding 29px 25px 12.5px 25px
+    padding 29px 25px 52.5px 25px
     overflow-y scroll
     align-self flex-start
     margin 0 auto auto auto
