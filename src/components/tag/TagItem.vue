@@ -1,7 +1,7 @@
 <template>
   <li class="tag-item">
     <span class="tag-item__hashtag">#</span>
-    <router-link :to="`/tag/${tag.text}`" class="tag-item__tag tag">
+    <router-link :to="`/tag/${tag.id}`" class="tag-item__tag tag">
       <div class="tag__header">
         <span class="tag__text" v-text="tag.text"></span>
         <span v-if="isLoggedIn" class="tag__action tag-action">

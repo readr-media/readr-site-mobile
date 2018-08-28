@@ -60,7 +60,7 @@ const router = new Router({
     { path: '/search/:keyword', component: PublicSearch, meta: { permission: 'member', }, },
     { path: '/series-list', component: PublicProjects, meta: { permission: 'member', }, },
     { path: '/setup/:type', component: PublicSetPassword, },
-    { path: '/tag/:tagName', component: PublicTag, meta: { permission: 'member', },  },
+    { path: '/tag/:tagId', component: PublicTag, meta: { permission: 'member', },  },
     { path: '/404', component: PageNotFound, },
     { path: '/500', component: ServerError, },
     // { path: '/videos', component: PublicVideos, },
