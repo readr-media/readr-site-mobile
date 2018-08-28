@@ -53,6 +53,7 @@ export function createStore () {
       'invitation_switch_status': false,
       'invitation_quota': 0,
       'isStripeRequired': false,
+      'itemsByTag': {},
       'members': [],
       'membersCount': 0,
       'memos': [],

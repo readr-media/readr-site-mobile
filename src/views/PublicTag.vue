@@ -17,17 +17,30 @@
   import Invite from 'src/components/invitation/Invite.vue'
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
   import TagNav from 'src/components/tag/TagNav.vue'
-  import moment from 'moment'
-  import { concat, find, filter, flatten, get, map, sortBy, uniqWith, } from 'lodash'
+  import { find, get, isEqual, uniqWith, } from 'lodash'
 
-  const fetchPostsByTags = (store, { keyword, }) => store.dispatch('GET_POSTS_BY_TAG', {
-    params: {
-      max_result: 200,
-      tagged_resources: 1,
-      stats: 1,
-      keyword,
-    },
-  })
+  const fetchPostAndReportByTag = (store, {
+    tagId,
+    max_result = 5,
+    page = 1,
+    sort = '-published_at',
+    datetime,
+    nextLink,
+  } = {}) => {
+    const time = datetime ? datetime : new Date().toISOString()
+    const sortClean = sort.replace('-', '')
+    return store.dispatch('GET_POST_REPORT_BY_TAG', {
+      tagId,
+      params: {
+        max_result,
+        page,
+        sort,
+        filter: `pnr:${sortClean}<=${time}`,
+      },
+      nextLink,
+    })
+  }
+  
   const fetchFollowing = (store, params) => store.dispatch('GET_FOLLOWING_BY_RESOURCE', params)
   const fetchEmotion = (store, params) => store.dispatch('FETCH_EMOTION_BY_RESOURCE', params)
 
@@ -42,8 +55,7 @@
     },
     computed: {
       posts () {
-        const posts = flatten(concat(map(filter(get(this.$store, 'state.postsByTag.items', []), t => (t.taggedPosts && t.text === this.$route.params.tagName)), p => p.taggedPosts)))
-        return sortBy(uniqWith(posts, (a, o) => a.id === o.id), [ p => -moment(p.publishedAt), ])
+        return uniqWith(this.$store.state.itemsByTag.items, isEqual)
       },
       showPostBox () {
         return typeof(get(this.$route, 'params.subItem')) === 'string'
@@ -57,7 +69,7 @@
         }      
       },
       tagsForNav () {
-        return filter(get(this.$store, 'state.postsByTag.items', []), t => t.text === this.$route.params.tagName)
+        return get(this.$store, [ 'state', 'itemsByTag', 'items', 0, 'tags', ], []).filter(tag => tag.id === Number(this.$route.params.tagId))
       },
     },
     data () {
@@ -67,14 +79,20 @@
     },    
     methods: {},
     beforeMount () {
-      fetchPostsByTags(this.$store, {
-        keyword: this.$route.params.tagName,
+      fetchPostAndReportByTag(this.$store, {
+        tagId: this.$route.params.tagId,
       }).then(() => {
-        const postsIds = map(this.posts, p => p.id)
-        if (postsIds.length > 0) {
-          fetchFollowing(this.$store, { resource: 'post', ids: postsIds, })
-          fetchEmotion(this.$store, { resource: 'post', ids: postsIds, emotion: 'like', })
-          fetchEmotion(this.$store, { resource: 'post', ids: postsIds, emotion: 'dislike', })
+        const postIds = this.posts.filter(post => !post.projectId).map(post => post.id)
+        const reportIds = this.posts.filter(report => report.projectId).map(report => report.id)
+        if (postIds.length > 0) {
+          fetchFollowing(this.$store, { resource: 'post', ids: postIds, })
+          fetchEmotion(this.$store, { resource: 'post', ids: postIds, emotion: 'like', })
+          fetchEmotion(this.$store, { resource: 'post', ids: postIds, emotion: 'dislike', })
+        }
+        if (reportIds.length > 0) {
+          fetchFollowing(this.$store, { resource: 'report', ids: reportIds, })
+          fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
+          fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
         }
       })
     },
