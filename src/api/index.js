@@ -77,7 +77,17 @@ export function fetchComment ({ params, }) {
     url = url + `?${query}` 
   }     
   return fetchInStrict(url, {}) 
-} 
+}
+
+export function fetchCommentPublic ({ params, }) {
+  let url = `${host}/api/public/comment`
+  const query = _buildQuery(params)
+  debug('params', params)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }    
+  return fetch(url, {})
+}
  
 export function deleteComment ({ params, }) { 
   let url = `${host}/api/comment` 
@@ -169,9 +179,9 @@ export function getFollowingByUser (params) {
 
 export function follow ({ params, }) { 
   return new Promise((resolve, reject) => { 
-    const url = `${host}/api/following/pubsub` 
-    superagent 
-    .post(url) 
+    const url = `${host}/api/following/pubsub`
+    superagent
+    .post(url)
     .set('Authorization', `Bearer ${getToken()}`) 
     .send(params) 
     .end(function (err, res) { 

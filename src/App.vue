@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <app-header v-if="!isLoginPage" @openControlBar="openControlBarHandler"></app-header>
+    <app-header v-if="!isLoginPage && !isCommentPage" @openControlBar="openControlBarHandler"></app-header>
     <transition name="fade" mode="out-in">
       <router-view class="view" :openControlBar="openControlBar" @closeControlBar="closeControlBar"></router-view>
     </transition>
-    <app-footer v-if="!isLoginPage && !isBackstage"></app-footer>
+    <app-footer v-if="!isLoginPage && !isBackstage && !isCommentPage"></app-footer>
     <Consume></Consume>
     <AlertGDPR v-if="showAlertGDPR" @closeAlertGDPR="showAlertGDPR = false" />
   </div>
@@ -44,6 +44,9 @@
       },
       isLoginPage () {
         return /\/login/.test(this.$route.fullPath)
+      },
+      isCommentPage () {
+        return this.$route.path === '/comment'
       },
       useragent () { 
         return get(this.$store, 'state.useragent') 
