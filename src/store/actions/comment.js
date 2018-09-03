@@ -5,7 +5,7 @@ import {
   addCommentReport,
   deleteComment,
   fetchComment,
-  // fetchCommentPublic,
+  fetchCommentPublic,
   fetchCommentCount,
   fetchMeComments,
   hideComment,
@@ -30,12 +30,11 @@ const FETCH_COMMENT = ({}, { params, }) => {
   })
 }
 
-// need sync readr-site version
-// const FETCH_COMMENT_PUBLIC = ({}, { params, }) => {
-//   return fetchCommentPublic({ params, }).then(({ body, }) => {
-//     return _.get(body, 'items', [])
-//   })
-// }
+const FETCH_COMMENT_PUBLIC = ({}, { params, }) => {
+  return fetchCommentPublic({ params, }).then(({ body, }) => {
+    return _.get(body, 'items', [])
+  })
+}
 
 const FETCH_COMMENT_COUNT = ({ commit, }, { params, type, }) => {
   return fetchCommentCount({ params, }).then(count => {
@@ -62,7 +61,7 @@ export {
   ADD_COMMENT_REPORT,
   DELETE_COMMENT,
   FETCH_COMMENT,
-  // FETCH_COMMENT_PUBLIC,
+  FETCH_COMMENT_PUBLIC,
   FETCH_COMMENT_COUNT,
   FETCH_COMMENTS_ME,
   HIDE_COMMENT,

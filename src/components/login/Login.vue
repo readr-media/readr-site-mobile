@@ -74,7 +74,8 @@
             if (res.status === 200) {
               const memberCenter = get(filter(ROLE_MAP, { key: get(this.$store, [ 'state', 'profile', 'role', ]), }), [ 0, 'route', ], 'member')
               // location.replace(`/${memberCenter}`)
-              this.$router.push(`/${memberCenter}`)
+              // this.$router.push(`/${memberCenter}`)
+              this.$route.path === '/comment' ? this.$router.push(this.$route.fullPath) : this.$router.push(`/${memberCenter}`)
             } else {
               this.resMsg = this.$t('login.WORDING_LOGIN_INFAIL_VALIDATION_ISSUE')
             }
