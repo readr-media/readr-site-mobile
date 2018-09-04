@@ -57,7 +57,7 @@
       this.$store.dispatch('UPDATE_CLIENT_SIDE')
       this.launchLogger()
       this.sendPageview()
-      this.showAlertGDPR = !this.getGDPRCookie()
+      this.showAlertGDPR = !this.getGDPRCookie() && !this.isCommentPage
     },
     methods: {
       closeControlBar () {
