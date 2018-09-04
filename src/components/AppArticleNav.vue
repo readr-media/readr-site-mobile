@@ -23,7 +23,7 @@
       </template>
     </nav>
     <slot name="tagNav"></slot>
-    <CommentContainer v-if="showComment" :asset="asset" :assetId="postId" :assetRefId="postRefId"></CommentContainer>
+    <CommentContainer v-if="shouldShowComment || showComment" :asset="asset" :assetId="postId" :assetRefId="postRefId"></CommentContainer>
   </div>
 </template>
 
@@ -197,6 +197,10 @@ export default {
       type: String,
     },
     inLightbox: {
+      type: Boolean,
+      default: false,
+    },
+    shouldShowComment: {
       type: Boolean,
       default: false,
     },
