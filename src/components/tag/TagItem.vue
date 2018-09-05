@@ -1,8 +1,8 @@
 <template>
   <li class="tag-item">
     <span class="tag-item__hashtag">#</span>
-    <router-link :to="`/tag/${tag.id}`" class="tag-item__tag tag">
-      <div class="tag__header">
+    <div class="tag-item__tag tag">
+      <router-link :to="`/tag/${tag.id}`" class="tag__header">
         <span class="tag__text" v-text="tag.text"></span>
         <span v-if="isLoggedIn" class="tag__action tag-action">
           <img
@@ -16,18 +16,17 @@
           >
           </span>
         </span>
-      </div>
-      <!-- TODO: add related projects while data available -->
-      <ul v-if="shouldShowRelatedsList && isTagRelatedProjectsExist" class="tag__relateds-list">
+      </router-link>
+      <ul v-if="shouldShowRelatedsList && isTaggedReportsExist" class="tag__relateds-list">
         <div class="tag__category" v-text="$t('TAG_NAV_ASIDE.CATEGORY.PROJECT')"></div>
         <TagItemRelatedsListItem
-          v-for="(project, i) in tag.taggedProjects"
-          :data="project"
+          v-for="(report, i) in tag.taggedReports"
+          :data="report"
           :key="i"
           class="tag__relateds-list-item"
         />
       </ul>
-    </router-link>
+    </div>
     <!-- TODO: add trending-rank -->
     <p v-if="shouldShowTrendingRank" class="tag-item__trending-rank"></p>
   </li>
@@ -89,8 +88,8 @@ export default {
     isLoggedIn () {
       return this.$store.state.isLoggedIn
     },
-    isTagRelatedProjectsExist () {
-      return get(this.tag, 'relatedProjects') !== null
+    isTaggedReportsExist () {
+      return 'taggedReports' in this.tag && this.tag.taggedReports !== null
     },
     isMouseover () {
       return get(this.$store.state, [ 'tagsIsMouseover', this.tag.id, ], this.isMouseoverLocal)
