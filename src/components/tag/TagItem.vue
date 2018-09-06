@@ -17,11 +17,11 @@
           </span>
         </span>
       </router-link>
-      <ul v-if="shouldShowRelatedsList && isTaggedReportsExist" class="tag__relateds-list">
+      <ul v-if="shouldShowRelatedsList && isRelatedListExist" class="tag__relateds-list">
         <div class="tag__category" v-text="$t('TAG_NAV_ASIDE.CATEGORY.PROJECT')"></div>
         <TagItemRelatedsListItem
-          v-for="(report, i) in tag.taggedReports"
-          :data="report"
+          v-for="(item, i) in relatedListItems"
+          :data="item"
           :key="i"
           class="tag__relateds-list-item"
         />
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { get, } from 'lodash'
+import { get, take, } from 'lodash'
 import { mapState, } from 'vuex'
 import TagItemRelatedsListItem from './TagItemRelatedsListItem.vue'
 
@@ -75,6 +75,8 @@ export default {
   data () {
     return {
       showActionTooltip: false,
+      relatedListName: 'taggedReports',
+      relatedListItemLimit: 3,
     }
   },
   computed: {
@@ -88,8 +90,11 @@ export default {
     isLoggedIn () {
       return this.$store.state.isLoggedIn
     },
-    isTaggedReportsExist () {
-      return 'taggedReports' in this.tag && this.tag.taggedReports !== null
+    isRelatedListExist () {
+      return this.relatedListName in this.tag && this.tag[this.relatedListName] !== null
+    },
+    relatedListItems () {
+      return take(get(this.tag, this.relatedListName, []), this.relatedListItemLimit)
     },
     isMouseover () {
       return get(this.$store.state, [ 'tagsIsMouseover', this.tag.id, ], this.isMouseoverLocal)
