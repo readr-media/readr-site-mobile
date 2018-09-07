@@ -7,7 +7,10 @@
           <span class="value" :class="{ negative: isPointsNegative, }" v-text="currentPoints"></span> 
           <span class="postfix" v-text="$t('point.UNIT')"></span>         
         </div>
-        <Deposit class="deposit"><span v-text="$t('point.DEPOSIT.GO')"></span></Deposit>
+        <!--Deposit class="deposit"><span v-text="$t('point.DEPOSIT.GO')"></span></Deposit-->
+        <DepositTappay class="deposit" v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint">
+          <span v-text="$t('point.DEPOSIT.GO')"></span>
+        </DepositTappay> 
       </div> 
       <div class="point-manager__infobar--switcher"> 
         <div class="point-record" :class="isActive(0)" @click="check(0)"><span class="radio"></span><span v-text="$t('point.POINT_RECORD')"></span></div> 
@@ -21,45 +24,54 @@
   </div> 
 </template>
 <script>
-  import Deposit from 'src/components/point/Deposit.vue'
+  // import Deposit from 'src/components/point/Deposit.vue'
+  import DepositTappay from 'src/components/point/DepositTappay.vue' 
   import PaymentRecord from 'src/components/point/PaymentRecord.vue'
   import PointRecord from 'src/components/point/PointRecord.vue'
   import { currentYPosition, elmYPosition, } from 'kc-scroll'
   import { get, } from 'lodash'
   const fetchCurrPoints = store => store.dispatch('GET_POINT_CURRENT', { params: {}, }) 
-  const loadStripeSDK = store => store.dispatch('LOAD_STRIPE_SDK')
-  // const debug = require('debug')('CLIENT:PointManager')
+  const loadTappaySDK = store => store.dispatch('LOAD_TAPPAY_SDK')
+  const debug = require('debug')('CLIENT:PointManager')
   export default {
     name: 'PointManager',
     components: {
-      Deposit,
+      // Deposit,
+      DepositTappay,
       PaymentRecord,
       PointRecord,
     },
     computed: { 
-      isPointsNegative () { 
-        return this.currentPoints < 0 
-      }, 
       currentPoints () { 
         return get(this.$store, 'state.personalPoints.points', 0) 
       }, 
+      isPointsNegative () { 
+        return this.currentPoints < 0 
+      }, 
+      isTappayNeeded () { 
+        return get(this.$store, 'state.isTappayRequired', false) 
+      },       
     }, 
     data () { 
       return { 
         activeIndex: 0, 
         isTop: false,
+        isDepositActive: false,
       } 
     },    
     methods: {
       check (index) { 
         this.activeIndex = index 
       }, 
+      fetchCurrentPoint () {
+        fetchCurrPoints(this.$store).then()
+      },  
       isActive (index) { 
         return [ this.activeIndex === index ? 'active' : '', ] 
-      },       
+      },     
     },
     mounted () {
-      fetchCurrPoints(this.$store).then(() => loadStripeSDK(this.$store))
+      fetchCurrPoints(this.$store).then(() => loadTappaySDK(this.$store))
       window.addEventListener('scroll', () => {
         const current_top_y = currentYPosition()
         const info_bar_top_Y = elmYPosition('.point-manager__infobar')
@@ -69,6 +81,11 @@
           this.isTop = false
         }
       })
+    },
+    watch: {
+      isTappayNeeded () { 
+        debug('Mutation detected: isTappayNeeded', this.isTappayNeeded) 
+      }, 
     },
   }
 </script>

@@ -268,7 +268,7 @@
     },
     metaInfo () {
       return {
-        isStripeNeeded: this.isStripeRequired,
+        isTappayNeeded: this.isTappayRequired,
       }
     },     
     data () {
@@ -304,8 +304,8 @@
       isDonationActive () { 
         return get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false) 
       },    
-      isStripeRequired () {
-        return get(this.$store, 'state.isStripeRequired', false)
+      isTappayRequired () {
+        return get(this.$store, 'state.isTappayRequired', false)
       },         
       itemsSelectedID () {
         const items = []
@@ -344,7 +344,7 @@
           document.querySelector('.controlBar').classList.remove('open')
         }
       },
-      isStripeRequired () {
+      isTappayRequired () {
         this.$forceUpdate()
       },
     },
