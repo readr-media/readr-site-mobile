@@ -34,7 +34,7 @@
     name: 'ManageMember',
     metaInfo () {
       return {
-        isStripeNeeded: this.isStripeRequired,
+        isTappayNeeded: this.isTappayRequired,
       }
     },     
     components: {
@@ -61,8 +61,8 @@
       isDonationActive () { 
         return get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false) 
       },        
-      isStripeRequired () {
-        return get(this.$store, 'state.isStripeRequired', false)
+      isTappayRequired () {
+        return get(this.$store, 'state.isTappayRequired', false)
       },         
       profile () {
         return get(this.$store, [ 'state', 'profile', ], {})
@@ -83,7 +83,7 @@
           document.querySelector('.controlBar').classList.remove('open')
         }
       },
-      isStripeRequired () {
+      isTappayRequired () {
         this.$forceUpdate()
       },
     },
