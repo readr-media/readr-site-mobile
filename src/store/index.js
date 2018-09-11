@@ -14,7 +14,11 @@ export function createStore () {
       'consumeFlag': { 
         "active": false, 
         "item": {}, 
-      },       
+      },    
+      'donateFlag': { 
+        'active': false, 
+        'item': {}, 
+      },    
       'emotionByResource': {
         'memo': {
           'like': [],

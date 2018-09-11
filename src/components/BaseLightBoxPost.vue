@@ -68,7 +68,7 @@ export default {
       debug('is memo?', get(this.post, 'flag') === 'memo' )
       debug('is memo?', this.$route.fullPath.split('/')[ 1 ] === 'series' && get(this.$route, 'params.slug') && get(this.$route, 'params.subItem'))
       return get(this.post, 'flag') === 'memo' 
-        || (this.$route.fullPath.split('/')[ 1 ] === 'series' && get(this.$route, 'params.slug') && get(this.$route, 'params.subItem')) 
+        || (this.$route.fullPath.split('/')[ 1 ] === 'series' && get(this.$route, 'params.slug') && get(this.$route, 'params.subItem') && get(this.$route, 'params.subItem') !== 'donate')
     },    
     isMemoPaid () { 
       return get(this.post, 'project.paid') 

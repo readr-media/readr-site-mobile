@@ -39,14 +39,13 @@
         <img :src="isFollowed ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="">
         <span v-text="$t('FOLLOWING.FOLLOW')"></span>
       </div>
-      <!-- <div>
-        <img src="/public/icons/donate.png" alt="">
-      </div> -->
+      <DonateButton class="donate" :projectSlug="get(project, 'slug')"></DonateButton> 
     </div>
   </div>
 </template>
 
 <script>
+import DonateButton from 'src/components/point/DonateButton.vue'
 import TagNav from 'src/components/tag/TagNav.vue'
 import { get, find, } from 'lodash'
 import { updatedAtYYYYMMDD, } from '../../util/comm'
@@ -65,6 +64,7 @@ const toogleFollowingByUserStat = (store, { resource, resourceType = '', targetI
 
 export default {
   components: {
+    DonateButton,
     TagNav,
   },
   props: {
@@ -96,6 +96,7 @@ export default {
     },
   },
   methods: {
+    get,
     toogleFollow () {
       if (this.isFollowed) {
         publishAction(this.$store, {
@@ -211,6 +212,10 @@ export default {
     user-select none
   .follow
     cursor pointer
+  .donate 
+    flex 1 
+    text-align right 
+    cursor pointer 
 
 .progress
   position relative

@@ -12,10 +12,12 @@
       <HomeArticleMain v-for="post in posts" :key="post.id" :articleData="post" ></HomeArticleMain>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent"></BaseLightBoxPost>
     </PostBoxWrapper>
+    <Donate></Donate>
   </div>
 </template>
 <script>
 import BaseLightBoxPost from 'src/components/BaseLightBoxPost.vue'
+import Donate from 'src/components/point/Donate.vue'
 import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
 import Invite from 'src/components/invitation/Invite.vue'
 import Leading from 'src/components/leading/Leading.vue'
@@ -102,10 +104,13 @@ const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource
   })
 }
 
+const switchOn = (store, item) => store.dispatch('SWITCH_ON_DONATE_PANEL', { item, })
+
 export default {
   name: 'PublicSeries',
   components: {
     BaseLightBoxPost,
+    Donate,
     HomeArticleMain,
     Invite,
     Leading,
@@ -113,11 +118,11 @@ export default {
     TagNav,
   },
   computed: {
+    isSeriesDonate () { 
+      return get(this.$route, 'params.subItem') === 'donate' 
+    }, 
     posts () {
       return sortBy(union(get(this.$store, 'state.memos', []), get(this.$store, 'state.publicReports', [])), [ p => -moment(p.publishedAt), ])
-    },
-    showPostBox () {
-      return typeof(get(this.$route, 'params.subItem')) === 'string'
     },
     postSingle () {
       return get(this.$store, 'state.memoSingle', {})
@@ -134,11 +139,14 @@ export default {
       }      
     },
     project () {
-      return get(this.$store, 'state.publicProjectSingle', {})
+      return get(this.$store, 'state.publicProjectSingle')
     },
     projectTagIds () {
       const tags = this.project.tags || []
       return tags.map(tag => tag.id)
+    },
+    showPostBox () {
+      return typeof(get(this.$route, 'params.subItem')) === 'string' && get(this.$route, 'params.subItem') !== 'donate'
     },
   },
   data () {
@@ -151,6 +159,14 @@ export default {
     }
   },
   methods: {
+    donateCheck () { 
+      debug('do check donate')
+      debug('do check donate')
+      debug('do check donate')
+      debug('do check donate')
+      debug('do check donate')
+      this.isSeriesDonate && this.project && switchOn(this.$store, this.project) 
+    },    
     isScrollBarReachBottom,
     isElementReachInView,
     loadmore () {
@@ -202,7 +218,7 @@ export default {
                 page: this.currPage,
               }),
             ]).then(() => { this.currPage += 1 }),
-            get(this.$route, 'params.subItem')
+            get(this.$route, 'params.subItem') && get(this.$route, 'params.subItem') !== 'donate'
               ? fetchMemoSingle(this.$store, get(this.$route, 'params.subItem'))
               : Promise.resolve(),
           ])
@@ -235,11 +251,19 @@ export default {
     getUserFollowing(this.$store, { resource: 'tag', })
   }, 
   mounted () {
+    this.donateCheck() 
     window.addEventListener('scroll', () => {
       this.isReachBottom = this.isElementReachInView('.memo', 0.5) || this.isScrollBarReachBottom()
     })    
   },
   watch: {
+    isSeriesDonate () { 
+      debug('Mutation detected: isSeriesDonate', this.isSeriesDonate) 
+      this.donateCheck() 
+    }, 
+    project () { 
+      this.donateCheck() 
+    },    
     isReachBottom () {
       debug('Mutation detected: isReachBottom', this.isReachBottom)
       if (!this.isReachBottom || this.isLoadMoreEnd) { return }
