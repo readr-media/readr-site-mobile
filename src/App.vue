@@ -42,6 +42,9 @@
       isBackstage () {
         return this.$route.path.match(/\/(admin|editor|guesteditor|member)$/)
       },
+      isAboutPage () {
+        return /\/about/.test(this.$route.fullPath)
+      },
       isLoginPage () {
         return /\/login/.test(this.$route.fullPath)
       },
@@ -51,6 +54,12 @@
       useragent () { 
         return get(this.$store, 'state.useragent') 
       },
+    },
+    beforeMount () {
+      const showAbout = !this.getFirstLoginCookie()
+      if (!this.isLoginPage && !this.isAboutPage && showAbout) {
+        this.$router.push('/about')
+      }
     },
     mounted () {
       this.doc = document
@@ -62,6 +71,9 @@
     methods: {
       closeControlBar () {
         this.openControlBar = false
+      },
+      getFirstLoginCookie () {
+        return VueCookie.get('readr-first-login')
       },
       getGDPRCookie () {
         return VueCookie.get('gdpr-accept-cookie')
@@ -96,7 +108,12 @@
     },
     watch: { 
       '$route.fullPath': function () { 
-        process.browser && this.sendPageview() 
+        process.browser && this.sendPageview()
+        
+        const showAbout = !this.getFirstLoginCookie()
+        if (!this.isLoginPage && !this.isAboutPage && showAbout) {
+          this.$router.push('/about')
+        }
       }, 
     }, 
   }
