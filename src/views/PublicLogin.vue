@@ -1,25 +1,32 @@
 <template>
   <div class="login-page">
-    <!--LoginPanel v-if="isClientSide && !isLoggedIn"></LoginPanel-->
-    <LoginPanelPackingTest v-if="isClientSide && !isLoggedIn"></LoginPanelPackingTest>
+    <template v-if="registrationActive">
+      <LoginPanel v-if="isClientSide && !isLoggedIn"></LoginPanel>
+    </template>
+    <template v-else>
+      <LoginPanelPackingTest v-if="isClientSide && !isLoggedIn"></LoginPanelPackingTest>
+    </template>
   </div>
 </template>
 <script>
-  import _ from 'lodash'
-  // import LoginPanel from '../components/LoginPanel.vue'
+  import LoginPanel from '../components/LoginPanel.vue'
   import LoginPanelPackingTest from '../components/LoginPanelPackingTest.vue'
   import AppHeader from '../components/header/AppHeader.vue'
+  import { get, } from 'lodash'
   
   export default {
     components: {
       'app-header': AppHeader,
-      // LoginPanel,
+      LoginPanel,
       LoginPanelPackingTest,
     },
     computed: {
       isLoggedIn () {
-        return _.get(this.$store, [ 'state', 'isLoggedIn', ], false)
+        return get(this.$store, 'state.isLoggedIn', false)
       },
+      registrationActive () { 
+        return get(this.$store, 'state.setting.REGISTRATION_ACTIVE', false) 
+      },      
     },
     data () {
       return {
