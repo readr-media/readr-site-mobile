@@ -95,9 +95,13 @@
   .login-panel
     background-color #d8d8d8
     width 100%
-    height 100%
+    height 100vh
     padding 80px 10px 40px
     margin 0
+    display flex
+    flex-direction column
+    justify-content center
+    align-items center
     > div
       width 100%
       // overflow hidden
