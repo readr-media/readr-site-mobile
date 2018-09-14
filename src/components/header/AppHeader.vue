@@ -13,7 +13,7 @@
     <div class="header__item header--account">
       <div @click="toggleDropdown">
         <span v-show="userNickname" v-text="userNickname"></span>
-        <img :src="profileImage" :alt="userNickname">
+        <img v-if="isClientSide" :src="profileImage" :alt="userNickname">
       </div>
       <div :class="{ active: openDropdown }" class="dropdown account">
         <div class="dropdown__item" @click="goMemberCenter" v-text="$t('HEADER.MEMBER_CENTRE')"></div>
@@ -37,6 +37,7 @@
   import { filter, get, } from 'lodash'
   import { ROLE_MAP, } from 'src/constants'
   import { removeToken, } from 'src/util/services'
+  import { getImageUrl, } from 'src/util/comm'
   import Notification from 'src/components/header/Notification.vue'
   import SearchTool from 'src/components/search/SearchTool.vue'
 
@@ -58,7 +59,7 @@
     },
     computed: {
       currentUser () {
-        return get(this.$store, 'state.profile', {})
+        return get(this.$store.state, 'profile', {})
       },
       isBackstage () {
         const route = this.$route.fullPath.split('/')[1] || ''
@@ -72,7 +73,7 @@
         return get(this.$store, 'state.isLoggedIn',)
       },
       profileImage () {
-        return this.currentUser.profileImage || '/public/icons/exclamation.png'
+        return getImageUrl(get(this.currentUser, 'profileImage', '/public/icons/exclamation.png'))
       },
       userNickname () {
         return this.isLoggedIn && get(this.currentUser, 'nickname', get(this.currentUser, 'name', this.$t('HEADER.MEMBER_CENTRE')))
