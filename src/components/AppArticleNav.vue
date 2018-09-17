@@ -6,7 +6,7 @@
         <CommentCount class="comment-icon__count" :commentAmount="commentCount" :assetUrl="assetUrl" :postId="postId" :type="'publicPostsHot'"></CommentCount>
       </span>
       <!-- <img class="follow-icon" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow"> -->
-      <span v-if="isLoggedIn" class="follow-icon" @click="toogleFollow($event)">
+      <span v-if="showFollow" class="follow-icon" @click="clickFollow($event)">
         <img class="follow-icon__thumbnail" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow">
         <span class="follow-icon__hint" v-text="$t('FOLLOWING.FOLLOW')"></span>
       </span>
@@ -134,6 +134,10 @@ export default {
         this.showComment = true
       }
     },
+    // TODO: Refactor following to a component like ButtonFollow.vue
+    clickFollow (event) {
+      this.isLoggedIn ? this.toogleFollow(event) : this.$router.push('/login')
+    },
     toogleFollow (event) {
       if (event) event.preventDefault()
       if (!this.$store.state.isLoggedIn) {
@@ -203,6 +207,10 @@ export default {
     shouldShowComment: {
       type: Boolean,
       default: false,
+    },
+    showFollow: {
+      type: Boolean,
+      default: true,
     },
   },
 }
