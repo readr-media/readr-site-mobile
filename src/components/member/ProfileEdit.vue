@@ -52,7 +52,7 @@ import { get, map, } from 'lodash'
 import { getImageUrl, } from 'src/util/comm'
 import { removeToken, } from 'src/util/services'
 
-// const debug = require('debug')('CLIENT:ProfileEdit')
+const debug = require('debug')('CLIENT:ProfileEdit')
 const updateInfo = (store, profile, action) => {
   return store.dispatch(action, {
     params: profile,
@@ -146,9 +146,9 @@ export default {
     getImageUrl,
     inputChangeHandler () {
       const file = this.$refs.inputPortraitImg.files[0]
-      console.log('inputChangeHandler 1')
+      debug('inputChangeHandler 1')
       const saveImage = (file) => {
-        console.log('saveImage')
+        debug('saveImage')
         const fd = new FormData()
         // const fileExt = file.type.split('image/')[1]
         fd.append('image', file, `${this.profile.id}`)
@@ -167,7 +167,7 @@ export default {
       }
 
       if (/^image\//.test(file.type)) {
-        console.log('inputChangeHandler 2')
+        debug('inputChangeHandler 2')
         deleteMemberProfileThumbnails(this.$store, this.profile.id)
         file.size <= 5242880 ? saveImage(file) : console.info(`file size is ${file.size} bytes bigger than 5MB`)
       }
@@ -193,7 +193,7 @@ export default {
           params = Object.assign(params, this.advanced) 
         }
 
-        updateInfo(this.$store, params, 'UPDATE_PROFILE').then(() => { 
+        return updateInfo(this.$store, params, 'UPDATE_PROFILE').then(() => { 
           return this.fetchPersonalSetting(this.$store) 
         }) 
         // .then(callback)
@@ -211,17 +211,14 @@ export default {
         }
       }
       const updatePassword = () => {
-        checkPassword(this.$store, {
-          email: this.profile.id,
+        return checkPassword(this.$store, {
+          email: this.profile.mail,
           password: this.inputOldPassword,
           // keepAlive: this.$refs[ 'keep-alive' ].checked
         })
         .then((res) => {
           if (res.status === 200) {
-            // console.log('login success')
-            // return true
             updateInfo(this.$store, {
-              id: this.profile.id,
               edit_mode: 'edit_profile',
               password: this.inputNewPassword,
             }, 'UPDATE_PASSWORD')
@@ -238,25 +235,25 @@ export default {
               })
             })
           } else {
-            console.log('login fail')
+            debug('login fail')
           }
         })
         .catch((err) => {
           if (err.status === 401) {
-            console.log('login 401')
+            debug('login 401')
             // return false
           }
         })
       }
 
+      const process = []
       if (!(inputNotChange('Nickname') && inputNotChange('Description')) || this.isPersonalSettingMutated) {
-        updateBasicInfo()
+        process.push(updateBasicInfo())
       }
       if (!isOldPasswordEmpty() && isConfirmNewPassword()) {
-        updatePassword()
+        process.push(updatePassword())
       }
-
-      this.$emit('save')
+      Promise.all(process).then(() => this.$emit('save'))
     },
   },
 }
