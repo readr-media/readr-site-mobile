@@ -20,7 +20,7 @@ const PublicLogin = () => import('../views/PublicLogin.vue')
 const PublicSeries = () => import('../views/PublicSeries.vue')
 const PublicProfile = () => import('../views/PublicProfile.vue')
 const PublicProjects = () => import('../views/PublicProjects.vue')
-const PublicReportsMemos = () => import('../views/PublicReportsMemos.vue')
+// const PublicReportsMemos = () => import('../views/PublicReportsMemos.vue')
 const PublicSearch = () => import('../views/PublicSearch.vue')
 const PublicSetPassword = () => import('../views/PublicSetPassword.vue')
 const PublicTag = () => import('../views/PublicTag.vue')
@@ -44,24 +44,24 @@ const router = new Router({
  
   },
   routes: [
-    { path: '/post/:postId?', component: PublicHome, meta: { permission: 'member', }, alias: '/', },
-    { path: '/hot', component: PublicHome, meta: { permission: 'member', }, },
-    { path: '/about', component: PublicAbout, meta: { permission: 'member', }, },
+    { path: '/post/:postId?', component: PublicHome, alias: '/', },
+    { path: '/hot', component: PublicHome, },
+    { path: '/about', component: PublicAbout, },
     { path: '/admin/:panel?/:tool?', component: ManageAdmin, meta: { permission: 'admin', }, },
     { path: '/agreement', component: PublicAgreement, },
     { path: '/editor/:panel?/:tool?', component: ManageEditor, meta: { permission: 'editor', }, },
-    { path: '/editors', component: PublicEditors, meta: { permission: 'member', }, },
+    { path: '/editors', component: PublicEditors, },
     { path: '/guesteditor/:panel?/:tool?', component: ManageGuestEditor, meta: { permission: 'guesteditor', }, },
     { path: '/login', component: PublicLogin, },
     { path: '/member/:panel?/:tool?', component: ManageMember, meta: { permission: 'member', }, },
-    { path: '/series/:slug/:subItem?', component: PublicSeries, meta: { permission: 'member', }, },
-    { path: '/profile/:id', component: PublicProfile, meta: { permission: 'member', }, },
-    { path: '/reports', component: PublicReportsMemos, meta: { permission: 'member', }, },
-    { path: '/memos', component: PublicReportsMemos, meta: { permission: 'member', }, },
-    { path: '/search/:keyword', component: PublicSearch, meta: { permission: 'member', }, },
-    { path: '/series-list', component: PublicProjects, meta: { permission: 'member', }, },
+    { path: '/series/:slug/:subItem?', component: PublicSeries, },
+    { path: '/profile/:id', component: PublicProfile, },
+    // { path: '/reports', component: PublicReportsMemos, },
+    // { path: '/memos', component: PublicReportsMemos, },
+    { path: '/search/:keyword', component: PublicSearch, },
+    { path: '/series-list', component: PublicProjects, },
     { path: '/setup/:type', component: PublicSetPassword, },
-    { path: '/tag/:tagId', component: PublicTag, meta: { permission: 'member', },  },
+    { path: '/tag/:tagId', component: PublicTag,  },
     { path: '/comment', component: PublicComment, props: (route) => ({ resourceURL: route.query.resource_url, }), },
     { path: '/404', component: PageNotFound, },
     { path: '/500', component: ServerError, },

@@ -3,7 +3,7 @@
     <PostBoxWrapper :showPostBox.sync="showPostBox" :hadRouteBeenNavigate="hadRouteBeenNavigate">
       <Invite></Invite>
       <main>
-        <HomeNavigationMobile v-if="hasNavigation" :memos="memos" :reports="reports" :video="video"></HomeNavigationMobile>
+        <!--HomeNavigationMobile v-if="hasNavigation" :memos="memos" :reports="reports" :video="video"></HomeNavigationMobile-->
         <TagNavList/>
         <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
       </main>
@@ -346,11 +346,7 @@
   }
 </script>
 <style lang="stylus" scoped>
-  @media (min-width 768px)
-    .home
-      main
-        position relative
-        padding 0 20px 0 80px
-  //     padding 80px 20px 0 80px
-
+  .home
+    main
+      padding-top 20px
 </style>
