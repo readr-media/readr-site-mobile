@@ -54,6 +54,9 @@
       activeItemsCount () {
         return this.inviteableCount
       },
+      curr_user () {
+        return get(this.$store, 'state.profile.id')
+      },      
       inputBackgroundColor () {
         return this.isProcessing ? '#f6f6f6' : undefined
       },
@@ -78,15 +81,15 @@
       }
     },
     beforeMount () {
-      debug('curr_user beforeMount.')
-      Promise.all([
+      debug('curr_user beforeMount.', this.curr_user)
+      this.curr_user && Promise.all([
         fetchQuota(this.$store),
       ])
     },
     watch: {
       curr_user: function () {
         debug('curr_user change detected.')
-        Promise.all([
+        this.curr_user && Promise.all([
           fetchQuota(this.$store),
         ])
       },
@@ -97,7 +100,7 @@
     methods: {
       find,
       $_invite_submit () {
-        if (!find(this.emails, email => email)) { return }
+        if (!find(this.emails, email => email) || !this.curr_user) { return }
         this.isProcessing = true
         if (this.$_invite_validate()) {
           invite(this.$store, {

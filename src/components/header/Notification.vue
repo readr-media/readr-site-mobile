@@ -64,7 +64,7 @@
       },      
     },
     beforeMount () {
-      Promise.all([
+      this.currUser && Promise.all([
         fetchNotification(this.$store, { id: this.currUser, }),
       ])
     },
@@ -75,7 +75,7 @@
     watch: { 
       currPath () { 
         debug('Mutation detected: currPath.')
-        this.updateNotification() 
+        this.currUser && this.updateNotification() 
       }, 
     }, 
   }
