@@ -83,6 +83,7 @@ export default {
     fetchProjectsList(this.$store)
     getUserFollowing(this.$store, { resource: 'project', })
     getUserFollowing(this.$store, { resource: 'tag', })
+    getUserFollowing(this.$store, { resource: 'project', })
   },  
   mounted () {
     window.addEventListener('scroll', this.$_projects_loadmoreHandler)

@@ -6,7 +6,7 @@
         <CommentCount class="comment-icon__count" :commentAmount="commentCount" :assetUrl="assetUrl" :postId="postId" :type="'publicPostsHot'"></CommentCount>
       </span>
       <!-- <img class="follow-icon" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow" @click="toogleFollow"> -->
-      <span v-if="isLoggedIn" class="follow-icon" @click="toogleFollow($event)">
+      <span v-if="isLoggedIn && showFollow" class="follow-icon" @click="toogleFollow($event)">
         <img class="follow-icon__thumbnail" :src="isFollow ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="follow">
         <span class="follow-icon__hint" v-text="$t('FOLLOWING.FOLLOW')"></span>
       </span>
@@ -203,6 +203,10 @@ export default {
     shouldShowComment: {
       type: Boolean,
       default: false,
+    },
+    showFollow: {
+      type: Boolean,
+      default: true,
     },
   },
 }
