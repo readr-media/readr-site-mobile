@@ -1,7 +1,12 @@
 <template>
   <div class="baselightbox-post--review no-content" v-if="isContentEmpty">
     <span v-if="isMemo && !isMemoPaid && !isPostEmpty" v-text="$t('POST_CONTENT.GO_JOIN_MEMO')" class="go-join" @click="goJoin"></span> 
-    <span v-else v-text="$t('POST_CONTENT.NO_PERMISSION')"></span> 
+    <template v-else> 
+      <div> 
+        <div><span v-text="$t('POST_CONTENT.NO_PERMISSION')"></span></div> 
+        <div class="button" v-if="isLoginBtnACtive"><span v-text="$t('POST_CONTENT.GO_LOGIN')" @click="goLogin"></span></div> 
+      </div> 
+    </template>    
   </div>
   <div :class="[ { 'baselightbox-post--review': !isNews && !isMemo }, { 'baselightbox-post--news': isNews || isMemo } ]" v-else>
     <!-- template for post type is news -->
@@ -58,6 +63,15 @@ export default {
     assetRefId () { 
       return get(this.post, 'project.id') 
     }, 
+    authorId () {
+      return getArticleAuthorId(this.post)
+    },
+    authorNickname () {
+      return getArticleAuthorNickname(this.post)
+    },
+    authorThumbnailImg () {
+      return getArticleAuthorThumbnailImg(this.post)
+    },
     isPostEmpty () {
       return isEmpty(this.post)
     },
@@ -73,15 +87,12 @@ export default {
     isMemoPaid () { 
       return get(this.post, 'project.paid') 
     },      
-    authorId () {
-      return getArticleAuthorId(this.post)
+    commentCount () {
+      return get(find(get(this.$store, 'state.commentCount'), { postId: this.post.id, }), 'count', get(this.post, 'commentAmount')) || 0
     },
-    authorNickname () {
-      return getArticleAuthorNickname(this.post)
-    },
-    authorThumbnailImg () {
-      return getArticleAuthorThumbnailImg(this.post)
-    },
+    me () { 
+      return get(this.$store, 'state.profile', {}) 
+    },    
     postContent () {
       if (!this.post.content || this.post.content.length === 0) { return [] }
       const wrappedContent = sanitizeHtml(this.post.content, { allowedTags: false, selfClosing: [ 'img', ], })
@@ -89,13 +100,11 @@ export default {
       let postParagraphs = map(get(doc, 'childNodes'), (p) => (sanitizeHtml(new seializer().serializeToString(p), { allowedTags: [ 'img', 'strong', 'a', 'h1', 'h2', 'figcaption', ], })))
       return postParagraphs
     },
-    commentCount () {
-      return get(find(get(this.$store, 'state.commentCount'), { postId: this.post.id, }), 'count', get(this.post, 'commentAmount')) || 0
-    },
   },
   data () { 
     return { 
       isContentEmpty: true,
+      isLoginBtnACtive: false, 
       showComment: true,
       shouldRenderComment: false,
     } 
@@ -109,13 +118,17 @@ export default {
       if (!this.isPostEmpty && this.isMemo && !this.isMemoPaid) { 
         switchOnDeductionPanel(this.$store, this.post) 
       }       
-    }, 
+    },
+    goLogin () { 
+      location && location.replace('/login') 
+    },     
   },
   mounted () {
     if (!this.isPostEmpty) { 
       debug(this.isMemo && !this.isMemoPaid && !this.isNews)       
       if (this.isMemo && !this.isMemoPaid) { 
         this.isContentEmpty = true 
+        !this.me.id && (this.isLoginBtnACtive = true) 
         switchOnDeductionPanel(this.$store, this.post) 
       } else { 
         this.isContentEmpty = false 
@@ -123,6 +136,7 @@ export default {
       } 
     } else { 
       this.isContentEmpty = true 
+      !this.me.id && (this.isLoginBtnACtive = true)       
     } 
     debug('Mounted: this.isContentEmpty', this.isContentEmpty)
   },
@@ -145,6 +159,7 @@ export default {
          * Client may not have the right to fetch this post content. 
          */      
         this.isContentEmpty = true    
+        !this.me.id && (this.isLoginBtnACtive = true)         
       }
       debug('watch: this.isContentEmpty', this.isContentEmpty, this.post)
     },
@@ -166,7 +181,9 @@ export default {
       justify-content center 
       align-items center 
       height 50vh
-
+      line-height normal 
+      padding-right 20px
+      padding-left 20px
       .go-join 
         padding 10px 20px 
         background-color #d8ca21 
@@ -175,7 +192,21 @@ export default {
         border-radius 2px 
         color #fff 
         &:hover 
-          background-color #e8dc4c     
+          background-color #e8dc4c 
+      .button 
+        width 100% 
+        padding 5px 10px 
+        margin 10px 0 
+        display flex 
+        justify-content center 
+        align-items center 
+        background-color #ddcf21 
+        color #fff 
+        cursor pointer 
+        border-radius 2px 
+        &:hover 
+          box-shadow 0 0 10px rgba(0,0,0,0.3) 
+     
     .baselightbox-post
       &__article
         display flex
