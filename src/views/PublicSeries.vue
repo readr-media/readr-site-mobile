@@ -238,7 +238,7 @@ export default {
                 mode: this.currPage === 1 ? 'set' : 'update',
                 proj_ids: [ this.currRefId, ],
                 page: this.currPage,
-              }) : fetchMemos(this.$store, {
+              }) : fetchPublicMemos(this.$store, {
                 mode: this.currPage === 1 ? 'set' : 'update',
                 proj_ids: [ this.currRefId, ],
                 page: this.currPage,
