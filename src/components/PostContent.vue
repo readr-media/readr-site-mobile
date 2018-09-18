@@ -212,7 +212,7 @@
         return stopParagraphWordLength > this.showContentWordLimit
       },
       targetUrl () {
-        switch (this.post.flag) {
+        switch (this.postType) {
           case 'memo':
             return `/series/${get(this.$route, 'params.slug')}/${get(this.post, 'id')}`
           default:
