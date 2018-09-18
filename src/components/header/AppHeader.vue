@@ -22,7 +22,9 @@
     </div>
     <Notification class="header__item"></Notification>
     <div v-if="isClientSide && !isLoggedIn" class="header__item header--status">
-      <router-link to="/login" v-text="$t('HEADER.LOGIN')"></router-link>
+      <!--router-link to="/login" v-text="$t('HEADER.LOGIN')"></router-link-->
+      <!--Use Alink for loading facebook/google sdk-->
+      <a href="/login" v-text="$t('HEADER.LOGIN')"></a>
     </div>
     <section :class="{ open: openMenu }" class="header__menu">
       <ul>
