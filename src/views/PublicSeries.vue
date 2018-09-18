@@ -24,11 +24,11 @@ import Leading from 'src/components/leading/Leading.vue'
 import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
 import TagNav from 'src/components/tag/TagNav.vue'
 import moment from 'moment'
-import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
+import { MEMO_PUBLISH_STATUS, PROJECT_PUBLISH_STATUS, PROJECT_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
 import { find, get, sortBy, union, } from 'lodash'
 import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
 
-const MAXRESULT_POSTS = 1
+const MAXRESULT_POSTS = 10
 const DEFAULT_PAGE = 1
 const DEFAULT_SORT = '-memo_order,-created_at'
 
@@ -48,6 +48,28 @@ const fetchMemos = (store, {
       where: {
         memo_publish_status: [ 2, ],
       },
+    },
+    mode,
+  })
+}
+const fetchPublicMemos = (store, { 
+  max_result = MAXRESULT_POSTS, 
+  mode = 'set',
+  proj_ids = [],
+  sort = DEFAULT_SORT, 
+  page = DEFAULT_PAGE,
+} = {}) => { 
+  return store.dispatch('GET_PUBLIC_MEMOS', { 
+    params: { 
+      member_id: get(store, 'state.profile.id', -1), 
+      project_id: proj_ids,
+      max_result: max_result, 
+      page,
+      where: { 
+        memo_publish_status: MEMO_PUBLISH_STATUS.PUBLISHED, 
+        project_publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED, 
+      }, 
+      sort: sort, 
     },
     mode,
   })
@@ -121,8 +143,11 @@ export default {
     isSeriesDonate () { 
       return get(this.$route, 'params.subItem') === 'donate' 
     }, 
+    me () {
+      return get(this.$store, 'state.profile', {})
+    },
     posts () {
-      return sortBy(union(get(this.$store, 'state.memos', []), get(this.$store, 'state.publicReports', [])), [ p => -moment(p.publishedAt), ])
+      return sortBy(union(get(this.$store, this.me.id ? 'state.memos' : 'state.publicMemos', []), get(this.$store, 'state.publicReports', [])), [ p => -moment(p.publishedAt), ])
     },
     postSingle () {
       return get(this.$store, 'state.memoSingle', {})
@@ -161,25 +186,26 @@ export default {
   methods: {
     donateCheck () { 
       debug('do check donate')
-      debug('do check donate')
-      debug('do check donate')
-      debug('do check donate')
-      debug('do check donate')
       this.isSeriesDonate && this.project && switchOn(this.$store, this.project) 
     },    
     isScrollBarReachBottom,
     isElementReachInView,
     loadmore () {
       // this.shouldShowSpinner = true
-      return fetchMemos(this.$store, {
+      const process = () => (this.me.id ? fetchMemos(this.$store, {
         mode: 'update',
         proj_ids: [ this.currRefId, ],
         page: this.currPage,
-      }).then((res) => {
+      }) : fetchPublicMemos(this.$store, {
+        mode: 'update',
+        proj_ids: [ this.currRefId, ],
+        page: this.currPage,
+      }))
+      return process().then((res) => {
         // this.shouldShowSpinner = false
         debug('Loadmore done. Status', res, get(res, 'status'))
         if (get(res, 'status') === 200) {
-          const memoIds = res.body.items.map(post => post.id)
+          const memoIds = this.posts.map(post => post.id)
           if (memoIds.length > 0) {
             fetchFollowing(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, })
             fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'like', })
@@ -208,7 +234,11 @@ export default {
         if (proj) {
           return Promise.all([
             Promise.all([
-              fetchMemos(this.$store, {
+              this.me.id ? fetchMemos(this.$store, {
+                mode: this.currPage === 1 ? 'set' : 'update',
+                proj_ids: [ this.currRefId, ],
+                page: this.currPage,
+              }) : fetchMemos(this.$store, {
                 mode: this.currPage === 1 ? 'set' : 'update',
                 proj_ids: [ this.currRefId, ],
                 page: this.currPage,
@@ -233,7 +263,7 @@ export default {
       }),
     ]).then(() => {
       const reportIds = get(this.$store.state, 'publicReports', []).map(report => report.id)
-      const memoIds = get(this.$store.state, 'memos', []).map(memo => memo.id)
+      const memoIds = get(this.$store.state, this.me.id ? 'memos' : 'publicMemos', []).map(memo => memo.id)
       if (reportIds.length > 0) {
         fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
         fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
