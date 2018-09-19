@@ -9,8 +9,13 @@
         <div class="title"><span v-text="$t('point.DETAIL.SUBJECT')"></span></div>
         <div class="value">
           <template v-if="detailType === 'point'">
-              <span class="object-type" v-text="objectType && ( `${$t(`point.${objectType}`)}${$t(`point.PROJECT`)}` )"></span>
-              <span class="object-name" v-text="objectName"></span>          
+            <template v-if="objectType === 'ENCOURAGE' || objectType === 'PARTICIPATE'">
+              <span class="object-type" v-text="`${$t(`point.${objectType}`)}${$t(`point.PROJECT`)}`"></span>
+              <span class="object-name" v-text="objectName"></span>
+            </template>
+            <template v-if="objectType === 'CLEARUP' || objectType ==='GIFT'">
+              <span class="object-type" v-text="$t(`point.${objectType}`)"></span>
+            </template>              
           </template>
           <template v-else>
             <span class="prefix" v-text="$t('point.PAYMENT.PREFIX')"></span> 
@@ -68,6 +73,10 @@
             return 'ENCOURAGE'
           case 2:
             return 'PARTICIPATE'
+          case 3:
+            return 'CLEARUP'
+          case 4:
+            return 'GIFT' 
           default:
             return
         }

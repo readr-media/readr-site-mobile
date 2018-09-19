@@ -8,18 +8,19 @@
           <span class="postfix" v-text="$t('point.UNIT')"></span>         
         </div>
         <!--Deposit class="deposit"><span v-text="$t('point.DEPOSIT.GO')"></span></Deposit-->
-        <DepositTappay class="deposit" v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint">
+        <!--DepositTappay class="deposit" v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint">
           <span v-text="$t('point.DEPOSIT.GO')"></span>
-        </DepositTappay> 
+        </DepositTappay--> 
       </div> 
-      <div class="point-manager__infobar--switcher"> 
+      <!--div class="point-manager__infobar--switcher"> 
         <div class="point-record" :class="isActive(0)" @click="check(0)"><span class="radio"></span><span v-text="$t('point.POINT_RECORD')"></span></div> 
         <div class="pay-record" :class="isActive(1)" @click="check(1)"><span class="radio"></span><span v-text="$t('point.PAYMENT_RECORD')"></span></div> 
-      </div> 
+      </div--> 
     </div> 
     <div class="point-manager__point-records"> 
-      <PointRecord v-if="activeIndex === 0"></PointRecord> 
-      <PaymentRecord v-if="activeIndex === 1"></PaymentRecord> 
+      <PointRecord></PointRecord>
+      <!--PointRecord v-if="activeIndex === 0"></PointRecord> 
+      <PaymentRecord v-if="activeIndex === 1"></PaymentRecord--> 
     </div> 
   </div> 
 </template>
@@ -54,21 +55,21 @@
     }, 
     data () { 
       return { 
-        activeIndex: 0, 
+        // activeIndex: 0, 
         isTop: false,
         isDepositActive: false,
       } 
     },    
     methods: {
-      check (index) { 
-        this.activeIndex = index 
-      }, 
+      // check (index) { 
+      //   this.activeIndex = index 
+      // }, 
       fetchCurrentPoint () {
         fetchCurrPoints(this.$store).then()
       },  
-      isActive (index) { 
-        return [ this.activeIndex === index ? 'active' : '', ] 
-      },     
+      // isActive (index) { 
+      //   return [ this.activeIndex === index ? 'active' : '', ] 
+      // },     
     },
     mounted () {
       fetchCurrPoints(this.$store).then(() => loadTappaySDK(this.$store))
