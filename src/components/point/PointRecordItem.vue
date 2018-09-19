@@ -2,7 +2,7 @@
   <div class="item" @click="checkoutDetail"> 
     <div class="item__timestamp"><span v-text="datetime"></span></div> 
     <div class="item__deduction"> 
-      <span class="value" v-text="0 - deduction"></span> 
+      <span class="value" v-text="0 - deduction > 0 ? `+${0 - deduction}` : 0 - deduction"></span> 
       <span class="unit" v-text="$t('point.UNIT')"></span> 
     </div> 
     <div class="item__rest"> 
@@ -28,7 +28,8 @@
         return get(this.record, 'points', 0) 
       }, 
       isBalanceNegative () { 
-        return this.balance < 0 
+        // return this.balance < 0 
+        return false
       }, 
     }, 
     methods: {
@@ -44,39 +45,3 @@
     }, 
   } 
 </script> 
-<style lang="stylus" scoped> 
-  .item 
-    width 100% 
-    display flex 
-    border-top 1px solid #d3d3d3 
-    padding 10px 0 
-    align-items center 
-    &:last-child 
-      border-bottom 1px solid #d3d3d3  
-    > div 
-      margin-right 30px 
-      font-size 0.75rem 
-      line-height normal 
-      &:last-child 
-        margin-right 0 
-    &__deduction, &__rest 
-      width 110px 
-      text-align right 
-      .value 
-        font-size 0.75rem
-        font-weight 600 
-        color #11b8c9 
-        &.negative 
-          color #d0021b 
-      .unit 
-        margin-left 10px 
-    &__timestamp 
-      width 160px 
-    &__subject 
-      flex 1 
-      .object-type 
-        margin-right 5px 
-      .object-name 
-        font-weight 500 
- 
-</style>

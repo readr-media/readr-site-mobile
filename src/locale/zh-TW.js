@@ -276,6 +276,14 @@ export default {
     'POINT_RECORD' : '點數明細',
     'PROJECT': '專題',
     'ENCOURAGE': '鼓勵', 
+    'CLEARUP': '點數結算',
+    'GIFT': '讀＋贈點',
+    'RECORD_TITLE': {
+      'DATETIME': '時間',
+      'ITEM': '項目',
+      'MUTATION': '點數',
+      'REST': '餘額',
+    },
     'PAYMENT': { 
       'PREFIX': '扣款前', 
       'INFIX': '點，付款金額', 
