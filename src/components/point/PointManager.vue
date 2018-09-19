@@ -8,9 +8,9 @@
           <span class="postfix" v-text="$t('point.UNIT')"></span>         
         </div>
         <!--Deposit class="deposit"><span v-text="$t('point.DEPOSIT.GO')"></span></Deposit-->
-        <DepositTappay class="deposit" v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint">
+        <!--DepositTappay class="deposit" v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint">
           <span v-text="$t('point.DEPOSIT.GO')"></span>
-        </DepositTappay> 
+        </DepositTappay--> 
       </div> 
       <div class="point-manager__infobar--switcher"> 
         <div class="point-record" :class="isActive(0)" @click="check(0)"><span class="radio"></span><span v-text="$t('point.POINT_RECORD')"></span></div> 
