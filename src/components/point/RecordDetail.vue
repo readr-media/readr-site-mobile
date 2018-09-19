@@ -9,11 +9,16 @@
         <div class="title"><span v-text="$t('point.DETAIL.SUBJECT')"></span></div>
         <div class="value">
           <template v-if="detailType === 'point'">
-            <template v-if="objectType === 'ENCOURAGE' || objectType === 'PARTICIPATE'">
-              <span class="object-type" v-text="`${$t(`point.${objectType}`)}${$t(`point.PROJECT`)}`"></span>
+            <template v-if="objectType === 'ENCOURAGE'">
+              <span class="object-type" v-text="$t(`point.${objectType}`)"></span>
               <span class="object-name" v-text="objectName"></span>
             </template>
-            <template v-if="objectType === 'CLEARUP' || objectType ==='GIFT'">
+            <template v-else-if="objectType === 'PARTICIPATE'">
+              <span class="object-type" v-text="$t(`point.${objectType}`)"></span>
+              <span class="object-name" v-text="objectName"></span>
+              <span class="object-type" v-text="$t(`point.EDITOR_ROOM`)"></span>
+            </template>
+            <template v-else-if="objectType === 'CLEARUP' || objectType ==='GIFT'">
               <span class="object-type" v-text="$t(`point.${objectType}`)"></span>
             </template>              
           </template>
