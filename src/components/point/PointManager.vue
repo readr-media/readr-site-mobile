@@ -109,7 +109,7 @@
         top 40px
         background-color rgba(250, 250, 250, 0.9)
         padding 20px
-        height 70px
+        // height 70px
       &--current
         > div:not(:first-child)
           margin-top 5px

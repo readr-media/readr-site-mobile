@@ -272,10 +272,11 @@ export default {
     'WORDING_POINTS_SPENT_WHEN' : '使用時間',
     'UNIT' : '點',
     'PAYMENT_RECORD' : '付款明細',
-    'PARTICIPATE': '參與', 
     'POINT_RECORD' : '點數明細',
     'PROJECT': '專題',
-    'ENCOURAGE': '鼓勵', 
+    'PARTICIPATE': '加入',
+    'EDITOR_ROOM': '編輯室',
+    'ENCOURAGE': '贊助',
     'CLEARUP': '點數結算',
     'GIFT': '讀＋贈點',
     'RECORD_TITLE': {
