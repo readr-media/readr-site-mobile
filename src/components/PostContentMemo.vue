@@ -1,5 +1,9 @@
 <template>
   <div :style="{ position: 'relative', }">
+    <div class="post-content__hint">
+      <img class="lock" src="/public/icons/lock.png">
+      <span v-text="$t('homepage.EDITOR_ROOMMATE_ONLY')"></span>
+    </div>
     <h1 class="post-content__title" v-text="post.title"></h1>
     <div class="editor-writing">
       <div class="editor-writing__container" @click="goMemo">
@@ -133,4 +137,15 @@
 <style lang="stylus" scoped>
   .editor-writing__container
     cursor pointer
+  .post-content__hint
+    display flex
+    align-items center
+    margin-bottom 5px
+    font-size 0.875rem
+    font-weight 500
+    line-height normal
+    color #808080
+    .lock
+      height 11px
+      margin-right 7px    
 </style>
