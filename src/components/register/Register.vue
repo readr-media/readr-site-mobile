@@ -2,18 +2,22 @@
   <div class="register">
     <div class="register-container" v-if="!isRegistered">
       <TextItem class="register-container__input-nickname" type="text"
+        alertPosition="bottom"
         :placeHolder="$t('login.WORDING_NICKNAME')"
         :alert.sync="alert.nickname"
         :value.sync="formData.nickname"></TextItem>
       <TextItem class="register-container__input-email" type="text"
+        alertPosition="bottom"
         :placeHolder="$t('login.WORDING_EMAIL')"
         :alert.sync="alert.mail"
         :value.sync="formData.mail"></TextItem>
       <TextItem class="register-container__input-pwd" type="password"
+        alertPosition="bottom"
         :placeHolder="$t('login.WORDING_PASSWORD')"
         :alert.sync="alert.pwd"
         :value.sync="formData.pwd"></TextItem>
       <TextItem class="register-container__input-pwd-check" type="password"
+        alertPosition="bottom"
         :placeHolder="$t('login.WORDING_PASSWORD_CHECK')"
         :alert.sync="alert[ 'pwd-check' ]"
         :value.sync="formData[ 'pwd-check' ]"></TextItem>
@@ -97,14 +101,16 @@
               }
             }).catch(({ err, }) => {
               this.shouldShowSpinner = false
-              if (err === 'User Already Existed') {
-                this.alertFlags.mail = true
-                this.alertMsgs.mail = this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED')
+              if (err === 'User Already Existed' || err === 'User Duplicated') {
+                this.alert.mail = {
+                  flag: true,
+                  msg: this.$t('login.DUPLICATED_USER'),
+                }                  
                 this.$forceUpdate()
               } else {
                 this.resMsg = this.$t('login.WORDING_REGISTER_INFAIL')
-                window.grecaptcha.reset(this.recaptcha)
               }
+              window.grecaptcha.reset(this.recaptcha)
             })
           }
         })
