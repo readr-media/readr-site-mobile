@@ -200,6 +200,7 @@ export default {
     'WORDING_HOME_POST_MORE' : '更多',
     'WORDING_HOME_POST_MORE_NEWS' : '查看更多',
     'WORDING_HOME_POST_SOURCE' : '出處：',
+    'EDITOR_ROOMMATE_ONLY': '編輯室專屬',
   },
   'HOME_NAV': {
     'MEMO': '筆記',
