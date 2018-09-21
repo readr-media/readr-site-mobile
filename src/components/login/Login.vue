@@ -65,17 +65,20 @@
       },
       login () {
         if (this.validatInput()) {
+          this.$emit('update:isDoingLogin', true)
           login(this.$store, {
             email: this.formData.mail,
             password: this.formData.pwd,
             keepAlive: this.$refs[ 'keep-alive' ].checked,
           }, get(this.$store, [ 'state', 'register-token', ])).then((res) => {
+            this.$emit('update:isDoingLogin', false)
             if (res.status === 200) {
               this.$route.path === '/comment' ? this.$router.push(this.$route.fullPath) : this.$router.push('/')
             } else {
               this.resMsg = this.$t('login.WORDING_LOGIN_INFAIL_VALIDATION_ISSUE')
             }
           }).catch((err) => {
+            this.$emit('update:isDoingLogin', false)
             if (err.status === 401) {
               this.resMsg = this.$t('login.WORDING_LOGIN_UNAUTHORIZED')
             }
@@ -105,6 +108,12 @@
       },
     },
     mounted () {},
+    props: {
+      isDoingLogin: {
+        type: Boolean,
+        default: false,
+      },
+    },
   }
 </script>
 <style lang="stylus" scoped>
