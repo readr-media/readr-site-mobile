@@ -23,7 +23,7 @@
       </template>
     </nav>
     <slot name="tagNav"></slot>
-    <CommentContainer v-if="shouldShowComment || showComment" :asset="asset" :assetId="postId" :assetRefId="postRefId"></CommentContainer>
+    <CommentContainer v-if="shouldShowComment || showComment" :asset="asset" :assetId="postId" :assetRefId="postRefId" :isPublic="!get(me, 'id')"></CommentContainer>
   </div>
 </template>
 
@@ -120,6 +120,9 @@ export default {
     isLoggedIn () {
       return this.$store.state.isLoggedIn
     },
+    me () {
+      return get(this.$store, 'state.profile', {})
+    },
   },
   data () {
     return {
@@ -127,6 +130,7 @@ export default {
     }
   },  
   methods: {
+    get,
     renderComment () {
       if (this.inLightbox) {
         this.$emit('toogleComment')
