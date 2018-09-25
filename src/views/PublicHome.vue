@@ -3,7 +3,6 @@
     <PostBoxWrapper :showPostBox.sync="showPostBox" :hadRouteBeenNavigate="hadRouteBeenNavigate">
       <Invite></Invite>
       <main>
-        <!--HomeNavigationMobile v-if="hasNavigation" :memos="memos" :reports="reports" :video="video"></HomeNavigationMobile-->
         <TagNavList/>
         <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
       </main>
@@ -12,7 +11,6 @@
   </section>
 </template>
 <script>
-  import { MEMO_PUBLISH_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
   import { get, find, uniqBy, } from 'lodash'
   // import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
@@ -23,10 +21,7 @@
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
   import TagNavList from 'src/components/tag/TagNavList.vue'
   
-  const MAXRESULT_MEMOS = 3
   const MAXRESULT_POSTS = 10
-  const MAXRESULT_REPORTS = 4
-  const MAXRESULT_VIDEOS = 1
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-published_at'
   const DEFAULT_CATEGORY = 'latest'
@@ -42,22 +37,6 @@
     } else {
       return store.dispatch('GET_FOLLOWING_BY_RESOURCE', params)
     }
-  }
-
-  const fetchMemos = (store, {
-    max_result = MAXRESULT_MEMOS,
-    sort = DEFAULT_SORT,
-  } = {}) => {
-    return store.dispatch('GET_PUBLIC_MEMOS', {
-      params: {
-        max_result: max_result,
-        member_id: get(store, 'state.profile.id'),
-        where: {
-          memo_publish_status: MEMO_PUBLISH_STATUS.PUBLISHED,
-        },
-        sort: sort,
-      },
-    })
   }
 
   const fetchPost = (store, { id, }) => {
@@ -86,59 +65,6 @@
     })
   }
 
-  // const fetchPointHistories = (store, { objectIds, objectType, }) => {
-  //   return store.dispatch('GET_POINT_HISTORIES', {
-  //     params: {
-  //       objectType: objectType,
-  //       objectIds: objectIds,
-  //     },
-  //   })
-  // }
-
-  const fetchReportsList = (store, {
-    max_result = MAXRESULT_REPORTS,
-    sort = DEFAULT_SORT,
-  } = {}) => {
-    return store.dispatch('GET_PUBLIC_REPORTS', {
-      params: {
-        max_result: max_result,
-        where: {
-          report_publish_status: REPORT_PUBLISH_STATUS.PUBLISHED,
-        },
-        sort: sort,
-      },
-    })
-  }
-
-  const fetchVideos = (store) => {
-    return store.dispatch('GET_PUBLIC_VIDEOS', {
-      params: {
-        max_result: MAXRESULT_VIDEOS,
-      },
-    })
-  }
-
-  const pageJump = ({ store, to, next, }) => {
-    if ('postId' in to.params && to.params.postId) {
-      fetchPost(store, { id: to.params.postId, }).then(({ status, }) => {
-        if (status === 'error') {
-          if (process.browser) {
-            // next('/404')
-          } else {
-            const e = new Error()
-            e.massage = 'Page Not Found'
-            e.code = '404'
-            throw e  
-          }
-        } else {
-          next()
-        }
-      })
-    } else {
-      next()
-    }
-  }
-
   const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource, resourceType = '', } = {}) => {
     return store.dispatch('GET_FOLLOWING_BY_USER', {
       id: id,
@@ -149,22 +75,38 @@
 
   export default {
     name: 'AppHome',
-    // Uncomment this when v1.0 is released
-    // asyncData ({ store, route, }) {
-    //   let reqs = [
-    //     fetchPosts(store),
-    //     fetchPosts(store, { category: 'hot', }),
-    //     fetchProjectsList(store, { max_result: 5, status: PROJECT_STATUS.WIP, }),
-    //     fetchProjectsList(store, { max_result: 2, status: PROJECT_STATUS.DONE, }),
-    //     fetchVideos(store),
-    //   ]
+    asyncData ({ store, route, }) {
+      const jobs = !get(store, 'state.publicPosts.items.length') ? [
+        fetchPosts(store).then(() => {
+          if (store.state.isLoggedIn) {
+            const postIdsLatest = get(store.state.publicPosts, 'items', []).map(post => post.id)
+            if (postIdsLatest.length > 0) {
+              fetchEmotion(store, { resource: 'post', ids: postIdsLatest, emotion: 'like', })
+              fetchEmotion(store, { resource: 'post', ids: postIdsLatest, emotion: 'dislike', })
+            } 
+          }
+        }),
+      ] : []
+    
+      if (get(route, 'params.postId')) {
+        jobs.push(fetchPost(store, { id: get(route, 'params.postId'), }).then(({ status, }) => {
+          if (status === 'error') {
+            if (process.browser) {
+              this.$router.push('/404')
+            } else {
+              const e = new Error()
+              e.massage = 'Page Not Found'
+              e.code = '404'
+              throw e  
+            }
+          } else {
+            return
+          }
+        }))
+      }
 
-    //   if (route.params.postId) {
-    //     reqs.push(fetchPost(store, { id: route.params.postId, }))
-    //   }
-
-    //   return Promise.all(reqs)
-    // },
+      return Promise.all(jobs)
+    },
     components: {
       HomeArticleMain,
       HomeNavigationMobile,
@@ -184,15 +126,6 @@
     },
     computed: {
       currEnv,
-      hasNavigation () {
-        return this.memos.length !== 0 || this.reports.length !== 0
-      },
-      isClientSide () {
-        return get(this.$store, 'state.isClientSide', false)
-      },
-      memos () {
-        return get(this.$store.state, 'publicMemos', [])
-      },
       postBox () {
         if (this.showPostBox) {
           const findPostInList = find(this.postsHome, [ 'id', Number(this.$route.params.postId), ])
@@ -202,7 +135,7 @@
         }
       },
       postSingle () {
-        return get(this.$store.state.publicPostSingle, 'items[0]', {})
+        return get(this.$store, 'state.publicPostSingle.items.0', {})
       },
       postsHome () {
         return this.articlesListMainCategory !== '/hot' ? this.postsLatest : this.postsHot
@@ -216,14 +149,8 @@
       postsLatest () {
         return get(this.$store.state.publicPosts, 'items', [])
       },
-      reports () {
-        return get(this.$store, [ 'state', 'publicReports', ], [])
-      },
       showPostBox () {
         return this.isCurrentRoutePath('/post/:postId')
-      },
-      video () {
-        return get(this.$store, [ 'state', 'publicVideos', 0, ])
       },
     },
     watch: {
@@ -241,82 +168,26 @@
       },
     },
     beforeRouteEnter (to, from, next) {
-      // const store = createStore()
-      // pageJump({ store, to, next, })
       next(vm => {
         vm.hadRouteBeenNavigate = true
       })
     },
     beforeRouteUpdate (to, from, next) {
-      pageJump({ store: this.$store, to, next, })
+      next()
     },
     beforeMount () {
-      const process = () => {
-        let reqs = [
-          fetchMemos(this.$store),
-          fetchPosts(this.$store),
-          fetchPosts(this.$store, { category: 'hot', }),
-          fetchReportsList(this.$store),
-          fetchVideos(this.$store),
-        ]
-
-        if (this.$route.params.postId) {
-          reqs.push(fetchPost(this.$store, { id: this.$route.params.postId, }))
-        }
-
-        Promise.all(reqs).then(() => {
+      getUserFollowing(this.$store, { resource: 'post', })
+      if (!get(this.postsLatest, 'length')) {
+        fetchPosts(this.$store).then(() => {
           if (this.$store.state.isLoggedIn) {
             const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => post.id)
-            if (postIdsLatest.length !== 0) {
+            if (postIdsLatest.length > 0) {
               fetchEmotion(this.$store, { resource: 'post', ids: postIdsLatest, emotion: 'like', })
               fetchEmotion(this.$store, { resource: 'post', ids: postIdsLatest, emotion: 'dislike', })
-            }
+            } 
           }
         })
-        
-        getUserFollowing(this.$store, { resource: 'post', })
       }
-
-      if (get(this.$route, 'params.postId')) {
-        fetchPost(this.$store, { id: get(this.$route, 'params.postId'), }).then(({ status, }) => {
-          if (status === 'error') {
-            if (process.browser) {
-              this.$router.push('/404')
-            } else {
-              const e = new Error()
-              e.massage = 'Page Not Found'
-              e.code = '404'
-              throw e  
-            }
-          } else {
-            process() 
-          }
-        })
-      } else {
-        process()
-      }
-
-      // Uncomment this when v1.0 is released
-      // if (this.$store.state.isLoggedIn) {
-      //   const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => `${post.id}`)
-      //   const postIdsHot = get(this.$store.state.publicPostsHot, 'items', []).map(post => `${post.id}`)
-      //   const postIdFeaturedProject = get(this.$store.state.projectsList, 'items', []).map(project => `${project.id}`)
-      //   const ids = uniq(concat(postIdsLatest, postIdsHot))
-
-      //   if (ids.length !== 0) {
-      //     fetchFollowing(this.$store, {
-      //       resource: 'post',
-      //       ids: ids,
-      //     })
-      //   }
-
-      //   if (postIdFeaturedProject.length !== 0) {
-      //     fetchFollowing(this.$store, {
-      //       resource: 'project',
-      //       ids: postIdFeaturedProject,
-      //     })
-      //   }
-      // }
     },
     mounted () {
       window.addEventListener('scroll', () => {
