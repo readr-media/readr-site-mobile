@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <CommentContainer :class="`reportBlock__comment hidden report-${get(report, [ 'id' ])}`" v-if="showComment" :asset="reportUrl" :assetId="this.report.id"></CommentContainer> 
+    <CommentContainer :class="`reportBlock__comment hidden report-${get(report, [ 'id' ])}`" v-if="showComment" :asset="reportUrl" :assetId="this.report.id" :isPublic="!get(me, 'id')"></CommentContainer> 
   </a>
 </template>
 <script>
@@ -62,6 +62,9 @@
       isFollow () {
         // return this.$store.state.isLoggedIn && this.postFollowers.indexOf(this.$store.state.profile.id) !== -1
         return false
+      },
+      me () {
+        return get(this.$store, 'state.profile', {})
       },
     },
     methods: {

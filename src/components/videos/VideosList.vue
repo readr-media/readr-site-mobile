@@ -21,7 +21,8 @@
           :class="`videosList__item-comment hidden video-${get(video, [ 'id' ])}`"
           v-if="showComment"
           :asset="$_videosList_asset(get(video, [ 'id' ]))"
-          :assetId="get(video, [ 'id', ])"></CommentContainer>
+          :assetId="get(video, [ 'id', ])"
+          :isPublic="!get(me, 'id')"></CommentContainer>
       </div>
     </template>
     <button v-if="hasMore" class="videosList__btn" @click="$_videosList_loadMore">More</button>
@@ -39,6 +40,11 @@
     components: {
       CommentCount,
       CommentContainer,
+    },
+    computed: {
+      me () {
+        return get(this.$store, 'state.profile', {})
+      },
     },
     data () { 
       return { 
