@@ -20,6 +20,9 @@
   import Invite from 'src/components/invitation/Invite.vue'
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
   import TagNavList from 'src/components/tag/TagNavList.vue'
+  import sanitizeHtml from 'sanitize-html'
+  import truncate from 'html-truncate'
+
   
   const MAXRESULT_POSTS = 10
   const DEFAULT_PAGE = 1
@@ -106,6 +109,21 @@
       }
 
       return Promise.all(jobs)
+    },
+    metaInfo () {
+      if (this.$route.params.postId) {
+        return {
+          ogTitle: get(this.postSingle, 'ogTitle') || get(this.postSingle, 'title'),
+          description: get(this.postSingle, 'ogDescription') || truncate(sanitizeHtml(get(this.postSingle, 'content', ''), { allowedTags: [], }), 100),
+          metaUrl: this.$route.path,
+          metaImage: get(this.postSingle, 'ogImage'),
+        }
+      } else {
+        return {
+          description: this.$i18n ? this.$t('OG.DESCRIPTION') : '',
+        }
+
+      }
     },
     components: {
       HomeArticleMain,
