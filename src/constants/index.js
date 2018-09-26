@@ -22,7 +22,7 @@ export const ROLE_MAP = [
 export const SETTING_NOTIFICATION = [
   // { name: 'KEYWORD_PUSH', key: 'xxxxx', },  
   { name: 'DAILY_PUSH', key: 'daily_push', },  
-  { name: 'POST_PUSH', key: 'post_push', },
+  // { name: 'POST_PUSH', key: 'post_push', },
 ]
 export const SETTING_ACCOUNT = [
   { name: 'HIDE_PROFILE', key: 'hide_profile', },
