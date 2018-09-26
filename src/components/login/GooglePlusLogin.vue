@@ -7,8 +7,9 @@
   </div>
 </template>
 <script>
-  import { get, } from 'lodash'
-
+  import { filter, get, } from 'lodash'
+  import { ROLE_MAP, } from 'src/constants'
+  
   const debug = require('debug')('CLIENT:GooglePlusLogin')
   const login = (store, profile, token) => {
     return store.dispatch('LOGIN', {
@@ -42,14 +43,16 @@
       login () {
         this.$emit('update:isDoingLogin', true)
         const readyToLogin = (idToken) => {
-          login(this.$store, { idToken, login_mode: 'google', }, get(this.$store, [ 'state', 'register-token', ]))
+          login(this.$store, { idToken, login_mode: 'google', }, get(this.$store, 'state.register-token'))
             .then((res) => {
               this.$emit('update:isDoingLogin', false)
               if (res.status === 200) {
                 /**
                  * use location.replace instead of router.push to server-side render page
                  */                
-                location.replace('/')
+                // location.replace('/')
+                const memberCenter = get(filter(ROLE_MAP, { key: get(this.$store, 'state.profile.role'), }), '0.route', 'member')
+                this.$route.path === '/comment' ? this.$router.push(this.$route.fullPath) : this.$router.push(`/${memberCenter}`)                
               } else {
                 debug('res', res)
               }
