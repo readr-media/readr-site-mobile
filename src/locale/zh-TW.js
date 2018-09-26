@@ -31,6 +31,7 @@ export default {
     'WORDING_REGISTER_PWD_EMPTY' : '請輸入密碼',
     'WORDING_REGISTER_PWD_CHECK_EMPTY' : '請再次輸入密碼',
     'WORDING_REGISTER_PWD_CHECK_INFAIL' : '「密碼」與「確認密碼」不同，請輸入相同之密碼',
+    'WORDING_REGISTER_PWD_CHECK_INFAIL_NEW' : '「新密碼」與「確認密碼」不同，請輸入相同之密碼',
     'WORDING_FACEBOOK_LOGIN' : '使用 Facebook 帳號登入',
     'WORDING_FACEBOOK_REGISTER' : '使用 Facebook 帳號註冊',
     'WORDING_GOOGLE_LOGIN' : '使用 Google 帳號登入',
@@ -92,27 +93,11 @@ export default {
     'WORDING_PROFILEEDIT_NEWPASSWORD' : '新密碼',
     'WORDING_PROFILEEDIT_CONFIRMPASSWORD' : '密碼確認',
     'WORDING_PROFILEEDIT_PERSONAL_OPTIONS' : '個人設定',
-    'WORDING_PROFILEEDIT_SAVE' : 'SAVE',
+    'WORDING_PROFILEEDIT_SAVE' : 'SAVE',  
     'PASSWORD_REVISING': {
       'SUCCESSUFULLY': '已成功修改密碼，請點擊「確認」後重新登入。',
       'CONFIRM': '確認',
-    },    
-    'SETTING_PRIVACY' : {
-      'PRIVACY' : '隱私設定',
-      'HIDE_PROFILE' : '隱藏個人頁面',
-    },
-    'SETTING_NOTIFICATION' : {
-      'NOTIFICATION' : '通知設定<sub>（Email 通知）</sub>',
-      'POST_PUSH' : '追蹤評論成為議題',
-      'POST_UPDATE' : '追蹤議題更新',
-      'PROFILE_PUSH' : '追蹤總編發佈新評論',
-      'COMMENT_PUSH' : '留言回覆',
-      'DAILY_PUSH' : '每日精選通知',
-    },
-    'SETTING_NOTIFICATION_EDITOR' : {
-      'NOTIFICATION_EDITOR' : '總編通知設定<sub>（Email 通知）</sub>',
-      'REVIEW_COMMENT_PUSH' : '評論留言',
-    },    
+    },  
   },
   'project': {
     'WORDING_PROJECT_HOT_KEYWORD' : '熱門關鍵字',
@@ -466,11 +451,39 @@ export default {
     'CONFIRM_PASSWORD' : '密碼確認',
     'DESCRIPTION' : '簡介',
     'EMAIL' : 'Email',
-    'NEW_PASSWORD' : '新密碼',
+    'NEW_PASSWORD' : '新密碼&emsp;',
     'NICK_NAME' : '暱稱',
     'OLD_PASSWORD' : '目前密碼',
     'PERSONAL_OPTIONS' : '個人設定',
     'SAVE' : 'SAVE',
+    'SECTION_PROFILE': '個人資料',
+    'SECTION_NOTIFICATION': '電子信件通知設定',
+    'SECTION_ACCUONT': '帳號設定',
+    'MODIFY_PASSWORD': '修改密碼',    
+    'PASSWORD_REVISING': {
+      'SUCCESSUFULLY': '已成功修改密碼，請點擊「確認」後重新登入。',
+      'CONFIRM': '確認',
+    },    
+    'SETTING_NOTIFICATION': {
+      'POST_PUSH': {
+        'TITLE': '專題最新內容',
+        'DESC': '當追蹤的專題有內容更新時，會寄送通知信',
+      },
+      'KEYWORD_PUSH': {
+        'TITLE': '關鍵字最新內容',
+        'DESC': '當追蹤的關鍵字有內容更新時，或是製作成專題時，會寄送通知信',
+      },
+      'DAILY_PUSH': {
+        'TITLE': '每日精選內容',
+        'DESC': '每日 READr 精選站上內容，給你最精華的每日更新 ',
+      },
+    },
+    'SETTING_ACCOUNT': {
+      'HIDE_PROFILE': {
+        'TITLE': '個人頁面觀看權限',
+        'DESC': '其他會員是否看得見你的個人頁面',
+      },  
+    },  
   },
   'NOTIFICATION': {
     'TITLE': '通知',
@@ -509,5 +522,9 @@ export default {
     'PROJECTS_IN_PROGRESS': '進行中議題',
     'SERIES': '專題',
     'SERIES_LIST': '專題列表', 
+  },
+  'FORM': {
+    'SWITCH_ON': '是',
+    'SWITCH_OFF': '否',
   },
 }

@@ -19,26 +19,13 @@ export const ROLE_MAP = [
   { key: get(ROLE_MAP_CONF, 'MEMBER'), value: '會員', route: 'member', },
 ]
 
-export const PROFILE_SETTING = [
-  {
-    object: 'SETTING_PRIVACY', name: 'PRIVACY', items: [
-      { name: 'HIDE_PROFILE', key: 'hide_profile', },
-    ],
-  },
-  {
-    object: 'SETTING_NOTIFICATION', name: 'NOTIFICATION', items: [
-      { name: 'POST_PUSH', key: 'post_push', },
-      // { name: 'POST_UPDATE', key: 'post_update', },
-      { name: 'PROFILE_PUSH', key: 'profile_push', },
-      { name: 'COMMENT_PUSH', key: 'comment_push', },
-      { name: 'DAILY_PUSH', key: 'daily_push', },
-    ],
-  },
-  // {
-    // object: 'SETTING_NOTIFICATION_EDITOR', name: 'NOTIFICATION_EDITOR', items: [
-    //   { name: 'REVIEW_COMMENT_PUSH', key: 'review_comment_push', },
-    // ],
-  // },
+export const SETTING_NOTIFICATION = [
+  // { name: 'KEYWORD_PUSH', key: 'xxxxx', },  
+  { name: 'DAILY_PUSH', key: 'daily_push', },  
+  { name: 'POST_PUSH', key: 'post_push', },
+]
+export const SETTING_ACCOUNT = [
+  { name: 'HIDE_PROFILE', key: 'hide_profile', },
 ]
 
 export const MM_SITE_DOMAIN = 'mirrormedia.mg'
