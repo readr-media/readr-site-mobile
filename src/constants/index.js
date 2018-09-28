@@ -56,7 +56,7 @@ export const OLD_PROJECTS_SLUGS = [
   'poetry',
   'rent-king',
   'rent-house',
-  'political-contribution',
+  // 'political-contribution',
   'fertility',
 ]
 
