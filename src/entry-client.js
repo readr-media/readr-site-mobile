@@ -5,6 +5,7 @@ import { createApp, } from './app'
 import { filter, get, } from 'lodash'
 import { getToken, removeToken, } from './util/services'
 import ProgressBar from './components/ProgressBar.vue'
+// import(/* webpackChunkName: "trace-worker" */ './trace-worker.js')
 
 // global progress bar
 const bar = Vue.prototype.$bar = new Vue(ProgressBar).$mount()
@@ -12,6 +13,9 @@ document.body.appendChild(bar.$el)
 
 const debug = require('debug')('CLIENT:entry-client')
 const { app, i18n, router, store, } = createApp()
+
+// import Comments from 'readr-comment'
+// Vue.use(Comments)
 
 // a global mixin that calls `asyncData` when a route component's params change
 Vue.mixin({
@@ -30,11 +34,11 @@ Vue.mixin({
     debug('router link enter somewhere.', to, from)
     debug('permission', permission)
     debug('cookie', cookie)
-    debug(get(store, 'state.profile.role'))
-    debug(get(store, 'state.isLoggedIn'))
     Promise.all([
       ...preRouteInit,
     ]).then(() => {
+      debug(get(store, 'state.profile.role'))
+      debug(get(store, 'state.isLoggedIn'))
       if (permission) {
         next(vm => { 
           if (cookie) {
@@ -53,12 +57,13 @@ Vue.mixin({
         }) 
       } else {
         /** Route "to" doesn't have any permission setting. So, go to route "to" without problem. */
+        debug(`Route "to" doesn't have any permission setting. So, go to route "to" without problem.`)
         next()
       }
-    }).catch(({ err, res, }) => { 
-      debug(err, res) 
+    }).catch(errInfo => {
+      debug('errInfo', errInfo)
       const domain = get(store, 'state.setting.DOMAIN')
-      removeToken(domain).then(() => location.replace('/login')) 
+      removeToken(domain).then(() => location.replace('/login?t=FADR42345FADS3'))
     })
   },
   beforeRouteUpdate (to, from, next) {
@@ -85,9 +90,9 @@ if (store.state.unauthorized) {
   debug('entry-client resolved.') 
   delete store.state.unauthorized 
   router.push(store.state.targ_url) 
-} 
+}
 
-const { UserAgent, } = require('express-useragent') 
+const { UserAgent, } = require('express-useragent')
 store.state.useragent = new UserAgent().parse(navigator.userAgent)
 
 // wait until router has resolved all async before hooks
@@ -124,6 +129,7 @@ router.onReady(() => {
 
 // service worker
 if ('https:' === location.protocol && navigator.serviceWorker) {
+// if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/service-worker.js')
   navigator.serviceWorker.ready.then(() => debug('Ready!', navigator.serviceWorker))
   navigator.serviceWorker.addEventListener('message', event => debug('Got Msg from dervice-worker!' + event.data))
