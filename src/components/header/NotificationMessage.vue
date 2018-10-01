@@ -1,69 +1,73 @@
 <template>
-  <div class="notification-message">
+  <div class="comment">
     <template v-if="get(item, 'event_type') === NOTIFICATION_TYPE.COMMENT_COMMENT">
-      <span class="notification-message--commenter" v-text="get(item, 'nickname')"></span>
-      <span class="notification-message--action" v-text="$t('NOTIFICATION.REPLY_AS_WELL')"></span>
-      <span class="notification-message--owner" v-text="get(item, 'object_name')"></span>
-      <span class="notification-message--string" v-text="$t('NOTIFICATION.WHOS')"></span>
-      <span class="notification-message--post-type" v-text="postType"></span>    
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.REPLY_AS_WELL')"></span>
+      <span class="comment--owner" v-text="get(item, 'object_name')"></span>
+      <span class="comment--string" v-text="$t('NOTIFICATION.WHOS')"></span>
+      <span class="comment--post-type" v-text="postType"></span>    
     </template>
-    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.COMMENT_REPLY"> 
-      <span class="notification-message--commenter" v-text="get(item, 'nickname')"></span>
-      <span class="notification-message--action" v-text="$t('NOTIFICATION.REPLY_TO_YOU')"></span>
-      <span class="notification-message--string" v-text="$t('NOTIFICATION.AT')"></span>
-      <span class="notification-message--owner" v-text="get(item, 'object_name')"></span>
-      <span class="notification-message--post-type" v-text="postType"></span>    
-      <span class="notification-message--string" v-text="$t('NOTIFICATION.WHOS_COMMENT')"></span>
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.COMMENT_REPLY">
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.REPLY_TO_YOU')"></span>
+      <span class="comment--string" v-text="$t('NOTIFICATION.AT')"></span>
+      <span class="comment--owner" v-text="get(item, 'object_name')"></span>
+      <span class="comment--post-type" v-text="postType"></span>    
+      <span class="comment--string" v-text="$t('NOTIFICATION.WHOS_COMMENT')"></span>
     </template>
-    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.COMMENT_REPLY"> 
-      <span class="notification-message--owner" v-text="get(item, 'object_name')"></span>
-      <span class="notification-message--action" v-text="$t('NOTIFICATION.REPLY_TO_YOU')"></span>
-      <span class="notification-message--string" v-text="$t('NOTIFICATION.AT_WHOS')"></span>
-      <span class="notification-message--post-type" v-text="postType"></span>    
-      <span class="notification-message--string" v-text="$t('NOTIFICATION.WHOS_COMMENT')"></span>
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.COMMENT_REPLY_AUTHOR">
+      <span class="comment--owner" v-text="get(item, 'object_name')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.REPLY_TO_YOU')"></span>
+      <span class="comment--string" v-text="$t('NOTIFICATION.AT_WHOS')"></span>
+      <span class="comment--post-type" v-text="postType"></span>    
+      <span class="comment--string" v-text="$t('NOTIFICATION.WHOS_COMMENT')"></span>
     </template>
-     <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.COMMENT_REPLY_AUTHOR">
-      <span class="notification-message--commenter" v-text="get(item, 'nickname')"></span>
-      <span class="notification-message--action" v-text="$t('NOTIFICATION.REPLY')"></span>
-      <span class="notification-message--owner" v-text="get(item, 'object_name')"></span>
-      <span class="notification-message--string" v-text="$t('NOTIFICATION.WHOS')"></span>
-      <span class="notification-message--post-type" v-text="postType"></span>    
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_MEMBER_REPLY || get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_POST_REPLY">
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.REPLY')"></span>
+      <span class="comment--owner" v-text="get(item, 'object_name')"></span>
+      <span class="comment--string" v-text="$t('NOTIFICATION.WHOS')"></span>
+      <span class="comment--post-type" v-text="postType"></span>    
     </template>
-     <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_PROJECT_REPLY"> 
-      <span class="notification-message--commenter" v-text="get(item, 'nickname')"></span>
-      <span class="notification-message--action" v-text="$t('NOTIFICATION.REPLY')"></span>
-      <span class="notification-message--owner" v-text="get(item, 'object_name')"></span>
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_PROJECT_REPLY">
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.REPLY')"></span>
+      <span class="comment--owner" v-text="get(item, 'object_name')"></span>
     </template>
-    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_MEMO_REPLY"> 
-      <span class="notification-message--commenter" v-text="get(item, 'nickname')"></span>
-      <span class="notification-message--action" v-text="$t('NOTIFICATION.REPLY')"></span>
-      <span class="notification-message--owner" v-text="get(item, 'object_name')"></span>
-      <span class="notification-message--string" v-text="$t('NOTIFICATION.WHOS')"></span>
-      <span class="notification-message--string" v-text="$t('NOTIFICATION.MEMO')"></span>
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_MEMO_REPLY">
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.REPLY')"></span>
+      <span class="comment--owner" v-text="get(item, 'object_name')"></span>
+      <span class="comment--string" v-text="$t('NOTIFICATION.WHOS')"></span>
+      <span class="comment--string" v-text="$t('NOTIFICATION.MEMO')"></span>
     </template>
-    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_PROJECT_REPORT"> 
-      <span class="notification-message--commenter" v-text="get(item, 'nickname')"></span>
-      <span class="notification-message--action" v-text="$t('NOTIFICATION.PUBLISH')"></span>
-      <span class="notification-message--post-type" v-text="postType"></span>    
-      <span class="notification-message--owner" v-text="get(item, 'object_name')"></span>
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_PROJECT_REPORT">
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.PUBLISH')"></span>
+      <span class="comment--post-type normal" v-text="postType"></span>    
+      <span class="comment--owner" v-text="get(item, 'object_name')"></span>
     </template>
-    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_PROJECT_MEMO"> 
-      <span class="comment--commenter" v-text="get(item, 'nickname')"></span> 
-      <span class="comment--string" v-text="$t('NOTIFICATION.WHOS')"></span> 
-      <span class="comment--post-type normal" v-text="postType"></span>     
-      <span class="comment--owner" v-text="get(item, 'object_name')"></span> 
-      <span class="comment--action" v-text="$t('NOTIFICATION.UPDATE')"></span> 
-    </template>     
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_PROJECT_MEMO">
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--string" v-text="$t('NOTIFICATION.WHOS')"></span>
+      <span class="comment--post-type normal" v-text="postType"></span>    
+      <span class="comment--owner" v-text="get(item, 'object_name')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.UPDATE')"></span>
+    </template>
     <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.POST_REPLY">
-      <span class="comment--commenter" v-text="get(item, 'nickname')"></span> 
-      <span class="comment--string" v-text="$t('NOTIFICATION.GIVE_FEEDBACK_TO_YOUR_PUBLISH')"></span>    
-      <span class="comment--post-type" v-text="postType"></span>   
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--string" v-text="$t('NOTIFICATION.GIVE_FEEDBACK_TO_YOUR_PUBLISH')"></span>   
+      <span class="comment--post-type" v-text="postType"></span>  
     </template>
-    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_MEMBER_POST"> 
-      <span class="comment--commenter" v-text="get(item, 'nickname')"></span> 
-      <span class="comment--action" v-text="$t('NOTIFICATION.PUBLISH')"></span> 
-      <span class="comment--post-type" v-text="postType"></span>   
-    </template>    
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_MEMBER_POST">
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.PUBLISH')"></span>
+      <span class="comment--post-type" v-text="postType"></span>
+    </template>
+    <template v-else-if="get(item, 'event_type') === NOTIFICATION_TYPE.FOLLOW_PROJECT_STATUS">
+      <span class="comment--commenter" v-text="get(item, 'nickname')"></span>
+      <span class="comment--action" v-text="$t('NOTIFICATION.UPDATE')"></span>
+    </template>
   </div>
 </template>
 <script>
@@ -99,7 +103,7 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .notification-message
+  .comment
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
