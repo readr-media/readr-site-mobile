@@ -80,6 +80,7 @@
       <a v-else-if="post.link && !hasSource" class="editor-writing-no-source" :href="post.link"  target="_blank" v-text="postLinkDecoded"></a>
     </template>
     <AppArticleNav
+      :showFollow="false"
       :resource="post.flag"
       :resourceType="resourceType"
       :postId="post.id"
