@@ -1,4 +1,5 @@
-import { SITE_DOMAIN_DEV, } from 'src/constants'
+import { SITE_DOMAIN, SITE_NAME, } from '../constants'
+// import { debug } from 'request/request';
 let isTappaySDKLoaded = false
 const debug = require('debug')('CLIENT:titleMeta')
 
@@ -11,63 +12,87 @@ function getMetaInfo (vm) {
   }
 }
 
-
 const serverMetaInfoMixin = {
   created () {
     const metaInfo = getMetaInfo(this)
     if (metaInfo) {
       const title = metaInfo.title
+      const ogTitle = metaInfo.ogTitle
       const description = metaInfo.description
       const metaUrl = metaInfo.metaUrl
       const metaImage = metaInfo.metaImage
       
       if (title) {
-        this.$ssrContext.title = `${title} - Readr`
+        this.$ssrContext.title = `${title} - ${SITE_NAME}`
+      } else {
+        this.$ssrContext.title = SITE_NAME
+      }
+      if (ogTitle) {
+        this.$ssrContext.ogTitle = `${ogTitle} - ${SITE_NAME}`
+      } else {
+        this.$ssrContext.ogTitle = SITE_NAME
       }
       if (description) { 
         this.$ssrContext.description = description 
       }
       if (metaUrl) {
-        this.$ssrContext.metaUrl = SITE_DOMAIN_DEV + metaUrl
+        this.$ssrContext.metaUrl = SITE_DOMAIN + metaUrl
       }
       if (metaImage) { 
         this.$ssrContext.metaImage = metaImage
+      } else {
+        this.$ssrContext.metaImage = '/public/og-image.jpg'
       }
     }
   },
+}
+
+const updateMeta = metaInfo => {
+  const title = metaInfo.title
+  const ogTitle = metaInfo.ogTitle
+  const description = metaInfo.description
+  const metaUrl = metaInfo.metaUrl
+  const metaImage = metaInfo.metaImage
+  if (title) {
+    document.title = `${title} - ${SITE_NAME}`
+  } else {
+    document.title = SITE_NAME
+  }
+  if (ogTitle) {
+    document.head.querySelector(`meta[property='og:title']`).content = `${ogTitle} - ${SITE_NAME}`
+  } else {
+    document.head.querySelector(`meta[property='og:title']`).content = SITE_NAME
+  }
+  if (description) {
+    document.head.querySelector(`meta[name=description]`).content = description
+    document.head.querySelector(`meta[property='og:description']`).content = description
+  }
+  if (metaUrl) {
+    document.head.querySelector(`meta[property='og:url']`).content = SITE_DOMAIN + metaUrl
+  }
+  if (metaImage) {
+    document.head.querySelector(`meta[property='og:image']`).content = metaImage
+  } else {
+    document.head.querySelector(`meta[property='og:image']`).content = '/public/og-image.jpg'
+  }
 }
 
 const clientMetaInfoMixin = {
   mounted () {
     const metaInfo = getMetaInfo(this)
     if (metaInfo) {
-      const title = metaInfo.title
-      const description = metaInfo.description
-      const metaUrl = metaInfo.metaUrl
-      const metaImage = metaInfo.metaImage
-      if (title) {
-        document.title = `${title} - Readr`
-        document.head.querySelector(`meta[property='og:title']`).content = `${title} - Readr`
-      }
-      if (description) {
-        document.head.querySelector(`meta[name=description]`).content = description
-        document.head.querySelector(`meta[property='og:description']`).content = description
-      }
-      if (metaUrl) {
-        document.head.querySelector(`meta[property='og:url']`).content = SITE_DOMAIN_DEV + metaUrl
-      }
-      if (metaImage) {
-        document.head.querySelector(`meta[property='og:image']`).content = metaImage
-      }
+      updateMeta(metaInfo)
     }
   },
   updated () {
     const metaInfo = getMetaInfo(this)
     if (metaInfo) {
+      /** update current page's mata */
+      updateMeta(metaInfo)
+
+      /** If Tappays SDK needed. */
       const { isTappayNeeded, } = metaInfo
-      /**
-       * If Tappays SDK needed.
-       */
+
       if (isTappayNeeded && !isTappaySDKLoaded) {
         const script = document.createElement('script')
         script.onload = () => {
