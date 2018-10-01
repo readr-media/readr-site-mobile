@@ -116,11 +116,14 @@
           ogTitle: get(this.postSingle, 'ogTitle') || get(this.postSingle, 'title'),
           description: get(this.postSingle, 'ogDescription') || truncate(sanitizeHtml(get(this.postSingle, 'content', ''), { allowedTags: [], }), 100),
           metaUrl: this.$route.path,
-          metaImage: get(this.postSingle, 'ogImage'),
+          metaImage: get(this.postSingle, 'ogImage') || '/public/og-image-post.jpg',
         }
       } else {
         return {
           description: this.$i18n ? this.$t('OG.DESCRIPTION') : '',
+          ogTitle: '',
+          title: '',
+          metaUrl: this.$route.path,
         }
 
       }
