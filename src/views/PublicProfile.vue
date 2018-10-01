@@ -95,6 +95,19 @@
 
   export default {
     name: 'Profile',
+    asyncData ({ store, route, }) {
+      return getMemberPublic(store, {
+        id: Number(get(route, 'params.id')),
+      })
+    },
+    metaInfo () {
+      return {
+        description: get(this.profile, 'description', ''),
+        ogTitle: get(this.profile, 'nickname', ''),
+        title: get(this.profile, 'nickname', ''),
+        metaUrl: this.$route.path,         
+      }
+    },    
     components: {
       About,
       FollowingListInTab,
@@ -221,15 +234,6 @@
             author: Number(get(this.$route, 'params.id')),
             type: [ POST_TYPE.NEWS, ],
           },
-        }),
-        // getPostsCount(this.$store, {
-        //   where: {
-        //     author: get(this.$route, 'params.id'),
-        //     type: [ POST_TYPE.REVIEW, POST_TYPE.NEWS, ],
-        //   },
-        // }),
-        getMemberPublic(this.$store, {
-          id: Number(get(this.$route, 'params.id')),
         }),
       ])
       .then(() => {

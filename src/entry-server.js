@@ -16,7 +16,8 @@ export default context => {
     const s = isDev && Date.now()
     const { app, i18n, router, store, } = createApp()
 
-    const { url, cookie, initmember, setting, } = context
+    const { url, cookie, initmember, setting, error, } = context
+    // const { url, initmember, setting, error, } = context
     const { route, } = router.resolve(url)
     const { fullPath, } = route
 
@@ -30,13 +31,20 @@ export default context => {
 
     Promise.all(preRouteInit).then((res) => {
       const role = get(filter(ROLE_MAP, { key: get(res, [ 0, 'profile', 'role', ]), }), [ 0, 'route', ], 'visitor')
-      const permission = get(route, [ 'meta', 'permission', ])
-      const isInitMember = get(route, [ 'path', ]) === '/initmember'
-      debug('role:', role)
+      const permission = get(route, 'meta.permission')
+      const isInitMember = get(route, 'path') === '/initmember'
       debug('permission:', permission)
       debug('url', url)
+      debug('fullPath', fullPath)
 
       let targUrl
+      // if (permission || (isInitMember && !initmember)) {
+      //   store.state.unauthorized = true
+      //   return reject({ code: 403, })
+      // } else {
+      //   router.push(url)
+      //   targUrl = url
+      // }
       if ((permission && (role === 'visitor' || (permission !== role && permission !== 'member'))) || (isInitMember && !initmember)) {
         store.state.unauthorized = true
         // if (!cookie) {
@@ -53,15 +61,20 @@ export default context => {
         router.push(url)
         targUrl = url
       }
-      store.state.setting = setting
+      setting && (store.state.setting = setting)
+      error && (store.state.error = error)
 
       // wait until router has resolved possible async hooks
       router.onReady(() => {
-        const matchedComponents = router.getMatchedComponents(targUrl)
+        let matchedComponents = router.getMatchedComponents(targUrl)
         // const matchedComponents = get(route, [ 'matched' ], [])
         // no matched routes
         if (!matchedComponents.length) {
           return reject({ code: 404, })
+        } else {
+          if (typeof(matchedComponents[ 0 ]) === 'function') {
+            return reject({ url: fullPath, })
+          }
         }
         // Call fetchData hooks on components matched by the route.
         // A preFetch hook dispatches a store action and returns a Promise,
