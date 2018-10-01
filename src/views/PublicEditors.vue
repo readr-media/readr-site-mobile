@@ -47,6 +47,14 @@ export default {
       }),
     ])
   },
+  metaInfo () {
+    return {
+      description: this.$i18n ? this.$t('OG.DESCRIPTION') : 'Readr',
+      ogTitle: this.$i18n ? this.$t('OG.GUESTEDITORS') : 'Readr',
+      title: this.$i18n ? this.$t('OG.GUESTEDITORS') : 'Readr',
+      metaUrl: this.$route.path,
+    }
+  },  
   components: {
     AppTitledList,
     EditorsIntro,
