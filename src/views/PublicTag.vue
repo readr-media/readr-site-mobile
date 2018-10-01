@@ -53,6 +53,19 @@
       PostBoxWrapper,
       TagNav,
     },
+    asyncData ({ store, route, }) {
+      return fetchPostAndReportByTag(store, {
+        tagId: get(route, 'params.tagId'),
+      })
+    },
+    metaInfo () {
+      return {
+        description: this.$i18n ? this.$t('OG.DESCRIPTION') : '',
+        ogTitle: this.$i18n ? get(this.tagsForNav, '0.text', this.$t('OG.TITLE')) : '',
+        title: this.$i18n ? get(this.tagsForNav, '0.text', this.$t('OG.TITLE')) : '',
+        metaUrl: this.$route.path,         
+      }
+    },    
     computed: {
       posts () {
         return uniqWith(this.$store.state.itemsByTag.items, isEqual)
@@ -69,7 +82,7 @@
         }      
       },
       tagsForNav () {
-        return get(this.$store, [ 'state', 'itemsByTag', 'items', 0, 'tags', ], []).filter(tag => tag.id === Number(this.$route.params.tagId))
+        return get(this.$store, 'state.itemsByTag.items.0.tags', []).filter(tag => tag.id === Number(this.$route.params.tagId))
       },
     },
     data () {
@@ -79,22 +92,18 @@
     },    
     methods: {},
     beforeMount () {
-      fetchPostAndReportByTag(this.$store, {
-        tagId: this.$route.params.tagId,
-      }).then(() => {
-        const postIds = this.posts.filter(post => !post.projectId).map(post => post.id)
-        const reportIds = this.posts.filter(report => report.projectId).map(report => report.id)
-        if (postIds.length > 0) {
-          fetchFollowing(this.$store, { resource: 'post', ids: postIds, })
-          fetchEmotion(this.$store, { resource: 'post', ids: postIds, emotion: 'like', })
-          fetchEmotion(this.$store, { resource: 'post', ids: postIds, emotion: 'dislike', })
-        }
-        if (reportIds.length > 0) {
-          fetchFollowing(this.$store, { resource: 'report', ids: reportIds, })
-          fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
-          fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
-        }
-      })
+      const postIds = this.posts.filter(post => !post.projectId).map(post => post.id)
+      const reportIds = this.posts.filter(report => report.projectId).map(report => report.id)
+      if (postIds.length > 0) {
+        fetchFollowing(this.$store, { resource: 'post', ids: postIds, })
+        fetchEmotion(this.$store, { resource: 'post', ids: postIds, emotion: 'like', })
+        fetchEmotion(this.$store, { resource: 'post', ids: postIds, emotion: 'dislike', })
+      }
+      if (reportIds.length > 0) {
+        fetchFollowing(this.$store, { resource: 'report', ids: reportIds, })
+        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
+        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
+      }
     },
     mounted () {},
     watch: {

@@ -37,11 +37,24 @@ const fetchFollowing = (store, { ids, }) => {
 export default {
   name: 'Editors',
   asyncData ({ store, i18n, }) {
-    const targ_key = find(ROLE_MAP, { value: i18n.t('editors.WORDING_EDITORS_GUESTEDITOR'), }).key
-    return getMembersPublic(store, {
-      role: targ_key,
-    })
+    const roleNum = find(ROLE_MAP, { value: i18n.t('editors.WORDING_EDITORS_GUESTEDITOR'), }).key
+    return Promise.all([
+      getMembersPublic(store, {
+        role: roleNum,
+      }),
+      getMembersPublic(store, {
+        custom_editor: true,
+      }),
+    ])
   },
+  metaInfo () {
+    return {
+      description: this.$i18n ? this.$t('OG.DESCRIPTION') : 'Readr',
+      ogTitle: this.$i18n ? this.$t('OG.GUESTEDITORS') : 'Readr',
+      title: this.$i18n ? this.$t('OG.GUESTEDITORS') : 'Readr',
+      metaUrl: this.$route.path,
+    }
+  },  
   components: {
     AppTitledList,
     EditorsIntro,
@@ -61,20 +74,14 @@ export default {
     },
   },
   beforeMount () {
-    Promise.all([
-      getMembersPublic(this.$store, {
-        custom_editor: true,
-      }),
-    ]).then(() => {
-      if (this.$store.state.isLoggedIn) {
-        const customEditorsIds = this.$store.state.customEditors.items.map(editor => editor.id)
-        const asideListMembersIds = this.$store.state.publicMembers[this.asideListRoleValue].items.map(member => member.id)
-        const ids = uniq(concat(customEditorsIds, asideListMembersIds))
-        fetchFollowing(this.$store, {
-          ids: ids,
-        })
-      }
-    })
+    if (this.$store.state.isLoggedIn) {
+      const customEditorsIds = this.$store.state.customEditors.items.map(editor => editor.id)
+      const asideListMembersIds = this.$store.state.publicMembers[this.asideListRoleValue].items.map(member => member.id)
+      const ids = uniq(concat(customEditorsIds, asideListMembersIds))
+      fetchFollowing(this.$store, {
+        ids: ids,
+      })
+    }
   },
 }
 </script>

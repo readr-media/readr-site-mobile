@@ -20,7 +20,6 @@ const PublicLogin = () => import('../views/PublicLogin.vue')
 const PublicSeries = () => import('../views/PublicSeries.vue')
 const PublicProfile = () => import('../views/PublicProfile.vue')
 const PublicProjects = () => import('../views/PublicProjects.vue')
-// const PublicReportsMemos = () => import('../views/PublicReportsMemos.vue')
 const PublicSearch = () => import('../views/PublicSearch.vue')
 const PublicSetPassword = () => import('../views/PublicSetPassword.vue')
 const PublicTag = () => import('../views/PublicTag.vue')
@@ -45,7 +44,7 @@ const router = new Router({
   },
   routes: [
     { path: '/post/:postId?', component: PublicHome, alias: '/', },
-    { path: '/hot', component: PublicHome, },
+    { path: '/hot', component: PublicHome, }, // this is a deprecated route
     { path: '/about', component: PublicAbout, },
     { path: '/admin/:panel?/:tool?', component: ManageAdmin, meta: { permission: 'admin', }, },
     { path: '/agreement', component: PublicAgreement, },
@@ -54,11 +53,9 @@ const router = new Router({
     { path: '/guesteditor/:panel?/:tool?', component: ManageGuestEditor, meta: { permission: 'guesteditor', }, },
     { path: '/login', component: PublicLogin, },
     { path: '/member/:panel?/:tool?', component: ManageMember, meta: { permission: 'member', }, },
-    { path: '/series/:slug/:subItem?', component: PublicSeries, },
     { path: '/profile/:id', component: PublicProfile, },
-    // { path: '/reports', component: PublicReportsMemos, },
-    // { path: '/memos', component: PublicReportsMemos, },
     { path: '/search/:keyword', component: PublicSearch, },
+    { path: '/series/:slug/:subItem?', component: PublicSeries, },
     { path: '/series-list', component: PublicProjects, },
     { path: '/setup/:type', component: PublicSetPassword, },
     { path: '/tag/:tagId', component: PublicTag,  },
