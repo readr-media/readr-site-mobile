@@ -17,7 +17,7 @@
       </figure>
     </div>
     <div class="home-article-main__content">
-      <PostContent :post="articleData"></PostContent>
+      <PostContent :post="articleData" :key="`post-content-${articleData.id}`" :id="`post-content-${articleData.id}`"></PostContent>
     </div>
   </article>
 </template>

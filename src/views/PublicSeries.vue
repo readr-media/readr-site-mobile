@@ -9,7 +9,7 @@
           :tags="project.tags"
           class="series__tag-nav" />
       </Leading>
-      <HomeArticleMain v-for="post in posts" :key="post.id" :articleData="post" ></HomeArticleMain>
+      <HomeArticleMain v-for="(post, index) in posts" :key="post.id" :articleData="post" :class="{ 'last-one': index === posts.length - 1, }"></HomeArticleMain>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent"></BaseLightBoxPost>
     </PostBoxWrapper>
     <Donate></Donate>
@@ -24,6 +24,8 @@ import Leading from 'src/components/leading/Leading.vue'
 import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
 import TagNav from 'src/components/tag/TagNav.vue'
 import moment from 'moment'
+import sanitizeHtml from 'sanitize-html'
+import truncate from 'html-truncate'
 import { MEMO_PUBLISH_STATUS, PROJECT_PUBLISH_STATUS, PROJECT_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
 import { find, get, sortBy, union, } from 'lodash'
 import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
@@ -40,7 +42,6 @@ const fetchMemos = (store, {
 }) => {
   return store.dispatch('GET_MEMOS', {
     params: {
-      member_id: get(store, 'state.profile.id'),
       project_id: proj_ids,
       max_result: MAXRESULT_POSTS,
       page,
@@ -61,7 +62,6 @@ const fetchPublicMemos = (store, {
 } = {}) => { 
   return store.dispatch('GET_PUBLIC_MEMOS', { 
     params: { 
-      member_id: get(store, 'state.profile.id', -1), 
       project_id: proj_ids,
       max_result: max_result, 
       page,
@@ -77,8 +77,18 @@ const fetchPublicMemos = (store, {
 const fetchMemoSingle = (store, memoId) => {
   return store.dispatch('GET_MEMO', {
     params: {
-      member_id: get(store, 'state.profile.id'),
       memoId,
+    },
+  })
+}
+const fetchPublicMemoSingle = (store, memoId) => {
+  return store.dispatch('GET_PUBLIC_MEMO', {
+    params: {
+      memoId,
+      where: { 
+        memo_publish_status: MEMO_PUBLISH_STATUS.PUBLISHED, 
+        project_publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED, 
+      }, 
     },
   })
 }
@@ -130,6 +140,53 @@ const switchOn = (store, item) => store.dispatch('SWITCH_ON_DONATE_PANEL', { ite
 
 export default {
   name: 'PublicSeries',
+  asyncData ({ store, route, }) {
+    const processes = []
+    if (get(route, 'params.subItem') && get(route, 'params.subItem') !== 'donate') {
+      processes.push(fetchPublicMemoSingle(store, get(route, 'params.subItem')))
+    }
+    if (get(route, 'params.slug')) {
+      processes.push(fetchProjectSingle(store, get(route, 'params.slug')).then(proj => {
+        const projId = get(proj, 'id')
+        return Promise.all([
+          fetchPublicMemos(store, {
+            mode: 'set',
+            proj_ids: [ projId, ],
+            page: 1,
+          }),
+          fetchReportsList(store, {
+            proj_ids: [ projId, ],
+            page: 1,  
+          }),
+        ])
+      }))
+    }
+    return processes.length > 0 ? Promise.all(processes) : Promise.resolve()
+  },  
+  metaInfo () {
+    if (this.$route.params.subItem) {
+      const isPaid = get(this.postSingle, 'project.paid')
+      const isProjectDone = get(this.postSingle, 'project.status') === PROJECT_STATUS.DONE
+      const desc = isPaid || isProjectDone
+        ? truncate(sanitizeHtml(get(this.postSingle, 'content', ''), { allowedTags: [], }), 100)
+        : truncate(sanitizeHtml(get(this.postSingle, 'content', ''), { allowedTags: [], }), 100) + '...'
+      return {
+        title: get(this.postSingle, 'title'),
+        ogTitle: get(this.postSingle, 'title'),
+        description: desc,
+        metaUrl: this.$route.path,
+        metaImage: get(this.project, 'heroImage') || '/public/og-image-memo.jpg',     
+      }
+    } else {
+      return {
+        title: get(this.project, 'title'),
+        ogTitle: get(this.project, 'ogTitle') || get(this.project, 'title'),
+        description: get(this.project, 'ogDescription') || get(this.project, 'description'),
+        metaUrl: this.$route.path,
+        metaImage: get(this.project, 'ogImage') || get(this.project, 'heroImage'),            
+      }
+    }    
+  },    
   components: {
     BaseLightBoxPost,
     Donate,
@@ -150,7 +207,7 @@ export default {
       return sortBy(union(get(this.$store, this.me.id ? 'state.memos' : 'state.publicMemos', []), get(this.$store, 'state.publicReports', [])), [ p => -moment(p.publishedAt), ])
     },
     postSingle () {
-      return get(this.$store, 'state.memoSingle', {})
+      return get(this.$store, 'state.memoSingle.id') ? get(this.$store, 'state.memoSingle') : get(this.$store, 'state.publicMemoSingle', {})
     },    
     postBox () {
       if (this.showPostBox) {
@@ -177,7 +234,6 @@ export default {
   data () {
     return {
       currPage: DEFAULT_PAGE,
-      currRefId: 0,
       hadRouteBeenNavigate: false,
       isReachBottom: false,
       isLoadMoreEnd: false,
@@ -194,16 +250,17 @@ export default {
       // this.shouldShowSpinner = true
       const process = () => (this.me.id ? fetchMemos(this.$store, {
         mode: 'update',
-        proj_ids: [ this.currRefId, ],
-        page: this.currPage,
+        proj_ids: [ get(this.project, 'id', 0), ],
+        page: this.currPage + 1,
       }) : fetchPublicMemos(this.$store, {
         mode: 'update',
-        proj_ids: [ this.currRefId, ],
-        page: this.currPage,
+        proj_ids: [ get(this.project, 'id', 0), ],
+        page: this.currPage + 1,
       }))
       return process().then((res) => {
         // this.shouldShowSpinner = false
         debug('Loadmore done. Status', res, get(res, 'status'))
+        this.currPage += 1
         if (get(res, 'status') === 200) {
           const memoIds = this.posts.map(post => post.id)
           if (memoIds.length > 0) {
@@ -211,7 +268,6 @@ export default {
             fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'like', })
             fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'dislike', })
           }
-          this.currPage += 1
         } else if (get(res, 'status') === 'end') {
           this.isLoadMoreEnd = true
         }
@@ -227,52 +283,30 @@ export default {
     next()
   },  
   beforeMount () {
-    Promise.all([
-      fetchProjectSingle(this.$store, get(this.$route, 'params.slug')).then((proj) => {
-        debug(proj)
-        this.currRefId = get(proj, 'id') 
-        if (proj) {
-          return Promise.all([
-            Promise.all([
-              this.me.id ? fetchMemos(this.$store, {
-                mode: this.currPage === 1 ? 'set' : 'update',
-                proj_ids: [ this.currRefId, ],
-                page: this.currPage,
-              }) : fetchPublicMemos(this.$store, {
-                mode: this.currPage === 1 ? 'set' : 'update',
-                proj_ids: [ this.currRefId, ],
-                page: this.currPage,
-              }),
-              fetchReportsList(this.$store, {
-                proj_ids: [ this.currRefId, ],
-                page: this.currPage,
-              }),
-            ]).then(() => { this.currPage += 1 }),
-            get(this.$route, 'params.subItem') && get(this.$route, 'params.subItem') !== 'donate'
-              ? fetchMemoSingle(this.$store, get(this.$route, 'params.subItem'))
-              : Promise.resolve(),
-          ])
-        } else {
-          /**
-          * Forbidden.
-          */
-          this.isLoadMoreEnd = true
-          this.$router.push('/')
-          return
-        }
-      }),
-    ]).then(() => {
-      const reportIds = get(this.$store.state, 'publicReports', []).map(report => report.id)
+    const fetchEmotionForMemos = () => {
       const memoIds = get(this.$store.state, this.me.id ? 'memos' : 'publicMemos', []).map(memo => memo.id)
-      if (reportIds.length > 0) {
-        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
-        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
-      }
       if (memoIds.length > 0) {
         fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'like', })
         fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'dislike', })
-      }
-    })
+      }        
+    }
+    if (get(this.me, 'id')) {
+      fetchMemos(this.$store, {
+        mode: 'set',
+        proj_ids: [ get(this.project, 'id', 0), ],
+        page: 1,
+      }).then(() => {
+        fetchEmotionForMemos()
+      })
+      this.$route.params.subItem && fetchMemoSingle(this.$store, this.$route.params.subItem)
+    } else {
+      fetchEmotionForMemos()
+    }
+    const reportIds = get(this.$store.state, 'publicReports', []).map(report => report.id)
+    if (reportIds.length > 0) {
+      fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
+      fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
+    }    
 
     getUserFollowing(this.$store, { resource: 'post', })
     getUserFollowing(this.$store, { resource: 'memo', })
@@ -283,7 +317,10 @@ export default {
   mounted () {
     this.donateCheck() 
     window.addEventListener('scroll', () => {
-      this.isReachBottom = this.isElementReachInView('.memo', 0.5) || this.isScrollBarReachBottom()
+      this.isReachBottom
+        = this.$el.getBoundingClientRect().bottom < window.innerHeight - 10
+        || this.isElementReachInView('.last-one', 0.5)
+        || this.isScrollBarReachBottom()
     })    
   },
   watch: {
@@ -295,7 +332,7 @@ export default {
       this.donateCheck() 
     },    
     isReachBottom () {
-      debug('Mutation detected: isReachBottom', this.isReachBottom)
+      debug('Mutation detected: isReachBottom', this.isReachBottom, this.isLoadMoreEnd)
       if (!this.isReachBottom || this.isLoadMoreEnd) { return }
       this.loadmore()
     },
