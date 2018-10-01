@@ -100,6 +100,14 @@
         id: Number(get(route, 'params.id')),
       })
     },
+    metaInfo () {
+      return {
+        description: get(this.profile, 'description', ''),
+        ogTitle: get(this.profile, 'nickname', ''),
+        title: get(this.profile, 'nickname', ''),
+        metaUrl: this.$route.path,         
+      }
+    },    
     components: {
       About,
       FollowingListInTab,
