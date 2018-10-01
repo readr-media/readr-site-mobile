@@ -32,6 +32,8 @@
     </template>
     <template v-else-if="postType === 'memo'"> 
       <PostContentMemo 
+        :type="`post-content-${postType}`"
+        :key="`post-content-${postType}-${post.id}`"
         :targetUrl="targetUrl" 
         :postContentProcessed="postContentProcessed" 
         :shouldContentStopAtIndex="shouldContentStopAtIndex" 
