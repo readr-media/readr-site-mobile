@@ -52,9 +52,9 @@ const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource
 
 export default {
   name: 'PublicProjects',
-  // asyncData ({ store, }) {
-  //   return fetchProjectsList(store)
-  // },
+  asyncData ({ store, }) {
+    return fetchProjectsList(store)
+  },
   components: {
     ProjectsFigure,
   },
@@ -78,9 +78,7 @@ export default {
       fetchFollowing(this.$store, { ids: ids, resource: 'tag', })
     },
   },
-  beforeMount () {
-    // Beta version code
-    fetchProjectsList(this.$store)
+  beforeMount () {    
     getUserFollowing(this.$store, { resource: 'project', })
     getUserFollowing(this.$store, { resource: 'tag', })
     getUserFollowing(this.$store, { resource: 'project', })
