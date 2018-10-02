@@ -7,8 +7,8 @@
   </div>
 </template>
 <script>
-  import { ROLE_MAP, } from 'src/constants'
-  import { filter, get, } from 'lodash'
+  import { get, } from 'lodash'
+  import VueCookie from 'vue-cookie'
 
   const debug = require('debug')('CLIENT:FacebookLogin')
   const login = (store, profile, token) => {
@@ -49,10 +49,14 @@
                 /**
                  * use location.replace instead of router.push to server-side render page
                  */
-                // location.replace('/')
-
-                const memberCenter = get(filter(ROLE_MAP, { key: get(this.$store, 'state.profile.role'), }), '0.route', 'member')
-                this.$route.path === '/comment' ? this.$router.push(this.$route.fullPath) : this.$router.push(`/${memberCenter}`)                
+                const from = VueCookie.get('location-replace-from')
+                const isFromPathExist = from !== null
+                if (isFromPathExist) {
+                  VueCookie.delete('location-replace-from')
+                  location.replace(from)
+                } else {
+                  location.replace('/')
+                }     
               } else {
                 debug('res', res)
               }
