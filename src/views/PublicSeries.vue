@@ -137,6 +137,7 @@ const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource
 }
 
 const switchOn = (store, item) => store.dispatch('SWITCH_ON_DONATE_PANEL', { item, })
+const switchOff = store => store.dispatch('SWITCH_OFF_DONATE_PANEL', {})
 
 export default {
   name: 'PublicSeries',
@@ -197,9 +198,6 @@ export default {
     TagNav,
   },
   computed: {
-    isSeriesDonate () { 
-      return get(this.$route, 'params.subItem') === 'donate' 
-    }, 
     me () {
       return get(this.$store, 'state.profile', {})
     },
@@ -237,12 +235,18 @@ export default {
       hadRouteBeenNavigate: false,
       isReachBottom: false,
       isLoadMoreEnd: false,
+      isSeriesDonate: false,
     }
   },
   methods: {
     donateCheck () { 
       debug('do check donate')
       this.isSeriesDonate && this.project && switchOn(this.$store, this.project) 
+      if (this.isSeriesDonate) {
+        this.project && switchOn(this.$store, this.project)
+      } else {
+        switchOff(this.$store)
+      }      
     },    
     isScrollBarReachBottom,
     isElementReachInView,
@@ -280,6 +284,7 @@ export default {
     debug('this.postSingle', this.postSingle)
     debug(`get(this.$route, 'params.subItem')`, get(to, 'params.subItem'))
     debug('this.hadRouteBeenNavigate', this.hadRouteBeenNavigate)
+    this.isSeriesDonate = get(to, 'params.subItem') === 'donate'
     next()
   },  
   beforeMount () {
@@ -313,6 +318,7 @@ export default {
     getUserFollowing(this.$store, { resource: 'report', })
     getUserFollowing(this.$store, { resource: 'project', })
     getUserFollowing(this.$store, { resource: 'tag', })
+    this.isSeriesDonate = get(this.$route, 'params.subItem') === 'donate'
   }, 
   mounted () {
     this.donateCheck() 
@@ -329,7 +335,7 @@ export default {
       this.donateCheck() 
     }, 
     project () { 
-      this.donateCheck() 
+      debug('Mutation detected: project')
     },    
     isReachBottom () {
       debug('Mutation detected: isReachBottom', this.isReachBottom, this.isLoadMoreEnd)
@@ -344,6 +350,10 @@ export default {
       // if (!this.hadRouteBeenNavigate) this.hadRouteBeenNavigate = true
       debug('Mutation detected: $route', to, from)
       if (!this.hadRouteBeenNavigate) this.hadRouteBeenNavigate = true
+    },
+    '$route.params.subItem' () {
+      debug('Mutation detected: $route.params.subItem')
+      this.isSeriesDonate = get(this.$route, 'params.subItem') === 'donate'
     },
   },
 }
