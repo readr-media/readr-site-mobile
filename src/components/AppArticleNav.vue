@@ -32,6 +32,7 @@ import { find, get, } from 'lodash'
 import { mapState, } from 'vuex'
 import CommentContainer from 'src/components/comment/CommentContainer.vue'
 import CommentCount from 'src/components/comment/CommentCount.vue'
+import { redirectToLogin, } from 'src/util/services'
 
 const publishAction = (store, data) => store.dispatch('FOLLOW', { params: data, })
 const updateEmotion = (store, { resource = 'post', action = 'insert', emotion = 'like', object, }) => {
@@ -140,7 +141,11 @@ export default {
     },
     // TODO: Refactor following to a component like ButtonFollow.vue
     clickFollow (event) {
-      this.isLoggedIn ? this.toogleFollow(event) : this.$router.push('/login')
+      if (this.isLoggedIn) {
+        this.toogleFollow(event)
+      } else {
+        redirectToLogin(this.$route.fullPath)
+      }
     },
     toogleFollow (event) {
       if (event) event.preventDefault()

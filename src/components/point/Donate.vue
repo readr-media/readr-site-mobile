@@ -33,6 +33,7 @@
   import { ROLE_MAP, } from 'src/constants'
   import { POINT_OBJECT_TYPE, DONATION_POINT_MIN_LINE, } from 'api/config'
   import { get, filter, } from 'lodash'
+  import { redirectToLogin, } from 'src/util/services'
 
   const DEFAULT_DONATION_POINT_MIN_LINE = DONATION_POINT_MIN_LINE || -100
   const debug = require('debug')('CLIENT:Donate')
@@ -119,7 +120,7 @@
         })
       },
       goLogin () {
-        this.$router.push('/login')
+        redirectToLogin(this.$route.fullPath)
       },
     },
     beforeMount () {
