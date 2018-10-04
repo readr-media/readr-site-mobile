@@ -1,5 +1,11 @@
 <template>
-  <div class="baselightbox-post--review no-content" v-if="isContentEmpty">
+  <div class="baselightbox-post--review no-content" v-if="!get(this.post, 'id')">
+    <div>
+      <div><span v-text="$t('POST_CONTENT.NO_CONTENT')"></span></div>
+      <div class="button"><span v-text="$t('POST_CONTENT.GO_HOME')" @click="goHome"></span></div>
+    </div>
+  </div>
+  <div class="baselightbox-post--review no-content" v-else-if="isContentEmpty">
     <span v-if="isMemo && !isMemoPaid && !isPostEmpty" v-text="$t('POST_CONTENT.GO_JOIN_MEMO')" class="go-join" @click="goJoin"></span> 
     <template v-else> 
       <div> 
@@ -121,7 +127,11 @@ export default {
     },
     goLogin () { 
       redirectToLogin(this.$route.fullPath)
-    },     
+    },
+    goHome () {
+      this.$router.replace('/')
+    },
+    get,     
   },
   mounted () {
     if (!this.isPostEmpty) { 
