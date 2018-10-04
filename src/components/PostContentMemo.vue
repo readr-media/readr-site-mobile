@@ -33,7 +33,7 @@
         <h1 class="editor-writing-source__title" v-text="linkTitleTrim"></h1>
         <div class="editor-writing-source__description">
           <!-- <p v-text="linkDescriptionTrim"></p> -->
-          <p class="editor-writing-source__cite" v-if="post.linkName">{{ $t('homepage.WORDING_HOME_POST_SOURCE') }}{{ post.linkName }}</p>
+          <p class="editor-writing-source__cite" v-if="post.linkName">{{ $t('homepage.WORDING_HOME_POST_SOURCE') }}{{ linkNameTrim }}</p>
         </div>
       </div>
       <img class="editor-writing-source__figure" :src="post.linkImage" alt="source-fig">
@@ -59,6 +59,9 @@
       },
       linkDescriptionTrim () {
         return truncate(this.post.linkDescription, 45)
+      },
+      linkNameTrim () {
+        return truncate(this.post.linkName, 20)
       },
       isProjectPublished () {
         return get(this.post, 'project.status') === PROJECT_STATUS.DONE
