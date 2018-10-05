@@ -28,6 +28,12 @@ const SET_TAPPAY_LOADED = (state, { isLoaded, }) => {
   state['isTappayLoaded'] = isLoaded 
 } 
 
+const SET_TAPPAY_FLAG = (state, { active, item, }) => {
+  debug('SET_TAPPAY_FLAG: Going to do mutation:', { active, item, })
+  state[ 'clearUpPointsFlag' ].active = active
+  state[ 'clearUpPointsFlag' ].item = item
+}
+
 export { 
   SET_CONSUME_FLAG,
   SET_DONATE_FLAG,
@@ -35,4 +41,5 @@ export {
   SET_POINT_PERSONAL,
   SET_TAPPAY_REQUIREMENT,
   SET_TAPPAY_LOADED,
+  SET_TAPPAY_FLAG,
 }
