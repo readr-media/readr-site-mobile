@@ -87,7 +87,8 @@
         /**
          * use location.replace instead of router.push to server-side render page
          */
-        location && location.replace(`/${memberCenter}`)
+        // location && location.replace(`/${memberCenter}`)
+        this.$router.push(`/${memberCenter}`)
       },
       logout () {
         logout(this.$store).then(() => {
