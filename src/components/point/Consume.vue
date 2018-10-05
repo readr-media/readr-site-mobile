@@ -1,34 +1,49 @@
 <template>
   <BaseLightBox :showLightBox.sync="showMemoDeduction" borderStyle="nonBorder" @closeLightBox="hideMemoDeduction">
     <div class="project-memo-alert">
-      <div class="project-memo-alert__content">
-        <h2 v-text="$t('PROJECT.JOIN_CONTENT_1')"></h2>
-        <h1 v-text="get(targetItem, 'project.title')"></h1>
-        <h2>
-          <span v-text="$t('PROJECT.JOIN_CONTENT_2')"></span>
-          <strong v-text="pointsNeeded"></strong> 
-          <span v-text="$t('PROJECT.JOIN_CONTENT_POINT')"></span>
-        </h2>
-        <h2>
-          <template v-if="isDepositNeeded"> 
-            <span v-text="$t('PROJECT.WARNING_DEPOSIT_PREFIX')"></span> 
-            <span v-text="extraPointsNeeded"></span> 
-            <span v-text="$t('PROJECT.WARNING_DEPOSIT_POSTFIX')"></span> 
-          </template>
-        </h2>
-        <button v-text="btnWording"
-          :disabled="memoDeducting"
-          @click="clickHandler">
-        </button>
+      <div class="project-memo-alert__content" :class="{ center: !currUser, }">
+        <template v-if="currUser">
+          <div class="content">
+            <h2 v-text="$t('PROJECT.JOIN_CONTENT_1')"></h2>
+            <h1 v-text="get(targetItem, 'project.title')"></h1>
+            <h2>
+              <span v-text="$t('PROJECT.JOIN_CONTENT_2')"></span>
+              <strong v-text="pointsNeeded"></strong> 
+              <span v-text="$t('PROJECT.JOIN_CONTENT_POINT')"></span>
+            </h2>
+            <div v-if="isDepositNeeded" class="alert">
+              <span v-text="$t('PROJECT.NOT_ENOUGH_PREFIX')"></span>
+              <span v-text="DEFAULT_DONATION_POINT_MIN_LINE" class="value"></span>
+              <span v-text="$t('PROJECT.NOT_ENOUGH_POSTFIX')"></span>
+              <span v-text="$t('PROJECT.GO_CLEAR_UP_PREFIX')"></span>
+              <span v-text="sum" class="value"></span>
+              <span v-text="$t('PROJECT.GO_CLEAR_UP_POSTFIX')"></span>
+            </div>
+            <DonateDetail
+              theme="join"
+              @resize="checkBottom"
+              :rest="currentPoints"
+              :amount="pointsNeeded"
+              :type="alertType"></DonateDetail>              
+          </div>
+          <button v-text="btnWording"
+            :disabled="memoDeducting"
+            @click="clickHandler">
+          </button>
+        </template>
+        <template v-else>
+          <div class="content"><span v-text="$t('PROJECT.HAVE_TO_LOGIN')"></span></div>
+          <button v-text="$t('PROJECT.LOG_IN')" @click="goLogin"></button>
+        </template>
       </div>
     </div>
   </BaseLightBox>  
 </template>
 <script>
   import BaseLightBox from 'src/components/BaseLightBox.vue' 
+  import DonateDetail from 'src/components/point/DonateDetail.vue'
   import { POINT_OBJECT_TYPE, DONATION_POINT_MIN_LINE, } from 'api/config'  
-  import { ROLE_MAP, } from 'src/constants'
-  import { filter, get, } from 'lodash'
+  import { get, } from 'lodash'
   
   const DEFAULT_DONATION_POINT_MIN_LINE = DONATION_POINT_MIN_LINE || -100
 
@@ -43,19 +58,19 @@
     })
   }
   const fetchCurrPoints = store => store.dispatch('GET_POINT_CURRENT', { params: {}, })
+  const switchOnTappay = (store, item) => store.dispatch('SWITCH_ON_TAPPAY_PANEL', { active: true, item, })
   const switchOffDeductionPanel = store => store.dispatch('SWITCH_OFF_CONSUME_PANEL', { active: false, }) 
 
   export default {
     name: 'Consume',
     components: {
       BaseLightBox,
+      DonateDetail,
     },
     computed: {
       btnWording () {
         if (this.isDepositNeeded) {
-          debug('WARN: YOU GOTTA DEPOSIT!!!!!!', DEFAULT_DONATION_POINT_MIN_LINE)
-          debug('WARN: YOU GOTTA DEPOSIT!!!!!!', this.$t('PROJECT.WARNING_DEPOSIT_PREFIX') + this.currentPoints + this.$t('PROJECT.WARNING_DEPOSIT_POSTFIX'))
-          return this.$t('PROJECT.DEPOSIT')
+          return this.$t('PROJECT.GO_CLEAR_UP')
         } else {
           return this.memoDeducting ? `${this.$t('PROJECT.DEDUCTING')} ...` : this.$t('PROJECT.JOIN_CONFIRM')
         }
@@ -76,34 +91,56 @@
         return get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false)
       },        
       isDepositNeeded () {
-        return this.isDonationActive && this.currentPoints <= DEFAULT_DONATION_POINT_MIN_LINE
+        return this.isDonationActive && this.currentPoints - this.pointsNeeded <= DEFAULT_DONATION_POINT_MIN_LINE
       },      
       pointsNeeded () { 
-        return get(this.targetItem, 'project.memoPoints', 0) || 0 
+        return get(this.targetItem, 'project.memoPoints') || 0
       }, 
+      sum () {
+        return Math.abs(this.currentPoints - this.pointsNeeded)
+      },      
       targetItem () { 
         return get(this.$store, 'state.consumeFlag.item', {}) 
       },       
     },
     data () {
       return {
+        DEFAULT_DONATION_POINT_MIN_LINE,
+        alertType: 1,
         memoDeducting: false,
         showMemoDeduction: false,
       }
     },
     methods: {
       get,
+      checkBottom () {},
       clickHandler () {
         if (this.isDepositNeeded) {
-          switchOffDeductionPanel(this.$store).then(() => {
-            this.showMemoDeduction = false
-            const memberCenter = get(filter(ROLE_MAP, { key: get(this.$store, 'state.profile.role'), }), '0.route', 'member')
-            this.$router.push(`/${memberCenter}/records/point-manager`)
+          const slug = get(this.targetItem, 'project.slug')
+          const objectId = get(this.targetItem, 'projectId')
+          const points = get(this.targetItem, 'project.memoPoints')
+          switchOnTappay(this.$store, {
+            amount: this.sum,
+            callback: () => {
+              Promise.all([
+                deductPoints(this.$store, { objectId, points, }),
+                switchOffDeductionPanel(this.$store),
+              ]).then(() => {
+                // this.$router.push(`/series/${get(this.targetItem, 'project.slug')}`)
+                location.replace(`/series/${slug}`)
+              })
+            },
           })
         } else {
           this.memoDeduct()
         }
-      },      
+      },    
+      goLogin () {
+        switchOffDeductionPanel(this.$store).then(() => {
+          this.showMemoDeduction = false
+          this.$router.push('/login')
+        })
+      },        
       hideMemoDeduction () {
         this.showMemoDeduction = false 
       },
@@ -126,7 +163,15 @@
     watch: { 
       isActive () { 
         this.isActive && (this.showMemoDeduction = true) 
+        this.showMemoDeduction && fetchCurrPoints(this.$store)
       }, 
+      isDepositNeeded () {
+        if (this.isDepositNeeded) {
+          this.alertType = 0
+        } else {
+          this.alertType = 1
+        }
+      },
       showMemoDeduction () { 
         !this.showMemoDeduction && switchOffDeductionPanel(this.$store) 
       }, 
@@ -140,34 +185,55 @@
     min-height 100vh
     background-color #11b8c9
     background-image url(/public/icons/join.png)
-    background-position center calc(100% - 45px)
-    background-size 110px auto
+    background-position center calc(100% - 35px)
+    background-size 90px auto
     background-repeat no-repeat
     border 5px solid #fff
     overflow hidden
+    padding 40px 0 220px
     &__content
-      margin-top 85px
-      text-align center
+      padding 0 20px
+      height 100%
+      width 100%
+
+      .content
+        flex 1
+        line-height normal
+        height 235px
+        .alert
+          font-size 0.75rem
+          margin 5px 0
+          .value
+            margin 0 5px
+      &.center
+        .content
+          display flex
+          flex-direction column
+          justify-content center
+      > div
+        width 100%
+
       h1
-        margin 1em 0 10px
+        margin 10px 0 10px
         color #fff
-        font-size 1.5625rem
+        font-size 1.25rem
         font-weight 400
         letter-spacing 1px
       h2
-        margin .5em 0 0
-        font-size 1.125rem
+        margin 10px 0 0
+        font-size 1rem
         font-weight 400
         strong
           color #fff
-          font-size 1.875rem
-          margin 0 .2em
+          font-size 1.375rem
+          margin 0 10px
       button
-        width 150px
+        width 100%
+        height 40px
         margin-top 25px
         padding 11px 0
         color #11b8c9
-        font-size 1.5625rem
+        font-size 1.375rem
         background-color #fff
         box-shadow 0 0 10px rgba(250,250,250,0.9)
         border-radius 2px

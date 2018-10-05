@@ -123,6 +123,13 @@ export default {
     'WARNING_DEPOSIT_POSTFIX': ' 點', 
     'REST_POINT_PREFIX': '您目前尚有點數', 
     'REST_POINT_POSTFIX': '點',
+    'HAVE_TO_LOGIN': '謝謝您願意贊助我們，請先登入 Readr 會員後進行贊助。',
+    'LOG_IN': '會員登入',
+    'NOT_ENOUGH_PREFIX': '您的點數餘額小於',
+    'NOT_ENOUGH_POSTFIX': '點，',
+    'GO_CLEAR_UP_PREFIX': '須結算使用點數',
+    'GO_CLEAR_UP_POSTFIX': '點',  
+    'GO_CLEAR_UP': '前往付款',     
   },
   'ABOUT': {
     'WELCOME': {
