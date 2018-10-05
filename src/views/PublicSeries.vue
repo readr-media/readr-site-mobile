@@ -26,6 +26,7 @@ import TagNav from 'src/components/tag/TagNav.vue'
 import moment from 'moment'
 import sanitizeHtml from 'sanitize-html'
 import truncate from 'html-truncate'
+import { SITE_FULL, } from 'src/constants'
 import { MEMO_PUBLISH_STATUS, PROJECT_PUBLISH_STATUS, PROJECT_STATUS, REPORT_PUBLISH_STATUS, } from 'api/config'
 import { find, get, sortBy, union, } from 'lodash'
 import { isScrollBarReachBottom, isElementReachInView, } from 'src/util/comm'
@@ -177,7 +178,7 @@ export default {
         ogTitle: get(this.postSingle, 'title'),
         description: desc,
         metaUrl: this.$route.path,
-        metaImage: get(this.project, 'heroImage') || '/public/og-image-memo.jpg',     
+        metaImage: get(this.project, 'heroImage') || `${SITE_FULL}/public/og-image-memo.jpg`,     
         isTappayNeeded: this.isTappayRequired,
       }
     } else {
