@@ -118,12 +118,12 @@
         if (this.isDepositNeeded) {
           const slug = get(this.targetItem, 'project.slug')
           const objectId = get(this.targetItem, 'projectId')
-          const points = get(this.targetItem, 'project.memoPoints')
+          const memoPoints = get(this.targetItem, 'project.memoPoints')
           switchOnTappay(this.$store, {
             amount: this.sum,
             callback: () => {
               Promise.all([
-                deductPoints(this.$store, { objectId, points, }),
+                deductPoints(this.$store, { objectId, memoPoints, }),
                 switchOffDeductionPanel(this.$store),
               ]).then(() => {
                 // this.$router.push(`/series/${get(this.targetItem, 'project.slug')}`)
