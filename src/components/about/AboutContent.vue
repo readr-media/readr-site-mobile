@@ -44,6 +44,7 @@
         <img class="title" src="/public/icons/about-title-3.png" alt="">
         <p v-text="$t('ABOUT.HOW_MEMBER.PARAGRAPH_1')"></p>
         <p v-text="$t('ABOUT.HOW_MEMBER.PARAGRAPH_2')"></p>
+        <router-link class="to-about-points" to="points" v-text="$t('ABOUT.TO_ABOUT_POINTS')" append></router-link>
       </div>
     </section>
   </div>
@@ -222,4 +223,15 @@ export default {
           width calc(100% + 16px + 16px)
           position relative
           left -16px
+
+  .to-about-points
+    width 100%
+    height 30px
+    background-color #ddcf21
+    color #454746
+    display flex
+    justify-content center
+    align-items center
+    margin 16px 0
+    letter-spacing .5px
 </style>
