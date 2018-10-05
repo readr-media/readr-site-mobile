@@ -75,7 +75,7 @@
         return get(this.$store, 'state.isLoggedIn',)
       },
       profileImage () {
-        return getImageUrl(get(this.currentUser, 'profileImage', '/public/icons/exclamation.png'))
+        return getImageUrl(get(this.currentUser, 'profileImage', '/public/icons/exclamation.png') || '/public/icons/exclamation.png')
       },
       userNickname () {
         return this.isLoggedIn && get(this.currentUser, 'nickname', get(this.currentUser, 'name', this.$t('HEADER.MEMBER_CENTRE')))

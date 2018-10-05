@@ -3,9 +3,6 @@
     <div class="project-single-intro__container">
       <div class="project-single-intro__heroimg">
         <img :src="getImageUrl(get(project, 'heroImage'))">
-        <div class="project-single-intro__progress-bar" :style="{ width: `${targProgress}%` }">
-          <div class="current-progress"><span v-text="`${currProgress}%`"></span></div>
-        </div>
       </div>
       <div class="follow" @click="clickFollow">
         <img class="follow__icon" :src="isFollowed ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="">
@@ -59,9 +56,6 @@ export default {
     project () {
       return get(this.$store, 'state.publicProjectSingle', {})
     },
-    targProgress () {
-      return get(this.project, 'progress', 0)
-    },
     desc () {
       return get(this.project, 'description', '')
     },
@@ -75,27 +69,9 @@ export default {
       return this.$store.state.isLoggedIn && get(this.projectFollowingByUser, this.project.id, false)
     },
   },
-  data () {
-    return {
-      currProgress: 0,
-      isProgressRun: false,
-    }
-  },
   methods: {
     get,
     getImageUrl,
-    runProgress () {
-      // debug('this.targProgress', this.targProgress)
-      const interval = setInterval(() => {
-        this.currProgress += Math.ceil(this.targProgress / 100)
-        // debug('this.currProgress', this.currProgress)
-        // debug('this.targProgress', this.targProgress)
-        if (this.currProgress >= this.targProgress) {
-          this.currProgress = this.targProgress
-          clearInterval(interval)
-        }
-      }, 10)
-    },
     // TODO: Refactor following to a component like ButtonFollow.vue
     clickFollow () {
       if (this.isLoggedIn) {
@@ -128,14 +104,6 @@ export default {
   props: {
     projSlug: {
       type: String,
-    },
-  },
-  watch: {
-    targProgress () {
-      if (!this.isProgressRun) {
-        this.isProgressRun = true
-        this.runProgress()
-      }
     },
   },
 }
@@ -190,27 +158,6 @@ export default {
     line-height normal
   &__comment
     padding 0 15px
-  &__progress-bar
-    position absolute
-    height 5px
-    bottom 0
-    left 0
-    background-color #ddcf21
-    transition width 1.5s
-    .current-progress
-      width 28px
-      height 28px
-      position absolute
-      right -14px
-      top -11px
-      background-color #ddcf21
-      border-radius 50%
-      display flex
-      justify-content center
-      align-items center
-      color #fff
-      font-size 0.625rem
-      z-index 998
 
 .follow
   margin 0
