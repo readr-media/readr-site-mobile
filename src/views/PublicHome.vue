@@ -11,6 +11,7 @@
   </section>
 </template>
 <script>
+  import { SITE_FULL, } from 'src/constants'
   import { get, find, uniqBy, } from 'lodash'
   // import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
@@ -116,7 +117,7 @@
           ogTitle: get(this.postSingle, 'ogTitle') || get(this.postSingle, 'title'),
           description: get(this.postSingle, 'ogDescription') || truncate(sanitizeHtml(get(this.postSingle, 'content', ''), { allowedTags: [], }), 100),
           metaUrl: this.$route.path,
-          metaImage: get(this.postSingle, 'ogImage') || '/public/og-image-post.jpg',
+          metaImage: get(this.postSingle, 'ogImage') || `${SITE_FULL}/public/og-image-post.jpg`,
         }
       } else {
         return {
