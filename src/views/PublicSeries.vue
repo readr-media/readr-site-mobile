@@ -136,6 +136,7 @@ const getUserFollowing = (store, { id = get(store, 'state.profile.id'), resource
   })
 }
 
+const loadTappaySDK = store => store.dispatch('LOAD_TAPPAY_SDK')
 const switchOn = (store, item) => store.dispatch('SWITCH_ON_DONATE_PANEL', { item, })
 const switchOff = store => store.dispatch('SWITCH_OFF_DONATE_PANEL', {})
 
@@ -177,6 +178,7 @@ export default {
         description: desc,
         metaUrl: this.$route.path,
         metaImage: get(this.project, 'heroImage') || '/public/og-image-memo.jpg',     
+        isTappayNeeded: this.isTappayRequired,
       }
     } else {
       return {
@@ -185,6 +187,7 @@ export default {
         description: get(this.project, 'ogDescription') || get(this.project, 'description'),
         metaUrl: this.$route.path,
         metaImage: get(this.project, 'ogImage') || get(this.project, 'heroImage'),            
+        isTappayNeeded: this.isTappayRequired,
       }
     }    
   },    
@@ -198,6 +201,9 @@ export default {
     TagNav,
   },
   computed: {
+    isTappayRequired () {
+      return get(this.$store, 'state.isTappayRequired', false)
+    },   
     me () {
       return get(this.$store, 'state.profile', {})
     },
@@ -318,6 +324,7 @@ export default {
     getUserFollowing(this.$store, { resource: 'report', })
     getUserFollowing(this.$store, { resource: 'project', })
     getUserFollowing(this.$store, { resource: 'tag', })
+    loadTappaySDK(this.$store)
     this.isSeriesDonate = get(this.$route, 'params.subItem') === 'donate'
   }, 
   mounted () {
@@ -342,6 +349,10 @@ export default {
       if (!this.isReachBottom || this.isLoadMoreEnd) { return }
       this.loadmore()
     },
+    isTappayRequired () {
+      debug('Mutation detected: isTappayRequired', this.isTappayRequired)
+      this.$forceUpdate()
+    },     
     projectTagIds (ids) {
       fetchFollowing(this.$store, { resource: 'tag', ids: ids, })
     },

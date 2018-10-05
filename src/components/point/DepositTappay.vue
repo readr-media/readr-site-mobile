@@ -45,6 +45,10 @@
       lastfour,
     },
   })
+
+  const switchOffTappay = store => store.dispatch('SWITCH_OFF_TAPPAY_PANEL', { active: false, })
+  // const switchOffDonate = store => store.dispatch('SWITCH_OFF_DONATE_PANEL', {})
+
   export default {
     name: 'DepositTappay',
     components: {
@@ -52,9 +56,18 @@
       Spinner,
     },
     computed: {
-      depositAmountOnce () {
-        return get(this.$store, 'state.setting.DONATION_DEPOSIT_AMOUNT_ONCE', 100)
+      active () {
+        return get(this.$store, 'state.clearUpPointsFlag.active', false)
       },
+      amount () {
+        return get(this.$store, 'state.clearUpPointsFlag.item.amount', 0)
+      },
+      callback () {
+        return get(this.$store, 'state.clearUpPointsFlag.item.callback', () => {})
+      },      
+      // depositAmountOnce () {
+      //   return get(this.$store, 'state.setting.DONATION_DEPOSIT_AMOUNT_ONCE', 100)
+      // },
       memberId () {
         return get(this.$store, 'state.profile.id')
       },
@@ -84,6 +97,7 @@
             this.$emit('fetchCurrentPoint')
             this.resultMessage = this.$t('point.DEPOSIT.SUCCESSFULLY')
             this.alertFlag = true
+            this.callback()
           } else {
             this.resultMessage = this.$t('point.DEPOSIT.INFAIL')
             this.alertFlag = true
@@ -99,7 +113,7 @@
           debug('get prime successfully: ' + result.card.prime)  
           this.isDepositing = false    
           deposit(this.$store, {
-            points: 0 - this.depositAmountOnce,
+            points: 0 - this.amount,
             token: result.card.prime,
             lastfour: result.card.lastfour,
             member_name: this.cardHolder,
@@ -114,21 +128,16 @@
       cancelDefault () { /** do nothing */ },
       closeDeposit () {
         debug('close deporit')
-        this.$emit('update:active', false)
+        switchOffTappay(this.$store)
       },
     },
     mounted () {},
-    props: {
-      active: {
-        default: false,
-      },
-    },
     watch: {
       alertFlag () {
         if (this.alertFlag) {
           setTimeout(() => {
             this.alertFlag = false
-            this.$emit('update:active', false)
+            switchOffTappay(this.$store)
           }, 3000)
         }
       },

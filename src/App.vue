@@ -6,6 +6,7 @@
     </transition>
     <app-footer v-if="!isLoginPage && !isBackstage && !isCommentPage"></app-footer>
     <Consume></Consume>
+    <DepositTappay v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint"></DepositTappay>    
     <AlertGDPR v-if="showAlertGDPR" @closeAlertGDPR="showAlertGDPR = false" />
   </div>
 </template>
@@ -17,8 +18,11 @@
   import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/header/AppHeader.vue'
   import Consume from 'src/components/point/Consume.vue' 
+  import DepositTappay from 'src/components/point/DepositTappay.vue'
   import Tap from 'tap.js'
   import VueCookie from 'vue-cookie'
+
+  const fetchCurrentPoint = store => store.dispatch('GET_POINT_CURRENT', { params: {}, })
 
   export default {
     components: {
@@ -26,12 +30,14 @@
       AppFooter,
       AppHeader,
       Consume,
+      DepositTappay,
     },
     data () {
       return {
         openControlBar: false,
         doc: {}, 
         globalTapevent: {},
+        isDepositActive: false,
         showAlertGDPR: false,
       }
     },
@@ -50,6 +56,9 @@
       },
       isCommentPage () {
         return this.$route.path === '/comment'
+      },
+      isTappayNeeded () {
+        return get(this.$store, 'state.isTappayRequired', false)
       },
       useragent () { 
         return get(this.$store, 'state.useragent') 
@@ -71,6 +80,9 @@
     methods: {
       closeControlBar () {
         this.openControlBar = false
+      },
+      fetchCurrentPoint () {
+        fetchCurrentPoint(this.$store)
       },
       getFirstLoginCookie () {
         return VueCookie.get('readr-first-login')
