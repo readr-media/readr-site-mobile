@@ -11,7 +11,8 @@
         <!--DepositTappay class="deposit" v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint">
           <span v-text="$t('point.DEPOSIT.GO')"></span>
         </DepositTappay--> 
-      </div> 
+      </div>
+      <router-link class="point-manager__infobar-to-about-points" to="/about/points" v-text="$t('point.TO_ABOUT_POINTS')"></router-link> 
       <!--div class="point-manager__infobar--switcher"> 
         <div class="point-record" :class="isActive(0)" @click="check(0)"><span class="radio"></span><span v-text="$t('point.POINT_RECORD')"></span></div> 
         <div class="pay-record" :class="isActive(1)" @click="check(1)"><span class="radio"></span><span v-text="$t('point.PAYMENT_RECORD')"></span></div> 
@@ -162,5 +163,10 @@
                 height 5px 
                 border-radius 50% 
                 background-color #808080 
-                display block         
+                display block       
+    &__infobar-to-about-points
+      font-size 0.75rem
+      color #d0021b
+      font-weight 600
+      text-decoration underline  
 </style>
