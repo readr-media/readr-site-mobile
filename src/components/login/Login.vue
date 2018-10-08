@@ -3,10 +3,16 @@
     <TextItem class="login__input-email" type="email"
       :placeHolder="$t('login.WORDING_EMAIL_PLACEHOLDER')"
       :alert.sync="alert.mail"
+      :backgroundColor="'transparent'"
+      :border="'solid 1px #9b9b9b'"
+      :color="'#fff'"
       :value.sync="formData.mail"></TextItem>
     <TextItem class="login__input-pwd" type="password"
       :placeHolder="$t('login.WORDING_PASSWORD')"
       :alert.sync="alert.pwd"
+      :backgroundColor="'transparent'"
+      :border="'solid 1px #9b9b9b'"
+      :color="'#fff'"
       :value.sync="formData.pwd"></TextItem>
     <div class="login__wrapper">
       <div class="keep-login-alive">
@@ -17,7 +23,7 @@
         <span v-text="$t('login.WORDING_FORGET_PASSWORD')" @click="goRecoverPwd"></span>
       </div>
     </div>
-    <div class="login__msg">
+    <div v-if="resMsg" class="login__msg">
       <div class='content' v-text="resMsg"></div>
     </div>
     <div class="login__btn" @click="login">
@@ -134,9 +140,10 @@
   .login
     width 100%
     height 100%
+    padding-bottom 20px
     position relative
-    padding-bottom 2rem
-    color #000
+    color #fff
+    border-bottom 1px solid #fff
     &__input-email, &__input-pwd
       margin 15px 0
       &:first-of-type
@@ -156,13 +163,14 @@
       text-align right
       color red
     &__btn
-      position absolute
-      bottom 0
-      left 0
+      // position absolute
+      // bottom 0
+      // left 0
       width 100%
       height 35px
-      background-color #444746
-      color #ddcf21
+      margin-top 30px
+      background-color #ddcf21
+      color #444746
       display flex
       justify-content center
       align-items center

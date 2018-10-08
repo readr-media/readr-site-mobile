@@ -21,9 +21,9 @@
       </div>
     </div>
     <div class="login-panel__right">
-      <div class="title">
+      <!-- <div class="title">
         <span class="login-community active" v-text="''"></span>
-      </div>
+      </div> -->
       <div class="container">
         <FacebookLogin :type="isLoginTabAcitve ? 'login' : 'register'" :isDoingLogin.sync="isDoingLogin"></FacebookLogin>
         <GooglePlusLogin :type="isLoginTabAcitve ? 'login' : 'register'" :isDoingLogin.sync="isDoingLogin"></GooglePlusLogin>
@@ -97,10 +97,8 @@
 </script>
 <style lang="stylus" scoped>
   .login-panel
-    background-color #d8d8d8
     width 100%
-    height 100vh
-    padding 80px 10px 40px
+    padding 0 10px
     margin 0
     display flex
     flex-direction column
@@ -119,12 +117,16 @@
         margin 0 auto 15px
         font-size 15px
         font-weight 600
+        text-align center
         
         > span
           &.active
-            color #000
-        > span
-          margin 0 10px 0 0
+            color #ddcf21
+        > span + span
+          margin-left 1em
+      &.login-panel__right
+        > .container
+          margin-top 20px
       > .container
         width 100%
         margin 0 auto

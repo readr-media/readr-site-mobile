@@ -1,5 +1,5 @@
 <template>
-  <div class="text-item" :class="{ alert: flag }">
+  <div class="text-item" :class="{ alert: flag, 'show-msg': show }">
     <input ref="input"
       v-model="currValue"
       :style="{
@@ -126,7 +126,10 @@
         &:disabled
           border-bottom none
     &.alert
+      position relative
       margin calc(10px - 1.5px) 0
+      &.show-msg
+        padding-bottom 45px
       > input
         border-top 1.5px solid #ddcf21
         border-bottom 1.5px solid #ddcf21
@@ -154,6 +157,9 @@
       background-color #ffffff
       outline none
       font-weight 100
+      line-height 35px
+      border-top-right-radius 0
+      border-bottom-right-radius 0
       &::-webkit-input-placeholder
         color #bdbdbd
         font-weight 100
@@ -167,11 +173,11 @@
       background-color #ddcf21
       padding 10px
       position absolute
-      // width 150px
+      width 100%
       white-space nowrap
       min-height 30px
-      left calc(100% + 17.5px)
-      top 0
+      left 0
+      top 45px
       z-index 20
       font-size 0.625rem
       line-height calc((10 / 16) * 1.4rem)
@@ -181,25 +187,25 @@
       box-shadow 1px 1px 1px rgba(0, 0, 0, 0.4)
       display none
       &.long
-        width 140px
         white-space normal
-      &::before
-        content ''
-        border-width 7.5px 17.5px 7.5px 0
-        border-color transparent rgba(0, 0, 0, 0.4) transparent transparent
-        border-style solid
-        position absolute
-        left -17.5px
-        top 8.5px
-        display block
+      // &::before
+      //   content ''
+      //   border-width 7.5px 17.5px 7.5px 0
+      //   border-color transparent rgba(0, 0, 0, 0.4) transparent transparent
+      //   border-style solid
+      //   position absolute
+      //   left -17.5px
+      //   top 8.5px
+      //   display block
       &::after
         content ''
-        border-width 7.5px 17.5px 7.5px 0
-        border-color transparent #ddcf21 transparent transparent
+        border-width 0 5px 10px 5px 
+        border-color transparent transparent #ddcf21 transparent
         border-style solid
         position absolute
-        left -17.5px
-        top 7.5px
+        left 50%
+        top -10px
+        transform translateX(-50%)
         display block
       &.bottom
         right 0
