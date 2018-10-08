@@ -42,6 +42,9 @@ export default {
     'WORDING_BTN_SAVE' : '儲存',
     'WORDING_CREATE_PWD' : '新增密碼',
     'DUPLICATED_USER': '此 Email 已經是會員囉！請點擊上方登入字樣進行登入。',
+    'WELCOME' : `
+      <div class="big title">歡迎來到 READr</div>
+    `,
   },
   'admin': {
     'WORDING_ADMIN_ACCOUNT' : '帳號',

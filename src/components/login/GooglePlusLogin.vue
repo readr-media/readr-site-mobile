@@ -116,12 +116,11 @@
     width 100%
     height 35px
     padding 5px 34px
-    background-color #ffffff
+    background-color transparent
+    border 1px solid #9b9b9b
 
     font-size 1.125rem
-    color #808080
-
-    margin-bottom 15px
+    color #9b9b9b
 
     &__container
       display flex
