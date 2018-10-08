@@ -2,7 +2,8 @@ import _ from 'lodash'
 import Cookie from 'vue-cookie'
 import uuidv4 from 'uuid/v4'
 import pathToRegexp from 'path-to-regexp'
-import { SITE_DOMAIN, SITE_DOMAIN_DEV, MM_SITE_DOMAIN, OLD_PROJECTS_SLUGS, } from '../constants'
+import { SITE_DOMAIN, SITE_DOMAIN_DEV, SITE_FULL, MM_SITE_DOMAIN, OLD_PROJECTS_SLUGS, URL_SHARE_FB, URL_SHARE_LINE, URL_SHARE_GOOGLEPLUS, } from '../constants'
+import { POST_TYPE, } from 'api/config'
 
 export function consoleLogOnDev ({ msg, }) {
   if (currEnv() === 'dev') {
@@ -45,7 +46,7 @@ export function dateDiffFromNow (date) {
   }
 }
 
-export function getImageUrl (url) {
+export function getFullUrl (url) {
   const browser = typeof window !== 'undefined'
   let hostname
   if (browser) {
@@ -78,7 +79,7 @@ export function getArticleAuthorNickname (articleData) {
 }
 
 export function getArticleAuthorThumbnailImg (articleData) {
-  return getImageUrl(_.get(articleData, 'authorProfileImage') || (_.get(articleData, 'author.profileImage') || _.get(articleData, 'profileImage') || '/public/icons/exclamation.png'))
+  return getFullUrl(_.get(articleData, 'authorProfileImage') || (_.get(articleData, 'author.profileImage') || _.get(articleData, 'profileImage') || '/public/icons/exclamation.png'))
 }
 
 export function isScrollBarReachBottom (ratio = 0) {
@@ -175,4 +176,44 @@ export function onImageLoaded(url) {
       }
     }
   })
+}
+
+export function getPostType (postData) {
+  if (_.get(postData, 'type') === POST_TYPE.NEWS) {
+    return 'news'
+  } else if (_.get(postData, 'projectId') && _.get(postData, 'slug')) {
+    return 'report'
+  } else if (_.get(postData, 'projectId') && !_.get(postData, 'slug')){
+    return 'memo'
+  } else {
+    return 'normal'
+  }
+}
+
+export function getPostFullUrl (postData) {
+  const postType = getPostType(postData)
+  switch (postType) {
+    case 'news':
+    case 'normal':
+      return getFullUrl(`/post/${_.get(postData, 'id', '')}`)
+    case 'memo':
+      return getFullUrl(`/series/${_.get(postData, [ 'project', 'slug', ], '')}/${_.get(postData, 'id', '')}`)
+    case 'report':
+      return getReportUrl(_.get(postData, 'slug', ''))
+    default:
+      return SITE_FULL
+  }
+}
+
+export function createShareUrl(socialMedia = 'fb', url = SITE_FULL) {
+  switch (socialMedia) {
+    case 'fb':
+      return `${URL_SHARE_FB}?u=${url}`
+    case 'line':
+      return `${URL_SHARE_LINE}?${url}`
+    case 'g+':
+      return `${URL_SHARE_GOOGLEPLUS}?url=${url}`
+    default:
+      return `${URL_SHARE_FB}?u=${url}`
+  }
 }

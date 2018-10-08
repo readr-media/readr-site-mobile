@@ -3,7 +3,7 @@
     <template slot="aside">
       <div class="portrait">
           <div class="portrait__container" @click="profileEditorUploadThumbnail">
-            <img v-if="isClientSide" class="portrait__thumbnail" :src="getImageUrl(thumbnail)" alt="thumbnail">
+            <img v-if="isClientSide" class="portrait__thumbnail" :src="getFullUrl(thumbnail)" alt="thumbnail">
             <div class="portrait__upload">
               <input ref="inputPortraitImg" type="file" accept="image/*" class="editor__input" style="display: none;" @change="inputChangeHandler">
             </div>
@@ -113,7 +113,7 @@ import validator from 'validator'
 import { SETTING_ACCOUNT, SETTING_NOTIFICATION, } from 'src/constants'
 import { camelize, } from 'humps' 
 import { filter, get, map, } from 'lodash'
-import { getImageUrl, } from 'src/util/comm'
+import { getFullUrl, } from 'src/util/comm'
 import { removeToken, } from 'src/util/services'
 
 const debug = require('debug')('CLIENT:ProfileEdit')
@@ -220,7 +220,7 @@ export default {
       return store.dispatch('FETCH_PERSONAL_SETTONG') 
     },
     get,
-    getImageUrl,
+    getFullUrl,
     logout () {
       location && location.replace('/')
     },    
