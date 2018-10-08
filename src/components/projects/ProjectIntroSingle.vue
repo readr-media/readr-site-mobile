@@ -2,7 +2,7 @@
   <div class="project-single-intro">
     <div class="project-single-intro__container">
       <div class="project-single-intro__heroimg">
-        <img :src="getImageUrl(get(project, 'heroImage'))">
+        <img :src="getFullUrl(get(project, 'heroImage'))">
       </div>
       <div class="follow" @click="clickFollow">
         <img class="follow__icon" :src="isFollowed ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'" alt="">
@@ -28,7 +28,7 @@
 <script>
 import AppArticleNav from 'src/components/AppArticleNav.vue'
 import { get, } from 'lodash'
-import { getImageUrl, } from 'src/util/comm'
+import { getFullUrl, } from 'src/util/comm'
 import { mapState, } from 'vuex'
 import { redirectToLogin, } from 'src/util/services'
 // const debug = require('debug')('CLIENT:ProjectIntroSingle')
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     get,
-    getImageUrl,
+    getFullUrl,
     // TODO: Refactor following to a component like ButtonFollow.vue
     clickFollow () {
       if (this.isLoggedIn) {

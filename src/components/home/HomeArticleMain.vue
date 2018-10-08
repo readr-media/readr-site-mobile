@@ -3,7 +3,7 @@
     <!-- <div class="home-article-main__share">
       <AppShareButton :shareUrl="shareUrl" :direction="'down'" :backgroundColor="'#d3d3d3'"/>
     </div> -->
-    <div class="home-article-main__author">
+    <div class="home-article-main__info info">
       <figure class="author-info">
         <router-link class="author-info__thumbnail" :to="authorPublicProfileUrl">
           <img :src="authorThumbnailImg" alt="" v-if="isClientSide">
@@ -15,6 +15,7 @@
           </router-link>
         </figcaption>
       </figure>
+      <PostShareNav class="info__share-nav" :shareUrl="shareUrl"/>
     </div>
     <div class="home-article-main__content">
       <PostContent :post="articleData" :key="`post-content-${articleData.id}`" :id="`post-content-${articleData.id}`"></PostContent>
@@ -25,8 +26,8 @@
 <script>
 import AppShareButton from 'src/components/AppShareButton.vue'
 import PostContent from 'src/components/PostContent.vue'
-import { SITE_DOMAIN_DEV, } from 'src/constants'
-import { dateDiffFromNow, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from 'src/util/comm'
+import PostShareNav from 'src/components/post/PostShareNav.vue'
+import { dateDiffFromNow, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, getPostFullUrl, } from 'src/util/comm'
 import { get, } from 'lodash'
 
 export default {
@@ -45,6 +46,7 @@ export default {
   components: {
     AppShareButton,
     PostContent,
+    PostShareNav,
   },
   data () {
     return {
@@ -63,7 +65,7 @@ export default {
     },
     isClientSide,
     shareUrl () {
-      return `${SITE_DOMAIN_DEV}/post/${this.articleData.id}`
+      return getPostFullUrl(this.articleData)
     },
     authorNickname () {
       return getArticleAuthorNickname(this.articleData)
@@ -78,7 +80,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .home-article-main
   display flex
   flex-direction column
@@ -93,7 +95,7 @@ export default {
     right 15px
     width 30px
     height 30px
-  &__author
+  &__info
     width 100%
     height 60px
     background-color #d3d3d3
@@ -119,38 +121,45 @@ export default {
   & + .home-article-main
     margin-top 10px
 
-  .author-info
-    margin 0
-    display flex
-    flex-direction row
-    justify-content flex-start
-    align-items center
-    position relative
-    &__thumbnail
-      width 60px
-      height 60px
-      img
-        width 100%
-        height 100%
-        object-fit cover
-    &__meta
-      margin-left 20px
-      p
-        margin 5px 0
-    &__date
-      font-size 12px
-      font-weight 500
-    &__nickname
-      font-size 18px
-      color #000
-    &:before
-      content ''
-      position absolute
-      left calc(60px - 12px)
-      bottom 0
-      width 0
-      height 0
-      border-style solid
-      border-width 0 12px 20px 12px
-      border-color transparent transparent #ffffff transparent
+.author-info
+  margin 0
+  display flex
+  flex-direction row
+  justify-content flex-start
+  align-items center
+  position relative
+  &__thumbnail
+    width 60px
+    height 60px
+    img
+      width 100%
+      height 100%
+      object-fit cover
+  &__meta
+    margin-left 20px
+    p
+      margin 5px 0
+  &__date
+    font-size 12px
+    font-weight 500
+  &__nickname
+    font-size 18px
+    color #000
+  &:before
+    content ''
+    position absolute
+    left calc(60px - 12px)
+    bottom 0
+    width 0
+    height 0
+    border-style solid
+    border-width 0 12px 20px 12px
+    border-color transparent transparent #ffffff transparent
+
+.info
+  display flex
+  justify-content space-between
+  align-items center
+  &__share-nav
+    padding 0 10px 0 0
 </style>
