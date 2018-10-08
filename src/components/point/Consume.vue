@@ -2,7 +2,7 @@
   <BaseLightBox :showLightBox.sync="showMemoDeduction" borderStyle="nonBorder" @closeLightBox="hideMemoDeduction">
     <div class="project-memo-alert">
       <div class="project-memo-alert__content" :class="{ center: !currUser, }">
-        <template v-if="currUser">
+        <template v-if="isClientSide && currUser">
           <div class="content">
             <h2 v-text="$t('PROJECT.JOIN_CONTENT_1')"></h2>
             <h1 v-text="get(targetItem, 'project.title')"></h1>
@@ -44,6 +44,7 @@
   import DonateDetail from 'src/components/point/DonateDetail.vue'
   import { POINT_OBJECT_TYPE, DONATION_POINT_MIN_LINE, } from 'api/config'  
   import { get, } from 'lodash'
+  import { isClientSide, } from 'src/util/comm'
   
   const DEFAULT_DONATION_POINT_MIN_LINE = DONATION_POINT_MIN_LINE || -100
 
@@ -87,6 +88,7 @@
       isActive () { 
         return get(this.$store, 'state.consumeFlag.active', false) 
       }, 
+      isClientSide,
       isDonationActive () {
         return get(this.$store, 'state.setting.DONATION_IS_DEPOSIT_ACTIVE', false)
       },        
