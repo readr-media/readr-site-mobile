@@ -5,16 +5,16 @@
       <FollowingListItem
         class="list__list-item"
         v-for="item in data"
-        :key="item.id"
+        :key="`${item.resource}-${getItemContent(item).id}`"
         :resource="item.resource"
-        :id="item.id"
+        :id="getItemContent(item).id"
       >
         <!-- slot template in FollowingListItem for tag -->
         <router-link
           v-if="item.resource === 'tag'"
           class="tag"
-          v-text="item.text"
-          :to="`/tag/${item.id}`"
+          v-text="getItemContent(item).text"
+          :to="`/tag/${getItemContent(item).id}`"
         >
         </router-link>
         <!-- slot template in FollowingListItem for project -->
@@ -22,15 +22,15 @@
           v-else-if="item.resource === 'project'"
           class="report"
         >
-          <router-link class="report__hero-img" :to="`/series/${item.slug}`">
-            <img :src="item.heroImage" alt="">
+          <router-link class="report__hero-img" :to="`/series/${getItemContent(item).slug}`">
+            <img :src="getItemContent(item).heroImage" alt="">
           </router-link>
           <div class="report__info">
             <div>
               <p class="report__category" v-text="$t('FOLLOWING.PROJECT')"></p>
-              <router-link class="report__title" :to="`/series/${item.slug}`" v-text="item.title"></router-link>
+              <router-link class="report__title" :to="`/series/${getItemContent(item).slug}`" v-text="getItemContent(item).title"></router-link>
             </div>
-            <!-- <p class="report__tags"># 性產業工作者調查、情緒勞動</p> -->
+            <p class="report__tags" v-text="getTags(item)"></p>
           </div>
         </div>
       </FollowingListItem>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { get, } from 'lodash'
 import FollowingListItem from './FollowingListItem.vue'
 
 export default {
@@ -54,6 +55,15 @@ export default {
   },
   components: {
     FollowingListItem,
+  },
+  methods: {
+    getItemContent (item) {
+      return get(item, 'item') || {}
+    },
+    getTags (item) {
+      const tags = this.getItemContent(item).tags || []
+      return tags.length === 0 ? '' : `# ${ tags.map(tag => tag.text).join('、') }`
+    },
   },
 }
 </script>
