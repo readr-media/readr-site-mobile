@@ -11,7 +11,7 @@
     <div class="about__edit" v-if="isCurrUser">
       <span class="about__edit__btn" v-text="editText" @click="goEdit"></span>
     </div>
-    <BaseLightBox :showLightBox.sync="showLightBox" borderStyle="nonBorder">
+    <BaseLightBox :showLightBox.sync="showLightBox" borderStyle="nonBorder" v-if="isCurrUser">
       <ProfileEdit :showLightBox="showLightBox" :profile="profile" @save="showLightBox = false"/>
     </BaseLightBox>
   </div>
