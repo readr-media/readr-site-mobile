@@ -41,7 +41,8 @@
 <script>
 import { getArticleAuthorId, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from 'src/util/comm'
 import { POST_TYPE, } from 'api/config'
-import { get, find,  map, isEmpty, } from 'lodash'
+import { get, find, map, isEmpty, } from 'lodash'
+import { isClientSide, } from 'src/util/comm'
 import BaseLightBoxTemplateNews from 'src/components/BaseLightBoxTemplateNews.vue'
 import BaseLightBoxTemplatePost from 'src/components/BaseLightBoxTemplatePost.vue'
 import sanitizeHtml from 'sanitize-html'
@@ -87,6 +88,7 @@ export default {
     isNews () {
       return get(this.post, 'type', POST_TYPE.REVIEW) === POST_TYPE.NEWS 
     },
+    isClientSide,
     isMemo () { 
       debug('is memo?', get(this.post, 'flag') === 'memo' )
       debug('is memo?', this.$route.fullPath.split('/')[ 1 ] === 'series' && get(this.$route, 'params.slug') && get(this.$route, 'params.subItem'))
