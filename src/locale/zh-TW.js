@@ -561,9 +561,10 @@ export default {
     'SETTING_ACCOUNT': {
       'HIDE_PROFILE': {
         'TITLE': '個人頁面觀看權限',
-        'DESC': '其他會員是否看得見你的個人頁面',
+        'DESC': '是否隱藏你的個人頁面',
       },  
-    },  
+    },
+    'HIDE_PROFILE': '此個人頁面不公開',  
   },
   'NOTIFICATION': {
     'TITLE': '通知',
