@@ -5,15 +5,26 @@
       <div class="tappay-deposit__wrapper">
         <div class="tappay-deposit__header">
           <div class="leading"></div>
-          <div class="leading-text"><span v-html="$t('point.DEPOSIT.DESCRIPTION')"></span></div>
+          <div class="leading-text">
+            <div class="leading-text--wrapper">
+              <span v-text="$t('point.CLEAR_UP.DESCRIPTION_PREFIX')"></span>
+              <span v-text="amount" class="value"></span>
+              <span v-text="$t('point.CLEAR_UP.DESCRIPTION_INFIX')"></span>
+              <span v-text="amount" class="value"></span>
+              <span v-text="$t('point.CLEAR_UP.DESCRIPTION_POSTFIX')"></span> 
+              <!--span v-text="$t('point.CLEAR_UP.DESCRIPTION_CREADIT_ONLY')"></span-->
+            </div>          
+          </div>
         </div>
         <DepositTappayForm
           :status="active"
           :isReadyToDeposit.sync="isReadyToDeposit"
+          :carrierInfo.sync="carrierInfo"
+          :businessInfo.sync="businessInfo"
           :phone.sync="phoneNumber"
           :cardHolder.sync="cardHolder"></DepositTappayForm>
         <div class="go-deposit" :class="{ active: isReadyToDeposit, }" @click.stop="goDeposit">
-          <span v-text="$t('point.DEPOSIT.CONFIRM_TO_PAY')"></span>
+          <span v-text="$t('point.CLEAR_UP.CONFIRM_TO_PAY')"></span>
           <Spinner :show="isDepositing"></Spinner>
         </div>
         <div class="close" @click.stop="closeDeposit"></div>
@@ -32,7 +43,7 @@
   const deposit = (store, {
     points,
     token,
-    lastfour,
+    invoiceItem,
     member_phone,
     member_name,
   } = {}) => store.dispatch('ADD_REWARD_POINTS_TRANSACTIONS', {
@@ -42,7 +53,7 @@
       token,
       member_name,
       member_phone,
-      lastfour,
+      invoiceItem,
     },
   })
 
@@ -75,9 +86,11 @@
     data () {
       return {
         alertFlag: false,
-        cdtcLast4: null,
-        phoneNumber: '',
+        businessInfo: {},
         cardHolder: '',
+        cdtcLast4: null,
+        carrierInfo: {},
+        phoneNumber: '',
         isReadyToDeposit: false,
         isDepositing: false,
         resultMessage: '',
@@ -95,11 +108,11 @@
               * Deposited successfully. And go refresh current point.
               */
             this.$emit('fetchCurrentPoint')
-            this.resultMessage = this.$t('point.DEPOSIT.SUCCESSFULLY')
+            this.resultMessage = this.$t('point.CLEAR_UP.SUCCESSFULLY')
             this.alertFlag = true
             this.callback()
           } else {
-            this.resultMessage = this.$t('point.DEPOSIT.INFAIL')
+            this.resultMessage = this.$t('point.CLEAR_UP.INFAIL')
             this.alertFlag = true
             debug('res', res)
           }          
@@ -107,15 +120,23 @@
 
         window.TPDirect && window.TPDirect.card.getPrime(result => {
           if (result.status !== 0) {
-              debug('get prime error ' + result.msg)
-              return
+            debug('get prime error ' + result.msg)
+            return
           }
           debug('get prime successfully: ' + result.card.prime)  
           this.isDepositing = false    
           deposit(this.$store, {
+            invoiceItem: {
+              businessTitle: get(this.businessInfo, 'businessTitle'),
+              businessTaxNo: get(this.businessInfo, 'businessTaxNo'),
+              businessAddress: get(this.businessInfo, 'businessAddress'),        
+              carrierType: get(this.carrierInfo, 'carrierType'),
+              carrierNum: get(this.carrierInfo, 'carrierNum'),
+              category: get(this.carrierInfo, 'category'),
+              lastFourNum: result.card.lastfour,
+            },            
             points: 0 - this.amount,
             token: result.card.prime,
-            lastfour: result.card.lastfour,
             member_name: this.cardHolder,
             member_phone: this.phoneNumber,
           }).then(cb)              
@@ -166,13 +187,17 @@
       align-items center 
     &__wrapper     
       width 320px
-      height 528px
+      // height 528px
+      // min-height 528px
+      // max-height 100%
+      height 100%
+      overflow auto
       padding 25px
       background-color #fff
-      display flex
-      justify-content center
-      flex-direction column
-      position relative
+      // display flex
+      // justify-content center
+      // flex-direction column
+      // position relative
       .close
         width 45px
         height 45px
@@ -248,6 +273,28 @@
           margin-left 10px
           .name
             width auto
+      &.depend-on
+        display none
+        &.active
+          display block
+      &.indent
+        padding-left 20px
+        margin 10px 0
+        .input
+          padding-left 25px
+          width 100%
+          font-size 0.75rem
+          & + .input
+            margin-top 10px
+          input
+            border 1px solid #e3e3e3
+            width 100%
+            outline none
+            padding 2px 5px
+            color #808080
+            &::-webkit-input-placeholder
+              color #bdbdbd
+              font-weight 100            
       &.title
         font-size 1.125rem
         font-weight bold

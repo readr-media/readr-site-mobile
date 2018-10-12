@@ -348,7 +348,11 @@ export default {
       'REST': '餘額',
       'CONFIRM': '確定',
     },
-    'DEPOSIT': {
+    'CLEAR_UP': {
+      'DESCRIPTION_PREFIX': '您正準備結清點數',
+      'DESCRIPTION_INFIX': '點，共',
+      'DESCRIPTION_POSTFIX': '元新台幣。',
+      'DESCRIPTION_CREADIT_ONLY': '目前我們僅提供信用卡付費。',      
       'GO': '儲值',
       'DESCRIPTION': '您正在進行儲值，每次儲值以<br>100 元台幣為單位，可多次儲值。', 
       'CONFIRM_TO_PAY': '確認付款',
@@ -358,6 +362,7 @@ export default {
       'TITLE': { 
         'CARD_INFO': '信用卡資訊', 
         'OWNER': '持卡人資訊', 
+        'INVOICE_INFO': '電子發票',
       }, 
       'PLACEHOLDER': { 
         'CARD_NUMBER': '**** **** **** ****', 
@@ -377,6 +382,30 @@ export default {
         'CCV': '檢查碼', 
         'EXPIRY': '到期年月',       
       },       
+      'INVOICE': {
+        'CARRIER_TYPE': {
+          'EMAIL': {
+            'TITLE': 'Email 載具',
+            'PLACEHOLDER': '如：example@readr.com',
+          },
+          'PHONE': {
+            'TITLE': '手機條碼載具',
+            'PLACEHOLDER': '如：/1234ABC',
+          },
+          'NATURAL': {
+            'TITLE': '自然人憑證條碼',
+            'PLACEHOLDER': '如：AB00001234567890',
+          },
+          'BUSINESS': {
+            'TITLE': '三聯式發票',
+            'PLACEHOLDER': {
+              'TITLE': '請填入您的公司抬頭',
+              'TAX_NO': '請填入您的公司統一編號',
+              'ADDRESS': '請填入您的公司地址',
+            },
+          },
+        },
+      },    
     },
     'DONATE': {
       'APPRECIATE': '感謝您贊助',
