@@ -82,13 +82,13 @@
     asyncData ({ store, route, }) {
       const jobs = !get(store, 'state.publicPosts.items.length') ? [
         fetchPosts(store).then(() => {
-          if (store.state.isLoggedIn) {
-            const postIdsLatest = get(store.state.publicPosts, 'items', []).map(post => post.id)
-            if (postIdsLatest.length > 0) {
-              fetchEmotion(store, { resource: 'post', ids: postIdsLatest, emotion: 'like', })
-              fetchEmotion(store, { resource: 'post', ids: postIdsLatest, emotion: 'dislike', })
-            } 
-          }
+          const postIdsLatest = get(store.state.publicPosts, 'items', []).map(post => post.id)
+          if (postIdsLatest.length > 0) {
+            return Promise.all([
+              fetchEmotion(store, { resource: 'post', ids: postIdsLatest, emotion: 'like', }),
+              fetchEmotion(store, { resource: 'post', ids: postIdsLatest, emotion: 'dislike', }),
+            ])
+          } 
         }),
       ] : []
     
@@ -201,13 +201,11 @@
       getUserFollowing(this.$store, { resource: 'post', })
       if (!get(this.postsLatest, 'length')) {
         fetchPosts(this.$store).then(() => {
-          if (this.$store.state.isLoggedIn) {
-            const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => post.id)
-            if (postIdsLatest.length > 0) {
-              fetchEmotion(this.$store, { resource: 'post', ids: postIdsLatest, emotion: 'like', })
-              fetchEmotion(this.$store, { resource: 'post', ids: postIdsLatest, emotion: 'dislike', })
-            } 
-          }
+          const postIdsLatest = get(this.$store.state.publicPosts, 'items', []).map(post => post.id)
+          if (postIdsLatest.length > 0) {
+            fetchEmotion(this.$store, { resource: 'post', ids: postIdsLatest, emotion: 'like', })
+            fetchEmotion(this.$store, { resource: 'post', ids: postIdsLatest, emotion: 'dislike', })
+          } 
         })
       }
     },
@@ -227,11 +225,9 @@
             console.log(res)
           } else {
             this.currentPage += 1
-            if (this.$store.state.isLoggedIn) {
-              const ids = res.items.map(post => post.id)
-              fetchEmotion(this.$store, { mode: 'update', resource: 'post', ids: ids, emotion: 'like', })
-              fetchEmotion(this.$store, { mode: 'update', resource: 'post', ids: ids, emotion: 'dislike', })
-            }
+            const ids = res.items.map(post => post.id)
+            fetchEmotion(this.$store, { mode: 'update', resource: 'post', ids: ids, emotion: 'like', })
+            fetchEmotion(this.$store, { mode: 'update', resource: 'post', ids: ids, emotion: 'dislike', })
           }
         })
       },
