@@ -108,14 +108,14 @@
         this.openControlBar = true
       },
       sendPageview () { 
-        logTrace({ 
-          category: this.$route.fullPath, 
-          description: 'pageview', 
-          eventType: 'pageview', 
-          sub: this.currUser, 
-          target: {}, 
-          useragent: this.useragent, 
-        }) 
+        logTrace(Object.assign({
+          category: this.$route.fullPath,
+          description: 'pageview',
+          eventType: 'pageview',
+          sub: this.currUser,
+          target: {},
+          useragent: this.useragent,
+        }, this.$route.query)) 
       },       
     },
     watch: { 
