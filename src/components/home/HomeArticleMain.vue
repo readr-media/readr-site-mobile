@@ -1,15 +1,18 @@
 <template>
   <article class="home-article-main">
-    <!-- <div class="home-article-main__share">
-      <AppShareButton :shareUrl="shareUrl" :direction="'down'" :backgroundColor="'#d3d3d3'"/>
-    </div> -->
     <div class="home-article-main__info info">
       <figure class="author-info">
         <router-link class="author-info__thumbnail" :to="authorPublicProfileUrl">
           <img :src="authorThumbnailImg" alt="" v-if="isClientSide">
         </router-link>
         <figcaption class="author-info__meta">
-          <p class="author-info__date" v-text="dateDiffFromNow"></p>
+          <AppDateCreatedUpdated
+            v-if="isReportOrMemo"
+            class="author-info__date-report-memo"
+            :createdAt="articleData.createdAt"
+            :updatedAt="articleData.updatedAt"
+          />
+          <p v-else class="author-info__date" v-text="dateDiffFromNow"></p>
           <router-link class="author-info__nickname" :to="authorPublicProfileUrl">
             <p class="author-info__nickname" v-text="authorNickname"></p>
           </router-link>
@@ -25,9 +28,10 @@
 
 <script>
 import AppShareButton from 'src/components/AppShareButton.vue'
+import AppDateCreatedUpdated from 'src/components/AppDateCreatedUpdated.vue'
 import PostContent from 'src/components/PostContent.vue'
 import PostShareNav from 'src/components/post/PostShareNav.vue'
-import { dateDiffFromNow, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, getPostFullUrl, } from 'src/util/comm'
+import { dateDiffFromNow, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, getPostType, } from 'src/util/comm'
 import { get, } from 'lodash'
 
 export default {
@@ -45,6 +49,7 @@ export default {
   },
   components: {
     AppShareButton,
+    AppDateCreatedUpdated,
     PostContent,
     PostShareNav,
   },
@@ -64,14 +69,14 @@ export default {
       return dateDiffFromNow(this.articleData.publishedAt)
     },
     isClientSide,
-    shareUrl () {
-      return getPostFullUrl(this.articleData)
-    },
     authorNickname () {
       return getArticleAuthorNickname(this.articleData)
     },
     authorThumbnailImg () {
       return getArticleAuthorThumbnailImg(this.articleData)
+    },
+    isReportOrMemo () {
+      return getPostType(this.articleData) === 'report' || getPostType(this.articleData) === 'memo'
     },
   },
   methods: {
@@ -137,11 +142,19 @@ export default {
       object-fit cover
   &__meta
     margin-left 20px
+    display flex
+    flex-direction column
+    justify-content center
     p
-      margin 5px 0
+      margin 5px 0 0 0
   &__date
     font-size 12px
     font-weight 500
+  &__date-report-memo
+    & >>> .date__field + .date__field
+      border-left 1px solid gray
+    & >>> .field--gray
+      color gray
   &__nickname
     font-size 18px
     color #000
@@ -162,4 +175,10 @@ export default {
   align-items center
   &__share-nav
     padding 0 10px 0 0
+
+@media (max-width 320px)
+  .author-info
+    &__date-report-memo
+      & >>> .field
+        font-size 9px
 </style>

@@ -11,7 +11,7 @@
       </figure>
       <div class="projects-figure-content__info">
         <div class="projects-figure-content__info-title">
-          <ProjectsFigureDate :createdAt="project.createdAt" :updatedAt="project.updatedAt"/>
+          <AppDateCreatedUpdated :createdAt="project.createdAt" :updatedAt="project.updatedAt"/>
           <h1 v-text="project.title"></h1>
         </div>
         <p class="projects-figure-content__descr" v-text="project.description"></p>
@@ -38,7 +38,7 @@
 <script>
 import DonateButton from 'src/components/point/DonateButton.vue'
 import TagNav from 'src/components/tag/TagNav.vue'
-import ProjectsFigureDate from './ProjectsFigureDate.vue'
+import AppDateCreatedUpdated from 'src/components/AppDateCreatedUpdated.vue'
 import { get, find, } from 'lodash'
 import { updatedAtYYYYMMDD, } from '../../util/comm'
 import { mapState, } from 'vuex'
@@ -59,7 +59,7 @@ export default {
   components: {
     DonateButton,
     TagNav,
-    ProjectsFigureDate,
+    AppDateCreatedUpdated,
   },
   props: {
     project: {
