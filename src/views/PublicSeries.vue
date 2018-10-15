@@ -209,7 +209,7 @@ export default {
       return get(this.$store, 'state.profile', {})
     },
     posts () {
-      return sortBy(union(get(this.$store, this.me.id ? 'state.memos' : 'state.publicMemos', []), get(this.$store, 'state.publicReports', [])), [ p => -moment(p.publishedAt), ])
+      return sortBy(union(get(this.$store, 'state.memos.length') > 0 ? get(this.$store, 'state.memos') : get(this.$store, 'state.publicMemos', []), get(this.$store, 'state.publicReports', [])), [ p => -moment(p.publishedAt), ])
     },
     postSingle () {
       return get(this.$store, 'state.memoSingle.id') ? get(this.$store, 'state.memoSingle') : get(this.$store, 'state.publicMemoSingle', {})
