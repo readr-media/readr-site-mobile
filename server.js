@@ -15,6 +15,7 @@ const useragent = require('express-useragent')
 const uuidv4 = require('uuid/v4')
 const { PAGE_CACHE_EXCLUDING, GOOGLE_CLIENT_ID, TALK_SERVER } = require('./api/config')
 const { SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT } = require('./api/config')
+const { SERVER_PROTOCOL_MOBILE, SERVER_HOST_MOBILE, SERVER_PORT_MOBILE } = require('./api/config')
 const config = require('./api/config')
 const { createBundleRenderer } = require('vue-server-renderer')
 
@@ -211,7 +212,8 @@ function render (req, res, next) {
       DOMAIN: config.DOMAIN,
       DONATION_IS_DEPOSIT_ACTIVE: config.DONATION_IS_DEPOSIT_ACTIVE, 
       DONATION_DEPOSIT_AMOUNT_ONCE: config.DONATION_DEPOSIT_AMOUNT_ONCE,      
-      HOST: `${config.SERVER_PROTOCOL}://${config.SERVER_HOST}`,
+      HOST: `${config.SERVER_PROTOCOL}://${config.SERVER_HOST}${config.SERVER_PORT ? ':' + config.SERVER_PORT : ''}`,
+      HOST_MOBILE: `${config.SERVER_PROTOCOL_MOBILE}://${config.SERVER_HOST_MOBILE}${SERVER_PORT_MOBILE ? ':' + config.SERVER_PORT_MOBILE : ''}`,
       REGISTRATION_ACTIVE: config.REGISTRATION_ACTIVE,
       STRIPE_KEY: config.STRIPE_KEY,
       TAPPAY: config.TAPPAY, 
