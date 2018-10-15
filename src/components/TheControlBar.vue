@@ -19,7 +19,7 @@
         <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.MANAGE')"></div>
         <div class="controlBar__menu-item-box">
           <button @click="$_controlBar_openPanel($event, 'records')" v-text="$t('CONTROL_BAR.RECORD')"></button>
-          <button v-if="$can('editOtherPost')" @click="$_controlBar_openPanel($event, 'posts')" v-text="$t('CONTROL_BAR.POST')"></button>
+          <button v-if="$can('editOtherPost')" @click="$_controlBar_openPanel($event, 'posts')" v-text="$t('CONTROL_BAR.CONTENT')"></button>
         </div>
         <div class="controlBar__menu-item-box">
           <!-- <button @click="$_controlBar_openPanel($event, 'videos')" v-text="$t('CONTROL_BAR.VIDEO')"></button> -->
@@ -61,10 +61,10 @@
         return get(this.$store, [ 'state', 'isClientSide', ], false)
       },
       wordingBtnNews () {
-        return this.viewport <= 767 ? this.$t('control_bar.WORDING_CONTROLBAR_NEWS') : this.$t('control_bar.WORDING_CONTROLBAR_ADD_NEWS')
+        return this.viewport <= 767 ? this.$t('CONTROL_BAR.NEWS') : this.$t('CONTROL_BAR.ADD_NEWS')
       },
       wordingBtnReview () {
-        return this.viewport <= 767 ? this.$t('control_bar.WORDING_CONTROLBAR_REVIEW') : this.$t('control_bar.WORDING_CONTROLBAR_ADD_REVIEW')
+        return this.viewport <= 767 ? this.$t('CONTROL_BAR.REVIEW') : this.$t('CONTROL_BAR.ADD_REVIEW')
       },
     },
     mounted () {
