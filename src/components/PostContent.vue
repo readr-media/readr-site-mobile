@@ -426,5 +426,5 @@
     display block
     color #808080
     font-size 12px
-    
+    word-break break-all
 </style>

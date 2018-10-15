@@ -30,13 +30,14 @@ export default {
   data () {
     return {
       editorOption: {
-        formats: [],
+        formats: [ 'link', ],
         modules: {
-          toolbar: false,
+          toolbar: [ 'link', ],
           clipboard: {
             matchVisual: false,
           },
         },
+        bounds: '.post-panel-container',
       },
     }
   },
