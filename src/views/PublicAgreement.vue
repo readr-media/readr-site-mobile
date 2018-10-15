@@ -1,14 +1,14 @@
 <template>
   <main class="agreement">
     <Tab :tabs="tabs">
-      <div slot="0" class="agreement__item" v-html="agreementContent"></div>
-      <div slot="1">NA</div>
-      <div slot="2">NA</div>
+      <div slot="0" class="agreement__item" v-html="AGREEMENT_CONTENT"></div>
+      <div slot="1" class="agreement__item" v-html="IPR_CONTENT"></div>
+      <div slot="2" class="agreement__item" v-html="PRIVACY_CONTENT"></div>
     </Tab>
   </main>
 </template>
 <script>
-  import { AGREEMENT_CONTENT, } from '../constants/agreement'
+  import { AGREEMENT_CONTENT, IPR_CONTENT, PRIVACY_CONTENT, } from '../constants/agreement'
   import Tab from '../components/Tab.vue'
 
   export default {
@@ -17,7 +17,9 @@
     },
     data () {
       return {
-        agreementContent: AGREEMENT_CONTENT,
+        AGREEMENT_CONTENT,
+        IPR_CONTENT,
+        PRIVACY_CONTENT,
         tabs: [
           this.$t('agreement.WORDING_AGREEMENT_TERMS_AND_SERVICE'),
           this.$t('agreement.WORDING_AGREEMENT_IPR'),
