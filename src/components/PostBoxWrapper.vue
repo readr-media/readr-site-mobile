@@ -5,7 +5,7 @@
     </div>
     <div class="post-box-wrapper__aside" :class="{ on: showPostBox }">
       <div class="post-box-wrapper__aside__content">
-        <div class="btn go-back" :class="{ show: showPostBox }" @click="close"><span>Go Back</span></div>
+        <!--div class="btn go-back" :class="{ show: showPostBox }" @click="close"><span>Go Back</span></div-->
         <slot name="postContent" class=""></slot>
       </div>
     </div>
@@ -67,7 +67,7 @@
         top 0
         min-height 100vh
         background-color #fff 
-        padding-top 35px    
+        // padding-top 35px    
         .btn
           display none
           position fixed
