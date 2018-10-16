@@ -17,6 +17,13 @@
                 <span class="editor-writing__more" @click="toogleReadmore($event)" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
               </span>
             </p>
+            <p 
+              class="editor-writing__paragraph--visible"
+              v-if="i === shouldContentStopAtIndex && hasCustomContentBreak"
+              :key="`${post.id}-${i}`"
+              v-text="`......${$t('homepage.WORDING_HOME_POST_MORE')}`"
+            >
+            </p>
             <!-- rest of the post content -->
             <!-- <p :class="`editor-writing__paragraph--${isReadMoreClicked ? 'visible' : 'invisible'}`" v-else v-html="p" :key="`${post.id}-${i}`"></p> -->
           </template>
@@ -144,7 +151,7 @@
       },
       postContent () {
         if (!this.post.content || this.post.content.length === 0) { return [] }
-        const postParagraphs = map(get(this.contentDOM, 'childNodes'), (p) => (sanitizeHtml(new seializer().serializeToString(p), { allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', ], })))
+        const postParagraphs = map(get(this.contentDOM, 'childNodes'), (p) => (sanitizeHtml(new seializer().serializeToString(p), { allowedTags: this.allowedTags, })))
         return postParagraphs
       },
       postContentProcessed () {
@@ -238,6 +245,7 @@
         isReadMoreClicked: false,
         showContentWordLimit: 150,
         customContentBreakTagName: 'hr',
+        allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', 'em', 'blockquote', ],
       }
     },
     methods: {
@@ -249,7 +257,11 @@
         return index === this.shouldContentStopAtIndex
       },
       shouldShowReadMoreButton (index) {
-        return this.postType === 'normal' && !this.isReadMoreClicked && (!this.isStopLastParagraphBeforeTruncate || this.isStopParagraphWordCountExceedLimit) && this.isLastParagraphAfterTruncate(index)
+        return this.postType === 'normal' &&
+          !this.isReadMoreClicked &&
+          (!this.isStopLastParagraphBeforeTruncate || this.isStopParagraphWordCountExceedLimit) &&
+          this.isLastParagraphAfterTruncate(index) &&
+          !this.hasCustomContentBreak
       },
       setOgImageOrientation (src, event) {
         onImageLoaded(src).then(({ width, height, }) => {
@@ -354,6 +366,11 @@
         width 100%
       .portrait
         width 50%
+      blockquote
+        margin 0
+        padding 0 0 0 16px
+        border-left 4px solid #ccc
+        line-height 1
     &__container 
       // min-height 105px
       // overflow hidden
