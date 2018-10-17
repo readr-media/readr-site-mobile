@@ -1,5 +1,5 @@
 <template>
-  <div class="text-item" :class="{ alert: flag, 'show-msg': show }">
+  <div class="text-item" :class="{ alert: flag, }">
     <input ref="input"
       v-model="currValue"
       :style="{
@@ -18,8 +18,6 @@
       :disabled="disabled"
       :type="type"
       :placeholder="placeHolder"
-      @focus="focus"
-      @focusout="focusout"
       @keyup="keyup">
     <span class="text-item__alert" @click="doFucus"
       :style="{
@@ -29,7 +27,7 @@
         borderTop: border,
         borderBottom: border,             
       }"></span>
-    <span class="text-item__msg" v-text="msg" v-if="show" :class="{ long: isTooLong, bottom: alertPosition && alertPosition === 'bottom', }"></span>
+    <span class="text-item__msg" v-text="msg" :class="{ long: isTooLong, bottom: alertPosition && alertPosition === 'bottom', }"></span>
   </div>
 </template>
 <script>
@@ -48,12 +46,6 @@
     methods: {
       doFucus () {
         this.$refs['input'].focus()
-      },
-      focus () {
-        this.show = true
-      },
-      focusout () {
-        this.show = false
       },
       keyup () {
         this.$emit('update:alert', {
@@ -128,14 +120,14 @@
     &.alert
       position relative
       margin calc(10px - 1.5px) 0
-      &.show-msg
-        padding-bottom 45px
       > input
         border-top 1.5px solid #ddcf21
         border-bottom 1.5px solid #ddcf21
         border-left 1.5px solid #ddcf21
         height 35px
         width calc(100% - 35px)
+        &:focus ~ .text-item__msg
+          display block
       .text-item__alert
         border-top 1.5px solid #ddcf21
         border-bottom 1.5px solid #ddcf21
@@ -145,8 +137,6 @@
         background-size 22px 22px
         background-repeat no-repeat
         display inline-block
-      .text-item__msg
-        display block
     > input
       border none
       width 100%
@@ -179,24 +169,16 @@
       left 0
       top 45px
       z-index 20
-      font-size 0.625rem
-      line-height calc((10 / 16) * 1.4rem)
-      text-align left
+      font-size 0.75rem
+      line-height normal
+      text-align jusitfy
       color #000
-      font-weight 300
+      font-weight normal
       box-shadow 1px 1px 1px rgba(0, 0, 0, 0.4)
+      border-radius 5px
       display none
       &.long
         white-space normal
-      // &::before
-      //   content ''
-      //   border-width 7.5px 17.5px 7.5px 0
-      //   border-color transparent rgba(0, 0, 0, 0.4) transparent transparent
-      //   border-style solid
-      //   position absolute
-      //   left -17.5px
-      //   top 8.5px
-      //   display block
       &::after
         content ''
         border-width 0 5px 10px 5px 
@@ -212,48 +194,5 @@
         left auto
         top 100%
         &::before, &::after
-          content none
-  .closed-beta
-    .text-item
-      &.alert
-        > input
-          width calc(100% - 25px)
-        .text-item__alert
-          background-color transparent
-          background-size 15px 15px
-          border none
-          border-bottom 1px solid #fff
-
-      input
-        height 25px
-        padding 5px 0 5px 5px
-        color #fff
-        font-size 1rem
-        line-height 25px
-        background-color #444746
-        border-bottom 1px solid #fff
-        border-top none
-        border-left none
-        border-radius 0
-
-      &__alert
-        width 25px
-        height 25px
-
-      &__msg
-        position relative
-        left 0
-        right 0
-        min-height 0
-        padding 0
-        color #ddcf21
-        text-align right
-        background-color transparent
-        box-shadow none
-        &.long
-          width 100%
-        &::before
-          content none
-        &::after
           content none
 </style>

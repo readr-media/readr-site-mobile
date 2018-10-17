@@ -101,8 +101,8 @@
             register(this.$store, {
               nickname: this.formData.nickname,
               email: this.formData.mail,
-              password: this.formData.pwd,
-            }, get(this.$store, [ 'state', 'register-token', ])).then(({ status, }) => {
+              password: this.formData.pwd, }, get(this.$store, [ 'state', 'register-token', ])
+            ).then(({ status, }) => {
               this.isRegistered = true
               this.shouldShowSpinner = false
               if (status === 200) {
@@ -111,12 +111,23 @@
                 this.resMsg = this.$t('login.WORDING_REGISTER_INFAIL')
                 window.grecaptcha.reset(this.recaptcha)
               }
-            }).catch(({ err, }) => {
+            }).catch(({ err: error, mode, }) => {
               this.shouldShowSpinner = false
-              if (err === 'User Already Existed' || err === 'User Duplicated') {
+              if (error === 'User Already Existed' || error === 'User Duplicated') {
+                let message = this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED')
+                switch (mode) {
+                  case 'oauth-fb': {
+                    message = this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED_WITH_FACEBOOK')
+                    break
+                  }
+                  case 'oauth-goo': {
+                    message = this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED_WITH_G_PLUS')
+                    break
+                  }
+                }              
                 this.alert.mail = {
                   flag: true,
-                  msg: this.$t('login.DUPLICATED_USER'),
+                  msg: message,
                 }                  
                 this.$forceUpdate()
               } else {

@@ -96,6 +96,10 @@ const GET_PUBLIC_MEMBERS = ({ commit, }, { params, }) => {
   })
 }
 
+const REGISTER = ({}, { params, token, }) => {
+  return memberFunc.register(params, token)
+}
+
 const SETUP_BASIC_PROFILE = ({}, { params, }) => {
   return setupBasicProfile({ params, })
 }
@@ -120,6 +124,7 @@ export {
   GET_PROFILE,
   GET_PUBLIC_MEMBER,
   GET_PUBLIC_MEMBERS,
+  REGISTER,
   SETUP_BASIC_PROFILE,
   UPDATE_MEMBER,
   UPDATE_PROFILE,

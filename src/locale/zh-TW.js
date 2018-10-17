@@ -30,7 +30,14 @@ export default {
     'WORDING_REGISTER_NOTICE' : '註冊會員等同您同意我們的',
     'WORDING_REGISTER_SUCESSFUL' : '請至您註冊的 Email 信箱點擊啟用連結',
     'WORDING_REGISTER_INFAIL' : '註冊過程發生問題，請聯絡我們',
-    'WORDING_REGISTER_INFAIL_DUPLICATED' : '該電子信箱（Email）已被使用，請改用其他電子信箱。',
+    // 'WORDING_REGISTER_INFAIL_DUPLICATED' : '該電子信箱（Email）已被使用，請改用其他電子信箱或使用該電子信箱進行登入',
+    'REGISTER_FACEBOOK_EMAIL': '您 Facebook 帳號使用的',
+    'REGISTER_G_PLUS_EMAIL': '您 Google 帳號使用的',
+    'REGISTER_YOU': '此',
+    'WORDING_REGISTER_INFAIL_DUPLICATED' : '此 Email 已經是會員囉！請改用其他電子信箱或使用此「Email 」登入。',
+    'WORDING_REGISTER_INFAIL_DUPLICATED_WITH_ORDINARY' : 'Email 已經是會員囉！請使用此「Email」登入。',
+    'WORDING_REGISTER_INFAIL_DUPLICATED_WITH_FACEBOOK' : '您已使用「Facebook 帳號」註冊過囉！請使用「Facebook 帳號登入」。',
+    'WORDING_REGISTER_INFAIL_DUPLICATED_WITH_G_PLUS' : '您已使用「Google 帳號」註冊過囉！請使用「Google 帳號」登入。',
     'WORDING_REGISTER_PWD_EMPTY' : '請輸入密碼',
     'WORDING_REGISTER_PWD_CHECK_EMPTY' : '請再次輸入密碼',
     'WORDING_REGISTER_PWD_CHECK_INFAIL' : '「密碼」與「確認密碼」不同，請輸入相同之密碼',
@@ -41,7 +48,6 @@ export default {
     'WORDING_GOOGLE_REGISTER' : '使用 Google 帳號註冊',
     'WORDING_BTN_SAVE' : '儲存',
     'WORDING_CREATE_PWD' : '新增密碼',
-    'DUPLICATED_USER': '此 Email 已經是會員囉！請點擊上方登入字樣進行登入。',
     'WELCOME' : `
       <div class="big title">歡迎來到 READr</div>
     `,
