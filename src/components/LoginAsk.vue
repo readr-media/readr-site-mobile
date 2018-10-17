@@ -4,7 +4,7 @@
       <div class="message"><span v-text="message"></span></div>
       <div class="wrapper">
         <div class="confirm" @click="closeAlert"><span v-text="$t('POST_CONTENT.CONFIRM')"></span></div>
-        <div class="login" @click="goLogin"><span v-text="$t('POST_CONTENT.GO_LOGIN')"></span></div>
+        <div class="login" @click="goLogin" v-if="type === TYPE.GO_LOGIN"><span v-text="$t('POST_CONTENT.GO_LOGIN')"></span></div>
       </div>    
     </div>
   </div>
@@ -13,6 +13,10 @@
   import { redirectToLogin, } from 'src/util/services'
   import { get, } from 'lodash'
 
+  const TYPE = {
+    CONFIRM: 'CONFIRM',
+    GO_LOGIN: 'GO_LOGIN',
+  }
   const switchOff = store => store.dispatch('LOGIN_ASK_TOGGLE', { active: false, message: '', })
 
   export default {
@@ -24,6 +28,14 @@
       message () {
         return get(this.$store, 'state.loginAskFlag.message', '')
       },
+      type () {
+        return get(this.$store, 'state.loginAskFlag.type', 'confirm')
+      },
+    },    
+    data () {
+      return {
+        TYPE,
+      }
     },    
     methods: {
       closeAlert () {
@@ -71,6 +83,7 @@
           justify-content center
           align-items center
           font-size 0.9375rem
+          line-height normal
           box-shadow 0 0 10px rgba(0,0,0,0.1)
           &:not(:first-child)
             margin-left 20px
