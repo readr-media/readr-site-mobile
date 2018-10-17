@@ -69,6 +69,7 @@
       justify-content center
       align-items center
       flex-direction column
+      line-height normal
       .wrapper
         display flex
         width 100%
@@ -83,7 +84,6 @@
           justify-content center
           align-items center
           font-size 0.9375rem
-          line-height normal
           box-shadow 0 0 10px rgba(0,0,0,0.1)
           &:not(:first-child)
             margin-left 20px
