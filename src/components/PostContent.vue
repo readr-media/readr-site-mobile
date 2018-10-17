@@ -156,7 +156,7 @@
         return postParagraphs
       },
       postContentProcessed () {
-        if (this.postContentWordCountTotal <= this.showContentWordLimit){
+        if (this.postContentWordCountTotal <= this.showContentWordLimit) {
           return this.postContent
         } else {
           const ellipsis = this.postType === 'news' ? `......${this.$t('homepage.WORDING_HOME_POST_MORE')}` : ''
@@ -166,7 +166,7 @@
                 const wordCountBeforeStop = this.postContentWordCount.reduce((acc, curr, currIndex) => currIndex < this.shouldContentStopAtIndex ? acc + curr : acc, 0)
                 return truncate(paragraph, this.showContentWordLimit - wordCountBeforeStop, { ellipsis: ellipsis, })
               } else if (!this.isStopLastParagraphBeforeTruncate) {
-                return paragraph + ellipsis
+                return paragraph + (this.hasCustomContentBreak ? '' : ellipsis)
               }
             }
             return paragraph
