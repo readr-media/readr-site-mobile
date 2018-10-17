@@ -67,6 +67,7 @@
               </span>
               <span v-else v-html="p"></span>
               <span v-if="shouldShowReadMoreButton(i)">
+                <span>......</span>
                 <span class="editor-writing__more" @click="toogleReadmore($event)" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span>
               </span>
             </p>
@@ -158,7 +159,7 @@
         if (this.postContentWordCountTotal <= this.showContentWordLimit){
           return this.postContent
         } else {
-          const ellipsis = `......${this.postType === 'normal' ? '' : this.$t('homepage.WORDING_HOME_POST_MORE')}`
+          const ellipsis = this.postType === 'news' ? `......${this.$t('homepage.WORDING_HOME_POST_MORE')}` : ''
           return this.postContent.map((paragraph, index) => {
             if (!this.isReadMoreClicked && index === this.shouldContentStopAtIndex) {
               if (this.isStopParagraphWordCountExceedLimit) {
@@ -201,7 +202,7 @@
       },
       shouldContentStopAtIndex () {
         if (this.hasCustomContentBreak) return this.shouldCustomBreakAtIndex
-        if (this.postContentWordCountTotal <= this.showContentWordLimit) return this.postContent.length
+        if (this.postContentWordCountTotal <= this.showContentWordLimit) return this.postContent.length - 1
         let count = 0
         let index = 0
         if (this.postContentWordCountTotal <= this.showContentWordLimit) return this.postContent.length

@@ -15,8 +15,8 @@
               <img v-if="isClientSide" :src="getImgSrc(p)" alt="post-content-img" @load="setContentImageOrientation(getImgSrc(p), $event)">
             </span>
             <span v-else v-html="p"></span>
-            <span v-if="isMemoPaid === false && !isProjectPublished"> 
-              <span>...... </span> 
+            <span v-if="isMemoPaid === false && !isProjectPublished && i === shouldContentStopAtIndex"> 
+              <span>......</span> 
               <span class="editor-writing__more" @click.prevent="memoDeductMach" v-text="$t('homepage.WORDING_HOME_POST_MORE')"></span> 
             </span> 
             <span v-else-if="shouldShowReadMoreButton(i)">             
