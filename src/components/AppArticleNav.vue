@@ -24,14 +24,12 @@
     </nav>
     <slot name="tagNav"></slot>
     <CommentContainer v-if="shouldShowComment || showComment" :asset="asset" :assetId="postId" :assetRefId="postRefId" :isPublic="!get(me, 'id')"></CommentContainer>
-    <AppAritcleNavAlert :active.sync="isAlertActive" :alertMsg="alertMsg"></AppAritcleNavAlert>
   </div>
 </template>
 
 <script>
 import { find, get, } from 'lodash'
 import { mapState, } from 'vuex'
-import AppAritcleNavAlert from 'src/components/AppAritcleNavAlert.vue'
 import CommentContainer from 'src/components/comment/CommentContainer.vue'
 import CommentCount from 'src/components/comment/CommentCount.vue'
 
@@ -50,7 +48,7 @@ const updateEmotion = (store, { resource = 'post', action = 'insert', emotion = 
     },
   })
 }
-
+const switchOn = (store, message) => store.dispatch('LOGIN_ASK_TOGGLE', { active: true, message, })
 const toogleFollowingByUserStat = (store, { resource, resourceType = '', targetId, }) => {
   return store.commit('TOOGLE_FOLLOWING_BY_USER_STAT', {
     params: {
@@ -64,7 +62,6 @@ const toogleFollowingByUserStat = (store, { resource, resourceType = '', targetI
 export default {
   name: 'AppArticleNav',
   components: {
-    AppAritcleNavAlert,
     CommentCount,
     CommentContainer,
   },
@@ -129,8 +126,6 @@ export default {
   },
   data () {
     return {
-      alertMsg: '',
-      isAlertActive: false,      
       showComment: false,
     }
   },  
@@ -148,8 +143,7 @@ export default {
       if (this.isLoggedIn) {
         this.toogleFollow(event)
       } else {
-        this.isAlertActive = true
-        this.alertMsg = this.$t('POST_CONTENT.HINT.FOLLOW_WITH_LOGIN')        
+        switchOn(this.$store, this.$t('POST_CONTENT.HINT.FOLLOW_WITH_LOGIN'))
       }
     },
     toogleFollow (event) {
@@ -187,11 +181,10 @@ export default {
           updateEmotion(this.$store, { resource: this.resource, action:'insert', emotion: emotion, object: this.postId, })
         }
       } else {
-        this.isAlertActive = true
         if (emotion === 'like') {
-          this.alertMsg = this.$t('POST_CONTENT.HINT.LIKE_WITH_LOGIN')
+          switchOn(this.$store, this.$t('POST_CONTENT.HINT.LIKE_WITH_LOGIN'))
         } else {
-          this.alertMsg = this.$t('POST_CONTENT.HINT.UNLIKE_WITH_LOGIN')
+          switchOn(this.$store, this.$t('POST_CONTENT.HINT.UNLIKE_WITH_LOGIN'))
         }
       }
     },
