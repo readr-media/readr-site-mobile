@@ -1,10 +1,12 @@
 <template>
   <li class="tag-item">
-    <span class="tag-item__hashtag">#</span>
-    <div class="tag-item__tag tag">
-      <router-link :to="`/tag/${tag.id}`" class="tag__header">
-        <span class="tag__text" v-text="tag.text"></span>
-        <span class="tag__action tag-action">
+    <div :class="[ 'tag-item__tag', { 'tag-item__tag--less-border-radius': showRelatedsList }, 'tag' ]">
+      <router-link
+        :to="`/tag/${tag.id}`"
+        :class="[ 'tag__header', { 'tag__header--less-border-radius': showRelatedsList }, { 'tag__header--smaller': !shouldShowAction } ]"
+      >
+        <span :class="[ 'tag__text', { 'tag__text--smaller': !shouldShowAction } ]" v-text="tag.text"></span>
+        <span v-if="shouldShowAction" class="tag__action tag-action">
           <img
             :src="isFollowed ? '/public/icons/star-blue.png' : '/public/icons/star-line-blue.png'"
             @click.prevent="clickFollow"
@@ -17,7 +19,7 @@
           </span>
         </span>
       </router-link>
-      <ul v-if="shouldShowRelatedsList && isRelatedListExist" class="tag__relateds-list">
+      <ul v-if="showRelatedsList" class="tag__relateds-list">
         <div class="tag__category" v-text="$t('TAG_NAV_ASIDE.CATEGORY.PROJECT')"></div>
         <TagItemRelatedsListItem
           v-for="(item, i) in relatedListItems"
@@ -64,6 +66,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    // if shouldShowAction is false, TagItem will be smaller
+    shouldShowAction: {
+      type: Boolean,
+      default: true,
+    },
     shouldShowActionTooltip: {
       type: Boolean,
       default: false,
@@ -98,6 +105,9 @@ export default {
     },
     isMouseover () {
       return get(this.$store.state, [ 'tagsIsMouseover', this.tag.id, ], this.isMouseoverLocal)
+    },
+    showRelatedsList () {
+      return this.shouldShowRelatedsList && this.isRelatedListExist
     },
   },
   methods: {
@@ -145,20 +155,16 @@ export default {
 .tag-item
   display inline-flex
   align-items flex-start
-  &__hashtag
-    font-size 24px
-    font-weight 600
-    margin 0 15.5px 0 0
-    color #11b8c9
+  width 100%
   &__tag
-    // font-size .9375rem
     line-height 1.5rem
-    // font-weight 700
     border 1px solid #11b8c9
-    border-radius 12px
+    border-radius 20px
     user-select none
     background-color white
     flex 1 1 auto
+    &--less-border-radius
+      border-radius 8px
   &__trending-rank
     width 22.5px
     min-width 22.5px
@@ -169,28 +175,38 @@ export default {
     margin 0 0 0 6px
 
 .tag
+  width 100%
   &__header
-    padding 0 8px 0 13.5px
+    padding 5px 15.2px 5px 13.5px
     display flex
     justify-content space-between
     align-items center
-    border-radius 12px
+    border-radius 20px
     background-color white
     color black
+    width 100%
+    &--less-border-radius
+      border-radius 8px
+    &--smaller
+      padding 0 13.5px
   &__text
-    font-size 12px
+    font-size 15px
     font-weight 700
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
+    display inline-block
+    width 100%
+    &--smaller
+      font-size 13px
   &__action
     margin-left 5px
     > img
       position relative
-      top 2px
-      width 20px
-      height 15px
-      padding-left 5px
+      top 3px
+      width calc(25px + 15.2px)
+      height 25px
+      padding-left 15.2px
       border-left 1px solid #d3d3d3
       cursor pointer
   &__relateds-list
@@ -225,17 +241,21 @@ export default {
   &__category
     position absolute
     top 0
-    left -21px
-    width 20px
-    padding .5em 0 .2em
+    left -16px
+    width 15px
+    padding .6em 0 .3em
     color #000
-    font-size .5625rem
+    font-size 11px
     line-height 20px
     letter-spacing .3em
     writing-mode vertical-rl
     background-color #ddcf21
     user-select none
     cursor default
+    display flex
+    justify-content center
+    align-items center
+
 .tag-action
   position relative
   &__tooltip

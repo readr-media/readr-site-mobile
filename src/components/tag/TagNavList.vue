@@ -1,7 +1,5 @@
 <template>
   <nav class="tag-nav-aside">
-    <!-- TODO: add sorting radio buttons -->
-    <h1 class="tag-nav-aside__sort-title" v-text="$t('TAG_NAV_ASIDE.TITLE.HOT')"></h1>
     <ol class="tag-nav-aside__list">
       <TagItem
         v-for="tag in tags"
@@ -70,18 +68,16 @@ export default {
 
 <style lang="stylus" scoped>
 .tag-nav-aside
-  padding 11.5px 15.5px
-  &__sort-title
-    font-size 15px
-    font-weight 400
-    margin 0 0 11.5px 0
+  padding 11.5px 15.5px 11.5px 31px
+  width 100%
   &__list
     list-style none
     margin 0
     padding 0
+    width 100%
   &__tag-item
     display flex !important
     & + &
-      margin 10px 0 0 0
+      margin 14px 0 0 0
 </style>
 

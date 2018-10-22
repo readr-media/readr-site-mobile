@@ -5,7 +5,9 @@
       <TagNav
         v-if="tagsForNav && tagsForNav.length > 0"
         :tags="tagsForNav"
-        class="tag-relateds__tag-nav" />
+        :shouldTagShowAction="true"
+        class="tag-relateds__tag-nav"
+      />
       <HomeArticleMain v-for="post in posts" :key="post.id" :articleData="post" ></HomeArticleMain>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent"></BaseLightBoxPost>
     </PostBoxWrapper>
