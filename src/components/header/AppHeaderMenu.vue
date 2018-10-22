@@ -6,7 +6,7 @@
         <ul class="list">
           <li class="list__list-item">
             <a @click="memberActionTo('/login')" v-text="memberIsLoggedIn ? $t('MENU.MEMBER.LOGOUT') : $t('MENU.MEMBER.LOGIN')"></a>
-            <a v-show="!memberIsLoggedIn" v-text="$t('MENU.MEMBER.REGISTER')"></a>
+            <a v-show="!memberIsLoggedIn" @click="memberActionTo('/login/register')" v-text="$t('MENU.MEMBER.REGISTER')"></a>
           </li>
           <li class="list__list-item">
             <a @click="memberActionTo(`/${memberRole}/profile-edit`)" v-text="$t('MENU.MEMBER.PROFILE_EDIT')"></a>
@@ -102,15 +102,23 @@ export default {
       this.$emit('update:isMenuOpen', false)
     },
     memberActionTo (path) {
+      if (path === '/login/register') {
+        location && location.replace(path)
+        return
+      }
+
       if (!this.memberIsLoggedIn) {
-        this.memberActionRedirectToLogin()
+        redirectToLogin(path === '/login' ? this.$route.fullPath : path)
         return
       }
 
       if (path === '/login') {
         this.memberActionLogout()
       } else {
-        // use location.replace rather than this.$router.push to navigate member's route params correctly
+        /* use location.replace rather than this.$router.push
+        *  to navigate member's route params(e.g. `/${this.memberRole}/profile-edit`) correctly
+        *  since we only check member's route params in beforeMount()
+        */
         location && location.replace(path)
       }
       this.closeMenu()

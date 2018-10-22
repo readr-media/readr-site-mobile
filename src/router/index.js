@@ -60,7 +60,7 @@ const router = new Router({
     { path: '/editor/:panel?/:tool?', component: ManageEditor, meta: { permission: 'editor', }, },
     { path: '/editors', component: PublicEditors, },
     { path: '/guesteditor/:panel?/:tool?', component: ManageGuestEditor, meta: { permission: 'guesteditor', }, },
-    { path: '/login', component: PublicLogin, },
+    { path: '/login/:panel?', component: PublicLogin, },
     { path: '/member/:panel?/:tool?', component: ManageMember, meta: { permission: 'member', }, },
     { path: '/profile/:id', component: PublicProfile, },
     { path: '/search/:keyword', component: PublicSearch, },

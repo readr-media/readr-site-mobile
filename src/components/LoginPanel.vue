@@ -33,6 +33,7 @@
   </div>
 </template>
 <script>
+  import { get, } from 'lodash'
   import FacebookLogin from 'src/components/login/FacebookLogin.vue'
   import GooglePlusLogin from 'src/components/login/GooglePlusLogin.vue'
   import Login from 'src/components/login/Login.vue'
@@ -84,6 +85,10 @@
             break
         }
       },
+      tabNavigate () {
+        const panel = get(this.$route, 'params.panel', 'login')
+        this.tabChoose(panel)
+      },
     },
     mounted () {
       debug('LoginPanel mounted.')
@@ -92,6 +97,8 @@
       Promise.all([
         getDisposableToken(this.$store),
       ])
+
+      this.tabNavigate()
     },
   }
 </script>
