@@ -13,18 +13,18 @@
 </template>
 
 <script>
-import { get, take, } from 'lodash'
+import { get, } from 'lodash'
 import { mapState, } from 'vuex'
 import TagItem from './TagItem.vue'
 
-const MAXRESULT = 3
-const DEFAULT_PAGE = 1
+// const MAXRESULT = 3
+// const DEFAULT_PAGE = 1
 const DEFAULT_SORT = '-updated_at'
 const DEFAULT_URL_PARAM= '/hot'
 const getTags = (store, {
   urlParam = DEFAULT_URL_PARAM,
-  max_result = MAXRESULT,
-  page = DEFAULT_PAGE,
+  // max_result = MAXRESULT,
+  // page = DEFAULT_PAGE,
   sort = DEFAULT_SORT,
   keyword = '',
   stats = false,
@@ -32,8 +32,8 @@ const getTags = (store, {
   return store.dispatch('GET_PUBLIC_TAGS', {
     urlParam: urlParam,
     params: {
-      max_result: max_result,
-      page: page,
+      // max_result: max_result,
+      // page: page,
       sorting: sort,
       keyword: keyword,
       stats: stats,
@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     ...mapState({
-      tags: state => take(state.publicTags, 3),
+      tags: state => state.publicTags,
     }),
   },
   beforeMount () {
