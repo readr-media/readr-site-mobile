@@ -68,7 +68,7 @@ export default {
 
 <style lang="stylus" scoped>
 .tag-nav-aside
-  padding 11.5px 15.5px 11.5px 31px
+  padding 20px 15.5px 50px 31px
   width 100%
   &__list
     list-style none

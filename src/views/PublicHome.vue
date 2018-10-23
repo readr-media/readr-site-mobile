@@ -2,9 +2,10 @@
   <section class="home main">
     <PostBoxWrapper :showPostBox.sync="showPostBox" :hadRouteBeenNavigate="hadRouteBeenNavigate">
       <main>
-        <TagNavList/>
+        <HomeRadios :picked.sync="pickedMainView"/>
+        <TagNavList v-show="pickedMainView === 'tags'"/>
         <template v-if="isClientSide">
-          <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
+          <HomeArticleMain v-show="pickedMainView === 'posts'" v-for="post in postsHome" :key="post.id" :articleData="post"/>
         </template>
       </main>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent" /> 
@@ -18,6 +19,7 @@
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, isClientSide, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
+  import HomeRadios from 'src/components/home/HomeRadios.vue'
   import BaseLightBoxPost from 'src/components/BaseLightBoxPost.vue'
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
   import TagNavList from 'src/components/tag/TagNavList.vue'
@@ -132,6 +134,7 @@
     components: {
       HomeArticleMain,
       HomeNavigationMobile,
+      HomeRadios,
       BaseLightBoxPost,
       PostBoxWrapper,
       TagNavList,
@@ -143,6 +146,7 @@
         currentPage: DEFAULT_PAGE,
         endPage: false,
         isReachBottom: false,
+        pickedMainView: 'posts',
       }
     },
     computed: {
