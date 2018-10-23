@@ -84,7 +84,7 @@
   .notification
     position relative
     width 40px
-    background-image url(/public/icons/bell-yellow.png)
+    background-image url(/public/icons/bell-white.png)
     background-position bottom center
     background-repeat no-repeat
     background-size contain

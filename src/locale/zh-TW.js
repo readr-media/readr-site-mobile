@@ -658,4 +658,19 @@ export default {
     'SWITCH_ON': '是',
     'SWITCH_OFF': '否',
   },
+  'MENU': {
+    'MEMBER': {
+      'LOGIN': '會員登入',
+      'LOGOUT': '會員登出',
+      'REGISTER': '會員註冊',
+      'PROFILE_EDIT': '個人設定',
+      'FOLLOWING': '追蹤記錄',
+      'POINT_MANAGER': '點數記錄',
+    },
+    'SERIES_LIST': '新聞專題',
+    'EDITORS': '客座總編',
+    'ABOUT': '關於我們',
+    'ANNOUNCEMENT': '計畫大小事',
+    'MM': '鏡週刊',
+  },
 }
