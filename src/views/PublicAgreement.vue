@@ -44,5 +44,21 @@
     background-color #fff
     &__item
       text-align justify
+      & >>> h3
+        margin 40px 0
+        font-size 20px
+        letter-spacing .5px
+        line-height 1.25
+      & >>> p
+        margin 30px 0
+        font-size 15px
+        line-height 1.6
+        letter-spacing .5px
+        text-align justify
+        > span
+          margin 5px 0
+          display block
+      & >>> .footer
+        font-size 12px
    
 </style>
