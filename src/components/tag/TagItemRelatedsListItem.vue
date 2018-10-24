@@ -13,7 +13,7 @@
 
 <script>
 import { get, } from 'lodash'
-import { getReportUrl, } from 'src/util/comm'
+import { getReportUrl, getFullUrl, } from 'src/util/comm'
 
 export default {
   props: {
@@ -27,7 +27,7 @@ export default {
       return get(this.data, 'title', '')
     },
     heroImage () {
-      return get(this.data, 'heroImage', '')
+      return getFullUrl(get(this.data, 'heroImage', ''))
     },
     url () {
       return getReportUrl(get(this.data, 'slug', ''))
@@ -38,7 +38,9 @@ export default {
 
 <style lang="stylus" scoped>
 .list-item
-  padding 6px 0
+  padding 8.5px 0 10px 0
+  &:first-of-type
+    padding 6px 0 10px 0
   &__link
     color black
 
@@ -48,14 +50,13 @@ export default {
   justify-content space-between
   margin 0
   &__figcaption
-    font-size 10px
-    padding 0 13.5px 0 0
+    font-size 13px
+    padding 0 21.5px 0 0
   &__img
-    d = 50px
-    width d
-    min-width d
-    height d
-    min-height d
+    width 100px
+    min-width 100px
+    height 52.5px
+    min-height 52.5px
     object-fit cover
   &__figcaption-title
     line-height 1.5

@@ -135,8 +135,10 @@ export function getValue (o = {}, p = [], d = '') {
 
 export function updatedAtYYYYMMDD (isoDate) {
   if (!isoDate) return isoDate
+  const currentYear = (new Date()).getFullYear()
+  const year = (new Date(isoDate)).getFullYear()
   const date = isoDate.split('T')[0]
-  return date.replace(/-/g, '/')
+  return currentYear === year ? date.replace(/-/g, '/').replace(`${currentYear}/`, '')  : date.replace(/-/g, '/')
 }
 
 export function isCurrentRoutePath (path) {
