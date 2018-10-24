@@ -2,7 +2,7 @@ import qs from 'qs'
 import superagent from 'superagent'
 import { camelizeKeys, } from 'humps'
 import { getToken, } from 'src/util/services'
-import { mapKeys, mapValues, snakeCase, } from 'lodash'
+import { get, mapKeys, mapValues, snakeCase, } from 'lodash'
 
 const debug = require('debug')('CLIENT:api:comm')
 
@@ -72,36 +72,34 @@ export function constructUrlWithQuery (url, params) {
 
 export function fetch (url) {
   return new Promise((resolve, reject) => {
+    const s = Date.now()
+    const response = !process.browser && 3000
     superagent
     .get(url)
+    .timeout({ response, })
     .end(function (err, res) {
       if (err) {
-        reject(err)
+        if (!process.browser) {
+          console.info('err occurred while fetching:', url, 'in', `${Date.now() - s}ms`, get(err, 'message'))
+          resolve(get(err, 'message'))
+        } else {
+          reject({ err, res, })
+        }
       } else {
         // resolve(camelizeKeys(res.body))
         if (res.text === 'not found' || res.status !== 200) {
-          reject(res.text)
+          if (!process.browser) {
+            console.info('not found while fetching:', url, 'in', `${Date.now() - s}ms`)
+            resolve(res.text)
+          } else {
+            reject(res.text)
+          }
         } else {
+          !process.browser && console.info('fetch:', url, 'in', `${Date.now() - s}ms`)
           resolve({ status: res.status, body: camelizeKeys(res.body), })
         }
       }
     })
-  })
-}
-
-export function fetchInStrict (url, { cookie, }) {
-  return new Promise((resolve, reject) => {
-    superagent
-      .get(url)
-      .set('Authorization', `Bearer ${cookie || getToken()}`)
-      .end(function (err, res) {
-        if (err) {
-          reject({ err, res, })
-        } else {
-          // resolve(camelizeKeys(res.body))
-          resolve({ status: res.status, body: camelizeKeys(res.body), })
-        }
-      })
   })
 }
 
@@ -148,6 +146,31 @@ export function del (url, params) {
         if (err) {
           reject(err)
         } else {
+          resolve({ status: res.status, body: camelizeKeys(res.body), })
+        }
+      })
+  })
+}
+
+export function fetchInStrict (url, { cookie, }) {
+  return new Promise((resolve, reject) => {
+    const s = Date.now()
+    const response = !process.browser && 3000
+    superagent
+      .get(url)
+      .set('Authorization', `Bearer ${cookie || getToken()}`)
+      .timeout({ response, })
+      .end(function (err, res) {
+        if (err) {
+          if (!process.browser) {
+            console.info('err occurred while fetching:', url, 'in', `${Date.now() - s}ms`, get(err, 'message'))
+            resolve(get(err, 'message'))
+          } else {
+            reject({ err, res, })
+          }          
+        } else {
+          // resolve(camelizeKeys(res.body))
+          !process.browser && console.info('fetch:', url, 'in', `${Date.now() - s}ms`)
           resolve({ status: res.status, body: camelizeKeys(res.body), })
         }
       })
