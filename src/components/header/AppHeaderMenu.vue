@@ -88,7 +88,7 @@ export default {
       return this.$store.state.isLoggedIn
     },
     memberIconUrl () {
-      return get(this.$store.state, [ 'profile', 'profileImage', ], '')
+      return get(this.$store.state, [ 'profile', 'profileImage', ]) || '/public/icons/menu-member.svg'
     },
     memberIcon () {
       return this.memberIsLoggedIn ? getFullUrl(this.memberIconUrl) : '/public/icons/menu-member.svg'
