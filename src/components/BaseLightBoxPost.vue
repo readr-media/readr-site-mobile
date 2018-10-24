@@ -117,7 +117,7 @@ export default {
       isLoginBtnACtive: false, 
       showComment: true,
       shouldRenderComment: false,
-      allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', 'em', 'blockquote', ],
+      allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', 'em', 'blockquote', 'a', ],
     } 
   }, 
   methods: {
