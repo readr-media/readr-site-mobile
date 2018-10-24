@@ -260,6 +260,10 @@ export default {
     'MEMO': '筆記',
     'REPORT': '報導',
     'VIDEO': '對話',
+    'RADIOS': {
+      'POSTS': '客座評論',
+      'TAGS': '熱門關鍵字',
+    },
   },
   'homeNavigation': { 
     'WORDING_HOME_NAV_IN_PROGRESS' : '進行中', 

@@ -385,7 +385,7 @@
         font-size 15px
         font-weight 400
         text-align justify
-        line-height 1.5
+        line-height 1.77
         margin 0
         // text-overflow: ellipsis;
       p > br
@@ -409,7 +409,7 @@
       font-size 15px
       font-weight 400
       text-align justify
-      line-height 1.5
+      line-height 1.77
       margin 6px 0
       &--news
         text-align initial

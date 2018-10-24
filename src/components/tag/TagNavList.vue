@@ -6,6 +6,7 @@
         :key="tag.id"
         class="tag-nav-aside__tag-item"
         :tag="tag"
+        :shouldShowActionTooltip="true"
         :shouldShowRelatedsList="true"
       />
     </ol>

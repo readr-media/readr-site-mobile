@@ -28,11 +28,11 @@ export default {
     return {
       options: [
         {
-          text: '客座評論',
+          text: this.$t('HOME_NAV.RADIOS.POSTS'),
           key: 'posts',
         },
         {
-          text: '熱門關鍵字',
+          text: this.$t('HOME_NAV.RADIOS.TAGS'),
           key: 'tags',
         },
       ],

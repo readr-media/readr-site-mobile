@@ -176,6 +176,7 @@ export default {
 
 .tag
   width 100%
+  position relative
   &__header
     padding 5px 15.2px 5px 13.5px
     display flex
@@ -257,44 +258,44 @@ export default {
     align-items center
 
 .tag-action
-  position relative
   &__tooltip
     pointer-events none
     padding 1px 2px
     position absolute
-    top 5%
-    left 30px
-    width max-content
-    height 90%
-    font-size 10px
+    top calc(50% - 75px / 2)
+    left calc(50% - 170px / 2)
+    width 170px
+    height 75px
+    font-size 15px
     color #444746
     background-color white
-    border 1px solid #d3d3d3
     z-index 100
     display flex
+    justify-content center
     align-items center
     opacity 0
     transition opacity .25s
-    &:before
-      position absolute
-      top 2.5px
-      left -10px
-      content ''
-      width 0
-      height 0
-      border-style solid
-      border-width 7px 10px 7px 0
-      border-color transparent #d3d3d3 transparent transparent
-    &:after
-      position absolute
-      top 3.5px
-      left -9px
-      content ''
-      width 0
-      height 0
-      border-style solid
-      border-width 6px 9px 6px 0
-      border-color transparent white transparent transparent
+    box-shadow 0.5px 0.5px 1px 0 rgba(0, 0, 0, 0.5)
+    // &:before
+    //   position absolute
+    //   top 2.5px
+    //   left -10px
+    //   content ''
+    //   width 0
+    //   height 0
+    //   border-style solid
+    //   border-width 7px 10px 7px 0
+    //   border-color transparent #d3d3d3 transparent transparent
+    // &:after
+    //   position absolute
+    //   top 3.5px
+    //   left -9px
+    //   content ''
+    //   width 0
+    //   height 0
+    //   border-style solid
+    //   border-width 6px 9px 6px 0
+    //   border-color transparent white transparent transparent
     &--toogled
       opacity 1
 </style>
