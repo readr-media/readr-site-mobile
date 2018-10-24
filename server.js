@@ -223,6 +223,7 @@ function render (req, res, next) {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')  
     if (err.url) {
       res.redirect(err.url)
+      return
     }
     let status = err.code || 500
     if (err.code === 404) {

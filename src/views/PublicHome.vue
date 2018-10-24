@@ -1,10 +1,11 @@
 <template>
   <section class="home main">
     <PostBoxWrapper :showPostBox.sync="showPostBox" :hadRouteBeenNavigate="hadRouteBeenNavigate">
-      <Invite></Invite>
       <main>
         <TagNavList/>
-        <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
+        <template v-if="isClientSide">
+          <HomeArticleMain v-for="post in postsHome" :key="post.id" :articleData="post" ></HomeArticleMain>
+        </template>
       </main>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent" /> 
     </PostBoxWrapper>
@@ -14,11 +15,10 @@
   import { SITE_FULL, } from 'src/constants'
   import { get, find, uniqBy, } from 'lodash'
   // import { createStore, } from 'src/store'
-  import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
+  import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, isClientSide, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
   import BaseLightBoxPost from 'src/components/BaseLightBoxPost.vue'
-  import Invite from 'src/components/invitation/Invite.vue'
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
   import TagNavList from 'src/components/tag/TagNavList.vue'
   import sanitizeHtml from 'sanitize-html'
@@ -133,7 +133,6 @@
       HomeArticleMain,
       HomeNavigationMobile,
       BaseLightBoxPost,
-      Invite,
       PostBoxWrapper,
       TagNavList,
     },
@@ -148,6 +147,7 @@
     },
     computed: {
       currEnv,
+      isClientSide,
       postBox () {
         if (this.showPostBox) {
           const findPostInList = find(this.postsHome, [ 'id', Number(this.$route.params.postId), ])
