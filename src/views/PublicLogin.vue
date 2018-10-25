@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <template v-if="registrationActive">
-      <img src="/public/icons/logowithoutreadr.png">
+      <router-link to="/"><img src="/public/icons/logowithoutreadr.png"></router-link>
       <div class="message" v-html="$t('login.WELCOME')"></div>
       <LoginPanel v-if="isClientSide && !isLoggedIn"></LoginPanel>
     </template>
@@ -58,8 +58,10 @@
   min-height 100vh
   padding 40px 0
   background-color #444746
-  > img
-    width 50px
+  > a
+    font-size 0
+    img
+      width 50px
   > .message
     margin-top .5em
     color #ffffff
