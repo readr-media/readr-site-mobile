@@ -31,10 +31,11 @@
       window.addEventListener('touchmove', this.$_footer_touchHandler)
     },
     methods: {
-      $_footer_touchHandler (e) {
+      $_footer_touchHandler (e, showDirection = 'up') {
         const currentClientY = e.touches[0].clientY
         const endClientY = window.touchClientY || currentClientY
-        if (currentClientY <= endClientY) {
+        const shouldShowFooter = showDirection === 'up' ? currentClientY > endClientY : currentClientY <= endClientY
+        if (shouldShowFooter) {
           document.querySelector('footer').classList.add('active')
         } else {
           document.querySelector('footer').classList.remove('active')
