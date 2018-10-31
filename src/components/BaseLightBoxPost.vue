@@ -351,8 +351,6 @@ export default {
         width 100%
       .portrait
         width 100%
-      iframe
-        width 100%
     .nav-container
       padding 16px 0
   &__tags

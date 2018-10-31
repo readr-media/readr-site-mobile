@@ -19,11 +19,8 @@
           <template v-for="p in postContent">
             <figure v-if="isImg(p)">
               <img v-if="isClientSide" :src="getImgSrc(p)" alt="post-content-img" @load="setContentImageOrientation(getImgSrc(p), $event)">
-              <!-- <figcaption>
-                我需要一個圖說
-              </figcaption> -->
             </figure>
-            <div v-else v-html="p"></div>
+            <div v-else :class="{ 'yt-iframe-container': isElementContentYoutube(p) }" v-html="p"></div>
           </template>
         </section>
         <PostShareNav v-if="isClientSide" class="baselightbox-post__share-nav" :post="post"/>
@@ -53,7 +50,7 @@
   import AppArticleNav from 'src/components/AppArticleNav.vue'
   import TagNav from 'src/components/tag/TagNav.vue'
   import PostShareNav from 'src/components/post/PostShareNav.vue'
-  import { getFullUrl, isClientSide, updatedAtYYYYMMDD, onImageLoaded, getPostFullUrl, } from 'src/util/comm'
+  import { getFullUrl, isClientSide, updatedAtYYYYMMDD, onImageLoaded, getPostFullUrl, getElementContentSrc, isElementContentYoutube, } from 'src/util/comm'
   export default {
     name: 'BaseLightBoxTemplateNews',
     components: {
@@ -69,13 +66,13 @@
     },
     methods: {
       getImgSrc (content) { 
-        const regexp = /<img.*?src=['"](.*?)['"]/ 
-        return getFullUrl(regexp.exec(content)[1]) 
+        return getFullUrl(getElementContentSrc(content))
       },       
       isImg (content) { 
         const regexp = /<img([\w\W]+?)\/>/ 
         return regexp.test(content) 
-      },       
+      },
+      isElementContentYoutube,       
       setLeadingImageOrientation (src, event) {
         onImageLoaded(src).then(({ width, height, }) => {
           width < height ? event.target.style.objectFit = 'contain' : event.target.style.objectFit = 'cover'
@@ -124,4 +121,17 @@
     padding 0 0 0 16px
     border-left 4px solid #ccc
     line-height 1
+
+.yt-iframe-container
+  position relative
+  padding-bottom 56.25% // 16:9
+  padding-top 25px
+  width 100%
+  height 0
+  & >>> iframe
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
 </style>
