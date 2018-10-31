@@ -134,7 +134,7 @@
             query: this.queryForRedisUse(comment),            
           },
         }).then(() => {
-          return this.rerenderComment(comment)
+          // return this.rerenderComment(comment)
         })
       },
       hideComment (comment, id) {
@@ -146,7 +146,7 @@
             query: this.queryForRedisUse(comment),            
           },
         }).then(() => {
-          return this.rerenderComment(comment)
+          // return this.rerenderComment(comment)
         })
       },   
       reportComment (comment, id) {
@@ -171,7 +171,7 @@
             query: this.queryForRedisUse(comment),            
           },
         }).then(() => {
-          return this.rerenderComment(comment)
+          // return this.rerenderComment(comment)
         })
       },
       updateComment (comment, id) {
@@ -184,7 +184,7 @@
             query: this.queryForRedisUse(comment),            
           },
         }).then(() => {
-          return this.rerenderComment(comment)
+          // return this.rerenderComment(comment)
         })
       },
       refreshSubComment (id) {
