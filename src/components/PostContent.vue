@@ -146,13 +146,13 @@
         if (this.hasCustomContentBreak) return originalIndex - 1 < 0 ? 0 : originalIndex - 1
       },
       contentDOM () {
-        const wrappedContent = sanitizeHtml(this.post.content, { allowedTags: false, selfClosing: [ 'img', this.customContentBreakTagName, ], })
+        const wrappedContent = sanitizeHtml(this.post.content, { allowedTags: false, allowedAttributes: this.allowedAttributes, allowedIframeHostnames: this.allowedIframeHostnames, selfClosing: [ 'img', this.customContentBreakTagName, ], })
         const doc = new dom().parseFromString(wrappedContent)
         return doc
       },
       postContent () {
         if (!this.post.content || this.post.content.length === 0) { return [] }
-        const postParagraphs = map(get(this.contentDOM, 'childNodes'), (p) => (sanitizeHtml(new seializer().serializeToString(p), { allowedTags: this.allowedTags, })))
+        const postParagraphs = map(get(this.contentDOM, 'childNodes'), (p) => (sanitizeHtml(new seializer().serializeToString(p), { allowedTags: this.allowedTags, allowedAttributes: this.allowedAttributes, allowedIframeHostnames: this.allowedIframeHostnames, })))
         return postParagraphs
       },
       postContentProcessed () {
@@ -246,7 +246,9 @@
         isReadMoreClicked: false,
         showContentWordLimit: 150,
         customContentBreakTagName: 'hr',
-        allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', 'em', 'blockquote', 'a', ],
+        allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', 'em', 'blockquote', 'a', 'iframe', ],
+        allowedAttributes: Object.assign({}, sanitizeHtml.defaults.allowedAttributes, { iframe: [ 'frameborder', 'allowfullscreen', 'src', ], }),
+        allowedIframeHostnames: [ 'www.youtube.com', ],
       }
     },
     methods: {
@@ -375,6 +377,8 @@
         padding 0 0 0 16px
         border-left 4px solid #ccc
         line-height 1
+      iframe
+        width 100%
     &__container 
       // min-height 105px
       // overflow hidden
