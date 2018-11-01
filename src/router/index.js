@@ -72,6 +72,7 @@ const router = new Router({
     { path: '/404', component: PageNotFound, },
     { path: '/500', component: ServerError, },
     // { path: '/videos', component: PublicVideos, },
+    { path: '*', component: PageNotFound, },
   ],
 })
 
