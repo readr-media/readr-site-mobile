@@ -684,4 +684,9 @@ export default {
     'ANNOUNCEMENT': '計畫大小事',
     'MM': '鏡週刊',
   },
+  'NOT_FOUND': {
+    'TO_HOME_HINT': '抱歉 找不到這個網址',
+    'TO_HOME_BUTTON': '回首頁',
+    'PROJECTS': '最新專題',
+  },
 }
