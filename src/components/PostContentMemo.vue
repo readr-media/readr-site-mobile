@@ -12,7 +12,7 @@
           <p class="editor-writing__paragraph--visible" v-if="i <= shouldContentStopAtIndex" :key="`${post.id}-${i}`">
             <!-- <span v-html="p"></span> -->
             <span v-if="isImg(p)" class="figure">
-              <img v-if="isClientSide" :src="getImgSrc(p)" alt="post-content-img" @load="setContentImageOrientation(getImgSrc(p), $event)">
+              <img v-if="isClientSide" :src="getImgSrc(p)" alt="post-content-img" @load="setContentImageOrientation(getImgSrc(p), $event)" @click="clickImg(p, $event)">
             </span>
             <span v-else :class="{ 'yt-iframe-container': isElementContentYoutube(p) }" v-html="p"></span>
             <span v-if="isMemoPaid === false && !isProjectPublished && i === shouldContentStopAtIndex"> 
@@ -102,10 +102,6 @@
         required: true,
         type: Number,
       },
-      isImg: {
-        type: Function,
-        required: true,
-      },
       getImgSrc: {
         type: Function,
         required: true,
@@ -135,6 +131,14 @@
         required: true,
       },
       isElementContentYoutube: {
+        type: Function,
+        required: true,
+      },
+      isImg: {
+        type: Function,
+        required: true,
+      },
+      clickImg: {
         type: Function,
         required: true,
       },
