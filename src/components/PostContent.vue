@@ -388,7 +388,7 @@
       // min-height 105px
       // overflow hidden
       // text-overflow: ellipsis;
-      display inline-block
+      // display inline-block
       margin-bottom 5px
       color black
       min-width 100%
@@ -399,6 +399,7 @@
         text-align justify
         line-height 1.77
         margin 0
+        word-wrap break-word
         // text-overflow: ellipsis;
       p > br
         display none

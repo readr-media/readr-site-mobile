@@ -109,6 +109,7 @@
     right 0
 
 .article-content
+  word-break break-all
   & >>> div
     font-size 15px
     letter-spacing 0.5px
