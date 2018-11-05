@@ -8,13 +8,13 @@
             <a @click="memberActionTo('/login')" v-text="memberIsLoggedIn ? $t('MENU.MEMBER.LOGOUT') : $t('MENU.MEMBER.LOGIN')"></a>
             <a v-show="!memberIsLoggedIn" @click="memberActionTo('/login/register')" v-text="$t('MENU.MEMBER.REGISTER')"></a>
           </li>
-          <li class="list__list-item">
+          <li v-show="memberIsLoggedIn" class="list__list-item">
             <a @click="memberActionTo(`/${memberRole}/profile-edit`)" v-text="$t('MENU.MEMBER.PROFILE_EDIT')"></a>
           </li>
-          <li class="list__list-item">
+          <li v-show="memberIsLoggedIn" class="list__list-item">
             <a @click="memberActionTo(`/${memberRole}/records/following`)" v-text="$t('MENU.MEMBER.FOLLOWING')"></a>
           </li>
-          <li class="list__list-item">
+          <li v-show="memberIsLoggedIn" class="list__list-item">
             <a @click="memberActionTo(`/${memberRole}/records/point-manager`)" v-text="$t('MENU.MEMBER.POINT_MANAGER')"></a>
           </li>
         </ul>
@@ -191,7 +191,7 @@ export default {
     text-align center
     font-size 15px
     & + &
-      margin 15px 0 0 0
+      margin 8px 0 0 0
     a
       display inline-block
       color black
@@ -208,10 +208,5 @@ export default {
     height 20px
     & + &
       margin 0 0 0 20px
-
-@media (max-width 320px)
-  .menu-container
-    &__menu
-      justify-content flex-end
 </style>
 
