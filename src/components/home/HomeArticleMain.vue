@@ -1,5 +1,5 @@
 <template>
-  <article class="home-article-main">
+  <article v-if="!isReportOrMemo" class="home-article-main">
     <div class="home-article-main__info info">
       <figure class="author-info">
         <router-link class="author-info__thumbnail" :to="authorPublicProfileUrl">
