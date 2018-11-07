@@ -2,8 +2,8 @@
   <nav class="tag-nav-aside">
     <ol class="tag-nav-aside__list">
       <TagItem
-        v-for="tag in tags"
-        :key="tag.id"
+        v-for="(tag, i) in tags"
+        :key="`${tag.id}-${i}`"
         class="tag-nav-aside__tag-item"
         :tag="tag"
         :shouldShowActionTooltip="true"
