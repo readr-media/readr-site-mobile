@@ -209,6 +209,7 @@
         top 0
         right 0
         cursor pointer
+        z-index 9999
         &:hover
           box-shadow 0 0 5px rgba(0, 0, 0, 0.5)
       .go-deposit
@@ -221,7 +222,7 @@
         justify-content center
         align-items center
         border-radius 2px
-        margin-top 40px
+        margin 40px 0 60px
         &.active
           background-color #ddcf21
           color #fff
@@ -336,6 +337,12 @@
     .input
       position relative
       outline none
+      height 25px
+      input
+        height 100%
+        &::-webkit-input-placeholder
+          line-height 20px
+          vertical-align top
       &.input-alert
         input
           &:focus ~ .hint
@@ -375,8 +382,12 @@
       width 100%
       border-bottom 1px solid #d3d3d3
       // margin 2px 0
-      padding 5px
+      padding 0 5px
       border-radius 2px
+      &.no-radius
+        border-radius 0
+        input, select
+          border-radius 0
       &.input, &.slect
         display flex
         justify-content center
@@ -389,8 +400,10 @@
           width 100%
           color #808080          
         input
+          font-size 0.75rem
           border-bottom 1px solid #d3d3d3
-        
+          padding-top 0
+          padding-bottom 0
         select
           height 30px
           width 130%

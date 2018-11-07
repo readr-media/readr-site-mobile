@@ -18,7 +18,7 @@
     <div class="tappay-deposit__item title"><span v-text="$t('point.CLEAR_UP.TITLE.OWNER')"></span></div>
     <div class="tappay-deposit__item">
       <div class="name"><span v-html="$t('point.CLEAR_UP.ITEM.CARD_OWNER')"></span></div>
-      <div class="tpfield input" :class="{ 'input-alert': get(alertObj, 'CONTACT_PERSON') }"  tabIndex="0">
+      <div class="tpfield input no-radius" :class="{ 'input-alert': get(alertObj, 'CONTACT_PERSON') }"  tabIndex="0">
         <input type="text" v-model="cardContactPerson">
         <div class="hint"><span v-text="$t(`point.CLEAR_UP.CARD_INFO.HINT.CONTACT_PERSON`)"></span></div>
       </div>
@@ -26,12 +26,12 @@
     <div class="tappay-deposit__item__wrapper">
       <div class="tappay-deposit__item">
         <div class="name"><span v-html="$t('point.CLEAR_UP.ITEM.PHONE_NUMBER')"></span></div>
-        <div class="tpfield input country">
+        <div class="tpfield input country no-radius">
           <select v-model="currCountry">
             <option v-for="{ code, name } in callingCodes" :value="name" v-text="`${name} ${code}`"></option>
           </select>
         </div>
-        <div class="tpfield input" :class="{ 'input-alert': get(alertObj, 'PHONE_NUMBER') }" tabIndex="0">
+        <div class="tpfield input no-radius" :class="{ 'input-alert': get(alertObj, 'PHONE_NUMBER') }" tabIndex="0">
           <input type="text" v-model="phoneNumber">
           <div class="hint"><span v-text="$t(`point.CLEAR_UP.CARD_INFO.HINT.PHONE_NUMBER`)"></span></div>
         </div>
