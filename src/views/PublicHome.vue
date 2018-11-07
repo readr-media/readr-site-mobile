@@ -4,9 +4,7 @@
       <main>
         <HomeRadios :picked.sync="pickedMainView"/>
         <TagNavList v-show="pickedMainView === 'tags'"/>
-        <template v-if="isClientSide">
-          <HomeArticleMain v-show="pickedMainView === 'posts'" v-for="post in postsHome" :key="post.id" :articleData="post"/>
-        </template>
+        <HomeArticleMain v-show="pickedMainView === 'posts'" v-for="post in postsHome" :key="post.id" :articleData="post"/>
       </main>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent" /> 
     </PostBoxWrapper>
@@ -16,7 +14,7 @@
   import { SITE_FULL, } from 'src/constants'
   import { get, find, uniqBy, } from 'lodash'
   // import { createStore, } from 'src/store'
-  import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, isClientSide, } from 'src/util/comm'
+  import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
   import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
   import HomeRadios from 'src/components/home/HomeRadios.vue'
@@ -151,7 +149,6 @@
     },
     computed: {
       currEnv,
-      isClientSide,
       postBox () {
         if (this.showPostBox) {
           const findPostInList = find(this.postsHome, [ 'id', Number(this.$route.params.postId), ])
