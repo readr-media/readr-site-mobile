@@ -1,5 +1,5 @@
 <template>
-  <article v-if="!isReportOrMemo" class="home-article-main">
+  <article class="home-article-main">
     <div class="home-article-main__info info">
       <figure class="author-info">
         <router-link class="author-info__thumbnail" :to="authorPublicProfileUrl">
@@ -31,8 +31,10 @@ import AppShareButton from 'src/components/AppShareButton.vue'
 import AppDateCreatedUpdated from 'src/components/AppDateCreatedUpdated.vue'
 import PostContent from 'src/components/PostContent.vue'
 import PostShareNav from 'src/components/post/PostShareNav.vue'
-import { dateDiffFromNow, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, getPostType, } from 'src/util/comm'
+import { dateDiffFromNow, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from 'src/util/comm'
+import { getPostType, } from 'src/util/post/index'
 import { get, } from 'lodash'
+import { isAnnouncementAccountId, } from 'src/util/post/index'
 
 export default {
   props: {
@@ -70,13 +72,19 @@ export default {
     },
     isClientSide,
     authorNickname () {
-      return getArticleAuthorNickname(this.articleData)
+      return this.isAnnouncementAccountId ? get(this.memberDataAnnouncement, 'nickname') : getArticleAuthorNickname(this.articleData)
     },
     authorThumbnailImg () {
-      return getArticleAuthorThumbnailImg(this.articleData)
+      return this.isAnnouncementAccountId ? get(this.memberDataAnnouncement, 'profileImage') : getArticleAuthorThumbnailImg(this.articleData)
     },
     isReportOrMemo () {
       return getPostType(this.articleData) === 'report' || getPostType(this.articleData) === 'memo'
+    },
+    isAnnouncementAccountId () {
+      return isAnnouncementAccountId(get(this.articleData, 'author.id'))
+    },
+    memberDataAnnouncement () {
+      return get(this.$store.state, 'publicMemberAnnouncement', {})
     },
   },
   methods: {
