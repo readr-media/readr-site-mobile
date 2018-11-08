@@ -4,7 +4,13 @@
       <main>
         <HomeRadios :picked.sync="pickedMainView"/>
         <TagNavList v-show="pickedMainView === 'tags'"/>
-        <HomeArticleMain v-show="pickedMainView === 'posts'" v-for="post in postsHome" :key="post.id" :articleData="post"/>
+        <HomeArticleMain
+          v-show="pickedMainView === 'posts'"
+          v-for="post in postsHome"
+          :key="post.id"
+          :articleData="post"
+          :shouldShowMultipleDate="false"
+        />
       </main>
       <BaseLightBoxPost :showLightBox="showPostBox" :post="postBox" slot="postContent" /> 
     </PostBoxWrapper>
@@ -27,7 +33,7 @@
   
   const MAXRESULT_POSTS = 10
   const DEFAULT_PAGE = 1
-  const DEFAULT_SORT = '-published_at'
+  const DEFAULT_SORT = '-updated_at'
   const DEFAULT_CATEGORY = 'latest'
   // const debug = require('debug')('CLIENT:PublicHome')
 

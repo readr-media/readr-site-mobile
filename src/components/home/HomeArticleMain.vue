@@ -7,7 +7,7 @@
         </router-link>
         <figcaption class="author-info__meta">
           <AppDateCreatedUpdated
-            v-if="isReportOrMemo"
+            v-if="isReportOrMemo && shouldShowMultipleDate"
             class="author-info__date-report-memo"
             :createdAt="articleData.createdAt"
             :updatedAt="articleData.updatedAt"
@@ -48,6 +48,10 @@ export default {
         content: '',
       },
     },
+    shouldShowMultipleDate: {
+      type: Boolean,
+      default: true,
+    },
   },
   components: {
     AppShareButton,
@@ -68,7 +72,7 @@ export default {
       return this.authorId ? `/profile/${this.authorId}` : '#'
     },
     dateDiffFromNow () {
-      return dateDiffFromNow(this.articleData.publishedAt)
+      return dateDiffFromNow(this.articleData.updatedAt)
     },
     isClientSide,
     authorNickname () {
