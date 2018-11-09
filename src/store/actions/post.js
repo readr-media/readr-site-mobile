@@ -48,6 +48,7 @@ const GET_POST = ({ commit, }, { params, }) => {
 }
 
 const GET_POSTS = ({ commit,}, { params, }) => {
+  params = Object.assign({}, params, { show_author: true, show_updater: true, show_tag: true, show_comment: true, })
   return getPosts({ params, }).then(({ status, body, }) => {
     if (status === 200) {
       commit('SET_POSTS', { posts: body, })

@@ -17,7 +17,7 @@
   </section>
 </template>
 <script>
-  import { SITE_FULL, ANNOUNCEMENT_ACCOUNT_ID, } from 'src/constants'
+  import { SITE_FULL, } from 'src/constants'
   import { get, find, uniqBy, } from 'lodash'
   // import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
@@ -80,12 +80,6 @@
       id: id,
       resource: resource,
       resource_type: resourceType,
-    })
-  }
-
-  const getMemberPublic = (store, params) => {
-    return store.dispatch('GET_PUBLIC_MEMBER', {
-      params: params,
     })
   }
 
@@ -221,8 +215,6 @@
           } 
         })
       }
-
-      getMemberPublic(this.$store, { id: Number(ANNOUNCEMENT_ACCOUNT_ID), })
     },
     mounted () {
       window.addEventListener('scroll', () => {
