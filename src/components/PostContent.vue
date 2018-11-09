@@ -263,7 +263,7 @@
         allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', 'em', 'blockquote', 'a', 'iframe', ],
         allowedAttributes: Object.assign({}, sanitizeHtml.defaults.allowedAttributes, { iframe: [ 'frameborder', 'allowfullscreen', 'src', ], }),
         allowedIframeHostnames: [ 'www.youtube.com', ],
-        SITE_DOMAIN: currEnv() === 'dev' ? `http://${SITE_DOMAIN_DEV}` : `https://${SITE_DOMAIN}`,
+        SITE_DOMAIN: currEnv() === 'dev' ? `http://${SITE_DOMAIN_DEV}` : `https://www.${SITE_DOMAIN}`,
       }
     },
     methods: {

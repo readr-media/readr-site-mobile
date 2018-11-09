@@ -168,6 +168,10 @@
         page: page,
         sort: sort,
         where: where,
+        show_author: true,
+        show_updater: true,
+        show_tag: true,
+        show_comment: true,
       },
     })
   }
