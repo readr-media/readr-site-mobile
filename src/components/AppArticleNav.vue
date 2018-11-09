@@ -23,7 +23,16 @@
       </template>
     </nav>
     <slot name="tagNav"></slot>
-    <CommentContainer v-if="shouldShowComment || showComment" :asset="asset" :assetId="postId" :assetRefId="postRefId" :isPublic="!get(me, 'id')"></CommentContainer>
+    <CommentContainer
+      v-if="(commentCount > 0) || shouldShowComment || showComment"
+      :asset="asset"
+      :assetId="postId"
+      :assetRefId="postRefId"
+      :isPublic="!get(me, 'id')"
+      :commentAmount="commentCount"
+      :commentsLatest="commentsLatest"
+      :isNotLightbox="isNotLightbox"
+    />
   </div>
 </template>
 
@@ -225,6 +234,16 @@ export default {
     showFollow: {
       type: Boolean,
       default: true,
+    },
+    commentsLatest: {
+      type: Array,
+      default () {
+        return []
+      },
+    },
+    isNotLightbox: {
+      type: Boolean,
+      default: false,
     },
   },
 }

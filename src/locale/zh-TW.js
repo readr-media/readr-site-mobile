@@ -689,4 +689,8 @@ export default {
     'TO_HOME_BUTTON': '回首頁',
     'PROJECTS': '最新專題',
   },
+  'COMMENTS': {
+    'LOADMORE_PREFIX': '看另外',
+    'LOADMORE_SUFFIX': '則留言',
+  },
 }
