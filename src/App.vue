@@ -118,6 +118,7 @@
           sub: this.currUser,
           target: {},
           useragent: this.useragent,
+          referrer: document.referrer,
         }, this.$route.query)) 
       },       
     },
