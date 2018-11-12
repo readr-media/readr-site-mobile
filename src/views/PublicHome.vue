@@ -33,7 +33,7 @@
   
   const MAXRESULT_POSTS = 10
   const DEFAULT_PAGE = 1
-  const DEFAULT_SORT = '-updated_at'
+  const DEFAULT_SORT = '-published_at'
   const DEFAULT_CATEGORY = 'latest'
   // const debug = require('debug')('CLIENT:PublicHome')
 
