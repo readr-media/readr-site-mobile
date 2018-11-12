@@ -24,7 +24,7 @@
     </nav>
     <slot name="tagNav"></slot>
     <CommentContainer
-      v-if="(commentCount > 0) || shouldShowComment || showComment"
+      v-if="shouldShowComment && ((commentCount > 0) || showComment)"
       :asset="asset"
       :assetId="postId"
       :assetRefId="postRefId"
