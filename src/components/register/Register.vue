@@ -40,7 +40,7 @@
       <div class="g-recaptcha" :class="{ warn: (!isRecaptchaPassed && isRegisterClicked) }">
         <div id="g-recaptcha"></div>
       </div>
-      <div class="register-container__btn" :class="{ disabled: shouldShowSpinner }" @click="register">
+      <div class="register-container__btn" :class="{ disabled: shouldShowSpinner }" :test-group="abIndicator" test-name="20181112-verticalswitch"  @click="register">
         <span v-text="$t('login.WORDING_REGISTER')" v-if="!shouldShowSpinner"></span>
         <Spinner :show="shouldShowSpinner"></Spinner>
       </div>    
@@ -57,6 +57,7 @@
   import validator from 'validator'
   import { GOOGLE_RECAPTCHA_SITE_KEY, } from 'api/config'
   import { get, } from 'lodash'
+  import { getIndicator, } from 'src/util/abTest'
 
   const debug = require('debug')('CLIENT:Register')
   const register = (store, profile, token) => {
@@ -79,6 +80,7 @@
     },
     data () {
       return {
+        abIndicator: '',
         alert: {},
         formData: {},
         isRegistered: false,
@@ -92,6 +94,7 @@
     },
     name: 'Register',
     methods: {
+      getIndicator,
       register () {
         if (this.shouldShowSpinner) { return }
         this.verifyRecaptchaToken().then(() => {
@@ -195,6 +198,9 @@
           this.isRecaptchaPassed = get(response, [ 'success', ], false)
         })
       },
+    },
+    beforeMount () {
+      this.abIndicator = this.getIndicator()
     },
     mounted () {
       if (window.grecaptcha) {
