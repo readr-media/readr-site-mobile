@@ -26,13 +26,14 @@
     <div v-if="resMsg" class="login__msg">
       <div class='content' v-text="resMsg"></div>
     </div>
-    <div class="login__btn" @click="login">
+    <div class="login__btn" :test-group="abIndicator" test-name="20181112-verticalswitch" @click="login">
       <span v-text="$t('login.WORDING_LOGIN')"></span>
     </div>
   </div>
 </template>
 <script>
   import { get, } from 'lodash'
+  import { getIndicator, } from 'src/util/abTest'
   import TextItem from 'src/components/form/TextItem.vue'
   import validator from 'validator'
   import VueCookie from 'vue-cookie'
@@ -55,6 +56,7 @@
     },
     data () {
       return {
+        abIndicator: '',
         alert: {},
         formData: {},
         resMsg: null,
@@ -62,6 +64,7 @@
     },
     name: 'Login',
     methods: {
+      getIndicator,
       goRecoverPwd () {
         this.$emit('goRecoverPwd')
       },
@@ -127,6 +130,9 @@
         return pass
       },
     },
+    beforeMount () {
+      this.abIndicator = this.getIndicator()
+    },
     mounted () {},
     props: {
       isDoingLogin: {
@@ -140,10 +146,8 @@
   .login
     width 100%
     height 100%
-    padding-bottom 20px
     position relative
     color #fff
-    border-bottom 1px solid #fff
     &__input-email, &__input-pwd
       margin 15px 0
       &:first-of-type

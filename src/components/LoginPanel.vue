@@ -15,9 +15,15 @@
           @click="tabChoose('recoverpwd')"></span>
       </div>
       <div class="container">
-        <RecoverPassword v-if="isGoingRecoverPwd"></RecoverPassword>
-        <Login v-else-if="isLoginTabAcitve" @goRecoverPwd="goRecoverPwd" :isDoingLogin.sync="isDoingLogin"></Login>
-        <Register v-else></Register>
+        <template v-if="abIndicator === 'B'">
+          <FacebookLogin :type="isLoginTabAcitve ? 'login' : 'register'" :isDoingLogin.sync="isDoingLogin"></FacebookLogin>
+          <GooglePlusLogin :type="isLoginTabAcitve ? 'login' : 'register'" :isDoingLogin.sync="isDoingLogin"></GooglePlusLogin>
+        </template>
+        <template v-else>
+          <RecoverPassword v-if="isGoingRecoverPwd"></RecoverPassword>
+          <Login v-else-if="isLoginTabAcitve" @goRecoverPwd="goRecoverPwd" :isDoingLogin.sync="isDoingLogin"></Login>
+          <Register v-else></Register>
+        </template>
       </div>
     </div>
     <div class="login-panel__right">
@@ -25,8 +31,15 @@
         <span class="login-community active" v-text="''"></span>
       </div> -->
       <div class="container">
-        <FacebookLogin :type="isLoginTabAcitve ? 'login' : 'register'" :isDoingLogin.sync="isDoingLogin"></FacebookLogin>
-        <GooglePlusLogin :type="isLoginTabAcitve ? 'login' : 'register'" :isDoingLogin.sync="isDoingLogin"></GooglePlusLogin>
+        <template v-if="abIndicator === 'B'">
+          <RecoverPassword v-if="isGoingRecoverPwd"></RecoverPassword>
+          <Login v-else-if="isLoginTabAcitve" @goRecoverPwd="goRecoverPwd" :isDoingLogin.sync="isDoingLogin"></Login>
+          <Register v-else></Register>
+        </template>
+        <template v-else>
+          <FacebookLogin :type="isLoginTabAcitve ? 'login' : 'register'" :isDoingLogin.sync="isDoingLogin"></FacebookLogin>
+          <GooglePlusLogin :type="isLoginTabAcitve ? 'login' : 'register'" :isDoingLogin.sync="isDoingLogin"></GooglePlusLogin>
+        </template>
       </div>
     </div>
     <div class="login-panel__modal" v-show="isDoingLogin"><Spinner :show="true"></Spinner></div>
@@ -34,6 +47,7 @@
 </template>
 <script>
   import { get, } from 'lodash'
+  import { getIndicator, } from 'src/util/abTest'
   import FacebookLogin from 'src/components/login/FacebookLogin.vue'
   import GooglePlusLogin from 'src/components/login/GooglePlusLogin.vue'
   import Login from 'src/components/login/Login.vue'
@@ -59,6 +73,7 @@
     },
     data () {
       return {
+        abIndicator: '',
         isLoginTabAcitve: true,
         isGoingRecoverPwd: false,
         isDoingLogin: false,
@@ -66,6 +81,7 @@
     },
     name: 'LoginPanel',
     methods: {
+      getIndicator,
       goRecoverPwd () {
         this.isGoingRecoverPwd = true
       },
@@ -99,6 +115,7 @@
       ])
 
       this.tabNavigate()
+      this.abIndicator = this.getIndicator()
     },
   }
 </script>
@@ -138,6 +155,8 @@
         width 100%
         margin 0 auto
     &__left
+      padding-bottom 20px
+      border-bottom 1px solid #fff
       > .title
         > span
           cursor pointer
