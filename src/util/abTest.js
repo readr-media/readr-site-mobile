@@ -28,7 +28,7 @@ function setCookie () {
   VueCookie.set('readrid', uuidv4(), { expires: '1Y', })
 }
 
-function uuidToInteger (uuid) {
+function uuidToLargeNumber (uuid) {
   return bigInt(uuid.replace(/-/g, ''), 128).toString()
 }
 
@@ -36,15 +36,15 @@ export function getIndicator (distribution = DEFAULT_DISTRIBUTION) {
   if (this && this.$route && this.$route.query.ab) {
     return this.$route.query.ab.toUpperCase()
   }
-  let readrID = getCookie()
-  if (!readrID) {
+  let readrId = getCookie()
+  if (!readrId) {
     setCookie()
-    readrID = getCookie()
+    readrId = getCookie()
   }
-  const readrIDConverted = uuidToInteger(readrID)
-  const identifier = parseInt(readrIDConverted.substr(readrIDConverted.length - 2))
-  const weight = getDistributionWeight(distribution)
-  for (let [ index, value, ] of weight.entries()) {
+  const readrIdConverted = uuidToLargeNumber(readrId)
+  const identifier = parseInt(readrIdConverted.substr(readrIdConverted.length - 2))
+  const weights = getDistributionWeight(distribution)
+  for (let [ index, value, ] of weights.entries()) {
     if (value > identifier) {
       return distribution[index].id
     }
