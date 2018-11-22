@@ -169,14 +169,14 @@
       this.isActive && (this.showDonate = true)
     },
     mounted () {
-      this.donateAmount = get(this.targetItem, 'memoPoints', 20)
+      this.donateAmount = get(this.targetItem, 'memoPoints') < 30 ? 30 : get(this.targetItem, 'memoPoints')
     },
     watch: {
       currentPoints () {
         this.checkDonateAmount()
       },
       defaultAmount () {
-        this.donateAmount = get(this.targetItem, 'memoPoints', 20)
+        this.donateAmount = get(this.targetItem, 'memoPoints') < 30 ? 30 : get(this.targetItem, 'memoPoints')
       },
       donateAmount: {
         handler () {
