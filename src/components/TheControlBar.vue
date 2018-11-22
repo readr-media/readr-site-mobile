@@ -26,13 +26,6 @@
           <button v-if="$can('editTag')" @click="$_controlBar_openPanel($event, 'tags')" v-text="$t('CONTROL_BAR.TAG')"></button>
         </div>
       </div>
-      <div v-if="$can('memberManage')" class="controlBar__menu-item">
-        <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.ACCOUNT')"></div>
-        <div class="controlBar__menu-item-box">
-          <button v-text="$t('CONTROL_BAR.ADD_DIRECTLY')"></button>
-          <button @click="$_controlBar_openPanel($event, 'accounts')" v-text="$t('CONTROL_BAR.ACCOUNT_LIST')"></button>
-        </div>
-      </div>
       <button @click="$_controlBar_clickHandler('editProfile')" v-text="$t('CONTROL_BAR.EDIT_PROFILE')"></button>
     </div>
     <button @click="$_controlBar_close"><img src="/public/icons/close-black.png" alt=""></button>

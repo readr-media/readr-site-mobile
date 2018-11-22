@@ -2,7 +2,6 @@
   <div class="backstage admin">
     <template v-if="showMain">
       <TheControlBar
-        @addAccount="addMember"
         @addNews="showEditorHandler({ postPanel: 'add', postType: setting.POST_TYPE.NEWS })"
         @addReview="showEditorHandler({ postPanel: 'add', postType: setting.POST_TYPE.REVIEW })"
         @addVideo="showEditorHandler({ postPanel: 'add', postType: setting.POST_TYPE.VIDEO })"
@@ -14,10 +13,7 @@
         :showControlBar="showControlBar"
       />
       <main class="backstage-container">
-        <template v-if="activePanel === 'accounts'">
-          <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
-        </template>
-        <template v-else-if="activePanel === 'records'">
+        <template v-if="activePanel === 'records'">
           <section class="backstage__records">
             <app-tab class="backstage__tab" :tabs="tabs" @changeTab="tabHandler" :defaultTab="defaultTab">
               <PostListInTab
@@ -66,14 +62,6 @@
           </section>
         </template>
       </main>
-      <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showLightBox" :isConversation="true">
-        <MemberAccountEditor
-          action="add"
-          :shouldShow="showLightBox"
-          :title="$t('admin.WORDING_ADMIN_MEMBER_EDITOR_ADD_MEMBER')"
-          @updated="filterChanged">
-        </MemberAccountEditor>
-      </BaseLightBox>
       <BaseLightBox borderStyle="nonBorder" :showLightBox.sync="showProfile">
         <ProfileEdit :profile="profile" :showLightBox="showProfile" @save="showProfile = false"/>
       </BaseLightBox>
@@ -116,8 +104,6 @@
   import AlertPanel from '../components/AlertPanel.vue'
   import BaseLightBox from '../components/BaseLightBox.vue'
   import FollowingListInTab from '../components/FollowingListInTab.vue'
-  import MemberAccountEditor from '../components/admin/MemberAccountEditor.vue'
-  import MembersPanel from '../components/admin/MembersPanel.vue'
   import PointManager from 'src/components/point/PointManager.vue'
   import PostList from '../components/PostList.vue'
   import PostListDetailed from '../components/PostListDetailed.vue'
@@ -227,22 +213,6 @@
     })
   }
 
-  const getMembers = (store, { page, sort, }) => {
-    return store.dispatch('GET_MEMBERS', {
-      params: {
-        max_result: MAXRESULT,
-        page: page || DEFAULT_PAGE,
-        sort: sort || DEFAULT_SORT,
-      },
-    })
-  }
-
-  const getMembersCount = (store, params = {}) => { 
-    return store.dispatch('GET_MEMBERS_COUNT', { 
-      params, 
-    }) 
-  } 
-
   const publishPosts = (store, params) => {
     return store.dispatch('PUBLISH_POSTS', { params, })
   }
@@ -255,8 +225,6 @@
       BaseLightBox,
       ProfileEdit,
       FollowingListInTab,
-      MemberAccountEditor,
-      MembersPanel,
       PointManager,
       PostList,
       PostListDetailed,
@@ -278,7 +246,7 @@
     },     
     data () {
       return {
-        activePanel: 'accounts',
+        activePanel: 'records',
         activeTab: 'reviews',
         alertType: 'post',
         currPage: DEFAULT_PAGE,
@@ -348,9 +316,19 @@
     },
     beforeMount () {
       this.loading = true
-      this.$can('memberManage') && Promise.all([
-        getMembers(this.$store, {}),
-        getMembersCount(this.$store),
+      Promise.all([
+        getPostsByUser(this.$store, {
+          where: {
+            author: get(this.profile, [ 'id', ]),
+            type: POST_TYPE.REVIEW,
+          },
+        }),
+        getPostsCount(this.$store, {
+          where: {
+            author: get(this.profile, [ 'id', ]),
+            type: POST_TYPE.REVIEW,
+          },
+        }),
       ])
       .then(() => this.loading = false)
       .catch(() => this.loading = false)
@@ -374,9 +352,6 @@
       }      
     },
     methods: {
-      addMember () {
-        this.showLightBox = true
-      },
       addTag (tagName) {
         this.itemsStatus = TAG_ACTIVE.ACTIVE
         this.needConfirm = false
@@ -435,11 +410,6 @@
         this.currSort = filter.sort || this.currSort
         
         switch (this.activePanel) {
-          case 'accounts':
-            return Promise.all([
-              getMembers(this.$store, { page: this.currPage, sort: this.currSort, }),
-              getMembersCount(this.$store),
-            ])
           case 'records':
           case 'posts':
           case 'videos':
