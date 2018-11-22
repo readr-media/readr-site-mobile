@@ -10,8 +10,9 @@
         @editNews="showDraftListHandler(setting.POST_TYPE.NEWS)"
         @editProfile="showProfileHandler"
         @editReview="showDraftListHandler(setting.POST_TYPE.REVIEW)"
-        @openPanel="openPanel">
-      </TheControlBar>
+        @openPanel="openPanel"
+        :showControlBar="showControlBar"
+      />
       <main class="backstage-container">
         <template v-if="activePanel === 'accounts'">
           <MembersPanel v-if="$can('memberManage')" @filterChanged="filterChanged"></MembersPanel>
@@ -266,7 +267,7 @@
       VideoList,
     },
     props: {
-      openControlBar: {
+      showControlBar: {
         type: Boolean,
       },
     },
@@ -341,13 +342,6 @@
       },
     },
     watch: {
-      openControlBar (val) {
-        if (val) {
-          document.querySelector('.controlBar').classList.add('open')
-        } else {
-          document.querySelector('.controlBar').classList.remove('open')
-        }
-      },
       isTappayRequired () {
         this.$forceUpdate()
       },

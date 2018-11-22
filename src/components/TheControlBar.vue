@@ -1,5 +1,5 @@
 <template>
-  <section ref="controlBar" class="controlBar">
+  <section ref="controlBar" :class="[ 'controlBar', { 'open': showControlBar } ]">
     <div v-if="isClientSide" class="controlBar__menu">
       <div v-if="$can('addPost')" class="controlBar__menu-item">
         <div class="controlBar__menu-item-title" v-text="$t('CONTROL_BAR.REVIEW')"></div>
@@ -45,6 +45,12 @@
 
   export default {
     name: 'TheControlBar',
+    props: {
+      showControlBar: {
+        type: Boolean,
+        default: false,
+      },
+    },
     components: {
       'control-bar-button': ControlBarButton,
       'control-bar-button-box': ControlBarButtonBox,

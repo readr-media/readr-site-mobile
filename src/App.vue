@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <app-header v-if="!isLoginPage && !isCommentPage" @openControlBar="openControlBarHandler"></app-header>
+    <app-header v-if="!isLoginPage && !isCommentPage" @openControlBar="openControlBar"></app-header>
     <transition name="fade" mode="out-in">
-      <router-view class="view" :openControlBar="openControlBar" @closeControlBar="closeControlBar"></router-view>
+      <router-view class="view" :showControlBar="showControlBar" @closeControlBar="closeControlBar"></router-view>
     </transition>
     <app-footer v-if="!isLoginPage && !isBackstage && !isCommentPage"></app-footer>
     <Consume></Consume>
@@ -13,8 +13,9 @@
 </template>
 
 <script>
-  import { get, } from 'lodash' 
+  import { get, filter, } from 'lodash' 
   import { isAlink, isABTest, logTrace, } from 'src/util/services'
+  import { ROLE_MAP, } from 'src/constants'
   import AlertGDPR from 'src/components/AlertGDPR.vue'
   import AppFooter from './components/AppFooter.vue'
   import AppHeader from './components/header/AppHeader.vue'
@@ -37,7 +38,7 @@
     },
     data () {
       return {
-        openControlBar: false,
+        showControlBar: false,
         doc: {}, 
         globalTapevent: {},
         isDepositActive: false,
@@ -66,6 +67,9 @@
       useragent () { 
         return get(this.$store, 'state.useragent') 
       },
+      memberCenter () {
+        return get(filter(ROLE_MAP, { key: get(this.$store, 'state.profile.role',), }), [ 0, 'route', ], 'member')
+      },
     },
     beforeMount () {
       const showAbout = !this.getFirstLoginCookie()
@@ -81,8 +85,14 @@
       this.showAlertGDPR = !this.getGDPRCookie() && !this.isCommentPage
     },
     methods: {
+      openControlBar () {
+        if (!this.isBackstage) {
+          this.$router.push(`/${this.memberCenter}`)
+        }
+        this.showControlBar = true
+      },
       closeControlBar () {
-        this.openControlBar = false
+        this.showControlBar = false
       },
       fetchCurrentPoint () {
         fetchCurrentPoint(this.$store)
@@ -110,9 +120,6 @@
             isABTest: checkABTest,
           })
         }) 
-      },
-      openControlBarHandler () {
-        this.openControlBar = true
       },
       sendPageview () { 
         logTrace(Object.assign({
