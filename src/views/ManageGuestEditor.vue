@@ -7,8 +7,9 @@
       @editNews="$_guestEditor_showDraftList(config.type.NEWS)"
       @editProfile="$_guestEditor_showProfile"
       @editReview="$_guestEditor_showDraftList(config.type.REVIEW)"
-      @openPanel="$_guestEditor_openPanel">
-    </control-bar>
+      @openPanel="$_guestEditor_openPanel"
+      :showControlBar="showControlBar"
+    />
     <main class="backstage-container">
       <template v-if="activePanel === 'records'">
         <section class="backstage__records">
@@ -136,7 +137,7 @@
       PointManager,
     },
     props: {
-      openControlBar: {
+      showControlBar: {
         type: Boolean,
       },
     },
@@ -203,13 +204,6 @@
       },
     },
     watch: {
-      openControlBar (val) {
-        if (val) {
-          document.querySelector('.controlBar').classList.add('open')
-        } else {
-          document.querySelector('.controlBar').classList.remove('open')
-        }
-      },
       isTappayRequired () {
         this.$forceUpdate()
       },      

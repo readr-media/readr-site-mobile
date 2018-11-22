@@ -8,8 +8,9 @@
       @editNews="$_editor_showDraftList(config.type.NEWS)"
       @editProfile="$_editor_showProfile"
       @editReview="$_editor_showDraftList(config.type.REVIEW)"
-      @openPanel="$_editor_openPanel">
-    </control-bar>
+      @openPanel="$_editor_openPanel"
+      :showControlBar="showControlBar"
+    />
     <main class="backstage-container">
       <template v-if="activePanel === 'records'">
         <section class="backstage__records">
@@ -250,7 +251,7 @@
       PointManager,
     },
     props: {
-      openControlBar: {
+      showControlBar: {
         type: Boolean,
       },
     },
@@ -318,13 +319,6 @@
       },
     },
     watch: {
-      openControlBar (val) {
-        if (val) {
-          document.querySelector('.controlBar').classList.add('open')
-        } else {
-          document.querySelector('.controlBar').classList.remove('open')
-        }
-      },
       isTappayRequired () {
         this.$forceUpdate()
       },

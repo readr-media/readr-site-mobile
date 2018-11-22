@@ -2,8 +2,9 @@
   <div class="backstage member">
     <control-bar
       @closeControlBar="$_member_closeControlBar"
-      @editProfile="$_member_showProfile">
-    </control-bar>
+      @editProfile="$_member_showProfile"
+      :showControlBar="showControlBar"
+    />
     <main class="backstage-container">
       <section class="backstage__records">
         <app-tab class="backstage__tab" :tabs="tabs" :defaultTab="defaultTab">
@@ -46,7 +47,7 @@
       PointManager,
     },
     props: {
-      openControlBar: {
+      showControlBar: {
         type: Boolean,
       },
     },
@@ -76,13 +77,6 @@
       },        
     },
     watch: {
-      openControlBar (val) {
-        if (val) {
-          document.querySelector('.controlBar').classList.add('open')
-        } else {
-          document.querySelector('.controlBar').classList.remove('open')
-        }
-      },
       isTappayRequired () {
         this.$forceUpdate()
       },

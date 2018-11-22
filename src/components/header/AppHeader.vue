@@ -1,10 +1,10 @@
 <template>
   <header :class="{ 'header--backstage': isBackstage }" class="header">
     <router-link to="/" class="header__logo"><img src="/public/icons/readr-logo-backstage.svg" alt=""></router-link>
-    <div v-if="isBackstage" class="header__item header--edit" @click="openControlBar">
+    <div v-show="isLoggedIn" class="header__item header--edit" @click="openControlBar">
       <img src="/public/icons/pen-white.png" alt="">
     </div>
-    <SearchTool v-if="!isBackstage" class="header__item header--search"></SearchTool>
+    <SearchTool class="header__item header--search"></SearchTool>
     <Notification class="header__item"></Notification>
     <div class="header__item hamburger" @click="toggleMenu">
       <div class="hamburger__bar"></div>
@@ -37,6 +37,9 @@
         const route = this.$route.fullPath.split('/')[1] || ''
         const regex = /^(admin|editor|guesteditor|member)$/
         return route.match(regex)
+      },
+      isLoggedIn () {
+        return this.$store.state.isLoggedIn
       },
     },
     methods: {
