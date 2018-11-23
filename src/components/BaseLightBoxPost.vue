@@ -40,7 +40,7 @@
 
 <script>
 import { getArticleAuthorId, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from 'src/util/comm'
-import { POST_TYPE, } from 'api/config'
+import { POST_TYPE, PROJECT_STATUS, } from 'api/config'
 import { get, find, map, isEmpty, } from 'lodash'
 import { isClientSide, } from 'src/util/comm'
 import BaseLightBoxTemplateNews from 'src/components/BaseLightBoxTemplateNews.vue'
@@ -96,6 +96,9 @@ export default {
     },    
     isMemoPaid () { 
       return get(this.post, 'project.paid') 
+    },    
+    isProjectDone () {
+      return get(this.post, 'project.status') === PROJECT_STATUS.DONE
     },      
     commentCount () {
       return get(find(get(this.$store, 'state.commentCount'), { postId: this.post.id, }), 'count', get(this.post, 'commentAmount')) || 0
@@ -113,7 +116,7 @@ export default {
   },
   data () { 
     return { 
-      isContentEmpty: !get(this.post, 'id') || this.isMemo,
+      isContentEmpty: !get(this.post, 'id') || (this.isMemo && !this.isProjectDone),
       isLoginBtnACtive: false, 
       showComment: true,
       shouldRenderComment: false,
@@ -123,15 +126,28 @@ export default {
     } 
   }, 
   methods: {
-    goJoin () { 
-      debug('this.isPostEmpty', this.isPostEmpty)
+    checkMemoStatus () {
       debug('this.isMemo', this.isMemo)
       debug('this.isMemoPaid', this.isMemoPaid)
-      debug('go open deduction?', !this.isPostEmpty && this.isMemo && !this.isMemoPaid)
-      if (!this.isPostEmpty && this.isMemo && !this.isMemoPaid) { 
-        switchOnDeductionPanel(this.$store, this.post) 
-      }       
-    },
+      if (this.isMemo && !this.isMemoPaid && !this.isProjectDone) {
+        this.isContentEmpty = true
+        debug('this.me.id', this.me.id)
+        if (this.me.id) {
+          switchOnDeductionPanel(this.$store, this.post)
+        } else {
+          switchOffDeductionPanel(this.$store)
+        }
+      } else {
+        this.isContentEmpty = false
+        debug('should turn off deduction')
+        switchOffDeductionPanel(this.$store)
+      }
+    },    
+    goJoin () {
+      if (!this.isPostEmpty && this.isMemo && !this.isMemoPaid && !this.isProjectDone) {
+        switchOnDeductionPanel(this.$store, this.post)
+      }      
+    },    
     goLogin () { 
       redirectToLogin(this.$route.fullPath)
     },
@@ -141,20 +157,8 @@ export default {
     get,     
   },
   mounted () {
-    if (!this.isPostEmpty) { 
-      debug(this.isMemo && !this.isMemoPaid && !this.isNews)       
-      if (this.isMemo && !this.isMemoPaid) { 
-        this.isContentEmpty = true 
-        !this.me.id && (this.isLoginBtnACtive = true) 
-        switchOnDeductionPanel(this.$store, this.post) 
-      } else { 
-        this.isContentEmpty = false 
-        switchOffDeductionPanel(this.$store)
-      } 
-    } else { 
-      this.isContentEmpty = true 
-      !this.me.id && (this.isLoginBtnACtive = true)       
-    } 
+    this.isPostEmpty && (this.isContentEmpty = true)
+    this.checkMemoStatus()    
     debug('Mounted: this.isContentEmpty', this.isContentEmpty)
   },
   watch: {
@@ -164,21 +168,15 @@ export default {
       }
     },
     post () {
-      if (!this.isPostEmpty) { 
-        if (this.isMemo && !this.isMemoPaid) { 
-          this.isContentEmpty = true 
-          switchOnDeductionPanel(this.$store, this.post) 
-        } else { 
-          this.isContentEmpty = false 
-        } 
+      debug('!this.isPostEmpty', !this.isPostEmpty)
+      if (!this.isPostEmpty) {
+        this.checkMemoStatus()
       } else {
-        /** 
-         * Client may not have the right to fetch this post content. 
-         */      
-        this.isContentEmpty = true    
-        !this.me.id && (this.isLoginBtnACtive = true)         
+        /**
+         * Client may not have the right to fetch this post content.
+         */
+        this.isContentEmpty = true
       }
-      debug('watch: this.isContentEmpty', this.isContentEmpty, this.post)
     },
   },  
 }
