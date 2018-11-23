@@ -155,6 +155,7 @@
         }).then(() => { 
           this.showMemoDeduction = false 
           location.reload() 
+          // location.replace(`/series/${get(this.targetItem, 'project.slug')}`)
         })         
       },
     },
@@ -165,8 +166,12 @@
     },
     watch: { 
       isActive () { 
-        this.isActive && (this.showMemoDeduction = true) 
-        this.showMemoDeduction && fetchCurrPoints(this.$store)
+        if (this.isActive) {
+          this.showMemoDeduction = true
+          fetchCurrPoints(this.$store)
+        } else {
+          this.showMemoDeduction = false
+        }        
       }, 
       isDepositNeeded () {
         if (this.isDepositNeeded) {
