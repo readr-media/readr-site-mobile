@@ -18,9 +18,12 @@
               <span class="object-name" v-text="objectName"></span>
               <span class="object-type" v-text="$t(`point.EDITOR_ROOM`)"></span>
             </template>
-            <template v-else-if="objectType === 'CLEARUP' || objectType ==='GIFT'">
+            <template v-else-if="objectType === 'CLEARUP'">
               <span class="object-type" v-text="$t(`point.${objectType}`)"></span>
-            </template>              
+            </template>
+            <template v-else-if="objectType ==='GIFT'">
+              <span class="object-type" v-text="reason || $t(`point.${objectType}`)"></span>
+            </template>          
           </template>
           <template v-else>
             <span class="prefix" v-text="$t('point.PAYMENT.PREFIX')"></span> 
@@ -86,6 +89,10 @@
             return
         }
       },   
+      reason () {
+        const reason = get(this.record, 'reason')
+        return reason !== '0' && reason
+      },
       pointOrigin () { 
         return this.balance - this.pointDeposit 
       }, 
