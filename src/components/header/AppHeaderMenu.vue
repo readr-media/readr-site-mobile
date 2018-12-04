@@ -124,7 +124,7 @@ export default {
       this.closeMenu()
     },
     memberActionRedirectToLogin () {
-      redirectToLogin(this.$route.fullPath, this.$router)
+      location.replace(this.$route.fullPath, this.$router)
     },
     memberActionLogout () {
       logout(this.$store).then(() => {

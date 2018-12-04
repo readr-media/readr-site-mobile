@@ -57,12 +57,18 @@ export default {
   },
   computed: {
     ...mapState({
+      me: state => get(state, 'profile', {}),
       tags: state => state.publicTags,
     }),
   },
   beforeMount () {
     getTags(this.$store, { stats: false, })
     getUserFollowing(this.$store, { resource: 'tag', })
+  },
+  watch: {
+    me() {
+      getUserFollowing(this.$store, { resource: 'tag', })
+    },
   },
 }
 </script>

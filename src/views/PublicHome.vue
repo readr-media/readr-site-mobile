@@ -35,7 +35,7 @@
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-published_at'
   const DEFAULT_CATEGORY = 'latest'
-  // const debug = require('debug')('CLIENT:PublicHome')
+  // const debug = require('debug')('CLIENT:Home')
 
   const fetchEmotion = (store, params) => {
     return store.dispatch('FETCH_EMOTION_BY_RESOURCE', params)
@@ -86,7 +86,7 @@
   }
 
   export default {
-    name: 'AppHome',
+    name: 'Home',
     asyncData ({ store, route, }) {
       const jobs = !get(store, 'state.publicPosts.items.length') ? [
         fetchPosts(store).then(() => {
@@ -157,6 +157,9 @@
     },
     computed: {
       currEnv,
+      me () {
+        return get(this.$store, 'state.profile', {})
+      },
       postBox () {
         if (this.showPostBox) {
           const findPostInList = find(this.postsHome, [ 'id', Number(this.$route.params.postId), ])
@@ -185,6 +188,9 @@
       },
     },
     watch: {
+      me() {
+        getUserFollowing(this.$store, { resource: 'post', })
+      },       
       isReachBottom (val) {
         if (val && !this.endPage) {
           this.$_home_loadmore()
