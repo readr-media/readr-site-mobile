@@ -40,7 +40,6 @@
   import { POINT_OBJECT_TYPE, DONATION_POINT_MIN_LINE, } from 'api/config'
   import { get, } from 'lodash'
   import { isClientSide, } from 'src/util/comm'
-  import { redirectToLogin, } from 'src/util/services'
 
   const DEFAULT_DONATION_POINT_MIN_LINE = DONATION_POINT_MIN_LINE || -100
   const debug = require('debug')('CLIENT:Donate')
@@ -57,6 +56,7 @@
   const fetchCurrPoints = store => store.dispatch('GET_POINT_CURRENT', { params: {}, })
   const switchOff = store => store.dispatch('SWITCH_OFF_DONATE_PANEL', {})
   const switchOnTappay = (store, item) => store.dispatch('SWITCH_ON_TAPPAY_PANEL', { active: true, item, })
+  const switchOnLoginLight = (store, message) => store.dispatch('LOGIN_ASK_TOGGLE', { active: true, message, type: 'GO_LOGIN', })
   export default {
     name: 'Donate',
     components: {
@@ -162,7 +162,7 @@
         })
       },
       goLogin () {
-        redirectToLogin(this.$route.fullPath, this.$router)
+        switchOnLoginLight(this.$store)
       },
     },
     beforeMount () {
@@ -189,6 +189,9 @@
       isActive () {
         this.showDonate = this.isActive
         this.showDonate && fetchCurrPoints(this.$store)
+        if (this.isActive && !get(this.me, 'id')) {
+          switchOnLoginLight(this.$store)
+        }
       },
     },
   }
