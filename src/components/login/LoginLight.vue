@@ -9,12 +9,14 @@
             <FacebookLogin type="mix" :isDoingLogin.sync="isProcessing" theme="light"></FacebookLogin>
             <GooglePlusLogin type="mix" :isDoingLogin.sync="isProcessing" theme="light"></GooglePlusLogin>
           </div>
+          <div class="login-msg"><span v-text="message"></span></div>
           <div class="login-by-email">
             <div class="hint-text"><span v-text="$t('login.USE_EMAIL_INSTEAD')"></span></div>
             <Login :isDoingLogin.sync="isProcessing" theme="dark"></Login>
           </div>
         </template>
         <template v-else>
+          <div class="login-msg"><span v-text="message"></span></div>
           <div class="register">
             <Register></Register>
           </div>
@@ -55,7 +57,10 @@
     computed: {
       active () {
         return get(this.$store, 'state.loginAskFlag.active', false)
-      },      
+      },   
+      message () {
+        return get(this.$store, 'state.loginAskFlag.message', this.$t('login.REGISTER_BONUS'))
+      },   
     },
     data () {
       return {
@@ -110,6 +115,7 @@
       background-color #444746
       padding 25px 10px 30px
       position relative
+      overflow auto
     &__logo
       margin 0 auto
       width 50px
@@ -117,6 +123,17 @@
         width 100%
     &__container
       margin-top 37px
+      .login-msg
+        margin-top 10px
+        display flex
+        justify-content center
+        font-size 0.9375rem
+        font-weight normal
+        font-style normal
+        font-stretch normal
+        line-height normal
+        letter-spacing normal
+        color #ddcf21      
       .login-by-email
         margin-top 38px
         .hint-text
@@ -156,7 +173,7 @@
     &__close
       width 20px
       height 20px
-      position absolute
+      position fixed
       right 0
       top 0
       background-size contain

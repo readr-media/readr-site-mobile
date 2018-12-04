@@ -152,7 +152,7 @@ export default {
       if (this.isLoggedIn) {
         this.toogleFollow(event)
       } else {
-        switchOn(this.$store, this.$t('POST_CONTENT.HINT.FOLLOW_WITH_LOGIN'))
+        switchOn(this.$store)
       }
     },
     toogleFollow (event) {
@@ -191,9 +191,9 @@ export default {
         }
       } else {
         if (emotion === 'like') {
-          switchOn(this.$store, this.$t('POST_CONTENT.HINT.LIKE_WITH_LOGIN'))
+          switchOn(this.$store)
         } else {
-          switchOn(this.$store, this.$t('POST_CONTENT.HINT.UNLIKE_WITH_LOGIN'))
+          switchOn(this.$store)
         }
       }
     },
