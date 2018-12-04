@@ -51,8 +51,9 @@
 
   const fetchPost = (store, { id, }) => {
     return store.dispatch('GET_POST', {
+      id: id,
       params: {
-        id: id,
+        showAuthor: true,
       },
     })
   }
@@ -70,6 +71,7 @@
         category: category,
         max_result: max_result,
         page: page,
+        showAuthor: true,
         sort: sort,
       },
     })
