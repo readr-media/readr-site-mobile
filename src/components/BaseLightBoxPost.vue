@@ -149,7 +149,7 @@ export default {
       }      
     },    
     goLogin () { 
-      redirectToLogin(this.$route.fullPath)
+      redirectToLogin(this.$route.fullPath, this.$router)
     },
     goHome () {
       this.$router.replace('/')

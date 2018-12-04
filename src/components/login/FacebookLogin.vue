@@ -41,16 +41,13 @@
             .then((res) => {
               this.$emit('update:isDoingLogin', false)
               if (res.status === 200) {
-                /**
-                 * use location.replace instead of router.push to server-side render page
-                 */
                 const from = VueCookie.get('location-replace-from')
                 const isFromPathExist = from !== null
                 if (isFromPathExist) {
                   VueCookie.delete('location-replace-from')
-                  location.replace(from)
+                  this.$router.push(from)
                 } else {
-                  location.replace('/')
+                  this.$router.push('/')
                 }     
 
                 // revolke switchOffLoginAsk for LoginLight

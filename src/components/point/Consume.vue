@@ -141,7 +141,7 @@
       goLogin () {
         switchOffDeductionPanel(this.$store).then(() => {
           this.showMemoDeduction = false
-          redirectToLogin(this.$route.fullPath)
+          redirectToLogin(this.$route.fullPath, this.$router)
         })
       },        
       hideMemoDeduction () {

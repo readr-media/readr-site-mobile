@@ -162,7 +162,7 @@
         })
       },
       goLogin () {
-        redirectToLogin(this.$route.fullPath)
+        redirectToLogin(this.$route.fullPath, this.$router)
       },
     },
     beforeMount () {
