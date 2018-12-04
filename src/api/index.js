@@ -279,8 +279,12 @@ export function getMeta (targetUrl) {
     .catch(err => err)
 }
 
-export function getPost ({ params, }) {
-  let url = `${host}/api/public/post/${params.id}`
+export function getPost ({ id, params, }) {
+  let url = `${host}/api/public/post/${id}`
+  const query = _buildQuery(params)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }
   return fetch(url, {})
 }
 
