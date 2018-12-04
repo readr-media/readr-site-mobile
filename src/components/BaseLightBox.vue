@@ -29,7 +29,6 @@
         return {
           'alert': this.isAlert,
           'non-border': this.borderStyle === 'nonBorder',
-          'conversation': this.isConversation,
         }
       },
     },
@@ -125,10 +124,6 @@
       > .baseLightBox__btn--close
         top 0
         right 0
-    &.conversation
-      > .baseLightBox__btn--close
-        width 45px
-        height 45px
     &.alert
       width auto
       height auto

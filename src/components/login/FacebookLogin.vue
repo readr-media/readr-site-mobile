@@ -1,5 +1,5 @@
 <template>
-  <div class="facebook-login" @click="login">
+  <div class="facebook-login" :class="{ light: theme === 'light' }" @click="login">
     <div class="facebook-login__container">
       <i class="icon"></i>
       <span class="wording" v-text="labelWording"></span>
@@ -23,20 +23,13 @@
       token,
     })
   }
-  const switchOn = (store, message) => store.dispatch('LOGIN_ASK_TOGGLE', { active: true, message, })
+  const switchConversation = (store, message) => store.dispatch('CONVERSATION_TOGGLE', { active: true, message, })  
+  const switchOffLoginAsk = store => store.dispatch('LOGIN_ASK_TOGGLE', { active: false, message: '', })
 
   export default {
     computed: {
       labelWording () {
         return this.$t('login.WORDING_FACEBOOK_LOGIN')
-        // switch (this.type) {
-        //   case 'register':
-        //     return this.$t('login.WORDING_FACEBOOK_REGISTER')
-        //   case 'login':
-        //     return this.$t('login.WORDING_FACEBOOK_LOGIN')
-        //   default:
-        //     return ''
-        // }
       },
     },
     name: 'FacebookLogin',
@@ -59,6 +52,9 @@
                 } else {
                   location.replace('/')
                 }     
+
+                // revolke switchOffLoginAsk for LoginLight
+                switchOffLoginAsk(this.$store) 
               } else {
                 debug('res', res)
               }
@@ -98,12 +94,12 @@
                       break
                     }
                     case 'oauth-goo': {
-                      switchOn(this.$store, this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED_WITH_G_PLUS'))
+                      switchConversation(this.$store, this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED_WITH_G_PLUS'))
                       .then(signOutFromApp)
                       break
                     }
                     case 'ordinary': {
-                      switchOn(
+                      switchConversation(
                         this.$store,
                         `${this.$t('login.REGISTER_FACEBOOK_EMAIL')} ${this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED_WITH_ORDINARY')}`  
                       ).then(signOutFromApp)
@@ -131,6 +127,7 @@
         type: Boolean,
         default: false,
       },
+      theme: {},
     },
   }
 </script>
@@ -144,9 +141,16 @@
     padding 5px 34px
     background-color transparent
     border 1px solid #9b9b9b
-
     font-size 1.125rem
     color #9b9b9b
+
+    &.light
+      background-color #3c5a99
+      border none
+      color #fff
+      .facebook-login__container
+        > .icon
+          background-image url(/public/icons/fb-white-square.png)
 
     margin-bottom 15px
     &__container

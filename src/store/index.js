@@ -18,7 +18,11 @@ export function createStore () {
       'consumeFlag': { 
         "active": false, 
         "item": {}, 
-      },    
+      },  
+      'conversationFlag': {
+        'active': false,
+        'message': '',
+      },         
       'donateFlag': { 
         'active': false, 
         'item': {}, 
@@ -58,6 +62,7 @@ export function createStore () {
       },
       'isClientSide': false,
       'isLoggedIn': false,
+      'isRecaptchaLoaded': false,
       'invitation_switch_status': false,
       'invitation_quota': 0,
       'isTappayRequired': false,

@@ -37,6 +37,9 @@ export default Object.assign({
   ADD_REWARD_POINTS_TRANSACTIONS: ({}, { params, }) => { // need sync readr-site version
     return addRewardPointsTransactions(params)
   },
+  CONVERSATION_TOGGLE: ({ commit, }, { active, message, type, }) => {
+    return commit('SWITCH_CONVERSATION', { active, message, type, })
+  },  
   CHECK_LOGIN_STATUS: ({ commit, }, { params, }) => {
     return checkLoginStatus({ params, }).then(({ status, body, }) => {
       commit('SET_LOGGEIN_STATUS', { status, body, })
@@ -140,6 +143,9 @@ export default Object.assign({
     debug('Got a action call to upload image.')
     return uploadImage(file, type)
   },
+  SET_RECAPTCHA_LOADED: ({ commit, }) => {
+    return commit('SET_RECAPTCHA_LOADED', { isLoaded: true, })
+  },   
   VERIFY_RECAPTCHA_TOKEN: ({}, { token, }) => {
     return verifyRecaptchaToken(token)
   },

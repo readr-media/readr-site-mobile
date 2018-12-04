@@ -7,7 +7,8 @@
     <app-footer v-if="!isLoginPage && !isBackstage && !isCommentPage"></app-footer>
     <Consume></Consume>
     <DepositTappay v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint"></DepositTappay>    
-    <LoginAsk></LoginAsk>
+    <Conversation></Conversation>
+    <LoginLight></LoginLight>
     <AlertGDPR v-if="showAlertGDPR" @closeAlertGDPR="showAlertGDPR = false" />
   </div>
 </template>
@@ -21,7 +22,8 @@
   import AppHeader from './components/header/AppHeader.vue'
   import Consume from 'src/components/point/Consume.vue' 
   import DepositTappay from 'src/components/point/DepositTappay.vue'
-  import LoginAsk from 'src/components/LoginAsk.vue'
+  import Conversation from 'src/components/Conversation.vue'
+  import LoginLight from 'src/components/login/LoginLight.vue'
   import Tap from 'tap.js'
   import VueCookie from 'vue-cookie'
 
@@ -33,8 +35,9 @@
       AppFooter,
       AppHeader,
       Consume,
+      Conversation,
       DepositTappay,
-      LoginAsk,
+      LoginLight,
     },
     data () {
       return {
