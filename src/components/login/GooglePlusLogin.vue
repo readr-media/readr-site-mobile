@@ -1,5 +1,5 @@
 <template>
-  <div class="google-plus-login" @click="login">
+  <div class="google-plus-login" :class="{ light: theme === 'light' }" @click="login">
     <div class="google-plus-login__container">
       <i class="icon"></i>
       <span class="wording" v-text="labelWording"></span>
@@ -24,20 +24,13 @@
       token,
     })
   }
-  const switchOn = (store, message) => store.dispatch('LOGIN_ASK_TOGGLE', { active: true, message, })
+  const switchConversation = (store, message) => store.dispatch('CONVERSATION_TOGGLE', { active: true, message, })  
+  const switchOffLoginAsk = store => store.dispatch('LOGIN_ASK_TOGGLE', { active: false, message: '', })
 
   export default {
     computed: {
       labelWording () {
         return this.$t('login.WORDING_GOOGLE_LOGIN')
-        // switch (this.type) {
-        //   case 'register':
-        //     return this.$t('login.WORDING_GOOGLE_REGISTER')
-        //   case 'login':
-        //     return this.$t('login.WORDING_GOOGLE_LOGIN')
-        //   default:
-        //     return ''
-        // }
       },
     },
     name: 'GooglePlusLogin',
@@ -60,6 +53,9 @@
                 } else {
                   location.replace('/')
                 }
+
+                // revolke switchOffLoginAsk for LoginLight
+                switchOffLoginAsk(this.$store) 
               } else {
                 debug('res', res)
               }
@@ -97,13 +93,13 @@
                       break
                     }
                     case 'oauth-fb': {
-                      switchOn(this.$store, this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED_WITH_FACEBOOK'))
+                      switchConversation(this.$store, this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED_WITH_FACEBOOK'))
                       .then(signOutFromApp)
                       break
                     }
                     case 'ordinary': {
                       this.$emit('update:isDoingLogin', false)
-                      switchOn(
+                      switchConversation(
                         this.$store,
                         `${this.$t('login.REGISTER_G_PLUS_EMAIL')} ${this.$t('login.WORDING_REGISTER_INFAIL_DUPLICATED_WITH_ORDINARY')}`  
                       ).then(signOutFromApp)
@@ -131,6 +127,7 @@
         type: Boolean,
         default: false,
       },
+      theme: {},
     },
   }
 </script>
@@ -143,9 +140,13 @@
     padding 5px 34px
     background-color transparent
     border 1px solid #9b9b9b
-
     font-size 1.125rem
     color #9b9b9b
+
+    &.light
+      background-color #fff
+      border none
+      color #000    
 
     &__container
       display flex

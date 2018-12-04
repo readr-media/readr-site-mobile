@@ -15,6 +15,7 @@
   import LoginPanelPackingTest from '../components/LoginPanelPackingTest.vue'
   import AppHeader from '../components/header/AppHeader.vue'
   import { get, } from 'lodash'
+  import { loadRecaptcha, loadGapiSDK, loadFbSDK, } from 'src/util/comm'
   
   export default {
     components: {
@@ -35,11 +36,19 @@
         isClientSide: false,
       }
     },
-    name: 'login-page',
+    name: 'Login',
     methods: {},
     mounted () {
       this.isClientSide = true
-      this.isLoggedIn && this.$router.push('/')
+      if (this.isLoggedIn) {
+        this.$router.push('/')
+      } else {
+        Promise.all([
+          loadRecaptcha(this.$store),
+          loadGapiSDK(this.$store),
+          loadFbSDK(this.$store),       
+        ])
+      }
     },
     watch: {
       isLoggedIn: function () {
