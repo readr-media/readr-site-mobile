@@ -108,7 +108,7 @@ export default {
       }
 
       if (!this.memberIsLoggedIn) {
-        redirectToLogin(path === '/login' ? this.$route.fullPath : path)
+        redirectToLogin(path === '/login' ? this.$route.fullPath : path, this.$router)
         return
       }
 
@@ -124,7 +124,7 @@ export default {
       this.closeMenu()
     },
     memberActionRedirectToLogin () {
-      redirectToLogin(this.$route.fullPath)
+      redirectToLogin(this.$route.fullPath, this.$router)
     },
     memberActionLogout () {
       logout(this.$store).then(() => {

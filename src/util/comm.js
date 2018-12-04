@@ -284,7 +284,6 @@ export function loadFbSDK (store) {
     if (isFbSDKLoaded) { return resolve() }
     const scriptFbSDK = document.createElement('script')
     scriptFbSDK.innerHTML = `
-      console.log('${_.get(store, 'state.setting.FB_CLIENT_ID')}')
       window.fbAsyncInit = function() {
         FB.init({
           appId            : '${_.get(store, 'state.setting.FB_CLIENT_ID')}',
@@ -301,7 +300,6 @@ export function loadFbSDK (store) {
             };
           }
         });
-        console.log('FB INIT!')
       };
       (function(d, s, id){
         var js, fjs = d.getElementsByTagName(s)[0];
