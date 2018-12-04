@@ -25,6 +25,7 @@ const PublicSearch = () => import('../views/PublicSearch.vue')
 const PublicSetPassword = () => import('../views/PublicSetPassword.vue')
 const PublicTag = () => import('../views/PublicTag.vue')
 const PublicComment = () => import('../views/PublicComment.vue')
+const PublicLoginPanel = () => import('../views/PublicLoginPanel.vue')
 // const PublicVideos = () => import('../views/PublicVideos.vue')
 
 const PageNotFound = () => import('../views/PageNotFound.vue')
@@ -61,6 +62,7 @@ const router = new Router({
     { path: '/editors', component: PublicEditors, },
     { path: '/guesteditor/:panel?/:tool?', component: ManageGuestEditor, meta: { permission: 'guesteditor', }, },
     { path: '/login/:panel?', component: PublicLogin, },
+    { path: '/login-panel', component: PublicLoginPanel, },
     { path: '/member/:panel?/:tool?', component: ManageMember, meta: { permission: 'member', }, },
     { path: '/profile/:id', component: PublicProfile, },
     { path: '/search/:keyword', component: PublicSearch, },
