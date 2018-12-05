@@ -126,7 +126,7 @@
       width 100%
       height 100%
       background-color #444746
-      padding 25px 10px 30px
+      padding 25px 10px 90px
       position relative
       overflow auto
     &__logo
