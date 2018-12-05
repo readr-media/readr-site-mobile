@@ -46,13 +46,13 @@ import { isClientSide, } from 'src/util/comm'
 import BaseLightBoxTemplateNews from 'src/components/BaseLightBoxTemplateNews.vue'
 import BaseLightBoxTemplatePost from 'src/components/BaseLightBoxTemplatePost.vue'
 import sanitizeHtml from 'sanitize-html'
-import { redirectToLogin, } from 'src/util/services'
 
 const debug = require('debug')('CLIENT:BaseLightBoxPost')
 const dom = require('xmldom').DOMParser
 const seializer  = require('xmldom').XMLSerializer
 const switchOnDeductionPanel = (store, item) => store.dispatch('SWITCH_ON_CONSUME_PANEL', { active: true, item, }) 
 const switchOffDeductionPanel = store => store.dispatch('SWITCH_OFF_CONSUME_PANEL', { active: false, }) 
+const switchOnLoginLight = (store, message) => store.dispatch('LOGIN_ASK_TOGGLE', { active: true, message, type: 'GO_LOGIN', })
 
 export default {
   name: 'BaseLightBoxPost',
@@ -82,6 +82,9 @@ export default {
     authorThumbnailImg () {
       return getArticleAuthorThumbnailImg(this.post)
     },
+    isLoginBtnActive () {
+      return get(this.me, 'id') ? false : true
+    },    
     isPostEmpty () {
       return isEmpty(this.post)
     },
@@ -117,7 +120,6 @@ export default {
   data () { 
     return { 
       isContentEmpty: !get(this.post, 'id') || (this.isMemo && !this.isProjectDone),
-      isLoginBtnACtive: false, 
       showComment: true,
       shouldRenderComment: false,
       allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', 'em', 'blockquote', 'a', 'iframe', ],
@@ -149,7 +151,7 @@ export default {
       }      
     },    
     goLogin () { 
-      redirectToLogin(this.$route.fullPath, this.$router)
+      switchOnLoginLight(this.$store)
     },
     goHome () {
       this.$router.replace('/')
@@ -159,9 +161,18 @@ export default {
   mounted () {
     this.isPostEmpty && (this.isContentEmpty = true)
     this.checkMemoStatus()    
-    debug('Mounted: this.isContentEmpty', this.isContentEmpty)
+    if (this.isMemo && !this.isMemoPaid && this.isLoginBtnActive) {
+      debug('isLoginBtnActive', this.isLoginBtnActive)
+      switchOnLoginLight(this.$store)
+    }
   },
   watch: {
+    isLoginBtnActive () {
+      debug('isLoginBtnActive', this.isLoginBtnActive)
+      if (this.isMemo && !this.isMemoPaid && this.isLoginBtnActive) {
+        switchOnLoginLight(this.$store)
+      }
+    },    
     showLightBox (val) {
       if (!val) {
         this.$emit('closeEditor')

@@ -283,7 +283,39 @@ export default {
           this.isLoadMoreEnd = true
         }
       })
-    },    
+    }, 
+    runJobs () {
+      const fetchEmotionForMemos = () => {
+        const memoIds = get(this.$store.state, this.me.id ? 'memos' : 'publicMemos', []).map(memo => memo.id)
+        if (memoIds.length > 0) {
+          fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'like', })
+          fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'dislike', })
+        }        
+      }
+      if (get(this.me, 'id')) {
+        fetchMemos(this.$store, {
+          mode: 'set',
+          proj_ids: [ get(this.project, 'id', 0), ],
+          page: 1,
+        }).then(() => {
+          fetchEmotionForMemos()
+        })
+        this.$route.params.subItem && fetchMemoSingle(this.$store, this.$route.params.subItem)
+      } else {
+        fetchEmotionForMemos()
+      }
+      const reportIds = get(this.$store.state, 'publicReports', []).map(report => report.id)
+      if (reportIds.length > 0) {
+        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
+        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
+      }    
+
+      getUserFollowing(this.$store, { resource: 'post', })
+      getUserFollowing(this.$store, { resource: 'memo', })
+      getUserFollowing(this.$store, { resource: 'report', })
+      getUserFollowing(this.$store, { resource: 'project', })
+      getUserFollowing(this.$store, { resource: 'tag', })
+    },   
   },
   beforeRouteUpdate (to, from, next) {
     debug('this.showLightBox', this.showPostBox)
@@ -295,36 +327,7 @@ export default {
     next()
   },  
   beforeMount () {
-    const fetchEmotionForMemos = () => {
-      const memoIds = get(this.$store.state, this.me.id ? 'memos' : 'publicMemos', []).map(memo => memo.id)
-      if (memoIds.length > 0) {
-        fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'like', })
-        fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'dislike', })
-      }        
-    }
-    if (get(this.me, 'id')) {
-      fetchMemos(this.$store, {
-        mode: 'set',
-        proj_ids: [ get(this.project, 'id', 0), ],
-        page: 1,
-      }).then(() => {
-        fetchEmotionForMemos()
-      })
-      this.$route.params.subItem && fetchMemoSingle(this.$store, this.$route.params.subItem)
-    } else {
-      fetchEmotionForMemos()
-    }
-    const reportIds = get(this.$store.state, 'publicReports', []).map(report => report.id)
-    if (reportIds.length > 0) {
-      fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
-      fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
-    }    
-
-    getUserFollowing(this.$store, { resource: 'post', })
-    getUserFollowing(this.$store, { resource: 'memo', })
-    getUserFollowing(this.$store, { resource: 'report', })
-    getUserFollowing(this.$store, { resource: 'project', })
-    getUserFollowing(this.$store, { resource: 'tag', })
+    this.runJobs()
     loadTappaySDK(this.$store)
     this.isSeriesDonate = get(this.$route, 'params.subItem') === 'donate'
   }, 
@@ -342,6 +345,9 @@ export default {
       debug('Mutation detected: isSeriesDonate', this.isSeriesDonate) 
       this.donateCheck() 
     }, 
+    me () {
+      this.runJobs()
+    },    
     project () { 
       debug('Mutation detected: project')
     },    

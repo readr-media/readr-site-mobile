@@ -36,35 +36,35 @@
     name: 'GooglePlusLogin',
     methods: {
       login () {
-        this.$emit('update:isDoingLogin', true)
         const readyToLogin = (idToken) => {
           login(this.$store, { idToken, login_mode: 'google', }, get(this.$store, 'state.register-token'))
-            .then((res) => {
-              this.$emit('update:isDoingLogin', false)
-              if (res.status === 200) {         
-                const from = VueCookie.get('location-replace-from')
-                const isFromPathExist = from !== null
-                if (this.panelType === 'WINDOW') {
-                  window.opener.location.reload()
-                  window.close()
-                } else if (isFromPathExist) {
-                  VueCookie.delete('location-replace-from')
-                  this.$router.push(from)
-                } else {
-                  this.$router.push('/')
-                }
-
-                // revolke switchOffLoginAsk for LoginLight
-                switchOffLoginAsk(this.$store) 
+          .then((res) => {
+            this.$emit('update:isDoingLogin', false)
+            if (res.status === 200) {         
+              const from = VueCookie.get('location-replace-from')
+              const isFromPathExist = from !== null
+              if (this.panelType === 'WINDOW') {
+                window.opener.location.reload()
+                window.close()
+              } else if (isFromPathExist) {
+                VueCookie.delete('location-replace-from')
+                this.$router.push(from)
               } else {
-                debug('res', res)
+                this.$router.push('/')
               }
-            })
+
+              // revolke switchOffLoginAsk for LoginLight
+              switchOffLoginAsk(this.$store) 
+            } else {
+              debug('res', res)
+            }
+          })
         }
         if (window && !window.googleStatus) {
           const auth = gapi && gapi.auth2.getAuthInstance()
           if (!auth) { return }
           auth.signIn({ scope: 'profile email', }).then((currUser) => {
+            this.$emit('update:isDoingLogin', true)
             const idToken = currUser.getAuthResponse().id_token
             gapi.client.people.people.get({
               'resourceName': 'people/me',
@@ -109,13 +109,13 @@
                 } else {
                   console.log(error)
                 }
+              })}, function (reason) {
+                debug({ msg: 'Error: ' + reason.result.error.message, })
               })
-            }, function (reason) {
-              debug({ msg: 'Error: ' + reason.result.error.message, })
             })
-          })
         } else {
           debug('Already authorized.')
+          this.$emit('update:isDoingLogin', true)
           readyToLogin(window.googleStatus.idToken)
         }
       },
