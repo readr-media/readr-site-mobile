@@ -29,7 +29,7 @@
 <script>
 import AppShareButton from 'src/components/AppShareButton.vue'
 import AppDateCreatedUpdated from 'src/components/AppDateCreatedUpdated.vue'
-import PostContent from 'src/components/PostContent.vue'
+import PostContent from 'src/components/post/PostContent.vue'
 import PostShareNav from 'src/components/post/PostShareNav.vue'
 import { dateDiffFromNow, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from 'src/util/comm'
 import { getPostType, } from 'src/util/post/index'

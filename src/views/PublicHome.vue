@@ -28,7 +28,7 @@
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
   import TagNavList from 'src/components/tag/TagNavList.vue'
   import sanitizeHtml from 'sanitize-html'
-  import truncate from 'html-truncate'
+  import truncate from 'truncate-html'
 
   
   const MAXRESULT_POSTS = 10
