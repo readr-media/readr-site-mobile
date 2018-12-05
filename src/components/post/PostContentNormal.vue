@@ -19,7 +19,6 @@
       </span>
     </div>
     <PostContentNormalSource
-      v-if="post.linkTitle"
       class="content__source"
       :post="post"
     />
