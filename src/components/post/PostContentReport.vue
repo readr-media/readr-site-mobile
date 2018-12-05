@@ -63,6 +63,7 @@ export default {
 .content
   a
     color black
+    word-break break-all
   &__title
     font-size 1.125rem
     margin-top 1em

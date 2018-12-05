@@ -80,6 +80,7 @@ export default {
     text-align justify
     line-height 1.77
     margin 6px 0
+    word-break break-all
     &:last-of-type
       display inline
     >>> a
