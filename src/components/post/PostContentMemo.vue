@@ -154,6 +154,7 @@ export default {
     line-height 1.77
     margin 6px 0
     color #4a4a4a
+    word-break break-all
     &:last-of-type
       display inline
     &--youtube
