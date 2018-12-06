@@ -95,7 +95,8 @@ export default {
     isMemo () { 
       debug('is memo?', get(this.post, 'flag') === 'memo' )
       debug('is memo?', this.$route.fullPath.split('/')[ 1 ] === 'series' && get(this.$route, 'params.slug') && get(this.$route, 'params.subItem'))
-      return get(this.post, 'projectId') && !get(this.post, 'slug')
+      // return get(this.post, 'projectId') && !get(this.post, 'slug')
+      return this.post && get(this.post, 'type') === POST_TYPE.MEMO
     },    
     isMemoPaid () { 
       return get(this.post, 'project.paid') 
