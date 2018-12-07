@@ -123,7 +123,11 @@ export default {
   asyncData ({ store, route, }) {
     const processes = []
     if (get(route, 'params.subItem') && get(route, 'params.subItem') !== 'donate') {
-      processes.push(fetchPublicMemoSingle(store, get(route, 'params.subItem')))
+      processes.push(fetchPublicMemoSingle(store, get(route, 'params.subItem')).then(memo => {
+        const memoIds = [ get(memo, 'id'), ]
+        fetchEmotion(store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'like', })
+        fetchEmotion(store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'dislike', })
+      }))
     }
     if (get(route, 'params.slug')) {
       processes.push(fetchProjectSingle(store, get(route, 'params.slug')).then(proj => {
@@ -242,33 +246,40 @@ export default {
         debug('Loadmore done. Status', res, get(res, 'status'))
         this.currPage += 1
         if (get(res, 'status') === 200) {
-          this.fetchSeriesPostsResources(this.posts)
+          this.fetchSeriesPostsResources(this.posts, 'update')
         } else if (get(res, 'status') === 'end') {
           this.isLoadMoreEnd = true
         }
       })
     },
-    fetchSeriesPostsResources (postItems) {
+    fetchSeriesPostsResources (postItems, mode = 'set') {
       const posts = postItems.map(item => createPost(item)).map(item => ({ postType: get(item, [ 'processed', 'postType', ], ''), id: item.id, }))
       const reportIds = posts.filter(item => item.postType === 'report').map(item => item.id)
       const memoIds = posts.filter(item => item.postType === 'memo').map(item => item.id)
       if (reportIds.length > 0) {
         // fetchFollowing(this.$store, { resource: 'report', ids: reportIds, })
-        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'like', })
-        fetchEmotion(this.$store, { resource: 'report', ids: reportIds, emotion: 'dislike', })
+        fetchEmotion(this.$store, { mode, resource: 'report', ids: reportIds, emotion: 'like', })
+        fetchEmotion(this.$store, { mode, resource: 'report', ids: reportIds, emotion: 'dislike', })
       }
       if (memoIds.length > 0) {
         // fetchFollowing(this.$store, { resource: 'memo', ids: memoIds, })
-        fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'like', })
-        fetchEmotion(this.$store, { resource: 'memo', ids: memoIds, emotion: 'dislike', })
+        fetchEmotion(this.$store, { mode, resource: 'memo', ids: memoIds, emotion: 'like', })
+        fetchEmotion(this.$store, { mode, resource: 'memo', ids: memoIds, emotion: 'dislike', })
       }
     },
     runJobs () {
       if (get(this.me, 'id')) {
         fetchProjectContents(this.$store, { project_id: get(this.project, 'id', 0), })
-        this.$route.params.subItem && fetchMemoSingle(this.$store, this.$route.params.subItem)
+
+        this.$route.params.subItem &&
+        fetchMemoSingle(this.$store, this.$route.params.subItem)
+        .then(memo => {
+          const memoIds = [ get(memo, 'id'), ]
+          fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'like', })
+          fetchEmotion(this.$store, { mode: 'update', resource: 'memo', ids: memoIds, emotion: 'dislike', })
+        })
       }
-      this.fetchSeriesPostsResources(this.posts)
+      this.fetchSeriesPostsResources(this.posts, 'update')
 
       getUserFollowing(this.$store, { resource: 'post', })
       getUserFollowing(this.$store, { resource: 'memo', })
