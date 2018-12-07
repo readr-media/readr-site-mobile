@@ -13,11 +13,11 @@
       <span v-else></span>
       <template v-if="resource !== 'project'">
         <span class="like-icon" @click="toggleEmotion('like')">
-          <img :src="isLike ? '/public/icons/like-blue.png' : '/public/icons/like-line-blue.png'" alt="like">
+          <img v-if="isClientSide" :src="isLike ? '/public/icons/like-blue.png' : '/public/icons/like-line-blue.png'" alt="like">
           <span v-text="emotionLikeCount"></span>
         </span>
         <span class="like-icon dislike" @click="toggleEmotion('dislike')">
-          <img :src="isDislike ? '/public/icons/like-blue.png' : '/public/icons/like-line-blue.png'" alt="unlike">
+          <img v-if="isClientSide" :src="isDislike ? '/public/icons/like-blue.png' : '/public/icons/like-line-blue.png'" alt="unlike">
           <span v-text="emotionDislikeCount"></span>
         </span>
       </template>
@@ -41,6 +41,7 @@ import { find, get, } from 'lodash'
 import { mapState, } from 'vuex'
 import CommentContainer from 'src/components/comment/CommentContainer.vue'
 import CommentCount from 'src/components/comment/CommentCount.vue'
+import { isClientSide, } from 'src/util/comm'
 
 const publishAction = (store, data) => store.dispatch('FOLLOW', { params: data, })
 const updateEmotion = (store, { resource = 'post', action = 'insert', emotion = 'like', object, }) => {
@@ -75,6 +76,7 @@ export default {
     CommentContainer,
   },
   computed: {
+    isClientSide,
     ...mapState({
       userId: state => state.profile.id,
       postsFollowingByUser: state => get(state.followingByUserStats, [ 'post', ], {}),
