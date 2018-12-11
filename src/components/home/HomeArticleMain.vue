@@ -71,7 +71,7 @@ export default {
       return this.authorId ? `/profile/${this.authorId}` : '#'
     },
     dateDiffFromNow () {
-      return dateDiffFromNow(this.articleData.updatedAt)
+      return dateDiffFromNow(this.articleData.publishedAt)
     },
     isClientSide,
     authorNickname () {
