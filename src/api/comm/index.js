@@ -84,6 +84,7 @@ export function fetch (url) {
     .end(function (err, res) {
       if (err) {
         if (!process.browser) {
+          /** Use resolve instead of reject to avoiding blocking on server-side */
           console.info('err occurred while fetching:', url, 'in', `${Date.now() - s}ms`, get(err, 'message'))
           resolve(get(err, 'message'))
         } else {
@@ -93,6 +94,7 @@ export function fetch (url) {
         // resolve(camelizeKeys(res.body))
         if (res.text === 'not found' || res.status !== 200) {
           if (!process.browser) {
+            /** Use resolve instead of reject to avoiding blocking on server-side */
             console.info('not found while fetching:', url, 'in', `${Date.now() - s}ms`)
             resolve(res.text)
           } else {

@@ -8,6 +8,7 @@ import {
   deletePosts,
   deletePostSelf,
   getPost,
+  getPostStrict,
   getPosts,
   getPostsCount,
   getPublicPosts,
@@ -33,16 +34,23 @@ const DELETE_POST_SELF = ({}, { id, }) => {
   return deletePostSelf(id)
 }
 
-const GET_POST = ({ commit, }, { id, params, }) => {
-  return new Promise((resolve) => {
-    getPost({ id, params, }).then(({ status, body, }) => {
+const GET_POST = ({ commit, }, { id, isPreview, params, }) => {
+  return new Promise((resolve, reject) => {
+    const fetcher = isPreview ? getPostStrict : getPost
+    debug('isPreview', isPreview)
+    fetcher({ id, params, })
+    .then(response => {
+      const { status, body, } = response
+      debug('Get fetching result. status:', status, body)
       if (status === 200) {
         commit('SET_PUBLIC_POST_SINGLE', { posts: body, })
         resolve({ status: 200, })
+      } else {
+        reject(response)
       }
-    }).catch((err) => {
-      // reject(err)
-      resolve({ status: 'error', res: err,})
+    }).catch(err => {
+      debug('Get fetching error.', { status: 'error', res: err,})
+      reject({ status: 'error', res: err,})
     })
   })
 }
