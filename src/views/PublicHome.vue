@@ -35,7 +35,7 @@
   const DEFAULT_PAGE = 1
   const DEFAULT_SORT = '-published_at'
   const DEFAULT_CATEGORY = 'latest'
-  // const debug = require('debug')('CLIENT:Home')
+  const debug = require('debug')('CLIENT:Home')
 
   const fetchEmotion = (store, params) => {
     return store.dispatch('FETCH_EMOTION_BY_RESOURCE', params)
@@ -49,9 +49,10 @@
     }
   }
 
-  const fetchPost = (store, { id, }) => {
+  const fetchPost = (store, { id, isPreview, }) => {
     return store.dispatch('GET_POST', {
-      id: id,
+      id,
+      isPreview,
       params: {
         showAuthor: true,
       },
@@ -87,7 +88,7 @@
 
   export default {
     name: 'Home',
-    asyncData ({ store, route, }) {
+    asyncData ({ store, route, router, }) {
       const jobs = !get(store, 'state.publicPosts.items.length') ? [
         fetchPosts(store).then(() => {
           const postIdsLatest = get(store.state.publicPosts, 'items', []).map(post => post.id)
@@ -101,18 +102,32 @@
       ] : []
     
       if (get(route, 'params.postId')) {
-        jobs.push(fetchPost(store, { id: get(route, 'params.postId'), }).then(({ status, }) => {
-          if (status === 'error') {
-            if (process.browser) {
-              this.$router.push('/404')
-            } else {
-              const e = new Error()
-              e.massage = 'Page Not Found'
-              e.code = '404'
-              throw e  
-            }
+        jobs.push(fetchPost(store, {
+          id: get(route, 'params.postId'),
+        }).catch(e => {
+          /** Post Not Found */
+          debug('Error:', e)
+          if (e === 'Not Found') {
+            if (!get(store, 'state.publicPostSingle.items.0.ogTitle') && !get(store, 'state.publicPostSingle.items.0.title')) {
+
+              /** If preview, dont redirect to 404 */
+              if (get(route, 'query.preview')) { return }
+
+              if (process.browser) {
+                router.push('/404')
+              } else {
+                debug('Going to throw 404 Error')
+                const err = new Error()
+                err.massage = 'Page Not Found'
+                err.code = 404
+                throw err  
+              }
+            }          
           } else {
-            return
+            const err = new Error()
+            err.massage = e
+            err.code = 500
+            throw err 
           }
         }))
       }
@@ -223,6 +238,12 @@
           } 
         })
       }
+      if (get(this.$route, 'params.postId') && get(this.$route, 'query.preview')) {
+        fetchPost(this.$store, {
+          id: get(this.$route, 'params.postId'),
+          isPreview: get(this.$route, 'query.preview'),
+        })
+      }      
     },
     mounted () {
       window.addEventListener('scroll', () => {

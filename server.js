@@ -128,7 +128,9 @@ function render (req, res, next) {
     }
   }
 
-  if (_.filter(PAGE_CACHE_EXCLUDING, (p) => (req.url.indexOf(p) > -1)).length === 0) {
+  const isPreview = req.url.indexOf('preview=true') > -1
+  const is404 = req.url.indexOf('/404') === 0
+  if (_.filter(PAGE_CACHE_EXCLUDING, (p) => (req.url.indexOf(p) > -1)).length === 0 && !isPreview && !is404) {
     if (!curr_host.match(targ_exp)) {
       if (req.url.length !== 1) {
         res.setHeader('Cache-Control', 'public, max-age=3600')  
@@ -137,7 +139,6 @@ function render (req, res, next) {
       }
     }
   }
-  // res.setHeader('Cache-Control', 'public, max-age=3600')  
   res.setHeader("Content-Type", "text/html")
   res.setHeader("Server", serverInfo)
 
@@ -174,36 +175,42 @@ function render (req, res, next) {
       REGISTRATION_ACTIVE: config.REGISTRATION_ACTIVE,
       STRIPE_KEY: config.STRIPE_KEY,
       TAPPAY: config.TAPPAY, 
-    }
+    },
+    is404,
   }
   const handleError = err => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')  
     if (err.url) {
+      console.error('Error occuerred. Redirect to', err.url)
       res.redirect(err.url)
       return
     }
+
     let status = err.code || 500
-    if (err.code === 404) {
+    debug('status', status)
+
+    if (status === 404) {
       isPageNotFound = true
-    }  else if (err.code === 403) { 
-      isUnauthorized = true 
-      res.status(status).send(`<script>location.replace('/login')</script>`) 
-      return 
+      console.error(`##########REQUEST URL(404)############\n`,
+      `ERROR OCCURRED WHEN RUNNING renderToString()\n`,
+      `REQUEST URL: ${req.url}\n`,
+      `REQUEST IP: ${req.clientIp}\n`,
+      `REFERER: ${req.headers.referer}\n`,
+      `${err}\n`, '######################')
+      req.url = '/404'
+      render(req, res, next)      
+    } else if (status === 403) {
+      isUnauthorized = true
+      return res.status(status).send(`<script>location.replace('/login')</script>`)
     } else {
       isErrorOccurred = true
+      console.error(`ERROR OCCURRED WHEN RUNNING renderToString()\n`,
+      `REQUEST URL: ${req.url}\n`,
+      `REQUEST IP: ${req.clientIp}\n`,
+      `REFERER: ${req.headers.referer}\n`,
+      `${err}`)
+      return res.status(500).send('500 | Internal Server Error')
     }
-    renderer.renderToString(Object.assign({}, context, { url: `/${status}` }), (e, h) => {
-      if (!e) {
-        res.status(status).send(h)
-        if (!isProd) {
-          console.log(`whole request: ${Date.now() - s}ms`)
-        }    
-      }else {
-        res.status(500).send('500 | Internal Server Error')
-        console.error(`Error occurred  during render : ${req.url}`)
-        console.error(e.stack)
-      }
-    })
   }
 
   res.on('finish', function () {
@@ -229,7 +236,7 @@ function render (req, res, next) {
     if (err) {
       return handleError(err)
     }
-    res.send(html)
+    res.status(context.is404 ? 404 : 200).send(html)
     if (!isProd) {
       console.log(`whole request: ${Date.now() - s}ms`)
     }
