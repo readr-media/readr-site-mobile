@@ -199,15 +199,14 @@
 <style lang="stylus" scoped>
   .donate-panel
     position relative
-    width 320px
-    height 568px
+    width 100%
+    height 100%
     border 5px solid #fff
     background-color #ddcf21
-    padding 40px 0 190px
     background-image url(/public/icons/sponsor.png)
     background-repeat no-repeat
     background-size auto 160px
-    background-position 0 368px
+    background-position 0 95%
 
     &__container
       overflow hidden
@@ -215,8 +214,8 @@
       flex-direction column
       justify-content center
       align-items center
-      width 100%
-      height 100%
+      position relative
+      top 10%
       padding 0 20px
     &__content
       flex 1
