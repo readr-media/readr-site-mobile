@@ -136,7 +136,7 @@ export default {
         this.isContentEmpty = true
         debug('this.me.id', this.me.id)
         if (this.me.id) {
-          switchOnDeductionPanel(this.$store, this.post)
+          this.showLightBox && switchOnDeductionPanel(this.$store, this.post)
         } else {
           switchOffDeductionPanel(this.$store)
         }
@@ -148,7 +148,7 @@ export default {
     },    
     goJoin () {
       if (!this.isPostEmpty && this.isMemo && !this.isMemoPaid && !this.isProjectDone) {
-        switchOnDeductionPanel(this.$store, this.post)
+        this.showLightBox && switchOnDeductionPanel(this.$store, this.post)
       }      
     },    
     goLogin () { 
