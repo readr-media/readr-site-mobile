@@ -85,6 +85,7 @@
       height 75px
       border 1px solid #979797
       border-radius 50%
+      overflow hidden
       > img
         width 100%
         height 100%

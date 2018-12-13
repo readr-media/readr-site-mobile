@@ -21,6 +21,7 @@
           <span v-text="emotionDislikeCount"></span>
         </span>
       </template>
+      <slot name="share"></slot>
     </nav>
     <slot name="tagNav"></slot>
     <CommentContainer
@@ -271,6 +272,7 @@ export default {
   flex-direction column
   margin-top 10px
   &__nav-btns
+    display flex
     height 30px
     margin-top auto // for automatically placing nav to the botom of the container
   &__tags

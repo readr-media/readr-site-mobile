@@ -4,11 +4,11 @@
     <main>
       <AppTitledList :listTitle="$t('editors.WORDING_EDITORS_CURRENT_GUESTEDITOR')">
         <ul class="editors-list-container">
-          <EditorsIntro class="editors-intro-main" v-for="customEditor in customEditors" :key="customEditor.id" :editor="customEditor"/>
+          <EditorsIntro class="editors-intro-main" v-for="customEditor in customEditors" :key="`${customEditor.id}-main`" :editor="customEditor"/>
         </ul>
       </AppTitledList>
       <ul class="editors__list-aside">
-        <EditorsIntro class="editors-intro-aside" v-for="member in asideListMembers" :key="member.id" :editor="member" :trimDescription="true"/>
+        <EditorsIntro class="editors-intro-aside" v-for="member in asideListMembers" :key="`${member.id}-aside`" :editor="member" :trimDescription="true"/>
       </ul>
     </main>
   </div>
@@ -20,7 +20,7 @@ import AppTitledList from '../components/AppTitledList.vue'
 import EditorsIntro from '../components/editors/EditorsIntro.vue'
 import Invite from '../components/invitation/Invite.vue'
 import { isScrollBarReachBottom, } from 'src/util/comm'
-import { find, get, } from 'lodash'
+import { find, get, uniqBy, } from 'lodash'
 
 // const debug = require('debug')('CLIENT:Editors')
 
@@ -83,7 +83,7 @@ export default {
       return get(this.$store, 'state.customEditors.items', [])
     },
     asideListMembers () {
-      return get(this.$store, `state.publicMembers[${this.asideListRoleValue}].items`, [])
+      return uniqBy(get(this.$store, `state.publicMembers[${this.asideListRoleValue}].items`, []), 'id')
     },
   },
   methods: {
