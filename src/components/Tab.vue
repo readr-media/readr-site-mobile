@@ -1,7 +1,7 @@
 <template>
   <div class="tab">
     <div class="tab__nav">
-      <div class="tab__nav__item" :class="{ active: activeItem === i }" v-for="(tab, i) in tabs" v-text="tab" @click="navClickHandler(i)" :style="tabStyle"></div>
+      <div v-for="(tab, i) in tabs" :key="`tab-${i}`" :class="{ active: activeItem === i }" class="tab__nav__item" @click="navClickHandler(i)" v-text="tab"></div>
     </div>
     <div class="tab__content">
       <slot v-for="(t, i) in tabs" :name="i" v-if="i === activeItem"></slot>
@@ -48,8 +48,10 @@
 <style lang="stylus" scoped>
   .tab
     &__nav
+      display flex
       width 100%
       &__item
+        flex 1
         height 25px
         display inline-flex
         justify-content center
@@ -58,13 +60,19 @@
         font-size 0.75rem
         font-weight 400
         cursor pointer
+        border-top 1px solid #d3d3d3
         & + &
           border-left 1px solid #d3d3d3
+        &:first-child
+          border-left 1px solid #d3d3d3
+        &:last-child
+          border-right 1px solid #d3d3d3
         &.active
           background-color #ddcf21
           color #fff
-          &:not(:last-child)
-            border-right 1px solid #d3d3d3
+          border-top none
+          &:last-child, &:first-child
+            border-right none
     &__content
       border 3px solid #d8ca21
       padding 20px
