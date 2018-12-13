@@ -54,7 +54,9 @@ $app-share-button__item
   display inline-block
   width 100%
   height 100%
-  background-size 100% 100%
+  background-size 93% 93%
+  background-repeat no-repeat
+  background-position center center
   z-index 1
 .app-share-button
   @extends $app-share-button
@@ -68,6 +70,7 @@ $app-share-button__item
     padding 0
     background-size 29px 29px
     background-color transparent
+    background-repeat no-repeat
     border none
     outline none
     
