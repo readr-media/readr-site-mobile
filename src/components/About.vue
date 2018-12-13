@@ -79,26 +79,25 @@
     width 100%
     min-height 100px
     margin 0 auto
-    padding 0 20px 0 70px
+    padding 0 20px
     &__thumbnail
-      position absolute
-      left 20px
-      top 0
-      width 40px
-      height 40px
+      width 75px
+      height 75px
       border 1px solid #979797
       border-radius 50%
-      overflow hidden
       > img
         width 100%
         height 100%
         object-fit cover
         object-position center center
     &__name
-      font-size .75rem
+      margin-top 10px
+      font-size 1.125rem
+      font-weight 600
     &__introduction
       margin-top 5px
-      font-size .75rem
+      font-size .9375rem
+      font-weight 400
       line-height 1.5
       text-align justify
     &__edit
