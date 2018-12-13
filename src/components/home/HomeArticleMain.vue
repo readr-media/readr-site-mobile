@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import AppShareButton from 'src/components/AppShareButton.vue'
 import AppDateCreatedUpdated from 'src/components/AppDateCreatedUpdated.vue'
 import PostContent from 'src/components/post/PostContent.vue'
 import PostShareNav from 'src/components/post/PostShareNav.vue'
@@ -53,7 +52,6 @@ export default {
     },
   },
   components: {
-    AppShareButton,
     AppDateCreatedUpdated,
     PostContent,
     PostShareNav,

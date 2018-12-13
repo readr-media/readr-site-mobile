@@ -67,6 +67,7 @@ export default {
     width r
     height r
     border-radius r
+    overflow hidden
     img
       width 100%
       height 100%
