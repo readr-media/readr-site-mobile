@@ -1,15 +1,22 @@
 <template>
-  <div id="app">
-    <app-header v-if="!isLoginPage && !isCommentPage" @openControlBar="openControlBar"></app-header>
-    <transition name="fade" mode="out-in">
-      <router-view class="view" :showControlBar="showControlBar" @closeControlBar="closeControlBar"></router-view>
-    </transition>
-    <app-footer v-if="!isLoginPage && !isBackstage && !isCommentPage"></app-footer>
-    <Consume></Consume>
-    <DepositTappay v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint"></DepositTappay>    
-    <Conversation></Conversation>
-    <LoginLight></LoginLight>
-    <AlertGDPR v-if="showAlertGDPR" @closeAlertGDPR="showAlertGDPR = false" />
+  <div id="app" :class="{ embed: isEmbed }">
+    <template v-if="isEmbed">
+      <transition name="fade" mode="out-in">
+        <router-view class="view"></router-view>
+      </transition>
+    </template>
+    <template v-else>
+      <app-header v-if="!isLoginPage && !isCommentPage" @openControlBar="openControlBar"></app-header>
+      <transition name="fade" mode="out-in">
+        <router-view class="view" :showControlBar="showControlBar" @closeControlBar="closeControlBar"></router-view>
+      </transition>
+      <app-footer v-if="!isLoginPage && !isBackstage && !isCommentPage"></app-footer>
+      <Consume></Consume>
+      <DepositTappay v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint"></DepositTappay>    
+      <Conversation></Conversation>
+      <LoginLight></LoginLight>
+      <AlertGDPR v-if="showAlertGDPR" @closeAlertGDPR="showAlertGDPR = false" />
+    </template>
   </div>
 </template>
 
@@ -57,6 +64,9 @@
       },
       isAboutPage () {
         return /\/about/.test(this.$route.fullPath)
+      },
+      isEmbed () {
+        return /\/embed\//.test(this.$route.fullPath)
       },
       isLoginPage () {
         return /\/login/.test(this.$route.fullPath)
@@ -170,6 +180,13 @@ button
     width 100%
     height 100vh
     overflow hidden
+
+.embed
+  min-height 100vh
+  background-color #11b8c9
+  .view
+    min-height 0
+
 .locked
   width 100%
   height 100vh

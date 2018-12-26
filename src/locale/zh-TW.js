@@ -586,6 +586,14 @@ export default {
       <div>最重要的就是你的參與。</div>
     `,
   },
+  'POLL': {
+    'CHOICE': '選項',
+    'CREATED_BY': '發起人',
+    'END_AT': '截止',
+    'SHARE': '分享',
+    'START_AT': '開始',
+    'VOTES': 'votes',
+  },
   'PROFILE': {
     'CONFIRM_PASSWORD' : '密碼確認',
     'DESCRIPTION' : '簡介',
