@@ -9,6 +9,7 @@ Vue.use(Vuex)
 export function createStore () {
   return new Vuex.Store({
     state: {
+      'chosenChoices': [],
       'clearUpPointsFlag': {
         'active': false,
         'item': {},        
@@ -26,7 +27,8 @@ export function createStore () {
       'donateFlag': { 
         'active': false, 
         'item': {}, 
-      },    
+      },
+      'embedPoll': {},
       'emotionByResource': {
         'memo': {
           'like': [],

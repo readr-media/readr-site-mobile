@@ -28,6 +28,8 @@ const PublicComment = () => import('../views/PublicComment.vue')
 const PublicLoginPanel = () => import('../views/PublicLoginPanel.vue')
 // const PublicVideos = () => import('../views/PublicVideos.vue')
 
+const EmbedPoll = () => import('../views/EmbedPoll.vue')
+
 const PageNotFound = () => import('../views/PageNotFound.vue')
 const ServerError = () => import('../views/ServerError.vue')
 
@@ -60,6 +62,7 @@ const router = new Router({
     { path: '/agreement', component: PublicAgreement, },
     { path: '/editor/:panel?/:tool?', component: ManageEditor, meta: { permission: 'editor', }, },
     { path: '/editors', component: PublicEditors, },
+    { path: '/embed/poll/:id', component: EmbedPoll, },
     { path: '/guesteditor/:panel?/:tool?', component: ManageGuestEditor, meta: { permission: 'guesteditor', }, },
     { path: '/login/:panel?', component: PublicLogin, },
     { path: '/login-panel', component: PublicLoginPanel, },
