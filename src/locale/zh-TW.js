@@ -707,4 +707,5 @@ export default {
     'LOADMORE_PREFIX': '看另外',
     'LOADMORE_SUFFIX': '則留言',
   },
+  'COPY_LINK': '複製連結成功',
 }

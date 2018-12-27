@@ -15,7 +15,9 @@
           :resource="post.flag || get(postInstance, [ 'processed', 'resource' ])"
           :resourceType="get(postInstance, [ 'processed', 'resourceType', ], '')"
           :commentCount="commentCount"
-          :inLightbox="true" @toogleComment="toogleComment">
+          :inLightbox="true" @toogleComment="toogleComment"
+        >
+          <PostShareNav slot="share" :post="post" class="baselightbox-post__share-nav"/>
           <TagNav
             v-if="post.tags && post.tags.length > 0"
             slot="tagNav"
@@ -23,7 +25,6 @@
             class="baselightbox-post__tags" />
         </AppArticleNav>
       </section>
-      <PostShareNav v-if="isClientSide" class="baselightbox-post__share-nav" :post="post"/>
     </article>
     <CommentContainer
       v-if="shouldRenderComment"
@@ -103,11 +104,10 @@
   &__article
     position relative
   &__share-nav
-    position absolute
-    top 0
-    right 0
+    margin 0 0 0 auto
 
 .article-content
-  &__paragraph-container
+  width 100%
+  &__paragraph-container, &__source-link
     word-break break-all
 </style>
