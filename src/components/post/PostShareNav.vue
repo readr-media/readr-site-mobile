@@ -7,7 +7,7 @@
       target="_blank"
       @click="sendShareLog('fb')"
     >
-      <img src="/public/icons/fb-square.svg" alt="">
+      <img src="/public/icons/fb-share.png" alt="">
     </a>
     <a
       v-if="isClientSide"
@@ -16,8 +16,12 @@
       target="_blank"
       @click="sendShareLog('line')"
     >
-      <img src="/public/icons/line.png" alt="">
+      <img src="/public/icons/line-share.png" alt="">
     </a>
+    <PostShareNavCopylink
+      class="nav__icon nav__icon--copy-link"
+      @toggle="copyToClipboard(createShareUrl('copylink', shareUrl))"
+    />
   </nav>
 </template>
 
@@ -28,6 +32,9 @@ import { logTrace, } from 'src/util/services'
 
 import { getPostType, getPostFullUrl, } from 'src/util/post/index'
 import { createShareUrl, } from 'src/util/post/share'
+import { copyToClipboard, } from 'src/util/comm'
+
+import PostShareNavCopylink from 'src/components/post/PostShareNavCopylink.vue'
 
 export default {
   props: {
@@ -37,6 +44,9 @@ export default {
         return {}
       },
     },
+  },
+  components: {
+    PostShareNavCopylink,
   },
   computed: {
     isClientSide,
@@ -55,6 +65,7 @@ export default {
   },
   methods: {
     createShareUrl,
+    copyToClipboard,
     sendShareLog (socialMedia) {
       const createShareLog = () => {
         return {
@@ -92,12 +103,20 @@ export default {
     & + &
       margin 0 0 0 10px
     &--fb
-      background-color #3b5998
       img
-        width 50%
+        width 100%
     &--line
-      background-color #00b900
       img
-        width 70%
+        width 100%
+
+@media (max-width 320px)
+  .nav
+    &__icon
+      d = 25px
+      width d
+      height d
+      border-radius d
+      & + &
+        margin 0 0 0 5px
 </style>
 

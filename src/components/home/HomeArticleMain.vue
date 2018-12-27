@@ -18,7 +18,6 @@
           </router-link>
         </figcaption>
       </figure>
-      <PostShareNav v-if="isClientSide" class="info__share-nav" :post="articleData"/>
     </div>
     <div class="home-article-main__content">
       <PostContent :post="articleData" :key="`post-content-${articleData.id}`" :id="`post-content-${articleData.id}`"></PostContent>
@@ -29,7 +28,6 @@
 <script>
 import AppDateCreatedUpdated from 'src/components/AppDateCreatedUpdated.vue'
 import PostContent from 'src/components/post/PostContent.vue'
-import PostShareNav from 'src/components/post/PostShareNav.vue'
 import { dateDiffFromNow, isClientSide, getArticleAuthorNickname, getArticleAuthorThumbnailImg, } from 'src/util/comm'
 import { getPostType, } from 'src/util/post/index'
 import { get, } from 'lodash'
@@ -54,7 +52,6 @@ export default {
   components: {
     AppDateCreatedUpdated,
     PostContent,
-    PostShareNav,
   },
   data () {
     return {
@@ -176,8 +173,6 @@ export default {
   display flex
   justify-content space-between
   align-items center
-  &__share-nav
-    padding 0 10px 0 0
 
 @media (max-width 320px)
   .author-info

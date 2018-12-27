@@ -23,7 +23,6 @@
             <div v-else :class="{ 'yt-iframe-container': isElementContentYoutube(p) }" v-html="p"></div>
           </template>
         </section>
-        <PostShareNav v-if="isClientSide" class="baselightbox-post__share-nav" :post="post"/>
       </article>
       <div class="nav-container">
         <AppArticleNav
@@ -35,6 +34,7 @@
           :commentCount="commentCount"
           :shouldShowComment="true"
         >
+          <PostShareNav slot="share" :post="post" class="baselightbox-post__share-nav"/>
           <TagNav
             v-if="post.tags && post.tags.length > 0"
             slot="tagNav"
@@ -110,9 +110,7 @@
   &__article
     position relative
   &__share-nav
-    position absolute
-    top 0
-    right 0
+    margin 0 0 0 auto
 
 .article-content
   word-break break-all
