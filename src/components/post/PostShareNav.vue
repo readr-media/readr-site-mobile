@@ -27,12 +27,12 @@
 
 <script>
 import { get, } from 'lodash'
+import * as clipboard from 'clipboard-polyfill'
 import { isClientSide, } from 'src/util/comm'
 import { logTrace, } from 'src/util/services'
 
 import { getPostType, getPostFullUrl, } from 'src/util/post/index'
 import { createShareUrl, } from 'src/util/post/share'
-import { copyToClipboard, } from 'src/util/comm'
 
 import PostShareNavCopylink from 'src/components/post/PostShareNavCopylink.vue'
 
@@ -65,7 +65,9 @@ export default {
   },
   methods: {
     createShareUrl,
-    copyToClipboard,
+    copyToClipboard (text) {
+      clipboard.writeText(text)
+    },
     sendShareLog (socialMedia) {
       const createShareLog = () => {
         return {
