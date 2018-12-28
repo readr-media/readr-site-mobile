@@ -2305,6 +2305,11 @@ cliff@~0.1.9:
     eyes "~0.1.8"
     winston "0.8.x"
 
+clipboard-polyfill@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/clipboard-polyfill/-/clipboard-polyfill-2.7.0.tgz#4f4344bb3405f88609ccf8ee2d445018da0e318f"
+  integrity sha512-JUQ9Q32xetbWG3e3tdYbP4uB13YeMz79AWg4SiPLVbu4s6pv2q70R8uXDtA8UD3f2BKQeTDD5ApoqRCs29RDlw==
+
 cliui@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/cliui/-/cliui-2.1.0.tgz#4b475760ff80264c762c3a1719032e91c7fea0d1"
