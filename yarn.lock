@@ -2308,7 +2308,6 @@ cliff@~0.1.9:
 clipboard-polyfill@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/clipboard-polyfill/-/clipboard-polyfill-2.7.0.tgz#4f4344bb3405f88609ccf8ee2d445018da0e318f"
-  integrity sha512-JUQ9Q32xetbWG3e3tdYbP4uB13YeMz79AWg4SiPLVbu4s6pv2q70R8uXDtA8UD3f2BKQeTDD5ApoqRCs29RDlw==
 
 cliui@^2.1.0:
   version "2.1.0"
@@ -8389,10 +8388,9 @@ readr-comment@^1.0.21:
     prevent-scroll "^2.0.0"
     sanitize-html "^1.18.2"
 
-readr-web-api@^1.0.65:
-  version "1.0.65"
-  resolved "https://registry.yarnpkg.com/readr-web-api/-/readr-web-api-1.0.65.tgz#72f78aae8d3ba2ad6cb11000fbe8eacef07eb498"
-  integrity sha512-NPc4OYL2SI2aXcFnUrhu5Q/mjtPvIfWCTwR/OW/tJcLVmK8po4N3GV9CsZpD8EdQMW+zt5pM9E9I72jw0hTAzw==
+readr-web-api@^1.0.66:
+  version "1.0.66"
+  resolved "https://registry.yarnpkg.com/readr-web-api/-/readr-web-api-1.0.66.tgz#4df6a13d3e6f0df1d436b0440b56cea949d0fc07"
   dependencies:
     "@google-cloud/logging" "^1.2.0"
     "@google-cloud/pubsub" "^0.18.0"
