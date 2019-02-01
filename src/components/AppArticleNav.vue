@@ -88,18 +88,12 @@ export default {
     asset () {
       switch (this.resource) {
         case 'memo': {
-          const resourceValue = `${get(this.$store, 'state.setting.HOST')}/series/${get(this.$route, 'params.slug')}/${this.postId}`
-          const resourceValueRelatedPost = `${get(this.$store, 'state.setting.HOST')}/post/${this.postId}`
-          const isRelatedPostAtHome = this.link
-          return `${ isRelatedPostAtHome ? resourceValueRelatedPost : resourceValue }`
+          return `${get(this.$store, 'state.setting.HOST')}/series/${get(this.projectInfo, 'slug')}/${this.postId}`
         }
         case 'project':
           return `${get(this.$store, 'state.setting.HOST')}/series/${this.postId}`
         case 'report': {
-          const resourceValue = `${this.link || get(this.$store, 'state.setting.HOST')}/project/${this.slug}`
-          const resourceValueRelatedPost = `${get(this.$store, 'state.setting.HOST')}/post/${this.postId}`
-          const isRelatedPostAtHome = this.link
-          return `${ isRelatedPostAtHome ? resourceValueRelatedPost : resourceValue }`
+          return `${get(this.$store, 'state.setting.HOST')}/project/${this.slug}`
         }
         default: 
           return `${get(this.$store, 'state.setting.HOST')}/${this.resource}/${this.postId}`
@@ -227,6 +221,9 @@ export default {
       required: true,
     },
     postRefId: {},
+    projectInfo: {
+      // Fot memo use.
+    },
     commentCount: {
       type: Number,
       required: true,
