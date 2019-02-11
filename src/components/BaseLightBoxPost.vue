@@ -43,6 +43,7 @@ import { getArticleAuthorId, getArticleAuthorNickname, getArticleAuthorThumbnail
 import { POST_TYPE, PROJECT_STATUS, } from 'api/config'
 import { get, find, map, isEmpty, } from 'lodash'
 import { isClientSide, } from 'src/util/comm'
+import { sanitizeHtmlOptions, } from 'src/util/post/config'
 import BaseLightBoxTemplateNews from 'src/components/BaseLightBoxTemplateNews.vue'
 import BaseLightBoxTemplatePost from 'src/components/BaseLightBoxTemplatePost.vue'
 import sanitizeHtml from 'sanitize-html'
@@ -130,19 +131,10 @@ export default {
       isContentEmpty: !get(this.post, 'id') || (this.isMemo && !this.isProjectDone),
       showComment: true,
       shouldRenderComment: false,
-      allowedTags: [ 'img', 'strong', 'h1', 'h2', 'figcaption', 'em', 'blockquote', 'a', 'iframe', ],
-      allowedAttributes: Object.assign({}, sanitizeHtml.defaults.allowedAttributes, { iframe: [ 'frameborder', 'allowfullscreen', 'src', 'width', 'height', ], img: [ 'src', 'srcset', ], }),
-      allowedIframeHostnames: [ 'www.youtube.com', 'dev.readr.tw', 'www.readr.tw', 'cloud.highcharts.com', ],
-      transformTags: {
-        'iframe': function(tagName, attribs) {
-          return {
-            tagName: 'iframe',
-            attribs: Object.assign(attribs, {
-              allowfullscreen: 'allowfullscreen',
-            }),
-          }
-        },
-      },
+      allowedTags: sanitizeHtmlOptions.allowedTags,
+      allowedAttributes: sanitizeHtmlOptions.allowedAttributes,
+      allowedIframeHostnames: sanitizeHtmlOptions.allowedIframeHostnames,
+      transformTags: sanitizeHtmlOptions.transformTags,
     } 
   }, 
   methods: {
