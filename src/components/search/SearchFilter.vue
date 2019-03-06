@@ -30,14 +30,23 @@
     methods: {
       change (key) {
         this.flag = key
-        this.$emit('searchChange', key)
+        this.$emit('update:filter', key)
+      },
+    },
+    props: {
+      filter: {},
+    },
+    watch: {
+      filter () {
+        this.flag = this.filter
       },
     },
   }
 </script>
 <style lang="stylus" scoped>
   .search-filter
-    margin-bottom 20px
+    margin-bottom 15px
+    padding 0 20px
     &__title
       font-size 0.9375rem
       font-weight 600

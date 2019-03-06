@@ -2,20 +2,19 @@
   <div class="search">
     <div class="search__container">
       <main class="search__container__main">
-        <SearchFilter @searchChange="searchChange"></SearchFilter>
+        <SearchFilter :filter.sync="currFilter" />
         <div v-if="currFilter === 'post'">
-          <HomeArticleMain v-for="(post, k) in items" :articleData="post" :key="`post-${k}`"></HomeArticleMain>
+          <HomeArticleMain v-for="(post, k) in items" :articleData="post" :key="`post-${k}`" />
         </div>
-        <div v-else-if="currFilter === 'conversation'"></div>
-        <div v-else>
-          <ProjectsFigure v-for="project in items" :project="project" :key="project.id"></ProjectsFigure>
+        <div v-else-if="currFilter === 'project'">
+          <ProjectsFigure v-for="project in items" :project="project" :key="project.id" />
         </div>
       </main>
     </div>
   </div>
 </template>
 <script>
-  import { filter, get, } from 'lodash'
+  import { get, } from 'lodash'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
   import ProjectsFigure from 'src/components/projects/ProjectsFigure.vue'
   import SearchFilter from 'src/components/search/SearchFilter.vue'
@@ -30,7 +29,7 @@
       params,
     })
   }
-  const fetchData = (store, route) => {
+  const fetchData = (store, route, objectType) => {
     debug('store.state.route.params', route.params)
     debug('store.state.route.params.keyword', route.params.keyword)
     return Promise.all([
@@ -39,6 +38,7 @@
         params: {
           page: PAGE,
           max_results: MAXRESULT,
+          object_type: objectType || 'post',
         },
       }),
     ])
@@ -46,9 +46,6 @@
 
   export default {
     name: 'Search',
-    asyncData ({ store, route, }) {
-      return fetchData(store, route)
-    },
     components: {
       HomeArticleMain,
       ProjectsFigure,
@@ -56,22 +53,45 @@
     },
     computed: {
       items () {
-        return filter(get(this.$store, 'state.searchResult.items'), { objectType: this.currFilter, })
+        return get(this.$store, 'getters.searchResultNormalized')
       },
     },
     data () {
       return {
         currFilter: 'post',
+        isProcessing: false,
       }
     },
     methods: {
+      fetchItems () {
+        if (!this.isProcessing) {
+          this.isProcessing = true
+          fetchData(this.$store, this.$route, this.currFilter).then(() => {
+            this.isProcessing = false
+          }).catch(() => {
+            this.isProcessing = false
+          })
+        }
+      },
       searchChange (key) {
         debug('Filter changes to:', key)
         this.currFilter = key
       },
     },
-    mounted () {
-      debug('Mounted')
+    beforeMount () {
+      fetchData(this.$store, this.$route)
+    },    
+    watch: {
+      currFilter () {
+        this.fetchItems()
+      },
+      '$route.fullPath': function () {
+        /**
+         * Revise this.currFilter to trigger data fetching.
+         */
+        this.currFilter = 'post'
+        this.fetchItems()
+      },
     },
   }
 </script>
@@ -90,7 +110,6 @@
         top 60px
         z-index 999
       &__main
-        margin-left 40px
         display flex
         flex-direction column
         justify-content flex-start

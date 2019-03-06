@@ -120,16 +120,16 @@ export default Object.assign({
   RESET_PWD: ({}, { params, }) => {
     return resetPwd(params)
   },
-  SEARCH: ({ commit, state, }, { keyword, params, }) => {
+  SEARCH: async ({ commit, state, }, { keyword, params, }) => {
     const orig = _.values(state.searchResult[ 'items' ])
-    return state.searchResult.items && (params.page > 1)
-      ? search(keyword, params).then(searchResult => {
-        searchResult[ 'items' ] = _.concat(orig, _.get(searchResult, 'body.hits'))
-        commit('SET_SEARCH', { searchResult, })
-      }) : search(keyword, params).then(searchResult => {
-        searchResult[ 'items' ] = _.get(searchResult, 'body.hits')
-        commit('SET_SEARCH', { searchResult, })
-      })
+    const searchResult = await search(keyword, params).catch(() => ({}))
+    if (state.searchResult.items && (params.page > 1)) {
+      searchResult.items = _.concat(orig, _.get(searchResult, 'body.hits.hits'))
+      return commit('SET_SEARCH', { searchResult, })
+    } else {
+      searchResult.items = _.get(searchResult, 'body.hits.hits')
+      return commit('SET_SEARCH', { searchResult, })
+    }
   },
   SYNC_AVATAR: ({}, { params, }) => { // need sync readr-site version
     return syncAvatar(params)
