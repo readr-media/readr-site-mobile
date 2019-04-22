@@ -17,6 +17,7 @@ const AboutContentPoints = () => import('src/components/about/AboutContentPoints
 const PublicAgreement = () => import('../views/PublicAgreement.vue')
 const PublicEditors = () => import('../views/PublicEditors.vue')
 const PublicHome = () => import('../views/PublicHome.vue')
+const PublicHome2 = () => import('../views2.0/PublicHome.vue')
 const PublicLogin = () => import('../views/PublicLogin.vue')
 const PublicSeries = () => import('../views/PublicSeries.vue')
 const PublicProfile = () => import('../views/PublicProfile.vue')
@@ -47,7 +48,7 @@ const router = new Router({
  
   },
   routes: [
-    { path: '/post/:postId?', component: PublicHome, alias: '/', },
+    { path: '/post/:postId?', component: PublicHome2, alias: '/', },
     { path: '/hot', component: PublicHome, }, // this is a deprecated route
     { path: '/about/:subpath?',
       component: PublicAbout,
