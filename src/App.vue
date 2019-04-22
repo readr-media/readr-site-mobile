@@ -10,7 +10,7 @@
       <transition name="fade" mode="out-in">
         <router-view class="view" :showControlBar="showControlBar" @closeControlBar="closeControlBar"></router-view>
       </transition>
-      <app-footer v-if="!isLoginPage && !isBackstage && !isCommentPage"></app-footer>
+      <AppFooter v-if="!isLoginPage && !isBackstage && !isCommentPage" />
       <Consume></Consume>
       <DepositTappay v-if="isTappayNeeded" :active.sync="isDepositActive" @fetchCurrentPoint="fetchCurrentPoint"></DepositTappay>    
       <Conversation></Conversation>
@@ -25,7 +25,7 @@
   import { isAlink, isABTest, logTrace, } from 'src/util/services'
   import { ROLE_MAP, } from 'src/constants'
   import AlertGDPR from 'src/components/AlertGDPR.vue'
-  import AppFooter from './components/AppFooter.vue'
+  import AppFooter from './components2.0/AppFooter.vue'
   import AppHeader from './components/header/AppHeader.vue'
   import Consume from 'src/components/point/Consume.vue' 
   import DepositTappay from 'src/components/point/DepositTappay.vue'
@@ -149,6 +149,9 @@
 </script>
 
 <style lang="stylus">
+#app
+  padding 0 0 34px 0
+
 a
   text-decoration none
 
