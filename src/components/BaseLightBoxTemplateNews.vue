@@ -16,8 +16,8 @@
         </section>
         <section class="article-content">
           <h1 v-text="!isPostEmpty ? post.title : ''"></h1>
-          <template v-for="p in postContent">
-            <div :class="{ 'yt-iframe-container': isElementContentYoutube(p) }" v-html="p"></div>
+          <template v-for="(p, index) in postContent">
+            <div :key="`article-content-${index}`" :class="{ 'yt-iframe-container': isElementContentYoutube(p) }" v-html="p"></div>
           </template>
         </section>
       </article>

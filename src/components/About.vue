@@ -68,7 +68,9 @@
     props: {
       profile: {
         type: Object,
-        default: {},
+        default () {
+          return {}
+        },
       },
     },
   }

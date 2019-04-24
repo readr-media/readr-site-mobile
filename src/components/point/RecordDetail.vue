@@ -86,7 +86,7 @@
           case 4:
             return 'GIFT' 
           default:
-            return
+            return undefined
         }
       },   
       reason () {

@@ -10,7 +10,7 @@
       </div>
     </div>  
     <template v-for="(item, index) in records"> 
-      <PointRecordItem class="point-record-item" :record="item" @showDetail="checkoutDetail"></PointRecordItem> 
+      <PointRecordItem :key="`point-record-${index}`" class="point-record-item" :record="item" @showDetail="checkoutDetail"></PointRecordItem> 
     </template> 
     <RecordDetail :showup.sync="showDetail" :detail="currDetail"></RecordDetail>
   </div> 

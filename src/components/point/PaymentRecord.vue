@@ -1,7 +1,7 @@
 <template> 
   <div class="payment-record"> 
-    <template v-for="item in records"> 
-      <PaymentRecordItem class="payment-record-item" :record="item" @showDetail="checkoutDetail"></PaymentRecordItem> 
+    <template v-for="(item, index) in records"> 
+      <PaymentRecordItem :key="`payment-${index}`" class="payment-record-item" :record="item" @showDetail="checkoutDetail"></PaymentRecordItem> 
     </template> 
     <RecordDetail :showup.sync="showDetail" :detail="currDetail"></RecordDetail>    
   </div> 

@@ -28,7 +28,7 @@
         <div class="name"><span v-html="$t('point.CLEAR_UP.ITEM.PHONE_NUMBER')"></span></div>
         <div class="tpfield input country no-radius">
           <select v-model="currCountry">
-            <option v-for="{ code, name } in callingCodes" :value="name" v-text="`${name} ${code}`"></option>
+            <option :key="name" v-for="{ code, name } in callingCodes" :value="name" v-text="`${name} ${code}`"></option>
           </select>
         </div>
         <div class="tpfield input no-radius" :class="{ 'input-alert': get(alertObj, 'PHONE_NUMBER') }" tabIndex="0">
@@ -39,7 +39,7 @@
     </div>
     <div class="tappay-deposit__item title"><span v-text="$t('point.CLEAR_UP.TITLE.INVOICE_INFO')"></span></div>
     <template v-for="(item, key) in CARRIER_TYPE">
-      <div class="tappay-deposit__item indent">
+      <div :key="`tappay-${key}`"  class="tappay-deposit__item indent">
         <RadioItem class="admin" name="carrier_type"
           theme="checkbox"
           fontSize="0.875rem"
@@ -49,7 +49,7 @@
           :disabled="false"
           :currSelected.sync="carrierSelected"></RadioItem> 
       </div>  
-      <div class="tappay-deposit__item indent depend-on" :class="{ active: carrierSelected == item }">
+      <div :key="`tappay-depend-${key}`" class="tappay-deposit__item indent depend-on" :class="{ active: carrierSelected == item }">
         <template v-if="key !== 'BUSINESS'">
           <div class="input" :class="{ 'input-alert': get(alertObj, key) }" tabIndex="0">
             <input type="text" v-model="carrierNum"

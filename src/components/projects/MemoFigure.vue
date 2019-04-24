@@ -25,7 +25,9 @@
     props: {
       memo: {
         type: Object,
-        default: {},
+        default () {
+          return {}
+        },
       },
     },
     computed: {

@@ -8,7 +8,7 @@
         <img src="/public/icons/triangle-right.png">
       </div>
       <div class="items">
-        <div class="item" :class="{ active: flag === item.key }" v-for="item in filters" @click="change(item.key)">
+        <div :key="`filter-${index}`" class="item" :class="{ active: flag === item.key }" v-for="(item, index) in filters" @click="change(item.key)">
           <span v-text="item.name"></span>
         </div>
       </div>    

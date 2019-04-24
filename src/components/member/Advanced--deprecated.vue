@@ -1,10 +1,10 @@
 <template>
   <div class="advanced">
-    <template v-for="setting in PROFILE_SETTING">
-      <div class="advanced__setting">
+    <template v-for="(setting, index) in PROFILE_SETTING">
+      <div :key="`setting-${index}`" class="advanced__setting">
         <div class="advanced__setting--title"><span v-html="$t(`profile_editor.${setting.object}.${setting.name}`)"></span></div>
         <template v-if="initialized">
-          <div class="advanced__setting--item" v-for="item in setting.items">
+          <div :key="`setting-${index}-${i}`" class="advanced__setting--item" v-for="(item, i) in setting.items">
             <SettingCheckbox :value.sync="form[ item.key ]">
               <span v-text="$t(`profile_editor.${setting.object}.${item.name}`)"></span>
             </SettingCheckbox>
