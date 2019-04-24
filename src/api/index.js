@@ -147,12 +147,11 @@ export function getFollowingByResource (params) {
     superagent
       .get(url)
       .set('Authorization', `Bearer ${getToken()}`)
-      .end(function (err, res) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve({ status: res.status, body: camelizeKeys(res.body), })
-        }
+      .then(res => {
+        resolve({ status: res.status, body: camelizeKeys(res.body), })
+      })
+      .catch(err => {
+        reject(err)
       })
   })
 }
@@ -167,12 +166,11 @@ export function getFollowingByUser (params) {
     superagent
       .get(url)
       .set('Authorization', `Bearer ${getToken()}`)
-      .end(function (err, res) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve({ status: res.status, body: camelizeKeys(res.body), })
-        }
+      .then(res => {
+        resolve({ status: res.status, body: camelizeKeys(res.body), })
+      })
+      .catch(err => {
+        reject(err)
       })
   })
 }
@@ -184,13 +182,12 @@ export function follow ({ params, }) {
     .post(url)
     .set('Authorization', `Bearer ${getToken()}`) 
     .send(params) 
-    .end(function (err, res) { 
-      if (err) { 
-        reject(err) 
-      } else { 
-        resolve(res) 
-      } 
-    }) 
+    .then(res => {
+      resolve(res)
+    })
+    .catch(err => {
+      reject(err)
+    })
   }) 
 }
 
@@ -199,12 +196,11 @@ export function getDisposableToken (type) {
   return new Promise((resolve, reject) => {
     superagent
       .get(url)
-      .end(function (err, res) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(res.body.token)
-        }
+      .then(res => {
+        resolve(res.body.token)
+      })
+      .catch(err => {
+        reject(err)
       })
   })
 }
@@ -391,15 +387,13 @@ export function checkPassword (params) {
     superagent
       .post(url)
       .set('Authorization', `Bearer ${getToken()}`)
-      .send(
-        params
-      ).end(function (err, res) {
-        if (err) {
-          reject(err)
-        } else {
-          saveToken(res.body.token)
-          resolve({ status: res.status, profile: res.body.profile, })
-        }
+      .send(params)
+      .then(res => {
+        saveToken(res.body.token)
+        resolve({ status: res.status, profile: res.body.profile, })
+      })
+      .catch(err => {
+        reject(err)
       })
   })
 }
@@ -410,15 +404,13 @@ export function login (params, token) {
     superagent
       .post(url)
       .set('Authorization', `Bearer ${token}`)
-      .send(
-        params
-      ).end(function (err, res) {
-        if (err) {
-          reject(err)
-        } else {
-          saveToken(res.body.token)
-          resolve({ status: res.status, profile: res.body.profile, })
-        }
+      .send(params)
+      .then(res => {
+        saveToken(res.body.token)
+        resolve({ status: res.status, profile: res.body.profile, })
+      })
+      .catch(err => {
+        reject(err)
       })
   })
 }
@@ -522,12 +514,11 @@ export function uploadImage (file, type) {
       .post(url)
       .set('Authorization', `Bearer ${getToken()}`)
       .send(file)
-      .end((err, res) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(res)
-        }
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
       })
   })
 }
@@ -539,12 +530,11 @@ export function deleteMemberProfileThumbnails (id) {
       .post(url)
       .set('Authorization', `Bearer ${getToken()}`)
       .send({ id, })
-      .end((err, res) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(res)
-        }
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
       })
   })
 }
@@ -555,12 +545,11 @@ export function verifyRecaptchaToken ({ token, }) {
     superagent
       .post(url)
       .send({ token, })
-      .end(function (err, res) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(res.body)
-        }
+      .then(res => {
+        resolve(res.body)
+      })
+      .catch(err => {
+        reject(err)
       })
   })
 }

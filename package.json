@@ -51,7 +51,7 @@
     "route-cache": "0.4.4",
     "sanitize-html": "^1.18.2",
     "serve-favicon": "^2.4.4",
-    "superagent": "^3.8.2",
+    "superagent": "^5.0.2",
     "tap.js": "^2.2.0",
     "truncate": "^2.0.1",
     "truncate-html": "^1.0.1",
