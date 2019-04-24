@@ -22,7 +22,7 @@
   // import { createStore, } from 'src/store'
   import { currEnv, isScrollBarReachBottom, isCurrentRoutePath, } from 'src/util/comm'
   import HomeArticleMain from 'src/components/home/HomeArticleMain.vue'
-  import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
+  // import HomeNavigationMobile from 'src/components/home/HomeNavigationMobile.vue'
   import HomeRadios from 'src/components/home/HomeRadios.vue'
   import BaseLightBoxPost from 'src/components/BaseLightBoxPost.vue'
   import PostBoxWrapper from 'src/components/PostBoxWrapper.vue'
@@ -154,7 +154,7 @@
     },
     components: {
       HomeArticleMain,
-      HomeNavigationMobile,
+      // HomeNavigationMobile,
       HomeRadios,
       BaseLightBoxPost,
       PostBoxWrapper,

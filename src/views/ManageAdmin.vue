@@ -113,7 +113,7 @@
   import Tab from '../components/Tab.vue'
   import TagList from '../components/TagList.vue'
   import TheControlBar from '../components/TheControlBar.vue'
-  import VideoList from '../components/VideoList.vue'
+  // import VideoList from '../components/VideoList.vue'
 
   const MAXRESULT = 20
   const DEFAULT_PAGE = 1
@@ -232,7 +232,7 @@
       PostPanel,
       TagList,
       TheControlBar,
-      VideoList,
+      // VideoList,
     },
     props: {
       showControlBar: {

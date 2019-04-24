@@ -27,8 +27,8 @@
 </template>
 <script>
   // import Deposit from 'src/components/point/Deposit.vue'
-  import DepositTappay from 'src/components/point/DepositTappay.vue' 
-  import PaymentRecord from 'src/components/point/PaymentRecord.vue'
+  // import DepositTappay from 'src/components/point/DepositTappay.vue' 
+  // import PaymentRecord from 'src/components/point/PaymentRecord.vue'
   import PointRecord from 'src/components/point/PointRecord.vue'
   import { currentYPosition, elmYPosition, } from 'kc-scroll'
   import { get, } from 'lodash'
@@ -39,8 +39,8 @@
     name: 'PointManager',
     components: {
       // Deposit,
-      DepositTappay,
-      PaymentRecord,
+      // DepositTappay,
+      // PaymentRecord,
       PointRecord,
     },
     computed: { 

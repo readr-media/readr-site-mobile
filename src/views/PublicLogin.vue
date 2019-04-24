@@ -13,13 +13,13 @@
 <script>
   import LoginPanel from '../components/LoginPanel.vue'
   import LoginPanelPackingTest from '../components/LoginPanelPackingTest.vue'
-  import AppHeader from '../components/header/AppHeader.vue'
+  // import AppHeader from '../components/header/AppHeader.vue'
   import { get, } from 'lodash'
   import { loadRecaptcha, loadGapiSDK, loadFbSDK, } from 'src/util/comm'
   
   export default {
     components: {
-      'app-header': AppHeader,
+      // 'app-header': AppHeader,
       LoginPanel,
       LoginPanelPackingTest,
     },

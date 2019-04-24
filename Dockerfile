@@ -1,4 +1,4 @@
-FROM node:8.12.0-slim
+FROM node:10.15-slim
 
 ENV NODE_SOURCE /usr/src
 

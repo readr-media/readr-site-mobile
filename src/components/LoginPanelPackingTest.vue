@@ -25,7 +25,7 @@
 <script>
   import Login from 'src/components/login/Login.vue'
   import RecoverPassword from 'src/components/login/RecoverPassword.vue'
-  import Register from 'src/components/register/Register.vue'
+  // import Register from 'src/components/register/Register.vue'
 
   const debug = require('debug')('CLIENT:LoginPanelPackingTest')
   const getDisposableToken = (store) => {
@@ -38,7 +38,7 @@
     components: {
       Login,
       RecoverPassword,
-      Register,
+      // Register,
     },
     data () {
       return {

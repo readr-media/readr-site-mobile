@@ -109,6 +109,7 @@
           case 'error':
             return this.$t('ALERT.ERROR')
         }
+        return undefined
       },
       alertTitle () {
         switch (this.type) {
@@ -128,6 +129,7 @@
           case 'tag':
             return this.$t('ALERT.DELETE_CONFIRMATION')
         }
+        return undefined
       },
       isMultiple () {
         return this.items.length > 1

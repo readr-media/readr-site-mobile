@@ -33,8 +33,8 @@
 </template>
 <script>
   import { get, } from 'lodash'
-  import ControlBarButton from './ControlBarButton.vue'
-  import ControlBarButtonBox from './ControlBarButtonBox.vue'
+  // import ControlBarButton from './ControlBarButton.vue'
+  // import ControlBarButtonBox from './ControlBarButtonBox.vue'
 
   export default {
     name: 'TheControlBar',
@@ -44,10 +44,10 @@
         default: false,
       },
     },
-    components: {
-      'control-bar-button': ControlBarButton,
-      'control-bar-button-box': ControlBarButtonBox,
-    },
+    // components: {
+    //   'control-bar-button': ControlBarButton,
+    //   'control-bar-button-box': ControlBarButtonBox,
+    // },
     data () {
       return {
         activePanel: 'record',
