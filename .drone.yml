@@ -38,7 +38,7 @@ pipeline:
       branch: [master, dev]
 
   builds:
-    image: node:8.12.0-slim
+    image: node:10.15-slim
     commands:
     - apt-get update && apt-get install -y node-gyp
     - yarn install

@@ -4,7 +4,7 @@
       <div v-for="(tab, i) in tabs" :key="`tab-${i}`" :class="{ active: activeItem === i }" class="tab__nav__item" @click="navClickHandler(i)" v-text="tab"></div>
     </div>
     <div class="tab__content">
-      <slot v-for="(t, i) in tabs" :name="i" v-if="i === activeItem"></slot>
+      <slot v-for="(t, i) in activeTabs" :name="i"></slot>
     </div>
   </div>
 </template>
@@ -23,6 +23,9 @@
       }
     },
     computed: {
+      activeTabs () {
+        return this.tabs.filter((tab, index) => index === this.activeItem)
+      },
       tabStyle () {
         return {
           width: `${100 / (this.tabs ? this.tabs.length : 1)}%`,
