@@ -25,7 +25,7 @@
         </div>
         <div class="form__wrapper">
           <div class="form__item--title"><span v-text="$t('PROFILE.SECTION_NOTIFICATION')"></span></div>
-          <div class="form__item switcher" v-for="item in SETTING_NOTIFICATION">
+          <div :key="`form-n-${index}`" class="form__item switcher" v-for="(item, index) in SETTING_NOTIFICATION">
             <ProfileEditSwitchItem :value.sync="settings[ get(item, 'key') ]" :defaultVal="get(personalSetting, camelize(get(item, 'key')))"
               :title="$t(`PROFILE.SETTING_NOTIFICATION.${get(item, 'name')}.TITLE`)"
               :desc="$t(`PROFILE.SETTING_NOTIFICATION.${get(item, 'name')}.DESC`)"></ProfileEditSwitchItem>
@@ -33,7 +33,7 @@
         </div>
         <div class="form__wrapper">
           <div class="form__item--title"><span v-text="$t('PROFILE.SECTION_ACCUONT')"></span></div>
-          <div class="form__item switcher" v-for="item in SETTING_ACCOUNT">
+          <div :key="`form-a-${index}`" class="form__item switcher" v-for="(item, index) in SETTING_ACCOUNT">
             <ProfileEditSwitchItem :value.sync="settings[ get(item, 'key') ]" :defaultVal="get(personalSetting, camelize(get(item, 'key')))"
               :title="$t(`PROFILE.SETTING_ACCOUNT.${get(item, 'name')}.TITLE`)"
               :desc="$t(`PROFILE.SETTING_ACCOUNT.${get(item, 'name')}.DESC`)"></ProfileEditSwitchItem>

@@ -40,7 +40,7 @@
         if (this.video.link) {
           return this.video.link.split(';')[0]
         }
-        return 
+        return undefined
       },
       me () {
         return get(this.$store, 'state.profile', {})

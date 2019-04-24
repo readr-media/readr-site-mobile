@@ -69,12 +69,14 @@ export default {
   props: {
     articleData: {
       type: Object,
-      default: {
-        author: {
-          nickname: '',
-        },
-        title: '',
-        content: '',
+      default () {
+        return {
+          author: {
+            nickname: '',
+          },
+          title: '',
+          content: '',
+        }
       },
     },
   },

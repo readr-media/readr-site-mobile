@@ -8,7 +8,7 @@
     </div>
     <div ref="inviteForm" class="invite__form">
       <h2 v-text="$t('INVITATION.EMAIL_ADDRESS')"></h2>
-      <div class="item__container" v-for="i in activeItemsCount">
+      <div :key="`invite-form-${i}`" class="item__container" v-for="i in activeItemsCount">
         <TextItem class="item input" v-if="isOpen"
           :alert.sync="emailAlert[ i ]"
           :alertPosition="'bottom'"

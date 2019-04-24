@@ -111,18 +111,16 @@ export default {
     frequencyStartTime () {
       if (this.poll.frequency === POLL_FREQUENCY.WEEKLY) {
         return moment().startOf('week').toISOString().replace('.000', '')
-      } else if (this.poll.frequency === POLL_FREQUENCY.DAILY) {
+      } else { // POLL_FREQUENCY.DAILY
         return moment().startOf('day').toISOString().replace('.000', '')
       }
-      return
     },
     frequencyEndTime () {
       if (this.poll.frequency === POLL_FREQUENCY.WEEKLY) {
         return moment().endOf('week').toISOString().replace('.999', '')
-      } else if (this.poll.frequency === POLL_FREQUENCY.DAILY) {
+      } else {
         return moment().endOf('day').toISOString().replace('.999', '')
       }
-      return
     },
     iframeCode () {
       const domain = currEnv() === 'dev' ? `http://${SITE_DOMAIN_DEV}` : `https://www.${SITE_DOMAIN}`

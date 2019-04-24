@@ -42,7 +42,9 @@
       },
       posts: {
         type: Array,
-        default: [],
+        default () {
+          return []
+        },
         // required: true
       },
     },

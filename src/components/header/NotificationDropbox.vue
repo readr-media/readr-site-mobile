@@ -8,7 +8,7 @@
     </div>
     <div class="notification-dropbox__items">
       <template v-for="(item, index) in notificationItems">
-        <div class="notification-dropbox__item" :class="{ never: !get(item, 'read') }" @click="read(`${index}`)" v-if="isNotificationDefined(item)">
+        <div :key="`notification-dropbox-${index}`" class="notification-dropbox__item" :class="{ never: !get(item, 'read') }" @click="read(`${index}`)" v-if="isNotificationDefined(item)">
           <div class="notification-dropbox__item__avatar-img">
             <img :src="getFullUrl(get(item, 'profile_image'), 'mobile')" v-if="isClientSide">
           </div>
@@ -105,7 +105,9 @@
       },
       notificationItems: {
         type: Array,
-        default: [],
+        default () {
+          return []
+        },
       },
     },    
   }
