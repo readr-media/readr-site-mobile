@@ -1,80 +1,156 @@
 <template>
-  <footer ref="footer" class="footer">
-    <router-link to="/" class="footer__item">
-      <p v-text="$t('SECTIONS.CHIEF_EDITOR_TALK')"></p>
-    </router-link>
-    <router-link to="/series-list" class="footer__item">
-      <p v-text="$t('SECTIONS.PROJECTS')"></p>
-    </router-link>
-    <router-link to="/editors" class="footer__item">
-      <p v-text="$t('SECTIONS.CHIEF_EDITOR_LIST')"></p>
-    </router-link>
-    <router-link to="/about" class="footer__item">
-      <p v-text="$t('SECTIONS.ABOUT')"></p>
-    </router-link>
-    <router-link :to="`/profile/${ANNOUNCEMENT_ACCOUNT_ID}`" class="footer__item">
-      <img class="announcement-icon" src="/public/icons/announcement.png" alt="">
-    </router-link>
+  <footer class="footer">
+    <div class="footer__top">
+      <ul class="footer__links-list links-list">
+        <li class="links-list__list-item">
+          <router-link
+            class="link"
+            to="/about"
+          >
+            關於我們
+          </router-link>
+        </li>
+        <li class="links-list__list-item">
+          <router-link
+            class="link"
+            to="/agreement"
+          >
+            隱私政策
+          </router-link>
+        </li>
+        <li class="links-list__list-item">
+          <router-link
+            class="link"
+            to="/agreement"
+          >
+            服務條款
+          </router-link>
+        </li>
+        <li class="links-list__list-item">
+          <router-link
+            class="link"
+            to="/agreement"
+          >
+            版權所有
+          </router-link>
+        </li>
+        <li class="links-list__list-item">
+          <router-link
+            class="link"
+            to="/"
+          >
+            聯絡我們
+          </router-link>
+        </li>
+      </ul>
+    </div>
+    <div class="footer__bottom">
+      <ul class="footer__links-icon-list links-icon-list">
+        <li class="links-icon-list__list-item">
+          <a
+            :href="URL_FB_FANPAGE"
+            target="_blank"
+            rel="noopener"
+          >
+            <img v-lazy="'/public/2.0/icons/fb.png'" alt="">
+          </a>
+        </li>
+        <li class="links-icon-list__list-item">
+          <a
+            :href="URL_TWITTER"
+            target="_blank"
+            rel="noopener"
+          >
+            <img v-lazy="'/public/2.0/icons/twitter.png'" alt="">
+          </a>
+        </li>
+        <li class="links-icon-list__list-item">
+          <a
+            :href="URL_IG"
+            target="_blank"
+            rel="noopener"
+          >
+            <img v-lazy="'/public/2.0/icons/ig.png'" alt="">
+          </a>
+        </li>
+        <li class="links-icon-list__list-item">
+          <a
+            :href="URL_MM"
+            target="_blank"
+            rel="noopener"
+          >
+            <img v-lazy="'/public/2.0/icons/mm.png'" alt="">
+          </a>
+        </li>
+      </ul>
+    </div>
   </footer>
 </template>
+
 <script>
-  import { ANNOUNCEMENT_ACCOUNT_ID, } from 'src/constants'
+import {
+  URL_FB_FANPAGE,
+  URL_TWITTER,
+  URL_IG,
+  URL_MM,
+} from 'src/constants'
 
-  export default {
-    name: 'AppFooter',
-    data () {
-      return {
-        ANNOUNCEMENT_ACCOUNT_ID,
-      }
-    },
-    mounted () {
-      window.addEventListener('touchmove', this.$_footer_touchHandler)
-    },
-    methods: {
-      $_footer_touchHandler (e, showDirection = 'up') {
-        const currentClientY = e.touches[0].clientY
-        const endClientY = window.touchClientY || currentClientY
-        const shouldShowFooter = showDirection === 'up' ? currentClientY > endClientY : currentClientY <= endClientY
-        if (shouldShowFooter) {
-          document.querySelector('footer').classList.add('active')
-        } else {
-          document.querySelector('footer').classList.remove('active')
-        }
-        window.touchClientY = currentClientY
-      },
-    },
-  }
+export default {
+  data () {
+    return {
+      URL_FB_FANPAGE,
+      URL_TWITTER,
+      URL_IG,
+      URL_MM,
+    }
+  },
+}
 </script>
-<style lang="stylus" scoped>
-  .footer
-    position fixed
-    bottom 0
-    left 0
-    right 0
-    z-index 999
-    width 100%
-    height 35px
-    background-color #fff
-    border-top 1px solid #d3d3d3
-    visibility hidden
-    display flex
-    &.active
-      visibility visible
-    &__item
-      flex 1 1 auto
-      display flex
-      justify-content center
-      align-items center
-      position relative
-      width 25%
-      height 100%
-      color black
-      border-left 1px solid #d3d3d3
-      font-size 13px
-      img
-        width 20px
-        height auto
 
-  .router-link-exact-active
-    background-color #ddcf21
+<style lang="stylus" scoped>
+.footer
+  padding 0 15px
+  margin 0 auto
+  max-width 320px
+  width 320px
+  &__top
+    position relative
+    top -15px
+  &__bottom
+    margin 2px 0 0 0
+
+.link
+  font-size 12px
+  font-weight 500
+  color black
+
+.links-list
+  list-style none
+  margin 0
+  padding 0
+  display flex
+  flex-wrap wrap
+  &__list-item
+    width calc(290px / 3)
+    height 20px
+    display flex
+    justify-content center
+    align-items center
+    border-left 1px solid #979797
+    margin 15px 0 0 0
+    &:nth-last-child(1)
+      border-right 1px solid #979797
+
+.links-icon-list
+  list-style none
+  margin 0
+  padding 0
+  display flex
+  justify-content center
+  &__list-item
+    & + &
+      margin 0 0 0 20px
+    img
+      width 30px
+      height 30px
 </style>
