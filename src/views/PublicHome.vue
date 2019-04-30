@@ -69,9 +69,6 @@ export default {
     SeriesList,
     SeriesListFull,
   },
-  asyncData ({ store, }) {
-    return fetchProjectsList(store)
-  },
   data () {
     return {
       currentPage: DEFAULT_PAGE,
@@ -92,6 +89,9 @@ export default {
     publicProjectsNormal () {
       return this.publicProjects.normal
     },
+  },
+  asyncData ({ store, }) {
+    return fetchProjectsList(store)
   },
   mounted () {
     window.addEventListener('scroll', this.loadMore)

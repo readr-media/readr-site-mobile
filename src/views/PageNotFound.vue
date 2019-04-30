@@ -2,16 +2,30 @@
   <div class="page-not-found">
     <div class="page-not-found__top top">
       <div class="top__back-to-home back-to-home">
-        <img class="back-to-home__404-img" src="/public/404.svg" alt="">
+        <img
+          class="back-to-home__404-img"
+          src="/public/404.svg"
+          alt=""
+        >
         <div class="back-to-home__to-home to-home">
-          <p class="to-home__hint" v-text="$t('NOT_FOUND.TO_HOME_HINT')"></p>
-          <button class="to-home__button" @click="$router.push('/')" v-text="$t('NOT_FOUND.TO_HOME_BUTTON')"></button>
+          <p
+            class="to-home__hint"
+            v-text="$t('NOT_FOUND.TO_HOME_HINT')"
+          />
+          <button
+            class="to-home__button"
+            @click="$router.push('/')"
+            v-text="$t('NOT_FOUND.TO_HOME_BUTTON')"
+          />
         </div>
       </div>
     </div>
     <div class="page-not-found__bottom bottom">
       <div class="bottom__projects-list-title projects-list-title">
-        <h1 class="projects-list-title__text" v-text="$t('NOT_FOUND.PROJECTS')"></h1>
+        <h1
+          class="projects-list-title__text"
+          v-text="$t('NOT_FOUND.PROJECTS')"
+        />
       </div>
       <ol class="bottom__projects-list projects-list">
         <li
@@ -21,10 +35,22 @@
         >
           <router-link :to="project.slug ? `/series/${project.slug}` : '/'">
             <template v-if="isClientSide">
-              <img v-if="project.heroImage" class="list-item__project-img" :src="getFullUrl(get(project, 'heroImage', ''))" alt="">
-              <div v-else class="list-item__project-img list-item__project-img--no-img" v-text="get(project, 'title', '')"></div>
+              <img
+                v-if="project.heroImage"
+                class="list-item__project-img"
+                :src="getFullUrl(get(project, 'heroImage', ''))"
+                alt=""
+              >
+              <div
+                v-else
+                class="list-item__project-img list-item__project-img--no-img"
+                v-text="get(project, 'title', '')"
+              />
             </template>
-            <p class="list-item__project-title" v-text="get(project, 'title', '')"></p>
+            <p
+              class="list-item__project-title"
+              v-text="get(project, 'title', '')"
+            />
           </router-link>
         </li>
       </ol>
@@ -61,9 +87,6 @@ const fetchProjectsList = (store, {
 
 export default {
   name: 'PageNotFound',
-  asyncData ({ store, }) {
-    return fetchProjectsList(store)
-  },
   data () {
     return {
       projectLimit: 3,
@@ -74,6 +97,9 @@ export default {
       return take(get(this.$store.state, [ 'publicProjects', 'normal', ], []), this.projectLimit)
     },
     isClientSide,
+  },
+  asyncData ({ store, }) {
+    return fetchProjectsList(store)
   },
   methods: {
     get,
