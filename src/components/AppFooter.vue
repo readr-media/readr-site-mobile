@@ -52,7 +52,10 @@
             target="_blank"
             rel="noopener"
           >
-            <img v-lazy="'/public/2.0/icons/fb.png'" alt="">
+            <img
+              v-lazy="'/public/2.0/icons/fb.png'"
+              alt=""
+            >
           </a>
         </li>
         <li class="links-icon-list__list-item">
@@ -61,7 +64,10 @@
             target="_blank"
             rel="noopener"
           >
-            <img v-lazy="'/public/2.0/icons/twitter.png'" alt="">
+            <img
+              v-lazy="'/public/2.0/icons/twitter.png'"
+              alt=""
+            >
           </a>
         </li>
         <li class="links-icon-list__list-item">
@@ -70,7 +76,10 @@
             target="_blank"
             rel="noopener"
           >
-            <img v-lazy="'/public/2.0/icons/ig.png'" alt="">
+            <img
+              v-lazy="'/public/2.0/icons/ig.png'"
+              alt=""
+            >
           </a>
         </li>
         <li class="links-icon-list__list-item">
@@ -79,7 +88,10 @@
             target="_blank"
             rel="noopener"
           >
-            <img v-lazy="'/public/2.0/icons/mm.png'" alt="">
+            <img
+              v-lazy="'/public/2.0/icons/mm.png'"
+              alt=""
+            >
           </a>
         </li>
       </ul>

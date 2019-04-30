@@ -1,9 +1,9 @@
 <template>
   <ol class="list">
     <ListItem
-      class="list__list-item"
       v-for="(item, i) in items"
       :key="i"
+      class="list__list-item"
       :item="item"
     />
   </ol>

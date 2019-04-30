@@ -6,8 +6,8 @@
     >
       <div class="link__img-wrapper img-wrapper">
         <img
-          class="img-wrapper__img"
           v-lazy="img"
+          class="img-wrapper__img"
           alt=""
         >
       </div>

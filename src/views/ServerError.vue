@@ -1,11 +1,11 @@
 <template>
-  <div class="server-error"></div>
+  <div class="server-error" />
 </template>
 <script>
   export default {
     name: 'ServerError',
-    methods: {},
     mounted () {},
+    methods: {},
   }
 </script>
 <style lang="stylus" scoped>
