@@ -24,7 +24,7 @@ pipeline:
       - /tmp/cache:/cache
     when:
       event: [push]
-      branch: [master, dev]
+      branch: [master, dev, 2.0]
 
   get_config:
     image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
@@ -35,7 +35,7 @@ pipeline:
     - cp default/readr-site/gcskeyfile.json ./gcskeyfile.json
     when:
       event: [push]
-      branch: [master, dev]
+      branch: [master, dev, 2.0]
 
   builds:
     image: node:10.15-slim
@@ -45,7 +45,7 @@ pipeline:
     - yarn run build
     when:
       event: [push]
-      branch: [master, dev]
+      branch: [master, dev, 2.0]
 
   publish:
     image: plugins/gcr
@@ -56,7 +56,7 @@ pipeline:
     secrets: [google_credentials]
     when:
       event: [push]
-      branch: [master, dev]
+      branch: [master, dev, 2.0]
   
   deploy_dev:
     image: nytimes/drone-gke:develop
@@ -75,7 +75,7 @@ pipeline:
       tier: frontend
     when:
       event: [push]
-      branch: dev
+      branch: [dev, 2.0]
   
   rebuild-cache:
     image: drillster/drone-volume-cache
@@ -87,7 +87,7 @@ pipeline:
       - /tmp/cache:/cache
     when:
       event: [push]
-      branch: [master, dev]
+      branch: [master, dev, 2.0]
 
   finish_slack:
     image: plugins/slack
