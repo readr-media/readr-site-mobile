@@ -18,15 +18,47 @@
 // import AppHeader from 'src/components/AppHeader/AppHeader.vue'
 import AppFooter from 'src/components/AppFooter.vue'
 
+import { SITE_FULL, SITE_NAME, } from './constants'
+
 export default {
   components: {
     // AppHeader,
     AppFooter,
   },
+  metaInfo: {
+    titleTemplate: `%s - ${SITE_NAME}`,
+    meta: [
+      { name: 'og:image', content: `${SITE_FULL}/public/og-image.jpg`, },
+    ],
+  },
 }
 </script>
 
 <style lang="stylus">
+
+h1, h2, h3, p, a, figure, pre
+  
+  margin 0
+h1, h2, h3, p, a,
+  color #000
+h2
+  font-size 1rem
+  font-weight 500
+a
+  text-decoration none
+  cursor pointer
+  &:link, &:visited, &:hover, &:active
+    color #000
+button
+  cursor pointer
+
+pre
+  padding .5em
+  color #f8f8f2
+  white-space pre-line
+  background-color #23241f
+  border-radius 3px
+
 .app
   // background-color #f1f1f1
   padding 0 0 34px 0
@@ -34,7 +66,25 @@ export default {
   //   position fixed
   //   top 0
   //   left 0
+  &-list
+    h1, p
+      line-height 1.3
+      & + h1, & + p
+        margin-top .5em
+    h1
+      font-size .75rem
+      font-weight normal 
+    p
+      color #4a4a4a
+      font-size .625rem
+  &-content-area
+    width 90%
+    margin-left auto
+    margin-right auto
 
-a
-  text-decoration none
+@media (min-width: 768px)
+  .app
+    &-content-area
+      width 60%
+
 </style>
