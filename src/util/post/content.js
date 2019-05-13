@@ -1,15 +1,15 @@
-import { filter, get, map, } from 'lodash'
+import { filter, get, map } from 'lodash'
 import sanitizeHtml from 'sanitize-html'
-import { sanitizeHtmlOptions, } from './config'
-const dom = require('xmldom').DOMParser
-const seializer  = require('xmldom').XMLSerializer
+import { sanitizeHtmlOptions } from './config'
+const DOMParser = require('xmldom').DOMParser
+const XMLSerializer = require('xmldom').XMLSerializer
 
 const {
   allowedAttributes,
   allowedIframeHostnames,
   allowedTags,
   customContentBreakTagName,
-  transformTags,
+  transformTags
 } = sanitizeHtmlOptions
 
 export function getPostContentDOM (post) {
@@ -17,11 +17,11 @@ export function getPostContentDOM (post) {
     allowedTags: false,
     allowedAttributes,
     allowedIframeHostnames,
-    selfClosing: [ 'img', customContentBreakTagName, ],
-    transformTags,
+    selfClosing: [ 'img', customContentBreakTagName ],
+    transformTags
   }
   const wrappedContent = sanitizeHtml(post.content, options)
-  const doc = new dom().parseFromString(wrappedContent)
+  const doc = new DOMParser().parseFromString(wrappedContent)
   return doc
 }
 
@@ -32,12 +32,12 @@ export function getPostContentStrings (post) {
     allowedTags,
     allowedAttributes,
     allowedIframeHostnames,
-    transformTags,
+    transformTags
   }
   const contentDOMChildNodes = get(getPostContentDOM(post), 'childNodes')
-  
+
   const paragraphsWithoutEmptyOrBreak = filter(contentDOMChildNodes, p => {
-    const pHtmlStr = new seializer().serializeToString(p)
+    const pHtmlStr = new XMLSerializer().serializeToString(p)
     return sanitizeHtml(pHtmlStr, options)
   })
 
@@ -45,8 +45,10 @@ export function getPostContentStrings (post) {
     const regexHtmlTag = /<[^>]*>/g
     const regexSpecificHtmlTag = /<(a|em|strong|pre)[^>]*>/g
     const regexErrorSelfClosingTag = /<(iframe*)\b[^>]*\/>/g
-    let pHtmlStr = new seializer().serializeToString(p).replace(/&lt;/g, '<')
-    pHtmlStr.match(regexErrorSelfClosingTag) ? pHtmlStr = pHtmlStr.replace(regexErrorSelfClosingTag, '$&</$1>').replace('/></iframe', '></iframe') : ''
+    let pHtmlStr = new XMLSerializer().serializeToString(p).replace(/&lt;/g, '<')
+    if (pHtmlStr.match(regexErrorSelfClosingTag)) {
+      pHtmlStr = pHtmlStr.replace(regexErrorSelfClosingTag, '$&</$1>').replace('/></iframe', '></iframe')
+    }
     const sanitize = sanitizeHtml(pHtmlStr, options)
     return (!sanitize.match(regexHtmlTag) || sanitize.match(regexSpecificHtmlTag)) ? pHtmlStr : sanitize
   })

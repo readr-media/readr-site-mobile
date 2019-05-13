@@ -1,25 +1,34 @@
 <template>
   <section class="post">
-    <figure v-if="postImage"></figure>
+    <figure v-if="postImage" />
     <main class="app-content-area">
-      <p class="small" v-text="dayjs(post.publishedAt).format('YYYY/MM/DD')"></p>
-      <h1 v-text="post.title || post.ogTitle"></h1>
-      <article v-html="postContentProcessed"></article>
+      <p
+        class="small"
+        v-text="dayjs(post.publishedAt).format('YYYY/MM/DD')"
+      />
+      <h1 v-text="post.title || post.ogTitle" />
+      <article>{{ postContentProcessed }}</article>
     </main>
-    <lazy-component class="post-bottom" @show="fetchSeries">
+    <lazy-component
+      class="post-bottom"
+      @show="fetchSeries"
+    >
       <DonateWithShare :url="getPostFullUrl(post)" />
       <div class="app-content-area post__series">
         <h2>更多系列</h2>
-        <SeriesListInPost :series="seriesFiltered" class="post__series-list" /> 
+        <SeriesListInPost
+          :series="seriesFiltered"
+          class="post__series-list"
+        />
       </div>
     </lazy-component>
   </section>
 </template>
 <script>
-import { SITE_FULL, } from 'src/constants' 
-import { createPost, } from 'src/util/post'
-import { getPostFullUrl, } from 'src/util/post/index'
-import { mapState, } from 'vuex'
+import { SITE_FULL } from 'src/constants'
+import { createPost } from 'src/util/post'
+import { getPostFullUrl } from 'src/util/post/index'
+import { mapState } from 'vuex'
 
 import DonateWithShare from 'src/components/DonateWithShare.vue'
 import SeriesListInPost from 'src/components/Series/SeriesListInPost.vue'
@@ -29,7 +38,7 @@ export default {
   name: 'AppPost',
   components: {
     DonateWithShare,
-    SeriesListInPost,
+    SeriesListInPost
   },
   metaInfo () {
     const title = this.post.title
@@ -38,21 +47,21 @@ export default {
     return {
       title: title,
       meta: [
-        { name: 'description', content: description, },
-        { name: 'og:title', content: title, },
-        { name: 'og:description', content: description, },
-        { name: 'og:url', content: getPostFullUrl(this.post), },
-        { name: 'og:image', content: image, },
-      ],
+        { name: 'description', content: description },
+        { name: 'og:title', content: title },
+        { name: 'og:description', content: description },
+        { name: 'og:url', content: getPostFullUrl(this.post) },
+        { name: 'og:image', content: image }
+      ]
     }
   },
   serverPrefetch () {
-    return this.$store.dispatch('DataPost/GET_POST', { id: this.$route.params.postId, })
+    return this.$store.dispatch('DataPost/GET_POST', { id: this.$route.params.postId })
   },
   computed: {
     ...mapState({
       post: state => state.DataPost.post,
-      series: state => state.DataSeries.series,
+      series: state => state.DataSeries.series
     }),
     postImage () {
       return this.post.heroImage || this.post.ogImage
@@ -65,15 +74,15 @@ export default {
     },
     seriesFiltered () {
       return this.series.slice(0, 3)
-    },
+    }
   },
   methods: {
     dayjs,
     fetchSeries () {
-      this.$store.dispatch('DataSeries/GET_SERIES', { maxResult: 4, })
+      this.$store.dispatch('DataSeries/GET_SERIES', { maxResult: 4 })
     },
-    getPostFullUrl,
-  },
+    getPostFullUrl
+  }
 }
 </script>
 <style lang="stylus" scoped>
@@ -103,7 +112,7 @@ export default {
     >>> .readme-embed
       > div
         display none
-      
+
   h2
     & + div
       margin-top .5em
@@ -113,7 +122,7 @@ export default {
       font-size .75rem
     & + h1
       margin-top .5em
-  
+
   &__series
     margin 2em auto 0
     &-list
@@ -127,7 +136,7 @@ export default {
           border 1px solid #979797
         h1
           margin-top .2em
-        
+
   .post-bottom
     margin 0
     padding 30px 0 60px
@@ -145,5 +154,5 @@ export default {
       >>> .list-item
         figure
           padding-top 56.25%
-        
+
 </style>

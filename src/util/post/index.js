@@ -1,19 +1,19 @@
 import truncate from 'truncate-html'
-import { get, isEmpty, } from 'lodash'
+import { get, isEmpty } from 'lodash'
 
-import { POST_TYPE, } from 'api/config'
-import { SITE_FULL, ANNOUNCEMENT_ACCOUNT_ID, } from 'src/constants'
+import { POST_TYPE } from 'api/config'
+import { SITE_FULL, ANNOUNCEMENT_ACCOUNT_ID } from 'src/constants'
 
-import { getShareUrl, } from 'src/util/comm'
-import { getReportLink, } from './report'
-import { truncatePostContent, } from './truncate'
-import { getPostContentStrings, } from './content'
+import { getShareUrl } from 'src/util/comm'
+import { getReportLink } from './report'
+import { truncatePostContent } from './truncate'
+import { getPostContentStrings } from './content'
 
 const postType = {
   [ POST_TYPE.REVIEW ]: 'normal',
   [ POST_TYPE.NEWS ]: 'news',
   [ POST_TYPE.REPORT ]: 'report',
-  [ POST_TYPE.MEMO ]: 'memo',
+  [ POST_TYPE.MEMO ]: 'memo'
 }
 
 export function getPostType (post) {
@@ -52,12 +52,12 @@ export function getResourceType (post) {
 
 export function getPostFullUrl (postData) {
   const postType = getPostType(postData)
-  
+
   const createPostUrl = {
     'news': getShareUrl(`/post/${get(postData, 'id', '')}`),
     'normal': getShareUrl(`/post/${get(postData, 'id', '')}`),
-    'memo': get(postData, 'link') || getShareUrl(`/series/${get(postData, [ 'project', 'slug', ], '')}/${get(postData, 'id', '')}`),
-    'report': get(postData, 'link') || getReportLink(postData),
+    'memo': get(postData, 'link') || getShareUrl(`/series/${get(postData, [ 'project', 'slug' ], '')}/${get(postData, 'id', '')}`),
+    'report': get(postData, 'link') || getReportLink(postData)
   }
   return createPostUrl[postType] || SITE_FULL
 }
@@ -69,12 +69,12 @@ export function isAnnouncementAccountId (id) {
 
 export function createPost (post = {}) {
   if (isEmpty(post)) { return {} }
-  
+
   return {
     ...post,
     contentProcessed: getPostContentStrings(post),
-    contentTruncateWithoutHtml: truncate(truncatePostContent(post), { length: 35, ellipsis: '...', stripTags: true, }),
-    typeProcessed: getPostType(post),
+    contentTruncateWithoutHtml: truncate(truncatePostContent(post), { length: 35, ellipsis: '...', stripTags: true }),
+    typeProcessed: getPostType(post)
     // processed: {
     //   postType: getPostType(post),
     //   resource: getResource(post),

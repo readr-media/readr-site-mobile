@@ -2,13 +2,13 @@ import _ from 'lodash'
 import Cookie from 'vue-cookie'
 import uuidv4 from 'uuid/v4'
 import pathToRegexp from 'path-to-regexp'
-import { SITE_DOMAIN, SITE_DOMAIN_DEV, } from '../constants'
+import { SITE_DOMAIN, SITE_DOMAIN_DEV } from '../constants'
 
 let isRecaptchaLoaded = false
 let isFbSDKLoaded = false
 let isGapiLoaded = false
 
-export function consoleLogOnDev ({ msg, }) {
+export function consoleLogOnDev ({ msg }) {
   if (currEnv() === 'dev') {
     console.log(msg)
   }
@@ -20,7 +20,7 @@ export function currEnv () {
   if (process.env.VUE_ENV === 'client') {
     debug('SITE_DOMAIN', SITE_DOMAIN)
     debug('location.hostname', location.hostname, (location.hostname.indexOf(SITE_DOMAIN) === 0 || location.hostname.indexOf(`www.${SITE_DOMAIN}`) === 0))
-    if (location.hostname.indexOf(SITE_DOMAIN) === 0 || location.hostname.indexOf(`www.${SITE_DOMAIN}`) === 0|| location.hostname.indexOf(`m.${SITE_DOMAIN}`) === 0) {
+    if (location.hostname.indexOf(SITE_DOMAIN) === 0 || location.hostname.indexOf(`www.${SITE_DOMAIN}`) === 0 || location.hostname.indexOf(`m.${SITE_DOMAIN}`) === 0) {
       return 'prod'
     } else {
       return 'dev'
@@ -56,8 +56,8 @@ export function getFullUrl (url) {
     hostname = location.hostname
   }
 
-  const exp_protocol = /^http(s?):\/\//
-  if (hostname === 'localhost' && !exp_protocol.test(url)) {
+  const expProtocol = /^http(s?):\/\//
+  if (hostname === 'localhost' && !expProtocol.test(url)) {
     return `http://${SITE_DOMAIN_DEV}${url}`
   }
   return url
@@ -75,8 +75,8 @@ export function getHost () {
 }
 
 export function getArticleAuthorId (articleData) {
-  const author = _.get(articleData, 'author.id') 
-  return !isNaN(`${author}`) ? author : _.get(articleData, 'author') 
+  const author = _.get(articleData, 'author.id')
+  return !isNaN(`${author}`) ? author : _.get(articleData, 'author')
 }
 
 export function getArticleAuthorNickname (articleData) {
@@ -90,21 +90,21 @@ export function getArticleAuthorThumbnailImg (articleData) {
 export function isScrollBarReachBottom (ratio = 0, errorMargin = 10) {
   const vh = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
   function getScrollXY () {
-    var scrOfX = 0, scrOfY = 0
-    if ( typeof ( window.pageYOffset ) == 'number' ) {
+    var scrOfX = 0; var scrOfY = 0
+    if (typeof (window.pageYOffset) === 'number') {
       // Netscape compliant
       scrOfY = window.pageYOffset
       scrOfX = window.pageXOffset
-    } else if ( document.body && ( document.body.scrollLeft || document.body.scrollTop ) ) {
+    } else if (document.body && (document.body.scrollLeft || document.body.scrollTop)) {
       // DOM compliant
       scrOfY = document.body.scrollTop
       scrOfX = document.body.scrollLeft
-    } else if ( document.documentElement && ( document.documentElement.scrollLeft || document.documentElement.scrollTop ) ) {
+    } else if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
       // IE6 standards compliant mode
       scrOfY = document.documentElement.scrollTop
       scrOfX = document.documentElement.scrollLeft
     }
-    return [ scrOfX, scrOfY, ]
+    return [ scrOfX, scrOfY ]
   }
 
   function getDocHeight () {
@@ -115,7 +115,7 @@ export function isScrollBarReachBottom (ratio = 0, errorMargin = 10) {
       D.body.clientHeight, D.documentElement.clientHeight
     )
   }
-  
+
   return getDocHeight() <= getScrollXY()[1] + window.innerHeight + (vh * ratio) + errorMargin
 }
 
@@ -131,7 +131,7 @@ export function isElementReachInView (selector, offset = 0) {
 
 export function setReadrCookie () {
   const uuid = uuidv4()
-  Cookie.set('mmid', uuid, { expires: (10 * 365 * 24) + 'h', })
+  Cookie.set('mmid', uuid, { expires: (10 * 365 * 24) + 'h' })
   return uuid
 }
 
@@ -144,7 +144,7 @@ export function updatedAtYYYYMMDD (isoDate) {
   const currentYear = (new Date()).getFullYear()
   const year = (new Date(isoDate)).getFullYear()
   const date = isoDate.split('T')[0]
-  return currentYear === year ? date.replace(/-/g, '/').replace(`${currentYear}/`, '')  : date.replace(/-/g, '/')
+  return currentYear === year ? date.replace(/-/g, '/').replace(`${currentYear}/`, '') : date.replace(/-/g, '/')
 }
 
 export function isCurrentRoutePath (path) {
@@ -155,7 +155,7 @@ export function isClientSide () {
   return _.get(this.$store, 'state.isClientSide', false)
 }
 
-export function isDescendant (child, { parent = document.body, }) {
+export function isDescendant (child, { parent = document.body }) {
   let node = child.parentNode
   while (node !== null && node !== undefined) {
     if (node === parent) {
@@ -166,12 +166,12 @@ export function isDescendant (child, { parent = document.body, }) {
   return false
 }
 
-export function onImageLoaded(url) {
+export function onImageLoaded (url) {
   var image = new Image()
   image.src = url
 
   return new Promise((resolve, reject) => {
-    if (!url) reject()
+    if (!url) reject(new Error())
     if (image.complete) {
       resolve(image)
     } else {
@@ -249,9 +249,9 @@ export function loadRecaptcha (store) {
       })
     }
     script.setAttribute('src', 'https://www.google.com/recaptcha/api.js')
-    document.head.appendChild(script)    
+    document.head.appendChild(script)
     resolve()
-  })  
+  })
 }
 
 export function loadGapiSDK (store) {
@@ -283,7 +283,7 @@ export function loadGapiSDK (store) {
       isGapiLoaded = true
     }
     scriptGapiSDK.setAttribute('src', 'https://apis.google.com/js/api.js')
-    document.head.appendChild(scriptGapiSDK)    
+    document.head.appendChild(scriptGapiSDK)
     resolve()
   })
 }
@@ -320,7 +320,7 @@ export function loadFbSDK (store) {
     `
     document.head.appendChild(scriptFbSDK)
     isFbSDKLoaded = true
-    resolve()    
+    resolve()
   })
 }
 
@@ -331,7 +331,7 @@ export function copyToClipboard (str) {
   el.style.position = 'absolute'
   el.style.left = '-9999px'
   document.body.appendChild(el)
-  const selected =            
+  const selected =
     document.getSelection().rangeCount > 0
       ? document.getSelection().getRangeAt(0)
       : false

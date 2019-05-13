@@ -2,11 +2,11 @@
   <div class="server-error" />
 </template>
 <script>
-  export default {
-    name: 'ServerError',
-    mounted () {},
-    methods: {},
-  }
+export default {
+  name: 'ServerError',
+  mounted () {},
+  methods: {}
+}
 </script>
 <style lang="stylus" scoped>
   .server-error

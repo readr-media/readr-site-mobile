@@ -18,19 +18,19 @@
 // import AppHeader from 'src/components/AppHeader/AppHeader.vue'
 import AppFooter from 'src/components/AppFooter.vue'
 
-import { SITE_FULL, SITE_NAME, } from './constants'
+import { SITE_FULL, SITE_NAME } from './constants'
 
 export default {
   components: {
     // AppHeader,
-    AppFooter,
+    AppFooter
   },
   metaInfo: {
     titleTemplate: `%s - ${SITE_NAME}`,
     meta: [
-      { name: 'og:image', content: `${SITE_FULL}/public/og-image.jpg`, },
-    ],
-  },
+      { name: 'og:image', content: `${SITE_FULL}/public/og-image.jpg` }
+    ]
+  }
 }
 </script>
 
@@ -80,7 +80,7 @@ pre
         margin-top .5em
     h1
       font-size .75rem
-      font-weight normal 
+      font-weight normal
     figure
       background-color #979797
   &-content-area

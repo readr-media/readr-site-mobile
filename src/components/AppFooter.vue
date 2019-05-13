@@ -104,7 +104,7 @@ import {
   URL_FB_FANPAGE,
   URL_TWITTER,
   URL_IG,
-  URL_MM,
+  URL_MM
 } from 'src/constants'
 
 export default {
@@ -113,9 +113,9 @@ export default {
       URL_FB_FANPAGE,
       URL_TWITTER,
       URL_IG,
-      URL_MM,
+      URL_MM
     }
-  },
+  }
 }
 </script>
 

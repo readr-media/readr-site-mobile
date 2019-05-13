@@ -22,16 +22,16 @@ const router = new Router({
     if (savedPosition) {
       return savedPosition
     } else {
-      return { y: 0, }
+      return { y: 0 }
     }
   },
   routes: [
-    { name: 'home', path: '/', component: PublicHome, },
-    { name: 'post', path: '/post/:postId?', component: AppPost, },
-    { path: '/404', component: PageNotFound, },
-    { path: '/500', component: ServerError, },
-    { path: '*', component: PageNotFound, },
-  ],
+    { name: 'home', path: '/', component: PublicHome },
+    { name: 'post', path: '/post/:postId?', component: AppPost },
+    { path: '/404', component: PageNotFound },
+    { path: '/500', component: ServerError },
+    { path: '*', component: PageNotFound }
+  ]
 })
 
 export function createRouter () {
