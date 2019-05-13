@@ -37,13 +37,20 @@ export default {
 <style lang="stylus">
 
 h1, h2, h3, p, a, figure, pre
-  
   margin 0
 h1, h2, h3, p, a,
   color #000
+h1
+  font-size 1.375rem
+  font-weight 600
 h2
   font-size 1rem
   font-weight 500
+p
+  font-size .875rem
+  &.small
+    color #4a4a4a
+    font-size .75rem
 a
   text-decoration none
   cursor pointer
@@ -51,7 +58,6 @@ a
     color #000
 button
   cursor pointer
-
 pre
   padding .5em
   color #f8f8f2
@@ -69,14 +75,14 @@ pre
   &-list
     h1, p
       line-height 1.3
+    h1, p, figure
       & + h1, & + p
         margin-top .5em
     h1
       font-size .75rem
       font-weight normal 
-    p
-      color #4a4a4a
-      font-size .625rem
+    figure
+      background-color #979797
   &-content-area
     width 90%
     margin-left auto
