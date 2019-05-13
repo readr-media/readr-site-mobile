@@ -5,7 +5,7 @@ export const TITLES = [
   '要如何進行結清呢？',
   '如何使用 READr 點數呢？',
   '如何查詢 READr 點數餘額？',
-  '點數結清後，還可以退費嗎？',
+  '點數結清後，還可以退費嗎？'
 ]
 
 export function createPointsIntroContent (memberCenter = 'member') {
@@ -52,7 +52,7 @@ export function createPointsIntroContent (memberCenter = 'member') {
     `,
     `
       <p>一旦任一會員選擇使用贊助功能的同時，本公司即推定該會員係民法上之成年人而具有完全行為能力，訂單一旦成立後，該交易即生效不得撤銷，且會員完成贊助交易後不論任何事由皆不得退款。</p>
-    `,
+    `
   ]
 }
 

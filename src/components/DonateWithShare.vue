@@ -4,9 +4,13 @@
     <div class="donate-share__btns">
       <a
         class="donate"
-        target="_blank">
+        target="_blank"
+      >
         <div>
-          <img src="/public/2.0/icons/donate-black.png" alt="贊助">
+          <img
+            src="/public/2.0/icons/donate-black.png"
+            alt="贊助"
+          >
           <span>贊助</span>
         </div>
       </a>
@@ -14,17 +18,31 @@
         <a
           :href="createShareUrl('fb', url)"
           class="facebook"
-          target="_blank">
-          <img src="/public/2.0/icons/fb-simple.png" alt="分享至 facebook">
+          target="_blank"
+        >
+          <img
+            src="/public/2.0/icons/fb-simple.png"
+            alt="分享至 facebook"
+          >
         </a>
         <a
           :href="createShareUrl('line', url)"
           class="line"
-          target="_blank">
-          <img src="/public/2.0/icons/line.png" alt="分享至 line">
+          target="_blank"
+        >
+          <img
+            src="/public/2.0/icons/line.png"
+            alt="分享至 line"
+          >
         </a>
-        <button class="copy" @click="copyToClipboard">
-          <img src="/public/2.0/icons/link.png" alt="複製連結">
+        <button
+          class="copy"
+          @click="copyToClipboard"
+        >
+          <img
+            src="/public/2.0/icons/link.png"
+            alt="複製連結"
+          >
           <span>複製成功</span>
         </button>
       </div>
@@ -32,29 +50,29 @@
   </div>
 </template>
 <script>
-import { createShareUrl, } from 'src/util/post/share'
+import { createShareUrl } from 'src/util/post/share'
 
 export default {
   name: 'DonateWithShare',
   props: {
-    url : {
+    url: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   methods: {
     createShareUrl,
     copyToClipboard () {
-      const textArea = document.createElement('textarea');
+      const textArea = document.createElement('textarea')
       textArea.value = createShareUrl('copylink', this.url)
-      document.body.appendChild(textArea);
+      document.body.appendChild(textArea)
       textArea.select()
       document.execCommand('copy')
       document.body.removeChild(textArea)
       document.querySelector('.copy').classList.add('show')
       setTimeout(() => { document.querySelector('.copy').classList.remove('show') }, 2000)
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>

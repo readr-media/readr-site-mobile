@@ -1,5 +1,5 @@
-import { ROLE_MAP as ROLE_MAP_CONF, } from 'api/config' 
-import { get, } from 'lodash'
+import { ROLE_MAP as ROLE_MAP_CONF } from 'api/config'
+import { get } from 'lodash'
 import projectList from './projectList'
 export const PROJECTS = projectList
 
@@ -20,19 +20,19 @@ export const URL_SHARE_GOOGLEPLUS = 'https://plus.google.com/share'
 export const ANNOUNCEMENT_ACCOUNT_ID = '126'
 
 export const ROLE_MAP = [
-  { key: get(ROLE_MAP_CONF, 'ADMIN'), value: '管理員', route: 'admin', },
-  { key: get(ROLE_MAP_CONF, 'EDITOR'), value: '編輯', route: 'editor', },
-  { key: get(ROLE_MAP_CONF, 'GUESTEDITOR'), value: '總編', route: 'guesteditor', },
-  { key: get(ROLE_MAP_CONF, 'MEMBER'), value: '會員', route: 'member', },
+  { key: get(ROLE_MAP_CONF, 'ADMIN'), value: '管理員', route: 'admin' },
+  { key: get(ROLE_MAP_CONF, 'EDITOR'), value: '編輯', route: 'editor' },
+  { key: get(ROLE_MAP_CONF, 'GUESTEDITOR'), value: '總編', route: 'guesteditor' },
+  { key: get(ROLE_MAP_CONF, 'MEMBER'), value: '會員', route: 'member' }
 ]
 
 export const SETTING_NOTIFICATION = [
-  // { name: 'KEYWORD_PUSH', key: 'xxxxx', },  
-  { name: 'DAILY_PUSH', key: 'daily_push', },  
-  { name: 'POST_PUSH', key: 'post_push', },
+  // { name: 'KEYWORD_PUSH', key: 'xxxxx', },
+  { name: 'DAILY_PUSH', key: 'daily_push' },
+  { name: 'POST_PUSH', key: 'post_push' }
 ]
 export const SETTING_ACCOUNT = [
-  { name: 'HIDE_PROFILE', key: 'hide_profile', },
+  { name: 'HIDE_PROFILE', key: 'hide_profile' }
 ]
 
 export const MM_SITE_DOMAIN = 'mirrormedia.mg'
@@ -64,7 +64,7 @@ export const OLD_PROJECTS_SLUGS = [
   'rent-king',
   'rent-house',
   // 'political-contribution',
-  'fertility',
+  'fertility'
 ]
 
 // Image upload max size 30 MB
@@ -75,26 +75,26 @@ export const RESOURCE_TYPE = {
   POST: 'post',
   RPOJECT: 'series',
   MEMO: 'memo',
-  REPORT: 'project',
+  REPORT: 'project'
 }
 
-export const NOTIFICATION_TYPE = { 
-  COMMENT_COMMENT: 'comment_comment', 
-  COMMENT_REPLY: 'comment_reply', 
-  COMMENT_REPLY_AUTHOR: 'comment_reply_author', 
-  FOLLOW_MEMBER_REPLY: 'follow_member_reply', 
-  FOLLOW_MEMBER_POST: 'follow_member_post', 
-  FOLLOW_POST_REPLY: 'follow_post_reply', 
-  FOLLOW_PROJECT_REPLY: 'follow_project_reply', 
-  FOLLOW_MEMO_REPLY: 'follow_memo_reply', 
-  FOLLOW_PROJECT_STATUS: 'follow_project_status', 
-  // FOLLOE_PROJECT_PROGRESS: 'follow_project_progress', 
-  FOLLOW_PROJECT_MEMO: 'follow_project_memo', 
-  FOLLOW_PROJECT_REPORT: 'follow_project_report', 
+export const NOTIFICATION_TYPE = {
+  COMMENT_COMMENT: 'comment_comment',
+  COMMENT_REPLY: 'comment_reply',
+  COMMENT_REPLY_AUTHOR: 'comment_reply_author',
+  FOLLOW_MEMBER_REPLY: 'follow_member_reply',
+  FOLLOW_MEMBER_POST: 'follow_member_post',
+  FOLLOW_POST_REPLY: 'follow_post_reply',
+  FOLLOW_PROJECT_REPLY: 'follow_project_reply',
+  FOLLOW_MEMO_REPLY: 'follow_memo_reply',
+  FOLLOW_PROJECT_STATUS: 'follow_project_status',
+  // FOLLOE_PROJECT_PROGRESS: 'follow_project_progress',
+  FOLLOW_PROJECT_MEMO: 'follow_project_memo',
+  FOLLOW_PROJECT_REPORT: 'follow_project_report',
   POST_REPLY: 'post_reply',
   FOLLOW_TAG_PROJECT_STATUS: 'follow_tag_project_status',
   FOLLOW_TAG_PROJECT_PROGRESS: 'follow_tag_project_progress',
   FOLLOW_TAG_REPORT: 'follow_tag_report',
   FOLLOW_TAG_MEMO: 'follow_tag_memo',
-  FOLLOW_TAG_POST: 'follow_tag_post',
+  FOLLOW_TAG_POST: 'follow_tag_post'
 }

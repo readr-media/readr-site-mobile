@@ -59,29 +59,29 @@
 </template>
 
 <script>
-import { get, take, } from 'lodash'
-import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS, } from 'api/config'
-import { getFullUrl, isClientSide, } from 'src/util/comm'
+import { get, take } from 'lodash'
+import { PROJECT_PUBLISH_STATUS, PROJECT_STATUS } from 'api/config'
+import { getFullUrl, isClientSide } from 'src/util/comm'
 
 const DEFAULT_PAGE = 1
 const DEFAULT_SORT = 'project_order,-updated_at'
 const MAXRESULT = 9
 // const debug = require('debug')('CLIENT:404')
 const fetchProjectsList = (store, {
-  max_result = MAXRESULT,
+  maxResult = MAXRESULT,
   page = DEFAULT_PAGE,
-  sort = DEFAULT_SORT,
+  sort = DEFAULT_SORT
 } = {}) => {
   return store.dispatch('GET_PUBLIC_PROJECTS', {
     params: {
-      max_result: max_result,
+      max_result: maxResult,
       page: page,
       sort: sort,
       where: {
-        status: [ PROJECT_STATUS.DONE, PROJECT_STATUS.WIP, ],
-        publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED,
-      },
-    },
+        status: [ PROJECT_STATUS.DONE, PROJECT_STATUS.WIP ],
+        publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED
+      }
+    }
   })
 }
 
@@ -89,24 +89,24 @@ export default {
   name: 'PageNotFound',
   data () {
     return {
-      projectLimit: 3,
+      projectLimit: 3
     }
   },
   computed: {
     projects () {
-      return take(get(this.$store.state, [ 'publicProjects', 'normal', ], []), this.projectLimit)
+      return take(get(this.$store.state, [ 'publicProjects', 'normal' ], []), this.projectLimit)
     },
-    isClientSide,
+    isClientSide
   },
-  asyncData ({ store, }) {
+  asyncData ({ store }) {
     return fetchProjectsList(store)
   },
   methods: {
     get,
     getFullUrl (url) {
       return url.includes('http') ? url : getFullUrl(url)
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -176,7 +176,6 @@ export default {
     content ''
     height 1px
     background-color black
-
 
 .projects-list
   list-style none

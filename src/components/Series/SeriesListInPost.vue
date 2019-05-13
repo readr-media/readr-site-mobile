@@ -7,7 +7,8 @@
       :href="`/series/${item.slug}`"
       :image="item.ogImage ||item.heroImage || ' '"
       :target="'_blank'"
-      :title="item.title" />
+      :title="item.title"
+    />
   </div>
 </template>
 <script>
@@ -15,15 +16,15 @@ import ListItem from '../ListItem/ListItem.vue'
 
 export default {
   name: 'SeriesListInPost',
+  components: {
+    ListItem
+  },
   props: {
     series: {
       type: Array,
-      default: () => [],
-    },
-  },
-  components: {
-    ListItem,
-  },
+      default: () => []
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>

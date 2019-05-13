@@ -13,42 +13,42 @@ export function createStore () {
   return new Vuex.Store({
     modules: {
       DataPost,
-      DataSeries,
+      DataSeries
     },
     state: {
       'chosenChoices': [],
       'clearUpPointsFlag': {
         'active': false,
-        'item': {},        
-      },      
+        'item': {}
+      },
       'customEditors': [],
       'commentCount': [],
-      'consumeFlag': { 
-        "active": false, 
-        "item": {}, 
-      },  
+      'consumeFlag': {
+        'active': false,
+        'item': {}
+      },
       'conversationFlag': {
         'active': false,
-        'message': '',
-      },         
-      'donateFlag': { 
-        'active': false, 
-        'item': {}, 
+        'message': ''
+      },
+      'donateFlag': {
+        'active': false,
+        'item': {}
       },
       'embedPoll': {},
       'emotionByResource': {
         'memo': {
           'like': [],
-          'dislike': [],
+          'dislike': []
         },
         'post': {
           'like': [],
-          'dislike': [],
+          'dislike': []
         },
         'report': {
           'like': [],
-          'dislike': [],
-        },
+          'dislike': []
+        }
       },
       'followingByResource': {
         'member': [],
@@ -56,18 +56,18 @@ export function createStore () {
         'post': [],
         'project': [],
         'report': [],
-        'tag': [],
+        'tag': []
       },
       'followingByUser': {},
       'followingByUserStats': {
         post: {
           review: {},
-          news: {},
+          news: {}
         },
         report: {},
         memo: {},
         project: {},
-        tag: {},
+        tag: {}
       },
       'isClientSide': false,
       'isLoggedIn': false,
@@ -79,15 +79,15 @@ export function createStore () {
       'itemsByTag': {},
       'loginAskFlag': {
         'active': false,
-        'message': '',
-      },      
+        'message': ''
+      },
       'members': [],
       'membersCount': 0,
       'memos': [],
       'memoSingle': {},
       'notification': [],
       'personalSetting': {},
-      'personalPoints': 0, 
+      'personalPoints': 0,
       'pointHistories': [],
       'posts': [],
       'postsByTag': [],
@@ -100,8 +100,8 @@ export function createStore () {
       'publicPosts': [],
       'publicPostsHot': [],
       'publicPostSingle': [],
-      'publicPostReview': [], 
-      'publicPostNews': [], 
+      'publicPostReview': [],
+      'publicPostNews': [],
       'publicMember': {},
       'publicMemberAnnouncement': {},
       'publicMembers': {},
@@ -112,7 +112,7 @@ export function createStore () {
         done: [],
         normal: [],
         recommends: [],
-        trends: [],
+        trends: []
       },
       'publicProjectSingle': {},
       'publicProjectContents': [],
@@ -122,13 +122,13 @@ export function createStore () {
       'publicVideosCount': 0,
       'register-token': '',
       'searchResult': {
-        'items': [],
+        'items': []
       },
       'tags': [],
-      'tagsCount': 0,
+      'tagsCount': 0
     },
     actions,
     mutations,
-    getters,
+    getters
   })
 }

@@ -1,7 +1,7 @@
-import { _buildQuery, del, post, put, fetch, fetchInStrict, } from 'src/api/comm'
-import { camelizeKeys, } from 'humps'
-import { getHost, } from 'src/util/comm'
-import { getToken, getSetupToken, saveToken, } from 'src/util/services'
+import { _buildQuery, del, post, put, fetch, fetchInStrict } from 'src/api/comm'
+import { camelizeKeys } from 'humps'
+import { getHost } from 'src/util/comm'
+import { getToken, getSetupToken, saveToken } from 'src/util/services'
 import _ from 'lodash'
 import validator from 'validator'
 
@@ -9,12 +9,12 @@ const debug = require('debug')('CLIENT:src:api')
 const superagent = require('superagent')
 const host = getHost()
 
-export function deleteMember ({ params, }) {
+export function deleteMember ({ params }) {
   const url = `${host}/api/member/${params.id}`
   return del(url)
 }
 
-export function deleteMembers ({ params, }) {
+export function deleteMembers ({ params }) {
   let url = `${host}/api/members`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -40,7 +40,7 @@ export function deletePost (id) {
   return del(url)
 }
 
-export function deletePosts ({ params, }) {
+export function deletePosts ({ params }) {
   let url = `${host}/api/posts`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -54,75 +54,75 @@ export function deletePostSelf (id) {
   return del(url)
 }
 
-export function addComment ({ params, }) { 
-  let url = `${host}/api/comment` 
-  const query = _buildQuery(params.query) 
-  if (query && (query.length > 0)) { 
-    url = url + `?${query}` 
-  }   
-  delete params.query   
-  return post(url, params,) 
-} 
- 
-export function addCommentReport ({ params, }) { 
-  const url = `${host}/api/comment/report` 
-  return post(url, params,) 
-} 
- 
-export function fetchComment ({ params, }) { 
-  let url = `${host}/api/comment` 
-  const query = _buildQuery(params) 
-  debug('params', params) 
-  if (query && (query.length > 0)) { 
-    url = url + `?${query}` 
-  }     
-  return fetchInStrict(url, {}) 
+export function addComment ({ params }) {
+  let url = `${host}/api/comment`
+  const query = _buildQuery(params.query)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }
+  delete params.query
+  return post(url, params)
 }
 
-export function fetchCommentPublic ({ params, }) {
+export function addCommentReport ({ params }) {
+  const url = `${host}/api/comment/report`
+  return post(url, params)
+}
+
+export function fetchComment ({ params }) {
+  let url = `${host}/api/comment`
+  const query = _buildQuery(params)
+  debug('params', params)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }
+  return fetchInStrict(url, {})
+}
+
+export function fetchCommentPublic ({ params }) {
   let url = `${host}/api/public/comment`
   const query = _buildQuery(params)
   debug('params', params)
   if (query && (query.length > 0)) {
     url = url + `?${query}`
-  }    
+  }
   return fetch(url, {})
 }
- 
-export function deleteComment ({ params, }) { 
-  let url = `${host}/api/comment` 
-  const query = _buildQuery(params.query) 
-  if (query && (query.length > 0)) { 
-    url = url + `?${query}` 
-  } 
-  delete params.query 
-  return del(url, params) 
-} 
 
-export function hideComment ({ params, }) { 
-  let url = `${host}/api/comment/hide` 
-  const query = _buildQuery(params.query) 
-  if (query && (query.length > 0)) { 
-    url = url + `?${query}` 
-  } 
-  delete params.query   
-  return put(url, params) 
-} 
+export function deleteComment ({ params }) {
+  let url = `${host}/api/comment`
+  const query = _buildQuery(params.query)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }
+  delete params.query
+  return del(url, params)
+}
 
-export function updateComment ({ params, }) { 
-  let url = `${host}/api/comment` 
-  const query = _buildQuery(params.query) 
-  if (query && (query.length > 0)) { 
-    url = url + `?${query}` 
-  } 
-  delete params.query    
-  return put(url, params,) 
-} 
+export function hideComment ({ params }) {
+  let url = `${host}/api/comment/hide`
+  const query = _buildQuery(params.query)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }
+  delete params.query
+  return put(url, params)
+}
 
-export function fetchCommentCount ({ params, }) {
+export function updateComment ({ params }) {
+  let url = `${host}/api/comment`
+  const query = _buildQuery(params.query)
+  if (query && (query.length > 0)) {
+    url = url + `?${query}`
+  }
+  delete params.query
+  return put(url, params)
+}
+
+export function fetchCommentCount ({ params }) {
   return new Promise((resolve) => {
     const url = `${host}/api/comment/count?asset_url=${params.assetUrl}`
-    fetch(url).then(({ body, }) => {
+    fetch(url).then(({ body }) => {
       resolve(body.count)
     })
   })
@@ -131,7 +131,7 @@ export function fetchCommentCount ({ params, }) {
 export function fetchMeComments () {
   return new Promise((resolve) => {
     const url = `${host}/api/comment/me`
-    fetchInStrict(url, {}).then(({ body, }) => {
+    fetchInStrict(url, {}).then(({ body }) => {
       resolve(body)
     })
   })
@@ -148,7 +148,7 @@ export function getFollowingByResource (params) {
       .get(url)
       .set('Authorization', `Bearer ${getToken()}`)
       .then(res => {
-        resolve({ status: res.status, body: camelizeKeys(res.body), })
+        resolve({ status: res.status, body: camelizeKeys(res.body) })
       })
       .catch(err => {
         reject(err)
@@ -167,7 +167,7 @@ export function getFollowingByUser (params) {
       .get(url)
       .set('Authorization', `Bearer ${getToken()}`)
       .then(res => {
-        resolve({ status: res.status, body: camelizeKeys(res.body), })
+        resolve({ status: res.status, body: camelizeKeys(res.body) })
       })
       .catch(err => {
         reject(err)
@@ -175,20 +175,20 @@ export function getFollowingByUser (params) {
   })
 }
 
-export function follow ({ params, }) { 
-  return new Promise((resolve, reject) => { 
+export function follow ({ params }) {
+  return new Promise((resolve, reject) => {
     const url = `${host}/api/following/pubsub`
     superagent
-    .post(url)
-    .set('Authorization', `Bearer ${getToken()}`) 
-    .send(params) 
-    .then(res => {
-      resolve(res)
-    })
-    .catch(err => {
-      reject(err)
-    })
-  }) 
+      .post(url)
+      .set('Authorization', `Bearer ${getToken()}`)
+      .send(params)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
 }
 
 export function getDisposableToken (type) {
@@ -205,7 +205,7 @@ export function getDisposableToken (type) {
   })
 }
 
-export function getMembers ({ params, }) {
+export function getMembers ({ params }) {
   let url = `${host}/api/members`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -214,38 +214,38 @@ export function getMembers ({ params, }) {
   return fetchInStrict(url, {})
 }
 
-export function getMembersCount () { 
-  let url = `${host}/api/members/count` 
-  return fetchInStrict(url, {}) 
-} 
+export function getMembersCount () {
+  let url = `${host}/api/members/count`
+  return fetchInStrict(url, {})
+}
 
 export function getNotification (id) {
   let url = `${host}/api/member/notification/${id}`
-  return fetchInStrict(url, {})  
+  return fetchInStrict(url, {})
 }
 
-export function getMemo ({ params, }) {
+export function getMemo ({ params }) {
   let url = `${host}/api/memo/${_.get(params, 'memoId')}`
   return fetchInStrict(url, {})
 }
 
-export function getMemos ({ params, }) {
+export function getMemos ({ params }) {
   let url = `${host}/api/memos`
   const query = _buildQuery(params)
   debug('params', params)
   if (query && (query.length > 0)) {
     url = url + `?${query}`
-  }  
+  }
   return fetchInStrict(url, {})
 }
 
-export function getPublicMember ({ params, }) {
+export function getPublicMember ({ params }) {
   let url = `${host}/api/public/profile/${params.id}`
   // url = `${url}/profile/${params.id}`
   return fetch(url)
 }
 
-export function getPublicMembers ({ params, }) {
+export function getPublicMembers ({ params }) {
   let url = `${host}/api/public/members`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -254,7 +254,7 @@ export function getPublicMembers ({ params, }) {
   return fetch(url)
 }
 
-export function getPublicVideos ({ params, }) {
+export function getPublicVideos ({ params }) {
   let url = `${host}/api/public/videos`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -270,12 +270,12 @@ export function getPublicVideosCount () {
 
 export function getMeta (targetUrl) {
   let url = `${host}/api/meta`
-  return post(url, { url: targetUrl, })
-    .then(res => ({ status: res.status, body: camelizeKeys(res.body), }))
+  return post(url, { url: targetUrl })
+    .then(res => ({ status: res.status, body: camelizeKeys(res.body) }))
     .catch(err => err)
 }
 
-export function getPost ({ id, params, }) {
+export function getPost ({ id, params }) {
   let url = `${host}/api/public/post/${id}`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -284,7 +284,7 @@ export function getPost ({ id, params, }) {
   return fetch(url, {})
 }
 
-export function getPostStrict ({ id, params, }) {
+export function getPostStrict ({ id, params }) {
   let url = `${host}/api/post/${id}`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -293,7 +293,7 @@ export function getPostStrict ({ id, params, }) {
   return fetchInStrict(url, {})
 }
 
-export function getPosts ({ params, }) {
+export function getPosts ({ params }) {
   let url = `${host}/api/posts`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -302,7 +302,7 @@ export function getPosts ({ params, }) {
   return fetchInStrict(url, {})
 }
 
-export function getPostsCount ({ params, }) {
+export function getPostsCount ({ params }) {
   let url = `${host}/api/posts/count`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -311,7 +311,7 @@ export function getPostsCount ({ params, }) {
   return fetchInStrict(url, {})
 }
 
-export function getPublicMemos ({ params, }) {
+export function getPublicMemos ({ params }) {
   let url = `${host}/api/public/memos`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -320,7 +320,7 @@ export function getPublicMemos ({ params, }) {
   return fetch(url)
 }
 
-export function getPublicPosts ({ params, }) {
+export function getPublicPosts ({ params }) {
   let url = `${host}/api/public/posts`
   if (params.category === 'latest') {
     url = `${host}/api/public/posts/latest`
@@ -334,7 +334,7 @@ export function getPublicPosts ({ params, }) {
   return fetch(url)
 }
 
-export function getPublicProjectsList ({ params, }) {
+export function getPublicProjectsList ({ params }) {
   let url = `${host}/api/public/projects`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -343,8 +343,8 @@ export function getPublicProjectsList ({ params, }) {
   return fetch(url)
 }
 
-export function getPublicProjectContents ({ project_id = '' , params, }) {
-  let url = `${host}/api/public/project/contents/${project_id}`
+export function getPublicProjectContents ({ projectId = '', params }) {
+  let url = `${host}/api/public/project/contents/${projectId}`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
     url = url + `?${query}`
@@ -352,8 +352,8 @@ export function getPublicProjectContents ({ project_id = '' , params, }) {
   return fetch(url)
 }
 
-export function getProjectContents ({ project_id = '' , params, }) {
-  let url = `${host}/api/project/contents/${project_id}`
+export function getProjectContents ({ projectId = '', params }) {
+  let url = `${host}/api/project/contents/${projectId}`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
     url = url + `?${query}`
@@ -361,7 +361,7 @@ export function getProjectContents ({ project_id = '' , params, }) {
   return fetchInStrict(url, {})
 }
 
-export function getPublicReportsList ({ params, }) {
+export function getPublicReportsList ({ params }) {
   let url = `${host}/api/public/reports`
   const query = _buildQuery(params)
   if (query && (query.length > 0)) {
@@ -370,15 +370,15 @@ export function getPublicReportsList ({ params, }) {
   return fetch(url)
 }
 
-export function getProfile ({ params = {},}) {
+export function getProfile ({ params = {} }) {
   const url = `${host}/api/profile`
-  return fetchInStrict(url, { cookie: params.cookie, })
+  return fetchInStrict(url, { cookie: params.cookie })
 }
 
-export function checkLoginStatus ({ params = {},}) {
+export function checkLoginStatus ({ params = {} }) {
   const url = `${host}/api/status`
 
-  return fetchInStrict(url, { cookie: params.cookie, })
+  return fetchInStrict(url, { cookie: params.cookie })
 }
 
 export function checkPassword (params) {
@@ -390,7 +390,7 @@ export function checkPassword (params) {
       .send(params)
       .then(res => {
         saveToken(res.body.token)
-        resolve({ status: res.status, profile: res.body.profile, })
+        resolve({ status: res.status, profile: res.body.profile })
       })
       .catch(err => {
         reject(err)
@@ -407,7 +407,7 @@ export function login (params, token) {
       .send(params)
       .then(res => {
         saveToken(res.body.token)
-        resolve({ status: res.status, profile: res.body.profile, })
+        resolve({ status: res.status, profile: res.body.profile })
       })
       .catch(err => {
         reject(err)
@@ -431,7 +431,7 @@ export function fetchInvitationQuota () {
   const url = `${host}/api/invitation/quota`
   return fetchInStrict(url, {}).then((res) => {
     if (_.get(res, 'status') === 200) {
-      const quota = typeof(_.get(res, 'body.quota')) === 'string'
+      const quota = typeof (_.get(res, 'body.quota')) === 'string'
         ? validator.toInt(_.get(res, 'body.quota'))
         : _.get(res, 'body.quota', 0)
       return quota
@@ -445,7 +445,7 @@ export function resetPwd (params) {
   const url = `${host}/api/recoverpwd/set`
   const token = getSetupToken()
   if (!token) {
-    return Promise.resolve({ status: 403, })
+    return Promise.resolve({ status: 403 })
   }
   return post(url, params, token)
 }
@@ -462,39 +462,39 @@ export function addMember (params) {
   params.mail = params.email
   params.active = 0
   return post(url, params)
-    .then(res => ({ status: res.status, }))
+    .then(res => ({ status: res.status }))
     .catch(err => err)
 }
 
-export function setupBasicProfile ({ params, }) {
+export function setupBasicProfile ({ params }) {
   const url = `${host}/api/initmember`
   const token = getSetupToken()
   if (!token) {
-    return Promise.resolve({ status: 403, })
+    return Promise.resolve({ status: 403 })
   }
   return post(url, params, token)
 }
 
-export function updateMember ({ params, type, }) {
+export function updateMember ({ params, type }) {
   const url = type !== 'role' ? `${host}/api/member` : `${host}/api/member/role`
   return put(url, params)
-    .then(res => ({ status: res.status, }))
+    .then(res => ({ status: res.status }))
     .catch(err => err)
 }
 
-export function updateNotificationStatus ({ params, }) {
+export function updateNotificationStatus ({ params }) {
   const url = `${host}/api/member/notification/ack`
   return put(url, params)
 }
 
-export function updatePassword ({ params, }) {
+export function updatePassword ({ params }) {
   const url = `${host}/api/member/password`
   return put(url, params)
-    .then(res => ({ status: res.status, }))
+    .then(res => ({ status: res.status }))
     .catch(err => err)
 }
 
-export function updatePost ({ params, }) {
+export function updatePost ({ params }) {
   const url = `${host}/api/post`
   return put(url, params)
 }
@@ -508,7 +508,7 @@ export function uploadImage (file, type) {
     } else if (type === 'post') {
       url = `${host}/api/image/post`
     } else {
-      reject()
+      reject(new Error('Error type'))
     }
     superagent
       .post(url)
@@ -529,7 +529,7 @@ export function deleteMemberProfileThumbnails (id) {
     superagent
       .post(url)
       .set('Authorization', `Bearer ${getToken()}`)
-      .send({ id, })
+      .send({ id })
       .then(res => {
         resolve(res)
       })
@@ -539,12 +539,12 @@ export function deleteMemberProfileThumbnails (id) {
   })
 }
 
-export function verifyRecaptchaToken ({ token, }) {
+export function verifyRecaptchaToken ({ token }) {
   return new Promise((resolve, reject) => {
     const url = `${host}/api/verify-recaptcha-token`
     superagent
       .post(url)
-      .send({ token, })
+      .send({ token })
       .then(res => {
         resolve(res.body)
       })
@@ -554,10 +554,10 @@ export function verifyRecaptchaToken ({ token, }) {
   })
 }
 
-export function publishPosts ({ params, }) {
+export function publishPosts ({ params }) {
   const url = `${host}/api/posts`
   return put(url, params)
-    .then(res => ({ status: res.status, }))
+    .then(res => ({ status: res.status }))
     .catch(err => err)
 }
 

@@ -24,7 +24,7 @@
     </div>
     <div class="section__block block">
       <h1 class="block__title">
-        系列報導 
+        系列報導
       </h1>
       <SeriesList
         :items="publicProjectsNormal"
@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import { get, } from 'lodash'
-import { mapState, } from 'vuex'
-import { PROJECT_STATUS, PROJECT_PUBLISH_STATUS, } from '../../api/config'
-import { isScrollBarReachBottom, } from '../util/comm'
+import { get } from 'lodash'
+import { mapState } from 'vuex'
+import { PROJECT_STATUS, PROJECT_PUBLISH_STATUS } from '../../api/config'
+import { isScrollBarReachBottom } from '../util/comm'
 
 import SeriesList from 'src/components/SeriesList/List.vue'
 import SeriesListFull from 'src/components/SeriesListFull/List.vue'
@@ -47,38 +47,38 @@ const DEFAULT_SORT = 'project_order,-updated_at'
 const MAX_RESULT = 12
 
 const fetchProjectsList = (store, {
-  max_result = MAX_RESULT,
+  maxResult = MAX_RESULT,
   page = DEFAULT_PAGE,
-  sort = DEFAULT_SORT,
+  sort = DEFAULT_SORT
 } = {}) => {
   return store.dispatch('GET_PUBLIC_PROJECTS', {
     params: {
-      max_result: max_result,
+      max_result: maxResult,
       page: page,
       sort: sort,
       where: {
-        status: [ PROJECT_STATUS.DONE, PROJECT_STATUS.WIP, ],
-        publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED,
-      },
-    },
+        status: [ PROJECT_STATUS.DONE, PROJECT_STATUS.WIP ],
+        publish_status: PROJECT_PUBLISH_STATUS.PUBLISHED
+      }
+    }
   })
 }
 
 export default {
   components: {
     SeriesList,
-    SeriesListFull,
+    SeriesListFull
   },
   data () {
     return {
       currentPage: DEFAULT_PAGE,
       hasMore: true,
-      loading: false,
+      loading: false
     }
   },
   computed: {
     ...mapState({
-      publicProjects: state => state.publicProjects,
+      publicProjects: state => state.publicProjects
     }),
     publicProjectsRecommends () {
       return this.publicProjects.recommends
@@ -88,9 +88,9 @@ export default {
     },
     publicProjectsNormal () {
       return this.publicProjects.normal
-    },
+    }
   },
-  asyncData ({ store, }) {
+  asyncData ({ store }) {
     return fetchProjectsList(store)
   },
   mounted () {
@@ -101,18 +101,18 @@ export default {
   },
   methods: {
     loadMore () {
-      if (this.hasMore && !this.loading && isScrollBarReachBottom(1/3)) {
-        const origCount = get(this.projects, [ 'length', ], 0)
+      if (this.hasMore && !this.loading && isScrollBarReachBottom(1 / 3)) {
+        const origCount = get(this.projects, [ 'length' ], 0)
         this.loading = true
-        fetchProjectsList(this.$store, { page: this.currentPage + 1, })
-        .then(() => {
-          this.currentPage += 1
-          get(this.projects, [ 'length', ], 0) <= origCount ? this.hasMore = false : true
-          this.loading = false
-        })
+        fetchProjectsList(this.$store, { page: this.currentPage + 1 })
+          .then(() => {
+            this.currentPage += 1
+            get(this.projects, [ 'length' ], 0) <= origCount ? this.hasMore = false : this.hasMore = true
+            this.loading = false
+          })
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

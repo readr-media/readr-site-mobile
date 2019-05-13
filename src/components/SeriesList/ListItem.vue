@@ -22,15 +22,15 @@
 </template>
 
 <script>
-import { get, } from 'lodash'
+import { get } from 'lodash'
 import moment from 'moment'
 
 export default {
   props: {
     item: {
       type: Object,
-      default: () => {},
-    },
+      default: () => {}
+    }
   },
   computed: {
     link () {
@@ -45,8 +45,8 @@ export default {
     date () {
       const date = get(this.item, 'updatedAt', '')
       return moment(date).format('YYYY-MM-DD')
-    },
-  },
+    }
+  }
 }
 </script>
 
