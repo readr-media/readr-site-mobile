@@ -58,6 +58,8 @@ a
     color #000
 button
   cursor pointer
+img
+  font-size 1rem
 pre
   padding .5em
   color #f8f8f2
@@ -66,8 +68,8 @@ pre
   border-radius 3px
 
 .app
-  // background-color #f1f1f1
   padding 0 0 34px 0
+  background-color #f1f1f1
   // &__header
   //   position fixed
   //   top 0
@@ -89,8 +91,22 @@ pre
     margin-right auto
 
 @media (min-width: 768px)
+  h1
+    font-size 1.875rem
+  h2
+    font-size 1.5rem
+  p
+    font-size 1rem
+    &.small
+      font-size .875rem
+  &.small
+    font-size .875rem
   .app
     &-content-area
       width 60%
-
+      max-width 800px
+    &-list
+      font-size 1.5rem
+      h1
+        font-size 1.5rem
 </style>

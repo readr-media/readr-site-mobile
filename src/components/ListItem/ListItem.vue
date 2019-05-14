@@ -16,7 +16,7 @@
     />
     <p
       v-if="date"
-      class="date"
+      class="date small"
       v-text="date"
     />
     <p
@@ -73,6 +73,18 @@ export default {
         height 100%
         object-fit cover
         object-position center center
+    h1, p
+      overflow hidden
     .description
       text-align justify
+
+  .list-item.comm-narrow
+    padding-bottom 1em
+    background-color #fff
+    h1, p
+      width 90%
+      margin-left auto
+      margin-right auto
+    figure
+      padding-top 56.25%
 </style>
