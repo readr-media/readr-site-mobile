@@ -59,7 +59,7 @@ a
 button
   cursor pointer
 img
-  font-size 1rem
+  font-size .75rem // for alt text
 pre
   padding .5em
   color #f8f8f2
