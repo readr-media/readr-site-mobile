@@ -7,7 +7,7 @@
         v-text="dayjs(post.publishedAt).format('YYYY/MM/DD')"
       />
       <h1 v-text="post.title || post.ogTitle" />
-      <article>{{ postContentProcessed }}</article>
+      <article v-html="postContentProcessed"></article>
     </main>
     <lazy-component
       class="post-bottom"
@@ -17,8 +17,8 @@
       <div class="app-content-area post__series">
         <h2>更多系列</h2>
         <SeriesList
-          :series="seriesFiltered"
-          class="post__series-list"
+          :items="seriesFiltered"
+          class="post__series-list more"
         />
       </div>
     </lazy-component>
@@ -55,13 +55,13 @@ export default {
       ]
     }
   },
-  serverPrefetch () {
-    return this.$store.dispatch('DataPost/GET_POST', { id: this.$route.params.postId })
+  asyncData ({ store, route }) {
+    return store.dispatch('DataPost/GET_POST', { id: route.params.postId })
   },
   computed: {
     ...mapState({
       post: state => state.DataPost.post,
-      series: state => state.DataSeries.series
+      series: state => state.DataSeries.publicProjects.normal
     }),
     postImage () {
       return this.post.heroImage || this.post.ogImage
@@ -79,7 +79,7 @@ export default {
   methods: {
     dayjs,
     fetchSeries () {
-      this.$store.dispatch('DataSeries/GET_SERIES', { maxResult: 4 })
+      this.$store.dispatch('DataSeries/FETCH', { maxResult: 4 })
     },
     getPostFullUrl
   }
@@ -129,14 +129,15 @@ export default {
       display flex
       flex-wrap wrap
       justify-content space-between
-      >>> .list-item
-        width calc((100% - 1em) / 3)
-        figure
-          background-color #979797
-          border 1px solid #979797
-        h1
-          margin-top .2em
-
+      &.more
+        >>> .list-item
+          width calc((100% - 1em) / 3)
+          figure
+            border 1px solid #979797
+          h1
+            margin-top .2em
+          .description
+            display none
   .post-bottom
     margin 0
     padding 30px 0 60px
@@ -151,8 +152,9 @@ export default {
         left -12.5%
         width 125%
     &__series-list
-      >>> .list-item
-        figure
-          padding-top 56.25%
+      &.more
+        >>> .list-item
+          figure
+            padding-top 56.25%
 
 </style>

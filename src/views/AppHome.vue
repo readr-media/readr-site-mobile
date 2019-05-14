@@ -5,9 +5,8 @@
         為您推薦
       </h1>
       <SeriesList
-        :item-style="'recommend'"
         :items="publicProjectsRecommends"
-        class="home__list"
+        class="home__list recommend"
       />
     </div>
     <div v-if="publicProjectsTrends.length > 0">
@@ -15,7 +14,6 @@
         最熱門系列
       </h1>
       <SeriesList
-        :item-style="'highlight'"
         :items="publicProjectsTrends"
         class="home__list highlight"
       />
@@ -49,8 +47,8 @@ export default {
     title: SITE_NAME,
     titleTemplate: null
   },
-  serverPrefetch () {
-    this.$store.dispatch('DataSeries/FETCH')
+  asyncData ({ store }) {
+    return store.dispatch('DataSeries/FETCH')
   },
   data () {
     return {
@@ -118,10 +116,11 @@ export default {
       margin 0 5px
       .description
         display none
-    >>> .list-item.highlight
-      width 100%
-      figure
-        padding-top 56.25%
+    &.highlight
+      >>> .list-item
+        width 100%
+        figure
+          padding-top 56.25%
 
 @media (max-width: 767px)
   .home
@@ -171,8 +170,6 @@ export default {
       left auto
       width 100%
       margin-top 1em
-      &.highlight
-        justify-content center
       >>> .list-item
         figure
           padding-top 56.25%
@@ -183,16 +180,19 @@ export default {
         margin 30px 20px 0
         &:nth-child(1), &:nth-child(2), &:nth-child(3)
           margin-top 0
-      >>> .list-item.recommend
-        width calc((100% - 120px) / 3)
-        margin 0 20px
-      >>> .list-item.highlight
-        width 80%
-        max-width 900px
-        margin 0
-        background-color transparent
-        h1, p
-          text-align center
+      &.recommend
+        >>> .list-item
+          width calc((100% - 120px) / 3)
+          margin 0 20px
+      &.highlight
+        justify-content center
+        >>> .list-item
+          width 80%
+          max-width 900px
+          margin 0
+          background-color transparent
+          h1, p
+            text-align center
 
 @media (min-width: 1024px)
   .home
