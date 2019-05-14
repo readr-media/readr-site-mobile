@@ -3,7 +3,8 @@
     id="app"
     class="app"
   >
-    <!-- <AppHeader class="app__header" /> -->
+    <LoginLight />
+    <AppHeader class="app__header" />
     <transition
       name="fade"
       mode="out-in"
@@ -15,15 +16,17 @@
 </template>
 
 <script>
-// import AppHeader from 'src/components/AppHeader/AppHeader.vue'
+import AppHeader from 'src/components/AppHeader/AppHeader.vue'
 import AppFooter from 'src/components/AppFooter.vue'
+import LoginLight from 'src/components/login/LoginLight.vue'
 
 import { SITE_FULL, SITE_NAME } from './constants'
 
 export default {
   components: {
-    // AppHeader,
-    AppFooter
+    AppHeader,
+    AppFooter,
+    LoginLight
   },
   metaInfo: {
     titleTemplate: `%s - ${SITE_NAME}`,
@@ -66,6 +69,11 @@ pre
   white-space pre-line
   background-color #23241f
   border-radius 3px
+
+.fade-enter-active, .fade-leave-active
+  transition opacity .5s
+.fade-enter, .fade-leave-to
+  opacity 0
 
 .app
   padding 0 0 34px 0
