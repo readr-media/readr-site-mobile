@@ -7,6 +7,7 @@ Vue.use(Router)
 
 const AppHome = () => import('../views/AppHome.vue')
 const AppPost = () => import('../views/AppPost.vue')
+const AppReport = () => import('../views/AppReport.vue')
 
 const PageNotFound = () => import('../views/PageNotFound.vue')
 const ServerError = () => import('../views/ServerError.vue')
@@ -27,6 +28,7 @@ const router = new Router({
   routes: [
     { name: 'home', path: '/', component: AppHome },
     { name: 'post', path: '/post/:postId?', component: AppPost },
+    { name: 'report', path: '/report/:slug', component: AppReport },
     { path: '/404', component: PageNotFound },
     { path: '/500', component: ServerError },
     { path: '*', component: PageNotFound }
