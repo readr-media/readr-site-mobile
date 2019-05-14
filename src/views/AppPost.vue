@@ -16,7 +16,7 @@
       <DonateWithShare :url="getPostFullUrl(post)" />
       <div class="app-content-area post__series">
         <h2>更多系列</h2>
-        <SeriesListInPost
+        <SeriesList
           :series="seriesFiltered"
           class="post__series-list"
         />
@@ -31,14 +31,14 @@ import { getPostFullUrl } from 'src/util/post/index'
 import { mapState } from 'vuex'
 
 import DonateWithShare from 'src/components/DonateWithShare.vue'
-import SeriesListInPost from 'src/components/Series/SeriesListInPost.vue'
+import SeriesList from 'src/components/Series/SeriesList.vue'
 import dayjs from 'dayjs'
 
 export default {
   name: 'AppPost',
   components: {
     DonateWithShare,
-    SeriesListInPost
+    SeriesList
   },
   metaInfo () {
     const title = this.post.title
