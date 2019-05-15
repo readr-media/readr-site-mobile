@@ -21,6 +21,7 @@ import AppFooter from 'src/components/AppFooter.vue'
 import LoginLight from 'src/components/login/LoginLight.vue'
 
 import { SITE_FULL, SITE_NAME } from './constants'
+import { updateViewport } from 'src/util/comm'
 
 export default {
   components: {
@@ -33,6 +34,20 @@ export default {
     meta: [
       { name: 'og:image', content: `${SITE_FULL}/public/og-image.jpg` }
     ]
+  },
+  beforeMount () {
+    this.updateViewport()
+  },
+  mounted () {
+    window.addEventListener('resize', this.updateViewport)
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.updateViewport)
+  },
+  methods: {
+    updateViewport () {
+      updateViewport(this.$store)
+    }
   }
 }
 </script>
@@ -78,10 +93,10 @@ pre
 .app
   padding 0 0 34px 0
   background-color #f1f1f1
-  // &__header
-  //   position fixed
-  //   top 0
-  //   left 0
+  &__header
+    position fixed
+    top 0
+    left 0
   &-list
     h1, p
       line-height 1.3

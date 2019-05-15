@@ -118,21 +118,21 @@ export default {
 <style lang="stylus" scoped>
 .header
   width 100%
-  height 50px
+  height 40px
   background-color #444746
   z-index 1000
   transition transform .25s ease-out
   &--hide
     transform translateY(-70px)
   &__wrapper
-    max-width 1400px
+    max-width 90%
     margin 0 auto
     display flex
     justify-content space-between
     align-items center
   &__logo
     display block
-    width 60px
+    width 44px
     position relative
     top 10px
     z-index 1000
@@ -140,7 +140,17 @@ export default {
       width 100%
   &__navs
     position relative
-    top -5px
+    top -2px
   &__sidebar
     z-index 999
+
+@media (min-width: 768px)
+  .header
+    height 50px
+    &__wrapper
+      max-width 1400px
+    &__logo
+      width 60px
+    &__navs
+      top -5px
 </style>

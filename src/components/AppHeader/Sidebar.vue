@@ -4,6 +4,9 @@
       'sidebar-wrapper',
       { 'sidebar-wrapper--show': showSidebar }
     ]"
+    :style="{
+      height: `${sidebarHeight}px`
+    }"
   >
     <div
       :class="[
@@ -13,6 +16,7 @@
       @click="$emit('update:showSidebar', false)"
     />
     <div
+      ref="sidebar"
       :class="[
         'sidebar-wrapper__sidebar',
         { 'sidebar-wrapper__sidebar--show': showSidebar },
@@ -27,12 +31,34 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+
 export default {
   props: {
     showSidebar: {
       type: Boolean,
       default: false,
       required: true
+    }
+  },
+  computed: {
+    ...mapState({
+      sidebarHeight: state => {
+        const vw = state.Viewport.width
+        const vh = state.Viewport.height
+        const headerHeight = vw < 768 ? 40 : 50
+        return vh - headerHeight
+      }
+    })
+  },
+  watch: {
+    showSidebar () {
+      if (this.showSidebar) {
+        disableBodyScroll(this.$refs['sidebar'])
+      } else {
+        enableBodyScroll(this.$refs['sidebar'])
+      }
     }
   }
 }
@@ -44,7 +70,8 @@ export default {
   bottom 0
   left 0
   width 100vw
-  height calc(100vh - 50px)
+  // height calc(100vh - 50px)
+  height 100vh
   opacity 0
   pointer-events none
   transition opacity 0s .25s
@@ -66,18 +93,32 @@ export default {
     position absolute
     bottom 0
     left 0
-    width 50vw
+    width 90vw
     height 100%
     background-color white
-    transform translateX(-50vw)
+    transform translateX(-90vw)
     transition transform .25s ease-out
     &--show
       transform translateX(0px)
 
 .sidebar
-  padding 80px 0
+  padding 14px 12px
   overflow-y scroll
   &__wrapper
-    width 640px
+    width 100%
     margin 0 auto
+
+@media (min-width: 768px)
+  .sidebar-wrapper
+    // height calc(100vh - 50px)
+    &__sidebar
+      width 50vw
+      transform translateX(-50vw)
+      &--show
+        transform translateX(0px)
+
+  .sidebar
+    padding 80px 0
+    &__wrapper
+      width 640px
 </style>

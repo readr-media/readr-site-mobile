@@ -12,6 +12,7 @@ import DataUser from './modules/DataUser'
 import UIAppFooter from './modules/UIAppFooter'
 import UIAppHeader from './modules/UIAppHeader'
 import UILoginLightbox from './modules/UILoginLightbox'
+import Viewport from './modules/Viewport'
 
 Vue.use(Vuex)
 
@@ -25,7 +26,8 @@ export function createStore () {
       DataUser,
       UIAppFooter,
       UIAppHeader,
-      UILoginLightbox
+      UILoginLightbox,
+      Viewport
     },
     state: {
       'chosenChoices': [],

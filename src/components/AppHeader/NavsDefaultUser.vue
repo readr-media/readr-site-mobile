@@ -61,14 +61,25 @@ export default {
 <style lang="stylus" scoped>
 .nav
   p
-    font-size 20px
+    font-size 14px
     margin 0
     color white
 
 .user
   &__thumbnail
-    width 30px
-    height 30px
-    border-radius 30px
+    width 26px
+    height 26px
+    border-radius 26px
     object-fit cover
+
+@media (min-width: 768px)
+  .nav
+    p
+      font-size 20px
+
+  .user
+    &__thumbnail
+      width 30px
+      height 30px
+      border-radius 30px
 </style>

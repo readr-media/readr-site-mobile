@@ -33,5 +33,11 @@ export default {
   padding 0
   &__list-item
     & + &
-      margin 30px 0 0 0
+      margin 17px 0 0 0
+
+@media (min-width: 768px)
+  .list
+    &__list-item
+      & + &
+        margin 30px 0 0 0
 </style>

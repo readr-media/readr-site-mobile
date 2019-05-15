@@ -343,3 +343,10 @@ export function copyToClipboard (str) {
     document.getSelection().addRange(selected)
   }
 }
+
+export function updateViewport (store) {
+  const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+  const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+  const viewport = { width: width, height: height }
+  return store.dispatch('Viewport/UPDATE_VIEWPORT', viewport)
+}

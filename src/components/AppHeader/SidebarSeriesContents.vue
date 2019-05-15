@@ -71,7 +71,14 @@ export default {
 <style lang="stylus" scoped>
 .series
   h1
-    font-size 30px
-    font-weight 600
-    margin 0 0 20px 0
+    font-size 16px
+    font-weight 500
+    margin 0 0 10px 0
+
+@media (min-width: 768px)
+  .series
+    h1
+      font-size 30px
+      font-weight 600
+      margin 0 0 20px 0
 </style>

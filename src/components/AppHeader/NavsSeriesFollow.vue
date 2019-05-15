@@ -6,7 +6,7 @@
     >
       <IconFollow
         :color-default="isFollow ? '#ddcf21' : 'white'"
-        :height="30"
+        :height="iconHeight"
       />
     </div>
     <transition
@@ -75,6 +75,13 @@ export default {
 
     ...mapState({
       isLoggedIn: state => state.DataUser.isLoggedIn
+    }),
+
+    ...mapState({
+      iconHeight: state => {
+        const vh = state.Viewport.height
+        return vh < 768 ? 24 : 30
+      }
     })
   },
   beforeMount () {
@@ -155,14 +162,6 @@ export default {
 
 .follow
   height 100%
-  img
-    height 100%
-  &__icon
-    width 100px
-    height 100%
-    background-color #8cffa0
-    -webkit-mask-image url(/public/2.0/icons/follow-white.png)
-    mask-image url(/public/2.0/icons/follow-white.png)
 
 .tooltip
   background-color white
