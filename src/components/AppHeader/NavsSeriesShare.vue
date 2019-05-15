@@ -7,7 +7,7 @@
       class="wrapper__share"
       @click="toggleNavs"
     >
-      <IconShare :height="30" />
+      <IconShare :height="iconHeight" />
     </div>
     <nav
       :class="[
@@ -73,7 +73,14 @@ export default {
     },
     shareUrlCopylink () {
       return _.get(this.post, [ 'processed', 'shareUrlCopylink' ], '')
-    }
+    },
+
+    ...mapState({
+      iconHeight: state => {
+        const vh = state.Viewport.height
+        return vh < 768 ? 24 : 30
+      }
+    })
   },
   methods: {
     toggleNavs () {
@@ -99,11 +106,11 @@ export default {
     position absolute
     top 30px
     opacity 0
-    user-select none
+    pointer-events none
     transition opacity .15s ease-out
     &--show
       opacity 1
-      user-select initial
+      pointer-events initial
 
 .share-navs
   margin 10px 0 0 0

@@ -7,7 +7,7 @@
         v-text="dayjs(post.publishedAt).format('YYYY/MM/DD')"
       />
       <h1 v-text="post.title || post.ogTitle" />
-      <article v-html="postContentProcessed"></article>
+      <article v-html="postContentProcessed" />
     </main>
     <lazy-component
       class="post-bottom"
@@ -55,9 +55,6 @@ export default {
       ]
     }
   },
-  asyncData ({ store, route }) {
-    return store.dispatch('DataPost/GET_POST', { id: route.params.postId })
-  },
   computed: {
     ...mapState({
       post: state => state.DataPost.post,
@@ -75,6 +72,9 @@ export default {
     seriesFiltered () {
       return this.series.slice(0, 3)
     }
+  },
+  asyncData ({ store, route }) {
+    return store.dispatch('DataPost/GET_POST', { id: route.params.postId })
   },
   methods: {
     dayjs,

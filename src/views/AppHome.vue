@@ -41,14 +41,11 @@ import SeriesList from 'src/components/Series/SeriesList.vue'
 
 export default {
   components: {
-    SeriesList,
+    SeriesList
   },
   metaInfo: {
     title: SITE_NAME,
     titleTemplate: null
-  },
-  asyncData ({ store }) {
-    return store.dispatch('DataSeries/FETCH')
   },
   data () {
     return {
@@ -70,6 +67,9 @@ export default {
     publicProjectsNormal () {
       return this.publicProjects.normal
     }
+  },
+  asyncData ({ store }) {
+    return store.dispatch('DataSeries/FETCH')
   },
   mounted () {
     window.addEventListener('scroll', this.loadMore)

@@ -167,11 +167,11 @@ export default {
         display none
     &__panel
       width 100%
-      max-width 480px
-      max-height 100%
+      height 100%
       background-color #444746
-      padding 25px 90px 30px
+      padding 25px 10px 90px
       position relative
+      overflow auto
     &__logo
       margin 0 auto
       width 50px
@@ -180,6 +180,7 @@ export default {
     &__container
       margin-top 37px
       .login-msg
+        margin-top 10px
         display flex
         justify-content center
         font-size 0.9375rem
@@ -228,7 +229,7 @@ export default {
     &__close
       width 20px
       height 20px
-      position absolute
+      position fixed
       right 0
       top 0
       background-size contain
