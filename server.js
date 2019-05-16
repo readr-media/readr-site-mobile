@@ -208,6 +208,7 @@ function render (req, res, next) {
       `REQUEST IP: ${req.clientIp}\n`,
       `REFERER: ${req.headers.referer}\n`,
       `${err}`)
+      console.error(err)
       return res.status(500).send('500 | Internal Server Error')
     }
   }
