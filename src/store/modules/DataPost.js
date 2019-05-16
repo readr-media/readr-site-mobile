@@ -16,17 +16,17 @@ export default {
     }
   },
   actions: {
-    GET_POST ({ commit }, { id, params }) {
-      return getPost({ id, params })
+    GET_POST ({ commit }, { id, showAuthor = false }) {
+      return getPost({
+        id,
+        params: {
+          showAuthor
+        }
+      })
         .then(response => {
           commit('SET_POST', response.body.items[0])
         })
-        // .catch(err => {
-        //   debug('Get fetching error.', { status: 'error', res: err,})
-        //   reject({ status: 'error', res: err,})
-        // })
     },
-
     GET_POST_REPORT ({ commit }, {
       // eslint-disable-next-line camelcase
       max_result = 1,
