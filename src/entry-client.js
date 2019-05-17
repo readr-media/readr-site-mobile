@@ -55,10 +55,10 @@ Vue.mixin({
     const cookie = getToken()
     const permission = get(to, [ 'meta', 'permission' ])
     const preRouteInit = cookie
-      ? !get(store, 'state.profile.role') || !get(store, 'state.isLoggedIn')
+      ? !get(store, 'state.DataUser.profile.role') || !get(store, 'state.DataUser.isLoggedIn')
         ? [
-          store.dispatch('CHECK_LOGIN_STATUS', { params: { cookie } }).then(() => debug('CHECKT LOGGIN STATUS')),
-          store.dispatch('GET_PROFILE', { params: { cookie } }).then(() => debug('FETCH DATA'))
+          store.dispatch('DataUser/CHECK_LOGIN_STATUS', { params: { cookie } }).then(() => debug('CHECKT LOGGIN STATUS')),
+          store.dispatch('DataUser/GET_PROFILE', { params: { cookie } }).then(() => debug('FETCH DATA'))
         ]
         : [ new Promise((resolve) => resolve()) ]
       : [ new Promise((resolve) => resolve()) ]
@@ -69,8 +69,8 @@ Vue.mixin({
     Promise.all([
       ...preRouteInit
     ]).then(() => {
-      debug(get(store, 'state.profile.role'))
-      debug(get(store, 'state.isLoggedIn'))
+      debug(get(store, 'state.DataUser.profile.role'))
+      debug(get(store, 'state.DataUser.isLoggedIn'))
       if (permission) {
         if (!cookie) {
           store.dispatch('UILoginLightbox/LOGIN_ASK_TOGGLE', { active: 'on', message: '', to: to.path })
