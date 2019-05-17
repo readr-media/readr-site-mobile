@@ -8,6 +8,9 @@ Vue.use(Router)
 const AppHome = () => import('../views/AppHome.vue')
 const AppPost = () => import('../views/AppPost.vue')
 const AppReport = () => import('../views/AppReport.vue')
+const AppSearch = () => import('../views/AppSearch.vue')
+
+const MemberFollowing = () => import('../views/MemberFollowing.vue')
 
 const PageNotFound = () => import('../views/PageNotFound.vue')
 const ServerError = () => import('../views/ServerError.vue')
@@ -26,9 +29,32 @@ const router = new Router({
     }
   },
   routes: [
-    { name: 'home', path: '/', component: AppHome },
-    { name: 'post', path: '/post/:postId?', component: AppPost },
-    { name: 'report', path: '/report/:slug', component: AppReport },
+    {
+      name: 'home',
+      path: '/',
+      component: AppHome
+    },
+    {
+      name: 'post',
+      path: '/post/:postId?',
+      component: AppPost
+    },
+    {
+      name: 'report',
+      path: '/report/:slug',
+      component: AppReport
+    },
+    {
+      name: 'search',
+      path: '/search',
+      component: AppSearch
+    },
+    {
+      name: 'memberFollowing',
+      path: '/following',
+      component: MemberFollowing,
+      meta: { permission: 'member' }
+    },
     { path: '/404', component: PageNotFound },
     { path: '/500', component: ServerError },
     { path: '*', component: PageNotFound }

@@ -2,7 +2,7 @@
   <nav class="navs">
     <router-link
       class="navs__nav"
-      to="/"
+      to="/search"
     >
       <img
         src="/public/2.0/icons/search-white.png"
@@ -11,10 +11,10 @@
     </router-link>
     <router-link
       class="navs__nav"
-      to="/"
+      to="/following"
     >
       <img
-        src="/public/2.0/icons/follow-white.png"
+        src="/public/2.0/icons/follow-white-bold.png"
         alt=""
       >
     </router-link>
