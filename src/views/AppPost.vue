@@ -40,6 +40,7 @@
       <div class="app-content-area post__series">
         <h2>更多系列</h2>
         <SeriesList
+          :item-style="'comm-series-more'"
           :items="seriesFiltered"
           class="post__series-list more"
         />
@@ -215,11 +216,6 @@ export default {
         top 0
         left -12.5%
         width 125%
-    &__series-list
-      &.more
-        >>> .list-item
-          figure
-            padding-top 56.25%
     &__review-link
       width 60%
       max-width 800px
