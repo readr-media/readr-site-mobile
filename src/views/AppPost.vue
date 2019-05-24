@@ -140,20 +140,19 @@ export default {
     .post__review-link
       order 9
   article
-    margin .5em auto 0
+    margin 10px auto 0
     >>> *
       & + *
-        margin-top .5em
+        margin-top 1rem
+      & + p
+        margin-top 10px
+    >>> h1, >>> h2, >>> h3
+      font-weight normal
     >>> p
-      font-size .875rem
       line-height 1.86
       text-align justify
-      & + p
-        margin-top 1em
-    >>> h1
-      font-size 1.875rem
-    >>> h2
-      font-size 1.25rem
+      & + *
+        margin-top 10px
     >>> a
       border-bottom 2px solid #11b8c9
     >>> img
@@ -164,18 +163,18 @@ export default {
       > div
         display none
   h1
-    font-size 1.875rem
     font-weight normal
     line-height 1.27
     & + *
       margin-top .5em
+    & + section
+      margin-top 1em
   h2
     & + div
       margin-top .5em
   p
     &.small
       color #4a4a4a
-      font-size .75rem
     & + h1
       margin-top .5em
   &__series
