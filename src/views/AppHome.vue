@@ -1,27 +1,27 @@
 <template>
   <section class="home">
     <div v-if="publicProjectsRecommends.length > 0">
-      <h1>
+      <h2>
         為您推薦
-      </h1>
+      </h2>
       <SeriesList
         :items="publicProjectsRecommends"
         class="home__list recommend"
       />
     </div>
     <div v-if="publicProjectsTrends.length > 0">
-      <h1 class="decorated">
+      <h2 class="decorated">
         最熱門系列
-      </h1>
+      </h2>
       <SeriesList
         :items="publicProjectsTrends"
         class="home__list highlight"
       />
     </div>
     <div>
-      <h1 class="decorated">
+      <h2 class="decorated">
         系列報導
-      </h1>
+      </h2>
       <SeriesList
         :item-style="'comm-narrow'"
         :items="publicProjectsNormal"
@@ -102,8 +102,6 @@ export default {
   > div
     & + div
       margin 15px 0 0
-  h1
-    font-size 1rem
   &__list
     position relative
     left -5px
@@ -129,7 +127,7 @@ export default {
         padding 0
         margin-top 1em
         background-color transparent
-        &:nth-child(1), &:nth-child(2), &:nth-child(3), &:nth-child(4)
+        &:nth-child(1), &:nth-child(2), &:nth-child(3)
           margin-top 0
         figure
           padding-top 100%
@@ -144,8 +142,7 @@ export default {
     > div
       & + div
         margin 35px 0 0
-    h1
-      font-size 1.875rem
+    h2
       text-align center
       &.decorated
         display flex

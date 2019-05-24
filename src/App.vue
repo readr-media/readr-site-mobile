@@ -59,16 +59,16 @@ h1, h2, h3, p, a, figure, pre
 h1, h2, h3, p, a,
   color #000
 h1
-  font-size 1.375rem
-  font-weight 600
+  font-size 2rem
+  font-weight normal
 h2
-  font-size 1rem
-  font-weight 500
+  font-size 1.5rem
+  font-weight normal
 p
-  font-size .875rem
+  font-size 1rem
   &.small
     color #4a4a4a
-    font-size .75rem
+    font-size .875rem
 a
   text-decoration none
   cursor pointer
