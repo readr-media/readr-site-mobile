@@ -87,10 +87,10 @@ export default {
       margin-right auto
     figure
       padding-top 56.25%
-  
+
 @media (min-width: 768px)
   .list-item.comm-series-more
     figure
       padding-top 56.25%
-    
+
 </style>
