@@ -16,11 +16,12 @@ export default {
     }
   },
   actions: {
-    GET_POST ({ commit }, { id, showAuthor = false }) {
+    GET_POST ({ commit }, { id, showAuthor = false, showTag = false }) {
       return getPost({
         id,
         params: {
-          showAuthor
+          showAuthor,
+          showTag
         }
       })
         .then(response => {
