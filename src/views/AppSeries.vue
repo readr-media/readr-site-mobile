@@ -3,18 +3,20 @@
     <main>
       <figure
         v-if="singleSeries.heroImage || singleSeries.ogImage"
-        class="series__image app-content-area">
-        <img 
-          :src="singleSeries.heroImage || singleSeries.ogImage" 
-          :alt="singleSeries.title || singleSeries.ogTitle">
+        class="series__image app-content-area"
+      >
+        <img
+          :src="singleSeries.heroImage || singleSeries.ogImage"
+          :alt="singleSeries.title || singleSeries.ogTitle"
+        >
       </figure>
       <h1
-        v-text="singleSeries.title || singleSeries.ogTitle"
         class="app-content-area"
+        v-text="singleSeries.title || singleSeries.ogTitle"
       />
       <p
-        v-text="singleSeries.description || singleSeries.ogDescription"
         class="app-content-area"
+        v-text="singleSeries.description || singleSeries.ogDescription"
       />
     </main>
     <lazy-component
@@ -37,7 +39,7 @@ import { SITE_FULL } from 'src/constants'
 import { getFullUrl } from 'src/util/comm'
 import { mapState } from 'vuex'
 
-import SeriesList from 'src/components/Series/SeriesList.vue'
+import SeriesList from 'src/components/series/SeriesList.vue'
 
 export default {
   name: 'AppSeries',
@@ -59,9 +61,6 @@ export default {
       ]
     }
   },
-  asyncData ({ store, route }) {
-    return store.dispatch('DataSeries/FETCH_SINGLE_SERIES', { slug: route.params.slug })
-  },
   computed: {
     ...mapState({
       series: state => state.DataSeries.publicProjects.normal,
@@ -71,10 +70,13 @@ export default {
       return this.series.filter(series => series.slug !== this.$route.params.slug).slice(0, 3)
     }
   },
+  asyncData ({ store, route }) {
+    return store.dispatch('DataSeries/FETCH_SINGLE_SERIES', { slug: route.params.slug })
+  },
   methods: {
     fetchSeries () {
       this.$store.dispatch('DataSeries/FETCH', { maxResult: 4 })
-    },
+    }
   }
 }
 </script>

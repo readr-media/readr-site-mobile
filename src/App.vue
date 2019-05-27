@@ -56,7 +56,7 @@ export default {
 
 h1, h2, h3, p, a, figure, pre
   margin 0
-h1, h2, h3, p, a,
+h1, h2, h3, p, a
   color #000
 h1
   font-size 2rem

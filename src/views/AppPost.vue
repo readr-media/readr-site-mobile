@@ -14,7 +14,7 @@
       <PostAuthor
         v-if="post.author && post.author.nickname"
         :author="post.author"
-        :postType="postType"
+        :post-type="postType"
         :class="[ !isReview ? 'app-content-area' : '' ]"
         class="post__author"
       />
@@ -32,7 +32,7 @@
         :description="post.linkDescription"
         :image="post.linkImage"
         :link="post.link"
-        :sourceName="post.linkName"
+        :source-name="post.linkName"
         :title="post.linkTitle"
         class="post__review-link"
       />
@@ -62,7 +62,7 @@ import { mapState } from 'vuex'
 import DonateWithShare from 'src/components/DonateWithShare.vue'
 import PostAuthor from 'src/components/post/PostAuthor.vue'
 import PostReviewLink from 'src/components/post/PostReviewLink.vue'
-import SeriesList from 'src/components/Series/SeriesList.vue'
+import SeriesList from 'src/components/series/SeriesList.vue'
 import TagsInPost from 'src/components/tag/TagsInPost.vue'
 import dayjs from 'dayjs'
 
@@ -90,9 +90,6 @@ export default {
       ]
     }
   },
-  asyncData ({ store, route }) {
-    return store.dispatch('DataPost/GET_POST', { id: route.params.postId, showAuthor: true, showTag: true })
-  },
   computed: {
     ...mapState({
       post: state => state.DataPost.post,
@@ -116,6 +113,9 @@ export default {
     seriesFiltered () {
       return this.series.slice(0, 3)
     }
+  },
+  asyncData ({ store, route }) {
+    return store.dispatch('DataPost/GET_POST', { id: route.params.postId, showAuthor: true, showTag: true })
   },
   methods: {
     dayjs,
