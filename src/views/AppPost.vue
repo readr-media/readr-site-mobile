@@ -12,7 +12,7 @@
         v-text="post.title || post.ogTitle"
       />
       <PostAuthor
-        v-if="post.author"
+        v-if="post.author && post.author.nickname"
         :author="post.author"
         :postType="postType"
         :class="[ !isReview ? 'app-content-area' : '' ]"
@@ -21,6 +21,11 @@
       <article
         class="app-content-area"
         v-html="postContentProcessed"
+      />
+      <TagsInPost
+        v-if="post.tags && post.tags.length > 0"
+        :tags="post.tags"
+        class="post__tags app-content-area"
       />
       <PostReviewLink
         v-if="isReview"
@@ -58,6 +63,7 @@ import DonateWithShare from 'src/components/DonateWithShare.vue'
 import PostAuthor from 'src/components/post/PostAuthor.vue'
 import PostReviewLink from 'src/components/post/PostReviewLink.vue'
 import SeriesList from 'src/components/Series/SeriesList.vue'
+import TagsInPost from 'src/components/tag/TagsInPost.vue'
 import dayjs from 'dayjs'
 
 export default {
@@ -66,7 +72,8 @@ export default {
     DonateWithShare,
     PostAuthor,
     PostReviewLink,
-    SeriesList
+    SeriesList,
+    TagsInPost
   },
   metaInfo () {
     const title = this.post.title
@@ -84,7 +91,7 @@ export default {
     }
   },
   asyncData ({ store, route }) {
-    return store.dispatch('DataPost/GET_POST', { id: route.params.postId, showAuthor: true })
+    return store.dispatch('DataPost/GET_POST', { id: route.params.postId, showAuthor: true, showTag: true })
   },
   computed: {
     ...mapState({
@@ -110,9 +117,6 @@ export default {
       return this.series.slice(0, 3)
     }
   },
-  asyncData ({ store, route }) {
-    return store.dispatch('DataPost/GET_POST', { id: route.params.postId })
-  },
   methods: {
     dayjs,
     fetchSeries () {
@@ -129,6 +133,8 @@ export default {
     display flex
     flex-direction column
     padding calc(50px + 1em) 0 5em
+    > *
+      order 10
     h1
       order 2
     article
@@ -192,6 +198,9 @@ export default {
             margin-top .2em
           .description
             display none
+  &__tags
+    display flex
+    margin-top 30px
   &__review-link
     margin-top 30px
   .post-bottom
