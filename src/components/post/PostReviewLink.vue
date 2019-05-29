@@ -1,24 +1,30 @@
 <template>
   <section class="post-review-link">
     <figure v-if="image">
-      <img :src="image" :alt="title">
+      <img
+        :src="image"
+        :alt="title"
+      >
     </figure>
     <div>
       <a
         :href="link"
-        target="_blank">
-        <h3 v-text="title || link"></h3>
+        target="_blank"
+      >
+        <h3 v-text="title || link" />
       </a>
       <a
         v-if="description"
         :href="link"
-        target="_blank">
-        <p v-text="description"></p>
+        target="_blank"
+      >
+        <p v-text="description" />
       </a>
       <a
         v-if="sourceName"
         :href="link"
-        target="_blank">
+        target="_blank"
+      >
         <p>{{ `出處：${sourceName}` }}</p>
       </a>
     </div>

@@ -2,26 +2,35 @@
   <section class="post-author">
     <template v-if="postType === 'review'">
       <div class="post-author__img">
-        <div class="post-author__heading">評論</div>
+        <div class="post-author__heading">
+          評論
+        </div>
         <figure>
-          <img :src="author.profileImage || '/public/icons/exclamation.png'" :alt="author.nickname">
+          <img
+            :src="author.profileImage || '/public/icons/exclamation.png'"
+            :alt="author.nickname"
+          >
         </figure>
       </div>
       <div class="post-author__name app-content-area">
         <h2 v-text="author.nickname" />
         <button
           v-if="author.description"
-          @click="openDescription = !openDescription">
-        </button>
+          @click="openDescription = !openDescription"
+        />
       </div>
       <div
         v-show="openDescription"
-        class="post-author__descr app-content-area">
-        <p v-text="author.description"></p>
+        class="post-author__descr app-content-area"
+      >
+        <p v-text="author.description" />
       </div>
     </template>
     <template v-else>
-      <p class="small" v-text="defaultFormat"></p>
+      <p
+        class="small"
+        v-text="defaultFormat"
+      />
     </template>
   </section>
 </template>
