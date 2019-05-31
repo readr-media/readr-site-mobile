@@ -573,4 +573,48 @@ export default {
   align-items center
   &--yellow
     background-color #ddcf21
+
+@media (min-width 768px)
+  .donate
+    width 440px
+    margin 100px auto 0 auto
+    h1
+      font-size 24px
+      font-weight 500
+    h2
+      font-size 16px
+      font-weight 500
+    &__block
+      & + &
+        margin 36px 0 0 0
+
+  .header
+    img
+      display none
+    &__titles
+      margin-left calc((50vw - 440px) / 2)
+      display flex
+      p
+        font-size 30px
+      p + p
+        margin 0 0 0 20px
+
+  .donate-amount
+    &__coins
+      margin 12px 0 0 0
+
+  .coins
+    &__row
+      & + &
+        margin 20px 0 0 0
+    &__coin
+      & + &
+        margin 0 0 0 20px
+    &__custom-coin-input
+      margin 0 0 0 20px
+
+  .custom-coin-input
+    &__top
+      input
+        width 200px
 </style>
