@@ -53,7 +53,7 @@
         </button>
         <button
           class="buttons__button button button--white"
-          @click="$emit('closeSidebar')"
+          @click="SET_SHOW_SIDEBAR(false)"
         >
           取消
         </button>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   props: {
@@ -85,6 +85,11 @@ export default {
         const padding = 14
         return vh - headerHeight - padding * 2
       }
+    })
+  },
+  methods: {
+    ...mapMutations({
+      SET_SHOW_SIDEBAR: 'UIAppHeader/SET_SHOW_SIDEBAR'
     })
   }
 }

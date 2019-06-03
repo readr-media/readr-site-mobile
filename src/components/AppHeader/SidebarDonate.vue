@@ -11,7 +11,6 @@
       :is-result-success="isResultSuccess"
       :form-data="formData"
       @backToForm="showResult = false"
-      @closeSidebar="$emit('closeSidebar')"
     />
   </div>
 </template>
