@@ -32,7 +32,7 @@ export function addRewardPointsTransactions (params) {
   const url = `${host}/api/points`
   return post(url, params)
     .then(res => res.status)
-    .catch(err => err)
+    .catch(err => { throw err })
 }
 
 export function deletePost (id) {

@@ -1,17 +1,16 @@
 <template>
   <div class="donate-wrapper">
     <SidebarDonateForm
-      v-if="!showResult"
+      v-show="!showResult"
       @submitForm="onFormSubmit"
       @showResultSuccess="onShowResultSuccess"
       @showResultFail="onShowResultFail"
     />
     <SidebarDonateResult
-      v-else
+      v-show="showResult"
       :is-result-success="isResultSuccess"
       :form-data="formData"
       @backToForm="showResult = false"
-      @closeSidebar="$emit('closeSidebar')"
     />
   </div>
 </template>

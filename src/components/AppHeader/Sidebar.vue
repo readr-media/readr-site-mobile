@@ -35,15 +35,9 @@ import { mapState } from 'vuex'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 export default {
-  props: {
-    showSidebar: {
-      type: Boolean,
-      default: false,
-      required: true
-    }
-  },
   computed: {
     ...mapState({
+      showSidebar: state => state.UIAppHeader.showSidebar,
       sidebarHeight: state => {
         const vw = state.Viewport.width
         const vh = state.Viewport.height
