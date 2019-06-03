@@ -3,6 +3,7 @@
     <router-link
       :to="`/post/${id}`"
       class="list-item"
+      @click.native="SET_SHOW_SIDEBAR(false)"
     >
       <div class="list-item__img-wrapper img-wrapper">
         <img
@@ -27,6 +28,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import _ from 'lodash'
 import dayjs from 'dayjs'
 
@@ -59,6 +61,11 @@ export default {
     description () {
       return _.get(this.post, 'ogDescription', '')
     }
+  },
+  methods: {
+    ...mapMutations({
+      SET_SHOW_SIDEBAR: 'UIAppHeader/SET_SHOW_SIDEBAR'
+    })
   }
 }
 </script>
