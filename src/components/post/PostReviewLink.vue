@@ -25,7 +25,7 @@
         :href="link"
         target="_blank"
       >
-        <p>{{ `出處：${sourceName}` }}</p>
+        <p class="small">{{ `出處：${sourceName}` }}</p>
       </a>
     </div>
   </section>
@@ -76,7 +76,7 @@ export default {
   h3, p
     text-align justify
   h3
-    font-size .875rem
+    font-size 1.125rem
     font-weight 500
     line-height 1.43
   p
