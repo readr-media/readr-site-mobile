@@ -104,7 +104,7 @@ pre
     h1, p
       line-height 1.3
     h1, p, figure
-      & + h1, & + p
+      & + h1, & + p, & + div
         margin-top .5em
     h1
       font-size .75rem
@@ -118,11 +118,11 @@ pre
 
 @media (min-width: 768px)
   h1
-    font-size 1.875rem
+    font-size 2.8125rem
   h2
     font-size 1.5rem
   p
-    font-size 1rem
+    font-size 1.125rem
     &.small
       font-size .875rem
   .app
