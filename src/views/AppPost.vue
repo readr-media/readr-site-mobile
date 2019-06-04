@@ -133,10 +133,12 @@ export default {
     display flex
     flex-direction column
     padding calc(50px + 1em) 0 5em
+    overflow hidden
     > *
       order 10
     h1
       order 2
+      word-break break-word
     article
       order 4
     .post__date
@@ -146,19 +148,19 @@ export default {
     .post__review-link
       order 9
   article
-    margin 10px auto 0
+    margin 1.5rem auto 0
     >>> *
       & + *
-        margin-top 1rem
+        margin-top 1.5rem
       & + p
-        margin-top 10px
+        margin-top 17px
     >>> h1, >>> h2, >>> h3
       font-weight normal
     >>> p
       line-height 1.86
       text-align justify
       & + *
-        margin-top 10px
+        margin-top 17px
     >>> a
       border-bottom 2px solid #11b8c9
     >>> img
@@ -172,17 +174,15 @@ export default {
     font-weight normal
     line-height 1.27
     & + *
-      margin-top .5em
-    & + section
-      margin-top 1em
+      margin-top 1.5rem
   h2
     & + div
-      margin-top .5em
+      margin-top 1.5em
   p
     &.small
       color #4a4a4a
     & + h1
-      margin-top .5em
+      margin-top 17px
   &__series
     margin 2em auto 0
     &-list
