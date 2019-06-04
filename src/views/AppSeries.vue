@@ -88,13 +88,17 @@ export default {
     border-bottom 1px solid #979797
   h1
     & + *
-      margin-top .5em
+      margin-top 1.5rem
+    & + p
+      margin-top 17px
   h2
     & + div
-      margin-top .5em
+      margin-top 1.5rem
+  p
+    line-height 1.86
   figure
     & + *
-      margin-top .5em
+      margin-top 1.5rem
   &__image
     position relative
     padding-top calc(90% * 0.5625)
