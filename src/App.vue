@@ -95,7 +95,6 @@ pre
   opacity 0
 
 .app
-  padding 0 0 34px 0
   background-color #f1f1f1
   &__header
     position fixed
@@ -126,8 +125,6 @@ pre
     font-size 1rem
     &.small
       font-size .875rem
-  &.small
-    font-size .875rem
   .app
     &-content-area
       width 60%

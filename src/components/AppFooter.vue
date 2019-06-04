@@ -1,6 +1,9 @@
 <template>
-  <footer class="footer">
-    <div class="footer__top">
+  <footer
+    :class="$route.name"
+    class="footer"
+  >
+    <div class="footer__top app-content-area">
       <ul class="footer__links-list links-list">
         <li class="links-list__list-item">
           <router-link
@@ -44,7 +47,7 @@
         </li>
       </ul>
     </div>
-    <div class="footer__bottom">
+    <div class="footer__bottom app-content-area">
       <ul class="footer__links-icon-list links-icon-list">
         <li class="links-icon-list__list-item">
           <a
@@ -121,15 +124,10 @@ export default {
 
 <style lang="stylus" scoped>
 .footer
-  padding 0 15px
-  margin 0 auto
-  max-width 320px
-  width 320px
-  &__top
-    position relative
-    top -15px
+  padding 1em 0
+  background-color #fff
   &__bottom
-    margin 2px 0 0 0
+    margin .5em auto 0
 
 .link
   font-size 12px
@@ -143,13 +141,15 @@ export default {
   display flex
   flex-wrap wrap
   &__list-item
-    width calc(290px / 3)
+    width calc(100% / 3)
     height 20px
     display flex
     justify-content center
     align-items center
     border-left 1px solid #979797
-    margin 15px 0 0 0
+    margin .4em 0
+    &:nth-child(3n)
+      border-right 1px solid #979797
     &:nth-last-child(1)
       border-right 1px solid #979797
 
@@ -165,4 +165,11 @@ export default {
     img
       width 30px
       height 30px
+
+@media (min-width: 768px)
+  .footer
+    &.home
+      > div
+        width calc(80% - 40px) !important
+        max-width 1000px
 </style>
