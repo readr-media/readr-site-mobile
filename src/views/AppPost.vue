@@ -42,12 +42,17 @@
       @show="fetchSeries"
     >
       <DonateWithShare :url="getPostFullUrl(post)" />
-      <div class="app-content-area post__series">
+      <div class="app-content-area post__related">
+        <h2>系列內容</h2>
+        <PostList
+          :items="seriesPostsFiltered"
+          class="post__post-list"
+        />
         <h2>更多系列</h2>
         <SeriesList
           :item-style="'comm-series-more'"
           :items="seriesFiltered"
-          class="post__series-list more"
+          class="post__series-list"
         />
       </div>
     </lazy-component>
@@ -61,6 +66,7 @@ import { mapState } from 'vuex'
 
 import DonateWithShare from 'src/components/DonateWithShare.vue'
 import PostAuthor from 'src/components/post/PostAuthor.vue'
+import PostList from 'src/components/post/PostList.vue'
 import PostReviewLink from 'src/components/post/PostReviewLink.vue'
 import SeriesList from 'src/components/series/SeriesList.vue'
 import TagsInPost from 'src/components/tag/TagsInPost.vue'
@@ -71,6 +77,7 @@ export default {
   components: {
     DonateWithShare,
     PostAuthor,
+    PostList,
     PostReviewLink,
     SeriesList,
     TagsInPost
@@ -93,7 +100,8 @@ export default {
   computed: {
     ...mapState({
       post: state => state.DataPost.post,
-      series: state => state.DataSeries.publicProjects.normal
+      series: state => state.DataSeries.publicProjects.normal,
+      seriesPosts: state => state.DataSeriesContents.publicProjectContents
     }),
     isReview () {
       return this.postType === 'review'
@@ -112,6 +120,9 @@ export default {
     },
     seriesFiltered () {
       return this.series.slice(0, 3)
+    },
+    seriesPostsFiltered () {
+      return this.seriesPosts.filter(post => post.id !== Number(this.$route.params.postId)).slice(0, 3)
     }
   },
   asyncData ({ store, route }) {
@@ -183,21 +194,39 @@ export default {
       color #4a4a4a
     & + h1
       margin-top 17px
-  &__series
+  &__related
     margin 2em auto 0
-    &-list
-      display flex
-      flex-wrap wrap
-      justify-content space-between
-      &.more
-        >>> .list-item
-          width calc((100% - 1em) / 3)
-          figure
-            border 1px solid #979797
-          h1
-            margin-top .2em
-          .description
-            display none
+    h2, div
+      & + h2, & + div
+        margin-top .5em
+  &__post-list
+    display flex
+    flex-direction column
+    >>> .list-item
+      width 100%
+      padding-bottom .5em
+      border-bottom 1px solid #979797
+      &:last-child
+        border-bottom none
+      & + .list-item
+        margin-top .5em
+      figure, .date, .description
+        display none
+      figure
+        & + p
+          margin-top 0
+  &__series-list
+    display flex
+    flex-wrap wrap
+    justify-content space-between
+    >>> .list-item
+      width calc((100% - 1em) / 3)
+      figure
+        border 1px solid #979797
+      h1
+        margin-top .2em
+      .description
+        display none
   &__tags
     display flex
     margin-top 30px
@@ -224,6 +253,18 @@ export default {
         top 0
         left -12.5%
         width 125%
+    &__post-list
+      >>> .list-item
+        display flex
+        border-bottom none
+        figure
+          display block
+          width 33%
+          padding-top calc(33% * 0.5625)
+        .list-item__content
+          flex 1
+          margin 0 0 0 15px
+          border-bottom 1px solid #979797
     &__review-link
       width 60%
       max-width 800px
