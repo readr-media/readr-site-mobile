@@ -102,6 +102,7 @@ export default {
       top -2px
       width 25px
       height 25px
+      padding 0
       margin-left .6em
       background-color #d6c721
       background-image url(/public/2.0/icons/info.png)
