@@ -76,7 +76,7 @@ export default {
       seriesPosts: state => state.DataSeriesContents.publicProjectContents
     }),
     latestSeriesPosts () {
-      return this.seriesPosts[0]
+      return this.seriesPosts[0] || {}
     },
     seriesFilterSelf () {
       return this.series.filter(series => series.slug !== this.$route.params.slug).slice(0, 3)
