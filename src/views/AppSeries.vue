@@ -18,6 +18,14 @@
         class="app-content-area"
         v-text="singleSeries.description || singleSeries.ogDescription"
       />
+      <a
+        v-if="latestSeriesPosts.id"
+        :href="`/post/${latestSeriesPosts.id}`"
+        class="app-content-area"
+        target="_blank"
+      >
+        前往閱讀
+      </a>
     </main>
     <lazy-component
       class="series-bottom"
@@ -64,14 +72,27 @@ export default {
   computed: {
     ...mapState({
       series: state => state.DataSeries.publicProjects.normal,
-      singleSeries: state => state.DataSeries.singleSeries
+      singleSeries: state => state.DataSeries.singleSeries,
+      seriesPosts: state => state.DataSeriesContents.publicProjectContents
     }),
+    latestSeriesPosts () {
+      return this.seriesPosts[0]
+    },
     seriesFilterSelf () {
       return this.series.filter(series => series.slug !== this.$route.params.slug).slice(0, 3)
     }
   },
   asyncData ({ store, route }) {
     return store.dispatch('DataSeries/FETCH_SINGLE_SERIES', { slug: route.params.slug })
+  },
+  beforeMount () {
+    // [暫時] 由於 Header 尚未在 series 頁抓取系列內容
+    this.$store.dispatch('DataSeriesContents/FETCH', {
+      projectId: this.singleSeries.id,
+      params: {
+        maxResult: 1
+      }
+    })
   },
   methods: {
     fetchSeries () {
@@ -96,6 +117,16 @@ export default {
       margin-top 1.5rem
   p
     line-height 1.86
+    & + *
+      margin-top 17px
+  a
+    display block
+    height 50px
+    font-weight 500
+    line-height 50px
+    text-align center
+    background-color #ddcf21
+    border-radius 8px
   figure
     & + *
       margin-top 1.5rem
