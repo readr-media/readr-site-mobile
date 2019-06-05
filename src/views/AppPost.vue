@@ -45,6 +45,7 @@
       <div class="app-content-area post__related">
         <h2>系列內容</h2>
         <PostList
+          :description-length="17"
           :items="seriesPostsFiltered"
           class="post__post-list"
         />
@@ -261,10 +262,15 @@ export default {
           display block
           width 33%
           padding-top calc(33% * 0.5625)
+          border 1px solid #979797
         .list-item__content
           flex 1
           margin 0 0 0 15px
           border-bottom 1px solid #979797
+        .title
+          font-weight 500
+        .description
+          display block
     &__review-link
       width 60%
       max-width 800px

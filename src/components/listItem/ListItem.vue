@@ -13,6 +13,7 @@
     <div class="list-item__content">
       <p
         v-if="title"
+        class="title"
         v-text="title"
       />
       <p
