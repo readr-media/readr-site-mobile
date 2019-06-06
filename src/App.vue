@@ -101,10 +101,10 @@ pre
     top 0
     left 0
   &-list
-    h1, p
+    h1, h2, p
       line-height 1.3
-    h1, p, figure
-      & + h1, & + p, & + div
+    h1, h2, p, figure
+      & + h1, & + h2, & + p, & + div
         margin-top .5em
     h1
       font-size .75rem
