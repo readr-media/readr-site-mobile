@@ -84,6 +84,7 @@ Vue.mixin({
       }
     }).catch(errInfo => {
       debug('errInfo', errInfo)
+      console.log('---- errInfo', errInfo)
       const domain = get(store, 'state.setting.DOMAIN')
       removeToken(domain).then(() => location.replace('/login?t=FADR42345FADS3'))
     })

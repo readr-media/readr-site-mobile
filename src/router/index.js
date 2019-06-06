@@ -11,6 +11,7 @@ const AppReport = () => import('../views/AppReport.vue')
 const AppSearch = () => import('../views/AppSearch.vue')
 const AppSeries = () => import('../views/AppSeries.vue')
 
+const MemberAccount = () => import('../views/MemberAccount.vue')
 const MemberFollowing = () => import('../views/MemberFollowing.vue')
 
 const PageNotFound = () => import('../views/PageNotFound.vue')
@@ -54,6 +55,12 @@ const router = new Router({
       name: 'series',
       path: '/series/:slug',
       component: AppSeries
+    },
+    {
+      name: 'account',
+      path: '/account/:section?',
+      component: MemberAccount,
+      meta: { permission: 'member' }
     },
     {
       name: 'memberFollowing',

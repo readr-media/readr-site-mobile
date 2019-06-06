@@ -2,12 +2,14 @@ import _ from 'lodash'
 import Vue from 'vue'
 
 import {
+  checkPassword,
   getProfile,
   updateMember,
   login,
   checkLoginStatus,
   getFollowingByUser,
-  follow
+  follow,
+  updatePassword
 } from 'src/api'
 
 const { camelize } = require('humps')
@@ -80,6 +82,14 @@ export default {
       })
     },
 
+    LOGOUT ({ commit }) {
+      return new Promise((resolve) => {
+        commit('SET_LOGGEIN_STATUS', { body: false })
+        commit('SET_PROFILE', { profile: {} })
+        resolve()
+      })
+    },
+
     CHECK_LOGIN_STATUS ({ commit }, { params }) {
       return checkLoginStatus({ params }).then(({ status, body }) => {
         commit('SET_LOGGEIN_STATUS', { status, body })
@@ -94,6 +104,13 @@ export default {
 
         const { resource } = params
         commit('PUSH_FOLLOWING_IDS', { resource, ids: items })
+      })
+    },
+    // eslint-disable-next-line no-empty-pattern
+    CHECK_PASSWORD ({}, { email, password }) {
+      return checkPassword({
+        email,
+        password
       })
     },
 
@@ -114,6 +131,10 @@ export default {
             reject(new Error(e))
           })
       })
+    },
+    // eslint-disable-next-line no-empty-pattern
+    UPDATE_PASSWORD ({}, { password }) {
+      return updatePassword({ password, editMode: 'edit_profile' })
     }
   }
 }
