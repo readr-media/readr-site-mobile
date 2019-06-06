@@ -131,7 +131,7 @@ export default {
           margin-top 0
         figure
           padding-top 100%
-        h1, p
+        h1, h2, p
           width 100%
 
 @media (min-width: 768px)

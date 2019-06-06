@@ -1,6 +1,11 @@
 <template>
   <section :class="[ postType, 'post' ]">
-    <figure v-if="postImage" />
+    <figure v-if="!isReview && postImage">
+      <img
+        :src="postImage"
+        :alt="post.title || post.ogTitle"
+      >
+    </figure>
     <main>
       <p
         v-if="post.publishedAt"
@@ -140,11 +145,27 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .post
+  padding-top 40px
   background-color #f1f1f1
+  figure
+    position relative
+    width 100%
+    padding-top 56.252%
+    margin 0 auto
+    overflow hidden
+    img
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+      object-fit cover
+      object-position center center
   main
     display flex
     flex-direction column
-    padding calc(50px + 1em) 0 5em
+    margin-top 1em
+    padding 0 0 5em
     overflow hidden
     > *
       order 10
@@ -166,8 +187,6 @@ export default {
         margin-top 1.5rem
       & + p
         margin-top 17px
-    >>> h1, >>> h2, >>> h3
-      font-weight normal
     >>> p
       line-height 1.86
       text-align justify
