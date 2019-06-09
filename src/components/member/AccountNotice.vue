@@ -5,7 +5,10 @@
   >
     <div>
       <template v-if="notification.length > 0">
-        <button class="read">
+        <button
+          class="read"
+          @click="readAll"
+        >
           全部標為已讀
         </button>
         <NotificationList :items="notification" />
@@ -28,6 +31,11 @@ export default {
     notification: {
       type: Array,
       default: () => []
+    }
+  },
+  methods: {
+    readAll () {
+      // this.$store.dispatch('DataNotification/UPDATE_NOTIFICATION_STATUS', { params, })
     }
   }
 }

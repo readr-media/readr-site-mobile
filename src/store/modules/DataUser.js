@@ -134,7 +134,7 @@ export default {
     },
     // eslint-disable-next-line no-empty-pattern
     UPDATE_PASSWORD ({}, { password }) {
-      return updatePassword({ password, editMode: 'edit_profile' })
+      return updatePassword({ params: { password, editMode: 'edit_profile' } })
     }
   }
 }

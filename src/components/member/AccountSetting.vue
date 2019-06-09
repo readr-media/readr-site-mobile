@@ -2,20 +2,24 @@
   <section class="account-setting">
     <div>
       <h2>個人設定</h2>
+      <ChangeProfile :profile="profile" />
     </div>
     <div>
       <h2>帳號設定</h2>
+      <ChangePassword :profile="profile" />
     </div>
   </section>
 </template>
 <script>
-// import ChangeProfile from 'src/components/member/ChangeProfile.vue'
+import ChangePassword from 'src/components/member/ChangePassword.vue'
+import ChangeProfile from 'src/components/member/ChangeProfile.vue'
 
 export default {
   name: 'AccountSetting',
-  // components: {
-  //   ChangeProfile
-  // },
+  components: {
+    ChangePassword,
+    ChangeProfile
+  },
   props: {
     profile: {
       type: Object,
@@ -26,6 +30,9 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .account-setting
+  div
+    & + div
+      margin-top 1em
   h2
     position relative
     padding 0 0 0 25px
@@ -39,5 +46,5 @@ export default {
       height 15px
       background-color #11b8c9
     & + div
-      margin-top .5em
+      margin-top 1em
 </style>

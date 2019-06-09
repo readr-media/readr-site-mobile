@@ -39,6 +39,18 @@
     >
       更改密碼
     </button>
+    <p
+      v-if="isSuccess"
+      class="msg small"
+    >
+      更改成功，稍後將導向至首頁
+    </p>
+    <p
+      v-if="isFailure"
+      class="msg msg-failure small"
+    >
+      系統發生異常，請稍候再試
+    </p>
   </div>
 </template>
 <script>
@@ -46,6 +58,9 @@ import InputWithErrorMessage from '../form/InputWithErrorMessage.vue'
 
 import { get } from 'lodash'
 import { removeToken } from 'src/util/services'
+import { setTimeout } from 'timers'
+
+const debug = require('debug')('CLIENT:ChangePassword')
 
 export default {
   name: 'ChangePassword',
@@ -61,9 +76,11 @@ export default {
   data () {
     return {
       confirmPassword: '',
+      errors: [],
+      isFailure: false,
+      isSuccess: false,
       newPassword: '',
-      originPassword: '',
-      errors: []
+      originPassword: ''
     }
   },
   computed: {
@@ -112,11 +129,11 @@ export default {
           password: this.originPassword
         })
           .then(res => {
-            console.log('updatePassword')
             this.updatePassword()
           })
-          .catch(() => {
+          .catch(err => {
             this.errors.push('origin')
+            debug('check password failed', err)
           })
       }
     },
@@ -124,26 +141,21 @@ export default {
       this.$store.dispatch('DataUser/UPDATE_PASSWORD', {
         password: this.newPassword
       })
+        .then(() => this.$store.dispatch('LOGOUT'))
         .then(() => {
-          this.$store.dispatch('LOGOUT')
-            .then(() => {
-              const domain = get(this.$store, 'state.setting.DOMAIN')
-              removeToken(domain)
-            })
+          this.isSuccess = true
+          const domain = get(this.$store, 'state.setting.DOMAIN')
+          removeToken(domain)
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 3000)
         })
         .catch(err => {
-          console.log(err)
+          this.isFailure = true
+          debug('update password failed', err)
         })
     }
   }
-  // watch: {
-  //   confirmPassword (value) {
-  //   },
-  //   newPassword (value) {
-  //   },
-  //   originPassword (value) {
-  //   }
-  // }
 }
 </script>
 <style lang="stylus" scoped>
@@ -152,19 +164,17 @@ export default {
   flex-direction column
   button
     align-self flex-end
-    background-color #fff
-    border 1px solid #979797
-    &:disabled
-      background-color transparent
+    width calc(100% - 80px)
+    height 30px
+    color #fff
+    background-color #11b8c9
   > div
     margin-top .5em
     & + button
       margin-top .5em
-
-.change-password
   &__row
     display flex
-    & + .edit-password__row
+    & + .change-password__row
       margin-top .5em
     p
       min-width 4em
@@ -176,4 +186,9 @@ export default {
     >>> input
       height 30px
       border 1px solid #979797
+  .msg
+    margin-top .5em
+    text-align right
+    &-failure
+      color red
 </style>

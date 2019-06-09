@@ -8,8 +8,7 @@
     />
     <div
       :is="currentTabComponent"
-      :notification="notification"
-      :profile="profile"
+      v-bind="currentProps"
       class="account__feature app-content-area"
     />
   </section>
@@ -26,22 +25,6 @@ import { mapState } from 'vuex'
 const componentMapping = {
   notice: { index: 0, component: 'AccountNotice', route: '/account/notice' },
   setting: { index: 1, component: 'AccountSetting', route: '/account/' }
-}
-const getProps = (routeSection) => {
-  // const mapping = {
-  //   notice: { notification: this.notification },
-  //   setting: { profile: this.profile }
-  // }
-  console.log('getProps', this)
-  return {}
-  // return mapping[routeSection] ? mapping[routeSection] : mapping.setting
-}
-
-const getData = (store, routeSection, id) => {
-  const features = {
-    notice: () => store.dispatch('DataNotification/GET_NOTIFICATION', id)
-  }
-  return features[routeSection] ? features[routeSection]() : ''
 }
 
 export default {
@@ -63,27 +46,41 @@ export default {
       notification: state => state.DataNotification.notification
     }),
     currentTabComponent () {
-      const section = this.$route.params.section
-      return section ? componentMapping[section].component : componentMapping.setting.component
+      return this.routeSection ? componentMapping[this.routeSection].component : componentMapping.setting.component
     },
     currentProps () {
-      return getProps(this.$route.params.section)
+      return this.getProps()
+    },
+    routeSection () {
+      return this.$route.params.section
     }
   },
   watch: {
     '$route.path' () {
-      getData(this.$store, this.$route.params.section, this.profile.id)
+      this.getData()
       this.currentTab = this.getCurrentTab()
     }
   },
   beforeMount () {
-    getData(this.$store, this.$route.params.section, this.profile.id)
+    this.getData()
     this.currentTab = this.getCurrentTab()
   },
   methods: {
     getCurrentTab () {
-      const section = this.$route.params.section
-      return section ? componentMapping[section].index : componentMapping.setting.index
+      return this.routeSection ? componentMapping[this.routeSection].index : componentMapping.setting.index
+    },
+    getData () {
+      const features = {
+        notice: () => this.$store.dispatch('DataNotification/GET_NOTIFICATION', this.profile.id)
+      }
+      return this.routeSection ? features[this.routeSection]() : ''
+    },
+    getProps () {
+      const mapping = {
+        notice: { notification: this.notification },
+        setting: { profile: this.profile }
+      }
+      return this.routeSection ? mapping[this.routeSection] : mapping.setting
     },
     handleTab (tab) {
       const info = find(componentMapping, { index: tab.index })
@@ -97,9 +94,5 @@ export default {
   padding calc(50px + 1em) 0 0
   &__feature
     margin-top 1em
-  // &__block
-  //   padding-bottom 20px
-  //   & + .account__block
-  //     padding-top 1em
-  //     border-top 1px solid #979797
+    padding-bottom 20px
 </style>

@@ -79,5 +79,5 @@ span
 
 .error
   input
-    background-color red !important
+    border 1px solid red !important
 </style>

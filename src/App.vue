@@ -62,7 +62,7 @@ h1
   font-size 2.8125rem
   font-weight normal
 h2
-  font-size 1.5remstream
+  font-size 1.5rem
   font-weight 500
 p
   font-size 1.125rem
@@ -70,7 +70,7 @@ p
   &.small
     color #4a4a4a
     font-size .875rem
-input, textarea
+button, input, textarea
   font-size 1rem
 a
   text-decoration none
