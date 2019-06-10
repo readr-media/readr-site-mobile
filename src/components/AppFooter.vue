@@ -3,7 +3,7 @@
     :class="$route.name"
     class="footer"
   >
-    <div class="footer__top app-content-area">
+    <!-- <div class="footer__top app-content-area">
       <ul class="footer__links-list links-list">
         <li class="links-list__list-item">
           <router-link
@@ -46,7 +46,7 @@
           </router-link>
         </li>
       </ul>
-    </div>
+    </div> -->
     <div class="footer__bottom app-content-area">
       <ul class="footer__links-icon-list links-icon-list">
         <li class="links-icon-list__list-item">
