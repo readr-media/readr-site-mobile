@@ -4,7 +4,7 @@
       v-for="tag in tags"
       :key="`tags-in-post-${tag.id}`"
       :tag="tag"
-    /> 
+    />
   </section>
 </template>
 <script>

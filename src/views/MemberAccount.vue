@@ -9,7 +9,8 @@
     <div
       :is="currentTabComponent"
       v-bind="currentProps"
-      class="account__feature app-content-area"
+      :class="{ 'app-content-area': !routeSection }"
+      class="account__feature"
     />
   </section>
 </template>
@@ -19,6 +20,7 @@ import AccountNotice from 'src/components/member/AccountNotice.vue'
 import AccountSetting from 'src/components/member/AccountSetting.vue'
 
 import AppTab from 'src/components/AppTab.vue'
+import { SITE_NAME } from '../constants'
 import { find } from 'lodash'
 import { mapState } from 'vuex'
 
@@ -33,6 +35,10 @@ export default {
     AccountNotice,
     AccountSetting,
     AppTab
+  },
+  metaInfo: {
+    title: SITE_NAME,
+    titleTemplate: null
   },
   data () {
     return {
