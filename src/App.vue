@@ -66,9 +66,12 @@ h2
   font-weight 500
 p
   font-size 1.125rem
+  font-weight normal
   &.small
     color #4a4a4a
     font-size .875rem
+button, input, textarea
+  font-size 1rem
 a
   text-decoration none
   cursor pointer
@@ -95,6 +98,9 @@ pre
   opacity 0
 
 .app
+  display flex
+  flex-direction column
+  min-height 100vh
   background-color #f1f1f1
   &__header
     position fixed
@@ -115,6 +121,9 @@ pre
     width 90%
     margin-left auto
     margin-right auto
+
+.view
+  flex 1
 
 @media (min-width: 768px)
   h1
