@@ -6,12 +6,15 @@
     <div>
       <template v-if="notification.length > 0">
         <button
-          class="read"
+          class="btn-read-all"
           @click="readAll"
         >
           全部標為已讀
         </button>
-        <NotificationList :items="notification" />
+        <NotificationList
+          :items="notification"
+          class="account-notice__list"
+        />
       </template>
       <template v-else>
         <p>尚未有任何通知</p>
@@ -35,7 +38,12 @@ export default {
   },
   methods: {
     readAll () {
-      // this.$store.dispatch('DataNotification/UPDATE_NOTIFICATION_STATUS', { params, })
+      const ids = this.notification.map((item, index) => `${index}`)
+      this.$store.dispatch('DataNotification/UPDATE_NOTIFICATION_STATUS', {
+        params: {
+          ids
+        }
+      })
     }
   }
 }
@@ -48,8 +56,12 @@ export default {
   > div
     display flex
     flex-direction column
-  .read
+  &__list
+    margin-top 1em
+  .btn-read-all
     align-self flex-end
+    margin-right 5%
+    padding 0
     color #12b8c8
     text-align right
 </style>

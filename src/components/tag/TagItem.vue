@@ -1,6 +1,6 @@
 <template>
   <div class="tag-item">
-    <span v-text="tag.text"></span>
+    <span v-text="tag.text" />
   </div>
 </template>
 <script>
