@@ -9,12 +9,12 @@
     <NavsSeriesFollow
       class="navs__nav"
     />
-    <div
+    <!-- <div
       class="navs__nav"
       @click="$emit('comment')"
     >
       <IconComment :height="iconHeight" />
-    </div>
+    </div> -->
     <div
       class="navs__nav"
       @click="$emit('donate')"
@@ -32,14 +32,14 @@ import { mapState } from 'vuex'
 
 import NavsSeriesFollow from './NavsSeriesFollow.vue'
 import NavsSeriesShare from './NavsSeriesShare.vue'
-import IconComment from 'src/components/Icons/Comment.vue'
+// import IconComment from 'src/components/Icons/Comment.vue'
 import IconDonate from 'src/components/Icons/Donate.vue'
 
 export default {
   components: {
     NavsSeriesFollow,
     NavsSeriesShare,
-    IconComment,
+    // IconComment,
     IconDonate
   },
   computed: {
