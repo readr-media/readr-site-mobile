@@ -4,7 +4,7 @@ export default {
     return {
       shouldHide: false,
       showSidebar: false,
-      layoutSeriesRouteNames: [ 'report', 'post' ]
+      layoutSeriesRouteNames: [ 'report', 'post', 'series' ]
     }
   },
   mutations: {
