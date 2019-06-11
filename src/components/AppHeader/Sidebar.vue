@@ -13,7 +13,7 @@
         'sidebar-wrapper__dimmed',
         { 'sidebar-wrapper__dimmed--show': showSidebar }
       ]"
-      @click="$emit('update:showSidebar', false)"
+      @click="SET_SHOW_SIDEBAR(false)"
     />
     <div
       ref="sidebar"
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 export default {
@@ -54,6 +54,11 @@ export default {
         enableBodyScroll(this.$refs['sidebar'])
       }
     }
+  },
+  methods: {
+    ...mapMutations({
+      SET_SHOW_SIDEBAR: 'UIAppHeader/SET_SHOW_SIDEBAR'
+    })
   }
 }
 </script>
