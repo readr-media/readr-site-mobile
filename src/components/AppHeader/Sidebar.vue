@@ -103,6 +103,7 @@ export default {
 .sidebar
   padding 14px 12px
   overflow-y scroll
+  -webkit-overflow-scrolling touch
   &__wrapper
     width 100%
     margin 0 auto
