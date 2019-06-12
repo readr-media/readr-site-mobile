@@ -4,7 +4,11 @@
       class="navs__nav navs__nav--square navs__nav--series-contents"
       @click="$emit('series')"
     >
-      <p>系列內容</p>
+      <p
+        :class="{ highlight: shouldHighlightSeriesContents }"
+      >
+        系列內容
+      </p>
     </div>
     <NavsSeriesFollow
       class="navs__nav"
@@ -19,7 +23,10 @@
       class="navs__nav"
       @click="$emit('donate')"
     >
-      <IconDonate :height="iconHeight" />
+      <IconDonate
+        :height="iconHeight"
+        :color-default="shouldHighlightDonate ? '#ddcf21' : 'white'"
+      />
     </div>
     <NavsSeriesShare
       class="navs__nav"
@@ -47,8 +54,16 @@ export default {
       iconHeight: state => {
         const vw = state.Viewport.width
         return vw < 768 ? 24 : 30
-      }
-    })
+      },
+      showSidebar: state => state.UIAppHeader.showSidebar,
+      currentSidebarSlot: state => state.UIAppHeader.currentSidebarSlot
+    }),
+    shouldHighlightDonate () {
+      return this.showSidebar && this.currentSidebarSlot === 'donate'
+    },
+    shouldHighlightSeriesContents () {
+      return this.showSidebar && this.currentSidebarSlot === 'seriesContents'
+    }
   }
 }
 </script>
@@ -65,10 +80,6 @@ export default {
     &--square
       width 24px
       height 24px
-    &--series-contents
-      &:active
-        p
-          color #ddcf21
     & + &
       margin 0 0 0 20px
     img
@@ -79,6 +90,8 @@ export default {
       color white
       user-select none
       transition color .25s ease-out
+      &.highlight
+        color #ddcf21
 
 @media (min-width: 768px)
   .navs
@@ -87,10 +100,6 @@ export default {
       &--square
         width 38px
         height 38px
-      &--series-contents
-        &:hover
-          p
-            color #ddcf21
       & + &
         margin 0 0 0 40px
       p
