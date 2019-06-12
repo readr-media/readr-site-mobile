@@ -13,9 +13,9 @@
         >
       </div>
       <div class="list-item__content-wrapper content-wrapper">
-        <h1>
+        <h2>
           {{ title }}
-        </h1>
+        </h2>
         <p class="content-wrapper__date">
           {{ date }}
         </p>
@@ -83,9 +83,8 @@ export default {
 
 .content-wrapper
   margin 0 0 0 14px
-  h1
+  h2
     margin 0
-    font-size 12px
     font-weight 400
     line-height 1.3
     color black
@@ -110,8 +109,6 @@ export default {
 
   .content-wrapper
     margin 0 0 0 20px
-    h1
-      font-size 24px
     p
       margin 14px 0 0 0
       font-size 16px

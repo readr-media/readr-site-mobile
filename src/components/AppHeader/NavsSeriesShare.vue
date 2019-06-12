@@ -38,6 +38,7 @@
 import _ from 'lodash'
 import { mapState } from 'vuex'
 import { createPost } from 'src/util/post'
+import { getShareUrl } from 'src/util/comm'
 
 import NoSSR from 'vue-no-ssr'
 import IconShare from 'src/components/Icons/Share.vue'
@@ -65,20 +66,23 @@ export default {
     post () {
       return createPost(this.dataPost)
     },
+    shareUrlDefault () {
+      return getShareUrl(this.$route.fullPath)
+    },
     shareUrlFB () {
-      return _.get(this.post, [ 'processed', 'shareUrlFB' ], '')
+      return _.get(this.post, [ 'processed', 'shareUrlFB' ], this.shareUrlDefault)
     },
     shareUrlLine () {
-      return _.get(this.post, [ 'processed', 'shareUrlLine' ], '')
+      return _.get(this.post, [ 'processed', 'shareUrlLine' ], this.shareUrlDefault)
     },
     shareUrlCopylink () {
-      return _.get(this.post, [ 'processed', 'shareUrlCopylink' ], '')
+      return _.get(this.post, [ 'processed', 'shareUrlCopylink' ], this.shareUrlDefault)
     },
 
     ...mapState({
       iconHeight: state => {
-        const vh = state.Viewport.height
-        return vh < 768 ? 24 : 30
+        const vw = state.Viewport.width
+        return vw < 768 ? 24 : 30
       }
     })
   },

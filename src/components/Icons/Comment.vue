@@ -6,10 +6,6 @@
       height: `${_height}px`,
       backgroundColor: isMouseover ? colorHover : colorDefault
     }"
-    @touchstart="onMouseover"
-    @touchend="onMouseout"
-    @mouseover="onMouseover"
-    @mouseout="onMouseout"
   />
 </template>
 

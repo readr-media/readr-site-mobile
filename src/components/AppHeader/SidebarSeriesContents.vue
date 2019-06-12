@@ -1,6 +1,6 @@
 <template>
   <div class="series">
-    <h1>系列內容</h1>
+    <h2>系列內容</h2>
     <SidebarSeriesContentsList :items="seriesContentsData" />
     <NoSSR>
       <infinite-loading @infinite="infiniteHandler" />
@@ -70,15 +70,11 @@ export default {
 
 <style lang="stylus" scoped>
 .series
-  h1
-    font-size 16px
-    font-weight 500
+  h2
     margin 0 0 10px 0
 
 @media (min-width: 768px)
   .series
-    h1
-      font-size 30px
-      font-weight 600
+    h2
       margin 0 0 20px 0
 </style>
