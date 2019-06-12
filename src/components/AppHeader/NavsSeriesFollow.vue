@@ -79,8 +79,8 @@ export default {
 
     ...mapState({
       iconHeight: state => {
-        const vh = state.Viewport.height
-        return vh < 768 ? 24 : 30
+        const vw = state.Viewport.width
+        return vw < 768 ? 24 : 30
       }
     })
   },
