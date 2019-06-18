@@ -24,6 +24,10 @@ export const SET_TAPPAY_LOADED = ({ commit }) => {
   return commit('SET_TAPPAY_LOADED', { isLoaded: true })
 }
 
+export const DONATE = (action, { params }) => {
+  return pointsFunc.donate(params)
+}
+
 export const SWITCH_OFF_CONSUME_PANEL = ({ commit }, { active }) => {
   return commit('SET_CONSUME_FLAG', {
     active,
