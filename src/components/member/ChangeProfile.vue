@@ -51,7 +51,7 @@
         v-if="!inEditing"
         @click="inEditing = true"
       >
-        (Edit)
+        (編輯)
       </button>
       <button
         v-if="inEditing"
@@ -159,6 +159,7 @@ export default {
       flex 1
       margin-left .5em
   p
+    text-align justify
     &.not-set
       color #979797
   textarea
