@@ -8669,6 +8669,7 @@ readr-comment@^1.0.21:
 readr-web-api@^1.0.69:
   version "1.0.69"
   resolved "https://registry.yarnpkg.com/readr-web-api/-/readr-web-api-1.0.69.tgz#a7909a9430e0d96d5cf0d73137e0699cf825c823"
+  integrity sha512-nf87amoudi/auH8DsX5FwldM5uoJHaSDiakgglynv8Ls2+u+rTDkJlh4tsfkSr/6A4ujM6DT1CMfTm2Ah8PbpQ==
   dependencies:
     "@google-cloud/logging" "^1.2.0"
     "@google-cloud/pubsub" "^0.18.0"

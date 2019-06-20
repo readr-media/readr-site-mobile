@@ -19,8 +19,10 @@
 import AppHeader from 'src/components/AppHeader/AppHeader.vue'
 import AppFooter from 'src/components/AppFooter.vue'
 import LoginLight from 'src/components/login/LoginLight.vue'
-
+import Tap from 'tap.js'
 import { SITE_FULL, SITE_NAME } from './constants'
+import { isAlink, logTrace } from 'src/util/services'
+import { mapState } from 'vuex'
 import { updateViewport } from 'src/util/comm'
 
 export default {
@@ -35,16 +37,58 @@ export default {
       { name: 'og:image', content: `${SITE_FULL}/public/og-image.jpg` }
     ]
   },
+  data () {
+    return {
+      tapEvent: undefined // resolve eslint error
+    }
+  },
+  computed: {
+    ...mapState({
+      currentUser: state => state.DataUser.profile.id,
+      useragent: state => state.useragent
+    })
+  },
+  watch: {
+    '$route.fullPath' () {
+      process.browser && this.sendPageview()
+    }
+  },
   beforeMount () {
     this.updateViewport()
   },
   mounted () {
+    this.sendPageview()
+    this.tapEvent = new Tap(window)
+    window.addEventListener('tap', this.handleClickLogger)
     window.addEventListener('resize', this.updateViewport)
   },
   beforeDestroy () {
+    window.removeEventListener('tap', this.handleClickLogger)
     window.removeEventListener('resize', this.updateViewport)
   },
   methods: {
+    handleClickLogger (event) {
+      const checkAlink = isAlink(event.target)
+      checkAlink && logTrace({
+        category: 'whole-site',
+        description: 'ele clicked',
+        eventType: 'click',
+        sub: this.currentUser,
+        target: event.target,
+        useragent: this.useragent,
+        isAlink: checkAlink
+      })
+    },
+    sendPageview () {
+      logTrace({
+        category: this.$route.fullPath,
+        description: 'pageview',
+        eventType: 'pageview',
+        sub: this.currentUser,
+        target: {},
+        useragent: this.useragent
+      })
+    },
     updateViewport () {
       updateViewport(this.$store)
     }
