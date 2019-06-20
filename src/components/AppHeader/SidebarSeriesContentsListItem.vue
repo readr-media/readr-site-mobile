@@ -88,6 +88,8 @@ export default {
     font-weight 400
     line-height 1.3
     color black
+    word-wrap break-word
+    word-break break-all
   p
     margin 10px 0 0 0
     font-size 12px
