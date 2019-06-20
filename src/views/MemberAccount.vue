@@ -12,6 +12,13 @@
       :class="{ 'app-content-area': !routeSection }"
       class="account__feature"
     />
+    <button
+      v-if="!routeSection"
+      class="logout app-content-area"
+      @click="logout"
+    >
+      登出
+    </button>
   </section>
 </template>
 <script>
@@ -21,8 +28,9 @@ import AccountSetting from 'src/components/member/AccountSetting.vue'
 
 import AppTab from 'src/components/AppTab.vue'
 import { SITE_NAME } from '../constants'
-import { find } from 'lodash'
+import { find, get } from 'lodash'
 import { mapActions, mapState } from 'vuex'
+import { removeToken } from 'src/util/services'
 
 const componentMapping = {
   notice: { index: 0, component: 'AccountNotice', route: '/account/notice' },
@@ -76,7 +84,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      GET_NOTIFICATION: 'DataNotification/GET_NOTIFICATION'
+      GET_NOTIFICATION: 'DataNotification/GET_NOTIFICATION',
+      LOGOUT: 'DataUser/LOGOUT'
     }),
     getCurrentTab () {
       return this.routeSection ? componentMapping[this.routeSection].index : componentMapping.setting.index
@@ -97,6 +106,12 @@ export default {
     handleTab (tab) {
       const info = find(componentMapping, { index: tab.index })
       this.$router.push({ path: info.route })
+    },
+    logout () {
+      const domain = get(this.$store, 'state.setting.DOMAIN')
+      removeToken(domain)
+      this.LOGOUT()
+      this.$router.push('/')
     }
   }
 }
@@ -107,4 +122,10 @@ export default {
   &__feature
     margin-top 1em
     padding-bottom 20px
+  .logout
+    display block
+    padding .4em .5em
+    margin 20px auto 20px
+    color #11b8c9
+    border 1px solid #11b8c9
 </style>

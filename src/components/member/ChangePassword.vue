@@ -175,11 +175,11 @@ export default {
   > div
     margin-top .5em
     & + button
-      margin-top .5em
+      margin-top 1em
   &__row
     display flex
     & + .change-password__row
-      margin-top .5em
+      margin-top 1em
     p
       min-width 4em
       height 30px
