@@ -1,0 +1,85 @@
+doctype
+html(lang='zh-Hant-TW')
+  head
+    meta(charset='utf-8')
+    meta(name='mobile-web-app-capable' content='yes')
+    meta(name='apple-mobile-web-app-capable' content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style' content='default')
+    meta(name='viewport' content='width=device-width, initial-scale=1, minimal-ui')
+    meta(name='theme-color' content='#f60')
+    meta(property='og:image' content='https://www.readr.tw/public/og-image.jpg')
+    meta(property='fb:app_id' content='175313259598308')
+    meta(property='fb:pages' content='1855418728011324')
+    meta(property='og:site_name' content='Readr')
+    meta(property='og:locale' content='zh_TW')
+    meta(property='og:type' content='article')
+    meta(property='og:image:width' content='1200')
+    meta(property='og:image:height' content='800')
+    title 讀+ Readr
+    link(rel='apple-touch-icon' sizes='120x120' href='/public/favicon.png')
+    link(rel='shortcut icon' sizes='48x48' href='/public/favicon.png')
+    link(rel='manifest' href='/manifest.json')
+    link(rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css')
+    style.
+      html { box-sizing: border-box; font-size: 16px; }
+      *, *:before, *:after {  box-sizing: inherit; }
+      h1, h2, p { margin: 0; }
+      a { color: #000; text-decoration: none; }
+      .container { min-height: 100vh; padding: 40px 0; text-align: center; background-color: #fff; }
+      .container > * + * { margin-top: 1em; }
+      .container img { width: 70%; }
+      .container img.full { width: 100%; }
+      .container h1 { color: #8c8c8c; font-size: 1.25rem; font-weight: normal; }
+      .container > a { display: inline-block; padding: .2em 1em; color: #fff; font-size: 1.875rem; background-color: #808080; border-radius: 20px; }
+      .reports { display: none; margin-top: 40px; }
+      .reports > div { width: 90%; margin-left: auto; margin-right: auto; }
+      .reports__heading { display: flex; align-items: center; }
+      .reports__heading:before { content: ''; flex: 1 1 auto; height: 1px; background-color: #000; }
+      .reports__heading:after { content: ''; flex: 1 1 auto; height: 1px; background-color: #000; }
+      .reports__heading h2 { margin: 0 1em; font-size: 1.125rem; }
+      .reports__list { margin-top: 1em; }
+      .report { display: block; }
+      .report + .report { margin-top: 1em; }
+      .report figure { position: relative; margin: 0; padding-top: 56.25%; }
+      .report figure img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+      .report h2 { margin-top: .2em; font-weight: normal; }
+    script.
+      const url = `//${location.host}/api/public/projects?status={"$in":[2,1]}&publish_status={"$in":[2]}&max_result=3&page=1&sort=project_order,-updated_at`
+      fetch(url, { method: 'get' })
+      .then(res => {
+        if (!res.ok) throw new Error(response.statusText)
+        return res.json()
+      })
+      .catch(err => console.log('err', err))
+      .then(data => {
+        const container = document.querySelector('.reports')
+        if (data._items.length > 0 && container) {
+          container.style.display = 'block'
+          renderReportList(data._items)
+        }
+      })
+      function renderReportList (reports) {
+        const dom = reports.map(report => {
+          const title = report.title || report.og_title
+          const image = report.hero_image || report.og_image
+          return `
+            <a class="report" href="/series/${report.slug}">
+              <figure>
+                <img src="${image}">
+              </figure>
+              <h2>${title}</h2>
+            </a>
+          `
+        }).join('')
+        document.querySelector('.reports__list').innerHTML = dom
+      } 
+  body
+    div.container
+      img(src=(code === 404 ? '/public/404.svg' : '/public/500.jpg') class=(code !== 404 ? 'full' : ''))
+      if code === 404
+        h1= message
+        a(href='/') 回首頁
+      div.reports
+        div.reports__heading
+          h2 最新專題
+        div.reports__list
