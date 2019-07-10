@@ -38,6 +38,10 @@ module.exports = {
         }
       },
       {
+        test: /\.pug$/,
+        loader: 'pug-loader'
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
@@ -66,7 +70,7 @@ module.exports = {
           'vue-style-loader',
           'css-loader',
           'postcss-loader',
-          'stylus-loader',
+          'stylus-loader'
         ]
       }
     ]
@@ -77,13 +81,13 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    ... isProd
-    ? [
+    ...isProd
+      ? [
         new MiniCssExtractPlugin({
           filename: 'common.[chunkhash].css'
         })
       ]
-    : [
+      : [
         new FriendlyErrorsPlugin()
       ]
   ]

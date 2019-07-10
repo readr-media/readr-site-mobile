@@ -70,6 +70,10 @@ export default {
   },
   asyncData ({ store }) {
     return store.dispatch('DataSeries/FETCH')
+      .catch(err => {
+        const error = { code: err.status }
+        throw error
+      })
   },
   mounted () {
     window.addEventListener('scroll', this.loadMore)
