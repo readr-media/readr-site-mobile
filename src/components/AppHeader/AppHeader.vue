@@ -150,13 +150,20 @@ export default {
   &__sidebar
     z-index 999
 
-@media (min-width: 768px)
+@media (min-width 768px)
   .header
     height 50px
     &__wrapper
-      max-width 1400px
+      max-width none
+      padding 0 50px
     &__logo
       width 60px
     &__navs
       top -5px
+
+@media (min-width 1450px)
+  .header
+    &__wrapper
+      max-width 1400px
+      padding 0
 </style>
