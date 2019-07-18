@@ -21,7 +21,7 @@ export function _buildQuery (params = {}) {
     'stats',
     'role',
     'publish_status',
-    'projectId',
+    'project_id',
     'object_ids',
     'resource',
     'resource_id',
