@@ -3,7 +3,7 @@
     :class="$route.name"
     class="footer"
   >
-    <!-- <div class="footer__top app-content-area">
+    <div class="footer__top app-content-area">
       <ul class="footer__links-list links-list">
         <li class="links-list__list-item">
           <router-link
@@ -13,40 +13,40 @@
             關於我們
           </router-link>
         </li>
-        <li class="links-list__list-item">
+        <!-- <li class="links-list__list-item">
           <router-link
             class="link"
             to="/agreement"
           >
             隱私政策
           </router-link>
-        </li>
-        <li class="links-list__list-item">
+        </li> -->
+        <!-- <li class="links-list__list-item">
           <router-link
             class="link"
             to="/agreement"
           >
             服務條款
           </router-link>
-        </li>
-        <li class="links-list__list-item">
+        </li> -->
+        <!-- <li class="links-list__list-item">
           <router-link
             class="link"
             to="/agreement"
           >
             版權所有
           </router-link>
-        </li>
+        </li> -->
         <li class="links-list__list-item">
-          <router-link
+          <a
             class="link"
-            to="/"
+            href="mailto:readr@readr.tw"
           >
             聯絡我們
-          </router-link>
+          </a>
         </li>
       </ul>
-    </div> -->
+    </div>
     <div class="footer__bottom app-content-area">
       <ul class="footer__links-icon-list links-icon-list">
         <li class="links-icon-list__list-item">
@@ -139,7 +139,8 @@ export default {
   margin 0
   padding 0
   display flex
-  flex-wrap wrap
+  // flex-wrap wrap
+  justify-content center
   &__list-item
     width calc(100% / 3)
     height 20px
