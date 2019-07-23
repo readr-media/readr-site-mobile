@@ -74,6 +74,11 @@ const router = new Router({
       component: MemberFollowing,
       meta: { permission: 'member' }
     },
+    {
+      name: 'donate',
+      path: '/donate',
+      component: AppHome
+    },
     { path: '/404', component: PageNotFound },
     { path: '/500', component: ServerError },
     { path: '*', component: PageNotFound }
