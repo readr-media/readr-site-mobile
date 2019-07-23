@@ -1,6 +1,7 @@
 <template>
   <nav class="navs">
     <div
+      v-show="shouldShowSeriesContents"
       class="navs__nav navs__nav--series-contents"
       @click="$emit('series')"
     >
@@ -19,6 +20,7 @@
       <IconComment :height="iconHeight" />
     </div> -->
     <div
+      v-show="shouldShowDonate"
       class="navs__nav"
       @click="$emit('donate')"
     >
@@ -28,6 +30,7 @@
       />
     </div>
     <NavsSeriesShare
+      v-show="shouldShowShare"
       class="navs__nav"
     />
   </nav>
@@ -50,6 +53,12 @@ export default {
     // IconComment,
     IconDonate
   },
+  props: {
+    showIconList: {
+      type: Array,
+      default: () => [ 'seriesContents', 'donate', 'share' ]
+    }
+  },
   computed: {
     ...mapState({
       iconHeight: state => {
@@ -64,6 +73,15 @@ export default {
     },
     shouldHighlightSeriesContents () {
       return this.showSidebar && this.currentSidebarSlot === 'seriesContents'
+    },
+    shouldShowDonate () {
+      return this.showIconList.filter(item => item === 'donate').length > 0
+    },
+    shouldShowSeriesContents () {
+      return this.showIconList.filter(item => item === 'seriesContents').length > 0
+    },
+    shouldShowShare () {
+      return this.showIconList.filter(item => item === 'share').length > 0
     }
   }
 }
