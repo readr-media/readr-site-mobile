@@ -13,30 +13,30 @@
             關於我們
           </router-link>
         </li>
-        <!-- <li class="links-list__list-item">
-          <router-link
-            class="link"
-            to="/agreement"
-          >
-            隱私政策
-          </router-link>
-        </li> -->
-        <!-- <li class="links-list__list-item">
+        <li class="links-list__list-item">
           <router-link
             class="link"
             to="/agreement"
           >
             服務條款
           </router-link>
-        </li> -->
-        <!-- <li class="links-list__list-item">
+        </li>
+        <li class="links-list__list-item">
           <router-link
             class="link"
-            to="/agreement"
+            to="/privacy-rule"
           >
-            版權所有
+            隱私政策
           </router-link>
-        </li> -->
+        </li>
+        <li class="links-list__list-item">
+          <router-link
+            class="link"
+            to="/service-rule"
+          >
+            智財政策
+          </router-link>
+        </li>
         <li class="links-list__list-item">
           <a
             class="link"
@@ -139,8 +139,8 @@ export default {
   margin 0
   padding 0
   display flex
-  // flex-wrap wrap
-  justify-content center
+  flex-wrap wrap
+  justify-content flex-start
   &__list-item
     width calc(100% / 3)
     height 20px
