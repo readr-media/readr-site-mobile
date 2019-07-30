@@ -31,6 +31,9 @@
     "node": ">=7.0",
     "npm": ">=4.0"
   },
+  "browserslist": [
+    "last 3 versions"
+  ],
   "dependencies": {
     "@babel/runtime": "^7.4.3",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",

@@ -12,7 +12,6 @@ import * as actionsPoll from 'src/store/actions/poll'
 import * as actionsPost from 'src/store/actions/post'
 import * as actionsTag from 'src/store/actions/tag'
 import * as actionsProject from 'src/store/actions/project'
-import * as actionsReport from 'src/store/actions/report'
 
 import {
   addRewardPointsTransactions,
@@ -159,4 +158,4 @@ export default Object.assign({
   INVITATION_SWITCH_OFF: ({ commit }, {}) => {
     commit('INVITATION_SWITCH_OFF', {})
   }
-}, actionPoints, actionsComment, actionsEmotion, actionsFollowing, actionsMember, actionsMemo, actionsMeta, actionsNotification, actionsPoll, actionsPost, actionsProject, actionsReport, actionsTag)
+}, actionPoints, actionsComment, actionsEmotion, actionsFollowing, actionsMember, actionsMemo, actionsMeta, actionsNotification, actionsPoll, actionsPost, actionsProject, actionsTag)
