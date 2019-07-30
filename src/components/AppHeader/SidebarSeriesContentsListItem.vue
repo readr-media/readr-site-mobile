@@ -1,7 +1,7 @@
 <template>
   <li class="list-item-wrapper">
-    <router-link
-      :to="url"
+    <LinkItem
+      :href="url"
       class="list-item"
       @click.native="SET_SHOW_SIDEBAR(false)"
     >
@@ -23,7 +23,7 @@
           {{ description }}
         </p>
       </div>
-    </router-link>
+    </LinkItem>
   </li>
 </template>
 
@@ -34,7 +34,12 @@ import dayjs from 'dayjs'
 
 import { createPost } from 'src/util/post'
 
+import LinkItem from 'src/components/common/LinkItem.vue'
+
 export default {
+  components: {
+    LinkItem
+  },
   props: {
     item: {
       type: Object,
