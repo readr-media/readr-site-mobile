@@ -20,6 +20,17 @@
     </div>
     <div>
       <h2 class="decorated">
+        文章
+      </h2>
+      <PostsSlideshow
+        :has-more="hasMorePosts"
+        :posts="publicPosts"
+        class="home__posts-slideshow"
+        @toFinalChunk="loadMorePosts"
+      />
+    </div>
+    <div>
+      <h2 class="decorated">
         專題
       </h2>
       <SeriesList
@@ -37,10 +48,12 @@ import { get } from 'lodash'
 import { mapMutations, mapState } from 'vuex'
 import { isScrollBarReachBottom } from '../util/comm'
 
+import PostsSlideshow from 'src/components/post/PostsSlideshow.vue'
 import SeriesList from 'src/components/series/SeriesList.vue'
 
 export default {
   components: {
+    PostsSlideshow,
     SeriesList
   },
   metaInfo: {
@@ -49,13 +62,16 @@ export default {
   },
   data () {
     return {
-      currentPage: 1,
-      hasMore: true,
+      currentPostsPage: 1,
+      currentSeriesPage: 1,
+      hasMorePosts: true,
+      hasMoreSeries: true,
       loading: false
     }
   },
   computed: {
     ...mapState({
+      publicPosts: state => state.DataPost.posts,
       publicProjects: state => state.DataSeries.publicProjects
     }),
     // publicProjectsRecommends () {
@@ -69,7 +85,10 @@ export default {
     }
   },
   asyncData ({ store }) {
-    return store.dispatch('DataSeries/FETCH')
+    return Promise.all([
+      store.dispatch('DataSeries/FETCH'),
+      store.dispatch('DataPost/GET_POSTS', { projectId: 0 })
+    ])
       .catch(err => {
         const error = { code: err.status }
         throw error
@@ -82,24 +101,37 @@ export default {
     }
   },
   mounted () {
-    window.addEventListener('scroll', this.loadMore)
+    window.addEventListener('scroll', this.loadMoreSeries)
   },
   beforeDestroy () {
-    window.removeEventListener('scroll', this.loadMore)
+    window.removeEventListener('scroll', this.loadMoreSeries)
   },
   methods: {
     ...mapMutations({
       SET_SHOW_SIDEBAR: 'UIAppHeader/SET_SHOW_SIDEBAR',
       SET_CURRENT_SIDEBAR_SLOT: 'UIAppHeader/SET_CURRENT_SIDEBAR_SLOT'
     }),
-    loadMore () {
-      if (this.hasMore && !this.loading && isScrollBarReachBottom(1 / 3)) {
+    loadMorePosts () {
+      if (this.hasMorePosts && !this.loading) {
+        this.loading = true
+        this.$store.dispatch('DataPost/GET_POSTS', { projectId: 0, page: this.currentPostsPage + 1 })
+          .then(res => {
+            if (res.length === 0) {
+              this.hasMorePosts = false
+            }
+            this.currentPostsPage += 1
+            this.loading = false
+          })
+      }
+    },
+    loadMoreSeries () {
+      if (this.hasMoreSeries && !this.loading && isScrollBarReachBottom(1 / 3)) {
         const origCount = get(this.publicProjectsNormal, [ 'length' ], 0)
         this.loading = true
-        this.$store.dispatch('DataSeries/FETCH', { page: this.currentPage + 1 })
+        this.$store.dispatch('DataSeries/FETCH', { page: this.currentSeriesPage + 1 })
           .then(() => {
-            this.currentPage += 1
-            this.hasMore = !(get(this.publicProjectsNormal, [ 'length' ], 0) <= origCount)
+            this.currentSeriesPage += 1
+            this.hasMoreSeries = !(get(this.publicProjectsNormal, [ 'length' ], 0) <= origCount)
             this.loading = false
           })
       }
@@ -133,6 +165,18 @@ export default {
         width 100%
         figure
           padding-top 56.25%
+  &__posts-slideshow
+     >>> .list-item
+      display block
+      padding 0 0 .5em 0
+      border-bottom 1px solid #979797
+      figure, .description
+        display none
+      .title
+        display -webkit-box
+        -webkit-line-clamp 2
+        -webkit-box-orient vertical
+        height calc(1em * 1.3 * 2)
 
 @media (max-width: 767px)
   .home
@@ -204,6 +248,9 @@ export default {
           background-color transparent
           h1, p
             text-align center
+    &__posts-slideshow
+      width calc(100% - 40px)
+      margin 0 auto
 
 @media (min-width: 1024px)
   .home
