@@ -135,10 +135,10 @@ export default {
     .list-item__content
       position relative
       .side-badge
-        transform none
+        transform scale(.7)
         display initial
         position absolute
-        top -20px
+        top -29px
         left -15px
 
 </style>
