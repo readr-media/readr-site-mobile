@@ -108,7 +108,7 @@ export default {
       background-color white
     &__link
       padding 20px 50px
-      width auto
+      width 100%
     &__date
       font-size 14px
     &__description
