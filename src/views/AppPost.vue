@@ -226,8 +226,17 @@ export default {
       border-bottom 2px solid #11b8c9
     >>> img
       width 100%
-    >>> iframe
-      width 100%
+    >>> .youtube-wrapper
+      position relative
+      padding-bottom 56.25% /* 16:9 */
+      padding-top 25px
+      height 0
+      & iframe
+        position absolute
+        top 0
+        left 0
+        width 100%
+        height 100%
     >>> .readme-image
       &:after
         display block
