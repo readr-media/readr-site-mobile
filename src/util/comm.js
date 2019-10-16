@@ -351,3 +351,10 @@ export function updateViewport (store) {
   const viewport = { width: width, height: height }
   return store.dispatch('Viewport/UPDATE_VIEWPORT', viewport)
 }
+
+export function sendGaEvent (action, category, label) {
+  gtag && gtag('event', action, {
+    event_category: category,
+    event_label: label
+  })
+}

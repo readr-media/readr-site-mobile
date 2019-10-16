@@ -8,6 +8,7 @@
       <IconSeriesContents
         :height="iconHeight"
         :color="shouldHighlightSeriesContents ? '#ddcf21' : 'white'"
+        @click.native="sendGaEvent('click', 'header_readr', 'tableofcontentsbutton')"
       />
     </div>
     <!-- <NavsSeriesFollow
@@ -27,6 +28,7 @@
       <IconDonate
         :height="iconHeight"
         :color="shouldHighlightDonate ? '#ddcf21' : 'white'"
+        @click.native="sendGaEvent('click', 'header_readr', 'donate')"
       />
     </div>
     <NavsSeriesShare
@@ -38,6 +40,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { sendGaEvent } from 'src/util/comm'
 
 // import NavsSeriesFollow from './NavsSeriesFollow.vue'
 import NavsSeriesShare from './NavsSeriesShare.vue'
@@ -83,6 +86,9 @@ export default {
     shouldShowShare () {
       return this.showIconList.filter(item => item === 'share').length > 0
     }
+  },
+  methods: {
+    sendGaEvent
   }
 }
 </script>

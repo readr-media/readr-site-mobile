@@ -9,6 +9,7 @@
       <router-link
         class="header__logo"
         to="/"
+        @click.native="sendGaEvent('click', 'header_readr', 'logo')"
       >
         <img
           src="/public/2.0/logos/readr-logo-light.svg"
@@ -45,6 +46,7 @@
 
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
+import { sendGaEvent } from 'src/util/comm'
 
 import NavsDefault from './NavsDefault.vue'
 import NavsSeries from './NavsSeries.vue'
@@ -108,6 +110,7 @@ export default {
       SET_SHOW_SIDEBAR: 'UIAppHeader/SET_SHOW_SIDEBAR',
       SET_CURRENT_SIDEBAR_SLOT: 'UIAppHeader/SET_CURRENT_SIDEBAR_SLOT'
     }),
+    sendGaEvent,
     toggleNavSeries (navClicked) {
       if (this.currentSidebarSlot === navClicked && this.showSidebar) {
         this.SET_SHOW_SIDEBAR(false)
