@@ -20,14 +20,17 @@
         <ShareFacebook
           class="share-navs__nav"
           :url="shareUrlFB"
+          @click.native="sendGaEvent('click', 'header_readr', 'share-fb')"
         />
         <ShareLine
           class="share-navs__nav"
           :url="shareUrlLine"
+          @click.native="sendGaEvent('click', 'header_readr', 'share-line')"
         />
         <ShareCopylink
           class="share-navs__nav"
           :url="shareUrlCopylink"
+          @click.native="sendGaEvent('click', 'header_readr', 'share-copylink')"
         />
       </NoSSR>
     </nav>
@@ -37,7 +40,7 @@
 <script>
 import { mapState } from 'vuex'
 import { createShareUrl } from 'src/util/post/share'
-import { getShareUrl } from 'src/util/comm'
+import { getShareUrl, sendGaEvent } from 'src/util/comm'
 
 import NoSSR from 'vue-no-ssr'
 import IconShare from 'src/components/icons/IconShare.vue'
@@ -77,6 +80,7 @@ export default {
     })
   },
   methods: {
+    sendGaEvent,
     toggleNavs () {
       this.showNavs = !this.showNavs
     },
