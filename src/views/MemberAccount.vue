@@ -46,7 +46,10 @@ export default {
   },
   metaInfo: {
     title: SITE_NAME,
-    titleTemplate: null
+    titleTemplate: null,
+    meta: [
+      { vmid: 'og:type', property: 'og:type', content: 'profile' }
+    ]
   },
   data () {
     return {
