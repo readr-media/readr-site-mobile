@@ -1,6 +1,5 @@
 <template>
   <section :class="[ postType, 'post' ]">
-    <div id="fb-root" />
     <figure v-if="!isReview && postImage">
       <img
         :src="postImage"
@@ -75,7 +74,6 @@
         </template>
       </div>
     </lazy-component>
-    <div class="fb-quote" />
   </section>
 </template>
 
@@ -107,22 +105,8 @@ export default {
     const title = this.post.title
     const description = this.post.ogDescription || this.postProcessed.contentTruncateWithoutHtml
     const image = this.post.ogImage || this.post.heroImage || `${SITE_FULL}/public/og-image.jpg`
-    const script = [
-      {
-        innerHTML: `
-          (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0';
-            fjs.parentNode.insertBefore(js, fjs);
-          }(document, 'script', 'facebook-jssdk'));
-        `
-      }
-    ]
     return {
       title,
-      script,
       meta: [
         { name: 'description', content: description },
         { vmid: 'og:type', property: 'og:type', content: 'article' },
@@ -130,8 +114,7 @@ export default {
         { vmid: 'og:description', property: 'og:description', content: description },
         { vmid: 'og:url', property: 'og:url', content: getPostFullUrl(this.post) },
         { vmid: 'og:image', property: 'og:image', content: image }
-      ],
-      __dangerouslyDisableSanitizers: [ 'script' ]
+      ]
     }
   },
   computed: {
