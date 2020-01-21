@@ -26,7 +26,7 @@ pipeline:
       event: [push]
       branch: [master, dev, 2.0]
 
-  get_config:
+  get-config:
     image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
     secrets: [google_credentials]
     commands:
@@ -50,7 +50,7 @@ pipeline:
   publish:
     image: plugins/gcr
     repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
-    tag: ${DRONE_COMMIT_AUTHOR}_${DRONE_BUILD_NUMBER}
+    tag: ${DRONE_BRANCH}_${DRONE_COMMIT_AUTHOR}_${DRONE_BUILD_NUMBER}
     environment:
       - DOCKER_LAUNCH_DEBUG=true
     secrets: [google_credentials]
@@ -58,7 +58,7 @@ pipeline:
       event: [push]
       branch: [master, dev, 2.0]
   
-  deploy_dev:
+  deploy-dev:
     image: nytimes/drone-gke
     zone: asia-east1-a
     cluster: dev
@@ -70,7 +70,7 @@ pipeline:
       - source: google_credentials
         target: token
     vars:
-      image: gcr.io/mirrormedia-1470651750304/${DRONE_REPO_NAME}:${DRONE_COMMIT_AUTHOR}_${DRONE_BUILD_NUMBER}
+      image: gcr.io/mirrormedia-1470651750304/${DRONE_REPO_NAME}:${DRONE_BRANCH}_${DRONE_COMMIT_AUTHOR}_${DRONE_BUILD_NUMBER}
       app: ${DRONE_REPO_NAME}
       tier: frontend
     when:
@@ -89,7 +89,19 @@ pipeline:
       event: [push]
       branch: [master, dev, 2.0]
 
-  finish_slack:
+  upload-dist:
+    image: plugins/gcs
+    source: distribution
+    target: readr-files/distribution/
+    acl: allUsers:READER
+    secrets:
+      - source: google_credentials
+        target: token
+    when:
+      event: push
+      branch: master
+  
+  finish-slack:
     image: plugins/slack
     channel: jenkins
     secrets: [slack_webhook]
@@ -100,7 +112,7 @@ pipeline:
       event: [push]
     template: >
       {{#success build.status}}
-        *success* ${DRONE_REPO_NAME}:${DRONE_COMMIT_AUTHOR}_${DRONE_BUILD_NUMBER} was well served.
+        *success* ${DRONE_REPO_NAME}:${DRONE_BRANCH}_${DRONE_COMMIT_AUTHOR}_${DRONE_BUILD_NUMBER} was well served.
         Check out our new <http://m-dev.readr.tw|readr>.
       {{else}}
         Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
