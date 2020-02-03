@@ -4,7 +4,7 @@
       v-for="item in items"
       :key="item.id"
       :class="itemStyle"
-      :date="dayjs(item.publishedAt).format('YYYY/MM/DD')"
+      :date="dayjs(item.contentUpdatedAt).format('YYYY/MM/DD')"
       :description="truncate(item.description || item.ogDescription)"
       :href="`/series/${item.slug}`"
       :image="item.heroImage || item.ogImage || ' '"
