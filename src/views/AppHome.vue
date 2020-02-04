@@ -15,6 +15,7 @@
       </h2>
       <SeriesList
         :items="publicProjectsTrends"
+        image-sizes="(max-width: 767px) 90vw, 64vw"
         ga-event-label="popular"
         class="home__list highlight"
       />
@@ -37,6 +38,7 @@
       <SeriesList
         :item-style="'comm-narrow'"
         :items="publicProjectsNormal"
+        image-sizes="(max-width: 767px) 33vw, 27vw"
         ga-event-label="series"
         class="home__list"
       />
