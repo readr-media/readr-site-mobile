@@ -10,15 +10,19 @@
       class="donate-result__success success"
     >
       <p>贊助成功！</p>
-      <p>謝謝贊助，以下是贊助明細，發票會寄送到電子信箱</p>
+      <p>謝謝贊助，以下是本次的贊助明細，發票會寄送到電子信箱</p>
+      <p v-if="isSubscription">
+        下個月同一日期會再次進行扣款，並寄送發票明細於電子信箱
+      </p>
+      <p>如果有任何問題，歡迎聯繫我們：<a href="mailto:readr@readr.tw">readr@readr.tw</a> ／ 02-6633-3805</p>
       <div class="success__result-table-wrapper result-table-wrapper">
         <table class="result-table-wrapper__table table">
           <tr>
-            <td>贊助金額：</td>
+            <td>{{ isSubscription ? '定期' : '' }}贊助金額：</td>
             <td>{{ formData.donateAmount }} 元</td>
           </tr>
           <tr>
-            <td>贊助時間：</td>
+            <td>本次贊助時間：</td>
             <td>{{ formData.date }}</td>
           </tr>
           <tr>
@@ -85,7 +89,10 @@ export default {
         const padding = 14
         return vh - headerHeight - padding * 2
       }
-    })
+    }),
+    isSubscription () {
+      return this.formData.isSubscription
+    }
   },
   methods: {
     ...mapMutations({
@@ -102,14 +109,18 @@ export default {
 
 .success
   width 100%
-  p:nth-child(1)
-    text-align center
-    font-size 16px
-    font-weight 500
-  p:nth-child(2)
-    margin 22px 0 0 0
+  margin-bottom 100px
+  p
     font-size 12px
-    line-height 1.25
+    line-height 1.6
+    &:nth-child(1)
+      text-align center
+      font-size 16px
+      font-weight 500
+    &:nth-child(2)
+      margin 22px 0 0 0
+    &:last-of-type
+      margin-top 22px
   &__result-table-wrapper
     margin 30px 0 0 0
   &__back-to-form-button
