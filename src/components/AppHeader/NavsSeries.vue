@@ -20,17 +20,17 @@
     >
       <IconComment :height="iconHeight" />
     </div> -->
-    <div
+    <router-link
       v-show="shouldShowDonate"
       class="navs__nav"
-      @click="$emit('donate')"
+      to="/donate"
     >
       <IconDonate
         :height="iconHeight"
         :color="shouldHighlightDonate ? '#ddcf21' : 'white'"
         @click.native="sendGaEvent('click', 'header_readr', 'donate')"
       />
-    </div>
+    </router-link>
     <NavsSeriesShare
       v-show="shouldShowShare"
       class="navs__nav"
