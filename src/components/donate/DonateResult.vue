@@ -32,16 +32,11 @@
         </table>
       </div>
       <button
-        class="success__back-to-form-button button button--white button--small"
+        class="button button--white button--small"
         @click="$emit('backToForm')"
       >
         再次贊助
       </button>
-      <footer class="success__footer">
-        <img
-          v-lazy="'/public/2.0/decorations/flower.png'"
-        >
-      </footer>
     </div>
     <div
       v-else
@@ -70,6 +65,7 @@
 import { mapState, mapMutations } from 'vuex'
 
 export default {
+  name: 'DonateResult',
   props: {
     isResultSuccess: {
       type: Boolean,
@@ -86,8 +82,7 @@ export default {
         const vw = state.Viewport.width
         const vh = state.Viewport.height
         const headerHeight = vw < 768 ? 40 : 50
-        const padding = 14
-        return vh - headerHeight - padding * 2
+        return vh - headerHeight
       }
     }),
     isSubscription () {
@@ -105,11 +100,11 @@ export default {
 <style lang="stylus" scoped>
 .donate-result
   display flex
+  justify-content center
   align-items center
 
 .success
-  width 100%
-  margin-bottom 100px
+  width 90%
   p
     font-size 12px
     line-height 1.6
@@ -123,22 +118,8 @@ export default {
       margin-top 22px
   &__result-table-wrapper
     margin 30px 0 0 0
-  &__back-to-form-button
-    position absolute
-    bottom 90px
-    width 70% !important
-  &__footer
-    width 100%
-    height 80px
-    background-color #ddcf21
-    position absolute
-    bottom 0
-    left 0
-    img
-      height 100px
-      position absolute
-      bottom 70px
-      right 12px
+    + button
+      margin-top 80px
 
 .table
   border-collapse collapse
@@ -152,7 +133,6 @@ export default {
     border-top 1px dashed black
 
 .fail
-  width 100%
   display flex
   flex-direction column
   justify-content center
@@ -198,15 +178,6 @@ export default {
       font-size 24px
     p:nth-child(2)
       font-size 16px
-    &__back-to-form-button
-      bottom 100px
-      width 440px !important
-    &__footer
-      height 60px
-      img
-        height 150px
-        bottom 50px
-        right 30px
 
   .table
     font-size 16px
