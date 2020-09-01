@@ -38,26 +38,6 @@
             :class="[
               'coins__coin',
               'coin',
-              { 'coin--selected': donateAmountSelected === 30 }
-            ]"
-            @click="toggleDomateAmount(30)"
-          >
-            30 元
-          </button>
-          <button
-            :class="[
-              'coins__coin',
-              'coin',
-              { 'coin--selected': donateAmountSelected === 60 }
-            ]"
-            @click="toggleDomateAmount(60)"
-          >
-            60 元
-          </button>
-          <button
-            :class="[
-              'coins__coin',
-              'coin',
               { 'coin--selected': donateAmountSelected === 150 }
             ]"
             @click="toggleDomateAmount(150)"
@@ -73,6 +53,26 @@
             @click="toggleDomateAmount(200)"
           >
             200 元
+          </button>
+          <button
+            :class="[
+              'coins__coin',
+              'coin',
+              { 'coin--selected': donateAmountSelected === 500 }
+            ]"
+            @click="toggleDomateAmount(500)"
+          >
+            500 元
+          </button>
+          <button
+            :class="[
+              'coins__coin',
+              'coin',
+              { 'coin--selected': donateAmountSelected === 1000 }
+            ]"
+            @click="toggleDomateAmount(1000)"
+          >
+            1000 元
           </button>
         </div>
         <div class="coins__row">
@@ -324,9 +324,9 @@ export default {
   },
   data () {
     return {
-      donateAmountSelected: 0,
+      donateAmountSelected: 150,
       isDonateAmountCustom: false,
-      donateAmountCustomInternal: 30,
+      donateAmountCustomInternal: '',
 
       isCardInfoValid: false,
 
@@ -517,7 +517,7 @@ export default {
     },
 
     submitForm () {
-      if (this.isFormValid) {
+      if (this.isFormValid && !this.isDepositing) {
         this.isDepositing = true
         window.TPDirect.card.getPrime(result => {
           if (result.status !== 0) {
