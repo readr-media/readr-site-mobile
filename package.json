@@ -56,7 +56,7 @@
     "express-useragent": "^1.0.12",
     "humps": "^2.0.1",
     "kc-scroll": "^0.2.71",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.21",
     "lru-cache": "^5.1.1",
     "node-memwatch": "^1.0.1",
     "prevent-scroll": "^2.0.0",
