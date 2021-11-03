@@ -73,7 +73,7 @@
     "truncate": "^2.0.1",
     "truncate-html": "^1.0.1",
     "uuid": "^3.2.0",
-    "validator": "^10.11.0",
+    "validator": "^13.7.0",
     "vue": "^2.6.10",
     "vue-cookie": "^1.1.4",
     "vue-datetime": "0.7.1",
