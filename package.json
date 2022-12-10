@@ -52,7 +52,7 @@
     "dayjs": "^1.8.13",
     "debug": "^4.1.1",
     "es6-promise": "^4.2.2",
-    "express": "^4.15.4",
+    "express": "^4.17.3",
     "express-useragent": "^1.0.12",
     "humps": "^2.0.1",
     "kc-scroll": "^0.2.71",
